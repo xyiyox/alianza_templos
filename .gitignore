@@ -38,6 +38,7 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+*~
 
 # Django #
 ##########
