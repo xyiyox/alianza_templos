@@ -28,6 +28,7 @@ class UsuarioManager(BaseUserManager):
             apellidos=apellidos
         )
         user.is_admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
