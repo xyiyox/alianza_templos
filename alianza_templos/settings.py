@@ -8,7 +8,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-from local_settings import *
+try:
+    from local_settings import *
+except ImportError:
+    print 'no se encuentra local_settings'
+    pass 
+
+
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
@@ -20,16 +26,21 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 # Application definition
 
 INSTALLED_APPS = (
-    #'django_admin_bootstrapped',
     'suit',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'south',
     'usuarios',
+    'main',
+
+    'crispy_forms',
+    'session_security',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -37,6 +48,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'session_security.middleware.SessionSecurityMiddleware', # para django session security
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -67,6 +79,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+
+################### configuraciones de paquetes instalados ####################
+
+
+# configuracion de django suit
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
@@ -80,3 +97,10 @@ SUIT_CONFIG = {
         'auth': 'icon-lock',
     }
 }
+
+# configuracion de crispy forms
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+# configuracion de django session security
+#SESSION_SECURITY_WARN_AFTER = 30
+#SESSION_SECURITY_EXPIRE_AFTER = 60

@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %} Login {% endblock %}
+
+{% block body %} 
+
+
+<div class="container">
+	
+	<div class="row">
+
+		<div class="col-sm-8">
+			<div class="jumbotron">
+				<h1>
+					<i class="fa fa-users"></i>
+					Bienvenidos!
+				</h1>
+				<h3>Construyamos juntos la Alianza</h3>
+
+				<p>Trabajemos juntos por el crecimiento integral de nuestra iglesia...</p>
+			</div>
+		</div>
+
+		<div class="col-sm-4">
+
+			<div class="panel panel-default">
+				<div class="panel-heading">Ingresar</div>
+
+				<div class="panel-body">
+					
+					 {% crispy loginForm %} 
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+</div>
+
+
+{% endblock body %}
