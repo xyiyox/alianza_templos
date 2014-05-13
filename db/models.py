@@ -2,6 +2,7 @@
 from django.db import models
 from djgeojson.fields import PointField
 
+
 class Edificacion(models.Model):
 	"""
 	Representacion de un Proyecto de construccion 

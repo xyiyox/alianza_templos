@@ -111,6 +111,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # configuracion de leaflet
 LEAFLET_CONFIG = {
+    'SPATIAL_EXTENT': (5.0, 44.0, 7.5, 46),
     'DEFAULT_CENTER': (4.520855,-74.098308),
     'DEFAULT_ZOOM': 6,
 }
