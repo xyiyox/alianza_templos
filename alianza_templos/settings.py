@@ -35,13 +35,16 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'crispy_forms',
+    'session_security',
+    'leaflet',
+    'djgeojson',
+    'jsonfield',
+
     'south',
     'usuarios',
     'main',
     'db',
-
-    'crispy_forms',
-    'session_security',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -105,3 +108,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # configuracion de django session security
 #SESSION_SECURITY_WARN_AFTER = 30
 #SESSION_SECURITY_EXPIRE_AFTER = 60
+
+# configuracion de leaflet
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (4.520855,-74.098308),
+    'DEFAULT_ZOOM': 6,
+}

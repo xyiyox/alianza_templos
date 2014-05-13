@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from djgeojson.fields import PointField
+
 
 class Proyecto(models.Model):
 	"""
@@ -8,9 +10,9 @@ class Proyecto(models.Model):
 	"""
 	nombre = models.CharField(max_length=40)
 	direccion = models.TextField()
-	# TODO: mejorar geolocalizacion con geodjango
-	latitud = models.DecimalField(max_digits=8, decimal_places=4)
-	longitud = models.DecimalField(max_digits=8, decimal_places=4)
+	
+
+	coordenadas = PointField()
 	
 	TIPO_OWNER_ESCRITURA_CHOICES = (
 		(0, 'Partner Organization'),
