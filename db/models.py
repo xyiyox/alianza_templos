@@ -3,11 +3,11 @@ from django.db import models
 from djgeojson.fields import PointField
 
 
-"""
+
 class Proyecto(models.Model):
 	""" """
-	Representacion de un Proyecto de construccion 
-	de un templo para una iglesia de la IACYMC
+	#Representacion de un Proyecto de construccion 
+	#de un templo para una iglesia de la IACYMC
 	""" """
 	nombre = models.CharField(max_length=40)
 	direccion = models.TextField()
@@ -28,7 +28,7 @@ class Proyecto(models.Model):
 	)
 	tipo_adquisicion = models.SmallIntegerField()
 
-	""" """ Informacion de la comunidad """ """
+	""" """ #Informacion de la comunidad """ """
 	poblacion_comunidad = models.CharField(max_length=40)
 	nombre_comunidad = models.CharField(max_length=50)
 	region = models.CharField(max_length=30) # Tambien puede ser estado, region o distrito
@@ -39,7 +39,7 @@ class Proyecto(models.Model):
 	iglesia_cercana = models.CharField(max_length=30)
 	distancia_iglesia_cercana = models.PositiveSmallIntegerField() # En km
 
-	""" """ Informacion de la congregacion """ """
+	""" """ #Informacion de la congregacion """ """
 	lengua_primaria = models.CharField(max_length=20)
 	fecha_fundacion = models.DateField()
 	ingresos_ofrendas = models.DecimalField(max_digits=15, decimal_places=3) # ¿Unidad del dinero? Mensual
@@ -48,7 +48,7 @@ class Proyecto(models.Model):
 	cant_miembros_adultos = models.SmallIntegerField()
 	cant_miembtos_ninos = models.SmallIntegerField()
 
-	""" """ Informacion del pastor """ """
+	""" """ #Informacion del pastor """ """
 	nombre_pastor = models.CharField(max_length=50)
 	entrenamiento_biblico = models.CharField(max_length=50)
 	titulos_obtenidos = models.CharField(max_length=50)
@@ -67,7 +67,7 @@ class Proyecto(models.Model):
 	q2_why_not = models.TextField()
 	q2_how_do = models.TextField()
 
-	""" """ Informacion de construccion """ """
+	""" """ #Informacion de construccion """ """
 	tiempo_terminar_construccion = models.PositiveSmallIntegerField()
 	dimensiones_terreno = models.CharField(max_length=30)
 	dimensiones_edificio = models.CharField(max_length=30)
@@ -87,7 +87,7 @@ class Proyecto(models.Model):
 	moneda_local = models.CharField(max_length=20)
 	dolar_en_moneda_local = models.DecimalField(max_digits=6, decimal_places=3)
 
-	""" """ Informacion Financiera """ """
+	""" """ #Informacion Financiera """ """
 	# Contribuciones estimadas de la congregacion
 	labor_moneda_local = models.DecimalField(max_digits=12, decimal_places=3)
 	labor_dolares = models.DecimalField(max_digits=12, decimal_places=3)
@@ -98,7 +98,7 @@ class Proyecto(models.Model):
 	terreno_moneda_local = models.DecimalField(max_digits=12, decimal_places=3)
 	terreno_dolares = models.DecimalField(max_digits=12, decimal_places=3)
 
-	""" """ Otras fuentes de fondos """ """
+	""" """ #Otras fuentes de fondos """ """
 	fuente1 = models.CharField(max_length=30)
 	aporte_fuente1_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
 	aporte_fuente1_dolares = models.DecimalField(max_digits=12, decimal_places=3)
@@ -109,7 +109,7 @@ class Proyecto(models.Model):
 	aporte_solicitado_dolares = models.DecimalField(max_digits=12, decimal_places=3)
 	coste_total_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
 	coste_total_dolares = models.DecimalField(max_digits=12, decimal_places=3)
-"""
+
 
 class Edificacion(object):
 	"""
