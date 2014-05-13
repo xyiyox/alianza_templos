@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'south',
     'usuarios',
     'main',
+    'db',
 
     'crispy_forms',
     'session_security',

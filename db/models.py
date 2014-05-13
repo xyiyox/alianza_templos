@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
 class Proyecto(models.Model):
@@ -38,18 +39,18 @@ class Proyecto(models.Model):
 	""" Informacion de la congregacion """
 	lengua_primaria = models.CharField(max_length=20)
 	fecha_fundacion = models.DateField()
-	ingresos_ofrendas = models.DecimalField(max_digits=None, decimal_places=3) # ¿Unidad del dinero? Mensual
+	ingresos_ofrendas = models.DecimalField(max_digits=15, decimal_places=3) # ¿Unidad del dinero? Mensual
 	cant_asistentes_adultos = models.SmallIntegerField()
-	cant_asistentes_niños = models.SmallIntegerField()
+	cant_asistentes_ninos = models.SmallIntegerField()
 	cant_miembros_adultos = models.SmallIntegerField()
-	cant_miembtos_niños = models.SmallIntegerField()
+	cant_miembtos_ninos = models.SmallIntegerField()
 
 	""" Informacion del pastor """
 	nombre_pastor = models.CharField(max_length=50)
 	entrenamiento_biblico = models.CharField(max_length=50)
 	titulos_obtenidos = models.CharField(max_length=50)
-	años_en_actual_iglesia = models.PositiveSmallIntegerField()
-	años_en_ministerio = models.PositiveSmallIntegerField()
+	anios_en_actual_iglesia = models.PositiveSmallIntegerField()
+	anios_en_ministerio = models.PositiveSmallIntegerField()
 	ESTADO_CIVIL_CHOICES = (
 		(0, 'Soltero'),
 		(1, 'Casado'),
@@ -81,27 +82,27 @@ class Proyecto(models.Model):
 	requiere_permiso_construccion = models.BooleanField()
 	is_icm_approved = models.BooleanField()
 	moneda_local = models.CharField(max_length=20)
-	dolar_en_moneda_local = models.DecimalField()
+	dolar_en_moneda_local = models.DecimalField(max_digits=6, decimal_places=3)
 
 	""" Informacion Financiera """
 	# Contribuciones estimadas de la congregacion
-	labor_moneda_local = models.DecimalField()
-	labor_dolares = models.DecimalField()
-	materiales_moneda_local = models.DecimalField()
-	materiales_dolares = models.DecimalField()
-	dinero_moneda_local = models.DecimalField()
-	dinero_dolares = models.DecimalField()
-	terreno_moneda_local = models.DecimalField()
-	terreno_dolares = models.DecimalField()
+	labor_moneda_local = models.DecimalField(max_digits=12, decimal_places=3)
+	labor_dolares = models.DecimalField(max_digits=12, decimal_places=3)
+	materiales_moneda_local = models.DecimalField(max_digits=15, decimal_places=3)
+	materiales_dolares = models.DecimalField(max_digits=15, decimal_places=3)
+	dinero_moneda_local = models.DecimalField(max_digits=15, decimal_places=3)
+	dinero_dolares = models.DecimalField(max_digits=15, decimal_places=3)
+	terreno_moneda_local = models.DecimalField(max_digits=12, decimal_places=3)
+	terreno_dolares = models.DecimalField(max_digits=12, decimal_places=3)
 
 	""" Otras fuentes de fondos """
 	fuente1 = models.CharField(max_length=30)
-	aporte_fuente1_monedalocal = models.DecimalField()
-	aporte_fuente1_dolares = models.DecimalField()
+	aporte_fuente1_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
+	aporte_fuente1_dolares = models.DecimalField(max_digits=12, decimal_places=3)
 	fuente2 = models.CharField(max_length=30)
-	aporte_fuente2_monedalocal = models.DecimalField()
-	aporte_fuente2_dolares = models.DecimalField()
-	aporte_solicitado_monedalocal = models.DecimalField()
-	aporte_solicitado_dolares = models.DecimalField()
-	coste_total_monedalocal = models.DecimalField()
-	coste_total_dolares = models.DecimalField()
+	aporte_fuente2_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
+	aporte_fuente2_dolares = models.DecimalField(max_digits=12, decimal_places=3)
+	aporte_solicitado_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
+	aporte_solicitado_dolares = models.DecimalField(max_digits=12, decimal_places=3)
+	coste_total_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
+	coste_total_dolares = models.DecimalField(max_digits=12, decimal_places=3)
