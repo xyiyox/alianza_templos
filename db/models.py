@@ -111,7 +111,7 @@ class Proyecto(models.Model):
 	coste_total_dolares = models.DecimalField(max_digits=12, decimal_places=3)
 
 
-class Edificacion(object):
+class Edificacion(models.Model):
 	"""
 	Representacion de un Proyecto de construccion 
 	de un templo para una iglesia de la IACYMC
@@ -148,6 +148,7 @@ class Edificacion(object):
 		(1, 'Otro'),
 	)
 	metodo_construccion = models.SmallIntegerField()
+	congregacion = models.OneToOneField('Congregacion') # Relacion 1 a 1 entre la edificacion y la congregacion
 
 	requiere_permiso = models.BooleanField()
 	is_icm_approved = models.BooleanField()
@@ -165,6 +166,16 @@ class Edificacion(object):
 	terreno_moneda_local = models.DecimalField(max_digits=12, decimal_places=3)
 	terreno_dolares = models.DecimalField(max_digits=12, decimal_places=3)
 
+	valor_solicitado_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
+	valor_solicitado_dolares = models.DecimalField(max_digits=12, decimal_places=3)
+	costo_total_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
+	costo_total_dolares = models.DecimalField(max_digits=12, decimal_places=3)
+	TIPO_PAGO_FONDO = (
+		(0, 'Cuota Fija Mensual'),
+		(1, 'Porcentaje Mensual de Ofrendas'),
+	)
+	pago_fondo = models.SmallIntegerField()
+
 class Comunidad(models.Model):
 	""" Informacion de la comunidad """
 	poblacion_comunidad = models.CharField(max_length=40)
@@ -178,6 +189,7 @@ class Comunidad(models.Model):
 	distancia_iglesia = models.PositiveSmallIntegerField() # En km
 
 class Congregacion(models.Model):
+	nombre = models.CharField(max_length=30)
 	lengua_primaria = models.CharField(max_length=20)
 	fecha_fundacion = models.DateField()
 	asistentes_adultos = models.SmallIntegerField()
@@ -187,14 +199,7 @@ class Congregacion(models.Model):
 
 	ingresos_ofrendas = models.DecimalField(max_digits=15, decimal_places=3) # ¿Unidad del dinero? Mensual
 
-	q1_hay_material_biblico = models.BooleanField() # ¿El pastor ha hablado de la disponibilidad de material para estudio biblico?
-	q1_why_not = models.TextField()
-	q2_usa_material = models.BooleanField() # ¿El pastor ha acordado usar este material para crecimiento de la iglesia?
-	q2_why_not = models.TextField()
-	q2_how_do = models.TextField()
-
-class Pastor(models.Model):
-	nombre = models.CharField(max_length=50)
+	nombre_pastor = models.CharField(max_length=50)
 	entrenamiento_biblico = models.CharField(max_length=50)
 	ESTADO_CIVIL_CHOICES = (
 		(0, 'Soltero'),
@@ -206,6 +211,13 @@ class Pastor(models.Model):
 	anios_iglesia = models.PositiveSmallIntegerField()
 	anios_ministerio = models.PositiveSmallIntegerField()
 	# Se debe almacenar una foto del pastor
+
+	q1_hay_material_biblico = models.BooleanField() # ¿El pastor ha hablado de la disponibilidad de material para estudio biblico?
+	q1_why_not = models.TextField()
+	q2_usa_material = models.BooleanField() # ¿El pastor ha acordado usar este material para crecimiento de la iglesia?
+	q2_why_not = models.TextField()
+	q2_how_do = models.TextField()
+	
 	
 class Fuentes_Financieras(models.Model):
 	""" 
@@ -215,3 +227,10 @@ class Fuentes_Financieras(models.Model):
 	descripcion = models.TextField()
 	valor_local = models.DecimalField(max_digits=15, decimal_places=3)
 	valor_dolares = models.DecimalField(max_digits=15, decimal_places=3)
+	edificacion = models.ForeignKey('Edificacion') # Relacion 1 a n entre edificacion y fuentes_financieras
+
+class Condiciones(models.Model):
+	""" Terminos y Condiciones del Proyecto """
+	nombre = models.CharField(max_length=40)
+	descripcion = models.TextField()
+	proyecto = models.ManyToManyField('Edificacion', related_name="Condiciones_Edificacion")		
