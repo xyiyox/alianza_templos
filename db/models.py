@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from djgeojson.fields import PointField
+from .datos import *
 
 
 class Edificacion(models.Model):
@@ -131,9 +132,12 @@ class Edificacion_Condiciones(models.Model):
 	respuesta = models.BooleanField()
 
 class Preguntas(models.Model):
-	"""Prueba"""
-	edificacion = models.ForeignKey('Edificacion')
-	construccion = models.BooleanField('Reporte de progreso', help_text='Proveeremos fotos de construccion')
-	construccion1 = models.BooleanField('Reporte de progreso', help_text='Proveeremos fotos de construccion')
-	construccion2 = models.BooleanField('Reporte de progreso', help_text='Proveeremos fotos de construccion')
-	construccion3 = models.BooleanField('Reporte de progreso', help_text='Proveeremos fotos de construccion')
+	"""Prueba extendida"""
+	edificacion   = models.ForeignKey('Edificacion')
+	construccion  = models.BooleanField(CONDICIONES_CONSTRUCCION, choices=BOOL_CHOICES)
+	mantenimiento = models.BooleanField(CONDICIONES_MANTENIMIENTO, choices=BOOL_CHOICES)
+	actividades   = models.BooleanField(CONDICIONES_ACTIVIDADES, choices=BOOL_CHOICES)
+	discipulado   = models.BooleanField(CONDICIONES_DISCIPULADO, choices=BOOL_CHOICES)
+	alcance       = models.BooleanField(CONDICIONES_ALCANCE, choices=BOOL_CHOICES)
+
+	

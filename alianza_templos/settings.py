@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'leaflet',
     'djgeojson',
     'jsonfield',
+    'debug_toolbar',
 
     'south',
     'usuarios',
@@ -115,3 +116,4 @@ LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (4.520855,-74.098308),
     'DEFAULT_ZOOM': 6,
 }
+

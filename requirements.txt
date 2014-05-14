@@ -2,6 +2,7 @@ Django==1.6.4
 South==0.8.4
 argparse==1.2.1
 django-crispy-forms==1.4.0
+django-debug-toolbar==1.2
 -e git+git@github.com:makinacorpus/django-geojson.git@53905de50624b7bb0099559d3896f51a95231a0c#egg=django_geojson-master
 django-leaflet==0.13.2
 django-session-security==2.1.6
@@ -9,4 +10,5 @@ django-suit==0.2.8
 jsonfield==0.9.20
 psycopg2==2.5.2
 six==1.6.1
+sqlparse==0.1.11
 wsgiref==0.1.2
