@@ -120,24 +120,23 @@ class Fuentes_Financieras(models.Model):
 	valor_dolares = models.DecimalField(max_digits=15, decimal_places=3)
 	edificacion = models.ForeignKey('Edificacion') # Relacion 1 a n entre edificacion y fuentes_financieras
 
+
 class Condiciones(models.Model):
-	""" Terminos y Condiciones del Proyecto """
-	nombre = models.CharField(max_length=40)
-	descripcion = models.TextField()
-
-class Edificacion_Condiciones(models.Model):
-	""" Tabla intermedia entre Edificacion y Condiciones """
-	edificacion = models.ForeignKey('Edificacion')
-	condicion = models.ForeignKey('Condiciones')
-	respuesta = models.BooleanField()
-
-class Preguntas(models.Model):
-	"""Prueba extendida"""
-	edificacion   = models.ForeignKey('Edificacion')
-	construccion  = models.BooleanField(CONDICIONES_CONSTRUCCION, choices=BOOL_CHOICES)
-	mantenimiento = models.BooleanField(CONDICIONES_MANTENIMIENTO, choices=BOOL_CHOICES)
-	actividades   = models.BooleanField(CONDICIONES_ACTIVIDADES, choices=BOOL_CHOICES)
-	discipulado   = models.BooleanField(CONDICIONES_DISCIPULADO, choices=BOOL_CHOICES)
-	alcance       = models.BooleanField(CONDICIONES_ALCANCE, choices=BOOL_CHOICES)
-
+	""" Condiciones """
+	edificacion       = models.ForeignKey('Edificacion')
+	construccion      = models.BooleanField(CONDICIONES_CONSTRUCCION, choices=BOOL_CHOICES)
+	mantenimiento     = models.BooleanField(CONDICIONES_MANTENIMIENTO, choices=BOOL_CHOICES)
+	actividades       = models.BooleanField(CONDICIONES_ACTIVIDADES, choices=BOOL_CHOICES)
+	discipulado       = models.BooleanField(CONDICIONES_DISCIPULADO, choices=BOOL_CHOICES)
+	alcance           = models.BooleanField(CONDICIONES_ALCANCE, choices=BOOL_CHOICES)
 	
+	found_trust       = models.BooleanField(CONDICIONES_FOUND_TRUST, choices=BOOL_CHOICES)
+	found_commitment  = models.BooleanField(CONDICIONES_FOUND_COMMITMENT, choices=BOOL_CHOICES)
+	found_payment     = models.CharField(CONDICIONES_FOUND_PAYMENT, max_length=20, help_text='Cantidad o Porcentaje')
+
+	presupuesto       = models.BooleanField(CONDICIONES_PRESUPUESTO, choices=BOOL_CHOICES)
+	terminacion       = models.BooleanField(CONDICIONES_TERMINACION, choices=BOOL_CHOICES)
+
+	comentarios       = models.TextField(CONDICIONES_COMENTARIOS, blank=True)
+	aceptacion        = models.BooleanField(help_text=CONDICIONES_ACEPTACION)
+	nombre_completo   = models.CharField(max_length=50, help_text=CONDICIONES_FULL_NAME)

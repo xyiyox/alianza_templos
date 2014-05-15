@@ -109,6 +109,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # configuracion de django session security
 #SESSION_SECURITY_WARN_AFTER = 30
 #SESSION_SECURITY_EXPIRE_AFTER = 60
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # configuracion de leaflet
 LEAFLET_CONFIG = {
