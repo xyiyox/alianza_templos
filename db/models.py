@@ -154,6 +154,6 @@ class Adjuntos(models.Model):
 		(7, 'Breve Historia de la Congregacion'),
 		(8, 'Testimonio del Pastor'),
 	)
-	tipo_archivo  = models.SmallIntegerField()
+	tipo_archivo  = models.SmallIntegerField(choices=TIPO_ARCHIVO_CHOICES)
 	archivo_adjunto = models.FileField(upload_to='media')
 	
