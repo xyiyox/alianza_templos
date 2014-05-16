@@ -136,7 +136,24 @@ class Condiciones(models.Model):
 
 	presupuesto       = models.BooleanField(CONDICIONES_PRESUPUESTO, choices=BOOL_CHOICES)
 	terminacion       = models.BooleanField(CONDICIONES_TERMINACION, choices=BOOL_CHOICES)
-
 	comentarios       = models.TextField(CONDICIONES_COMENTARIOS, blank=True)
 	aceptacion        = models.BooleanField(help_text=CONDICIONES_ACEPTACION)
 	nombre_completo   = models.CharField(max_length=50, help_text=CONDICIONES_FULL_NAME)
+
+class Adjuntos(models.Model):
+	""" Modelo para almacenar los archivos adjuntos """
+	edificacion   = models.ForeignKey('Edificacion')
+	TIPO_ARCHIVO_CHOICES = (
+		(0, 'Foto del Sitio de Construccion'),
+		(1, 'Foto de la Congregacion'),
+		(2, 'Foto del Pastor'),
+		(3, 'Copia del Permiso de Construccion'),
+		(4, 'Copia de la Escritura de Propiedad'),
+		(5, 'Copy of the Plot Plan '),
+		(6, 'Copia del Plan de Construccion'),
+		(7, 'Breve Historia de la Congregacion'),
+		(8, 'Testimonio del Pastor'),
+	)
+	tipo_archivo  = models.SmallIntegerField()
+	archivo_adjunto = models.FileField(upload_to='media')
+	

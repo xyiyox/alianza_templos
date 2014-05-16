@@ -59,6 +59,6 @@ admin.site.register(Edificacion, LeafletGeoAdmin)
 admin.site.register(Comunidad)
 admin.site.register(Fuentes_Financieras)
 admin.site.register(Condiciones, CondicionesAdmin)
-
+admin.site.register(Adjuntos)
 
 

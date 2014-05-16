@@ -83,7 +83,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Configuracion de la ruta para los archivos e imagenes
 
+MEDIA_ROOT = os.path.join(BASE_DIR,'public')
 
 ################### configuraciones de paquetes instalados ####################
 
