@@ -142,7 +142,7 @@ class Condiciones(models.Model):
 
 class Adjuntos(models.Model):
 	""" Modelo para almacenar los archivos adjuntos """
-	edificacion   = models.ForeignKey('Edificacion')
+	# edificacion   = models.ForeignKey('Edificacion')
 	TIPO_ARCHIVO_CHOICES = (
 		(0, 'Foto del Sitio de Construccion'),
 		(1, 'Foto de la Congregacion'),
