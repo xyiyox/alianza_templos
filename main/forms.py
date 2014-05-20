@@ -8,31 +8,6 @@ from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, H
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
 
-from db.models import Edificacion, Comunidad, Congregacion, Fuentes_Financieras, Condiciones
-
-
-class EdificacionForm(forms.ModelForm):
-     class Meta:
-         model = Edificacion
-
-class ComunidadForm(forms.ModelForm):
-     class Meta:
-         model = Comunidad
-
-class CongregacionForm(forms.ModelForm):
-     class Meta:
-         model = Congregacion
-
-class FuentesFinancierasForm(forms.ModelForm):
-     class Meta:
-         model = Fuentes_Financieras
-
-class CondicionesForm(forms.ModelForm):
-     class Meta:
-         model = Condiciones
-    
-
-
 class LoginForm(AuthenticationForm):
   
 	def __init__(self, *args, **kwargs):
