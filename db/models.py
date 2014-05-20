@@ -9,8 +9,8 @@ class Edificacion(models.Model):
 	Representacion de un Proyecto de construccion 
 	de un templo para una iglesia de la IACYMC
 	"""
-	nombre_proyecto = models.CharField(max_length=40)
-	direccion = models.TextField()
+	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
+	direccion = models.TextField(verbose_name='Dirección')
 	coordenadas = PointField()
 	TIPO_OWNER_ESCRITURA_CHOICES = (
 		(0, 'Partner Organization'),
@@ -23,28 +23,28 @@ class Edificacion(models.Model):
 		(0, 'Comprado'),
 		(1, 'Donado'),
 	)
-	tipo_adquisicion = models.SmallIntegerField()
+	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición')
 
-	tiempo_limite = models.PositiveSmallIntegerField()
-	dimensiones_terreno = models.CharField(max_length=30)
-	dimensiones_edificio = models.CharField(max_length=30)
+	tiempo_limite = models.PositiveSmallIntegerField('Tiempo en que se terminará la construcción')
+	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30)
+	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30)
 	TIPO_CONSTRUCCION_CHOICES = (
 		(0, 'Iglesia'),
 		(1, 'Capilla'),
 		(2, 'Otro'),
 	)
-	tipo_construccion = models.SmallIntegerField()
+	tipo_construccion = models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES)
 	METODO_CONSTRUCCION_CHOICES = (
 		(0, 'Nueva Edificacion'),
 		(1, 'Otro'),
 	)
-	metodo_construccion = models.SmallIntegerField()
+	metodo_construccion = models.SmallIntegerField('Método de Construcción',choices=METODO_CONSTRUCCION_CHOICES)
 	congregacion = models.OneToOneField('Congregacion') # Relacion 1 a 1 entre la edificacion y la congregacion
 
-	requiere_permiso = models.BooleanField()
-	is_icm_approved = models.BooleanField()
-	moneda_local = models.CharField(max_length=20)
-	dolar_moneda_local = models.DecimalField(max_digits=6, decimal_places=3)
+	requiere_permiso = models.BooleanField('¿Requiere de un permiso de construcción?')
+	is_icm_approved = models.BooleanField('¿Ya ha sido aprobado por la ICM?')
+	moneda_local = models.CharField('Moneda Local',max_length=20)
+	dolar_moneda_local = models.DecimalField('Valor de la moneda local en dolares',max_digits=6, decimal_places=3)
 
 	""" Informacion Financiera """
 	# Contribuciones estimadas de la congregacion
@@ -65,7 +65,7 @@ class Edificacion(models.Model):
 		(0, 'Cuota Fija Mensual'),
 		(1, 'Porcentaje Mensual de Ofrendas'),
 	)
-	pago_fondo = models.SmallIntegerField()
+	pago_fondo = models.SmallIntegerField('¿Como se pagara el fondo?',choices=TIPO_PAGO_FONDO)
 
 class Comunidad(models.Model):
 	""" Informacion de la comunidad """

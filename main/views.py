@@ -23,7 +23,7 @@ class Aplicacion(SessionWizardView):
 
 	template_name = "main/aplicacion.html"
 	
-	form_list = [EdificacionForm, ComunidadForm]
+	form_list = [EdificacionForm, ComunidadForm, CongregacionForm, FuentesFinancierasForm, CondicionesForm]
 
 
 	def get_form(self, step=None, data=None, files=None):
