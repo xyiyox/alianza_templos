@@ -70,44 +70,44 @@ class Edificacion(models.Model):
 class Comunidad(models.Model):
 	""" Informacion de la comunidad """
 	poblacion_comunidad = models.CharField(max_length=40)
-	nombre = models.CharField(max_length=50)
-	region = models.CharField(max_length=30) # Tambien puede ser estado, region o distrito
-	pais = models.CharField(max_length=20)
+	nombre = models.CharField('Nombre', max_length=50)
+	region = models.CharField('Region, Estado o Distrito', max_length=30) # Tambien puede ser estado, region o distrito
+	pais = models.CharField('Pais', max_length=20)
 	
-	ciudad_cercana = models.CharField(max_length=30)
-	distancia_ciudad= models.PositiveSmallIntegerField() # En km
-	iglesia_cercana = models.CharField(max_length=30)
-	distancia_iglesia = models.PositiveSmallIntegerField() # En km
+	ciudad_cercana = models.CharField('Nombre de la ciudad mas cercana', max_length=30)
+	distancia_ciudad= models.PositiveSmallIntegerField('Distancia a la ciudad mas cercana (Km)') # En km
+	iglesia_cercana = models.CharField('Nombre de la iglesia mas cercana', max_length=30)
+	distancia_iglesia = models.PositiveSmallIntegerField('Distancia a la iglesia mas cercana (Km)') # En km
 
 class Congregacion(models.Model):
 	nombre = models.CharField(max_length=30)
-	lengua_primaria = models.CharField(max_length=20)
-	fecha_fundacion = models.DateField()
-	asistentes_adultos = models.SmallIntegerField()
-	asistentes_ninos = models.SmallIntegerField()
-	miembros_adultos = models.SmallIntegerField()
-	miembros_ninos = models.SmallIntegerField()
+	lengua_primaria = models.CharField('Lengua primaria hablada', max_length=20)
+	fecha_fundacion = models.DateField('Fecha de fundación')
+	asistentes_adultos = models.SmallIntegerField('Promedio de adultos por servicio')
+	asistentes_ninos = models.SmallIntegerField('Promedio de niños por servicio')
+	miembros_adultos = models.SmallIntegerField('Cantidad de miembros adultos')
+	miembros_ninos = models.SmallIntegerField('Cantidad de miembros niños')
 
-	ingresos_ofrendas = models.DecimalField(max_digits=15, decimal_places=3) # ¿Unidad del dinero? Mensual
+	ingresos_ofrendas = models.DecimalField('Ingresos por ofrendas', max_digits=15, decimal_places=3) # ¿Unidad del dinero? Mensual
 
-	nombre_pastor = models.CharField(max_length=50)
-	entrenamiento_biblico = models.CharField(max_length=50)
+	nombre_pastor = models.CharField('Nombre del pastor', max_length=50)
+	entrenamiento_biblico = models.CharField('Entrenamiento Biblico', max_length=50)
 	ESTADO_CIVIL_CHOICES = (
 		(0, 'Soltero'),
 		(1, 'Casado'),
 	)
-	estado_civil = models.SmallIntegerField()
-	numero_hijos = models.PositiveSmallIntegerField()
-	titulos_obtenidos = models.CharField(max_length=50)
-	anios_iglesia = models.PositiveSmallIntegerField()
-	anios_ministerio = models.PositiveSmallIntegerField()
+	estado_civil = models.SmallIntegerField('Estado civil', choices=ESTADO_CIVIL_CHOICES)
+	numero_hijos = models.PositiveSmallIntegerField('Número de hijos')
+	titulos_obtenidos = models.CharField('Titulos obtenidos', max_length=50)
+	anios_iglesia = models.PositiveSmallIntegerField('Años de servicio en la congregación')
+	anios_ministerio = models.PositiveSmallIntegerField('Años de servicio en el ministerio')
 	# Se debe almacenar una foto del pastor
 
-	q1_hay_material_biblico = models.BooleanField() # ¿El pastor ha hablado de la disponibilidad de material para estudio biblico?
-	q1_why_not = models.TextField()
-	q2_usa_material = models.BooleanField() # ¿El pastor ha acordado usar este material para crecimiento de la iglesia?
-	q2_why_not = models.TextField()
-	q2_how_do = models.TextField()
+	hay_material = models.BooleanField('¿El pastor ha hablado de la disponibilidad de material para estudio biblico?')
+	q1_why_not = models.TextField('¿Por que no?', blank=True, null=True)
+	usa_material = models.BooleanField('¿El pastor ha acordado usar este material para crecimiento de la iglesia?') 
+	q2_why_not = models.TextField('¿Por que no?', blank=True, null=True)
+	q2_how_do = models.TextField('¿Como lo hace?', blank=True, null=True)
 	
 	
 class Fuentes_Financieras(models.Model):
@@ -115,8 +115,8 @@ class Fuentes_Financieras(models.Model):
 	Tabla que almacenara entradas economicas como mano de obra, materiales
 	"""
 	nombre = models.CharField(max_length=30)
-	descripcion = models.TextField()
-	valor_local = models.DecimalField(max_digits=15, decimal_places=3)
+	descripcion = models.TextField('Descripción')
+	valor_local = models.DecimalField('Valor en moneda local', max_digits=15, decimal_places=3)
 	valor_dolares = models.DecimalField(max_digits=15, decimal_places=3)
 	edificacion = models.ForeignKey('Edificacion') # Relacion 1 a n entre edificacion y fuentes_financieras
 
