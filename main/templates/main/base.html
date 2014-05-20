@@ -27,18 +27,24 @@
 
 </head>
 <body>
-	<!--[if lt IE 8]>
-		<div class="jumbotron">
-	        <p >Esta apiclación no esta hecha para navegadores tan obsoletos. Use Navegadores como Chrome, Firefox o Internet Explorer 9</p>
-	    </div>
-	<![endif]-->
 	{% include 'main/nav/menu_principal.html' %}
-	
-	{% block body %}{% endblock %}
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="panel panel-default">
+					<p>aqui va el menu de nivel de usuario</p>
+				{% block sidebar_left %}{% endblock %}
+				</div>
+			</div>
+			<div class="col-sm-9">
+				{% block content %}{% endblock %}
+			</div>
+		</div>
+	</div>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{STATIC_URL}}main/js/jquery.js"><\/script>')</script>
-
 	
 	<script src="{{STATIC_URL}}main/bootstrap/js/bootstrap.min.js"></script>
 	{% block js_body %} {% endblock %}

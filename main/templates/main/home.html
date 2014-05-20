@@ -2,19 +2,17 @@
 
 {% block title %} Home {% endblock %}
 
-{% block body %}
 
-	<div class="container-fluid">
+{% block sidebar_left %}
+	
+{% endblock sidebar_left %}
 
-		<div class="row">
-			<div class="col-sm-12 ">
-				<div class="jumbotron clearfix">
-					<h2>Se ha logueado correctamente</h2>
-				</div>
-			</div>
-		</div>
-
+{% block content %}
+	
+	<div class="jumbotron clearfix">
+		<h1>Bienvenido</h1>
+		<p>Inicie creando una aplicacion para tu proyecto de construccion.</p>
+		<a class="btn btn-primary" href="{% url 'aplicacion' %}" role="button">Aplicacion</a>
 	</div>
 
-
-{% endblock body %}
+{% endblock content %}

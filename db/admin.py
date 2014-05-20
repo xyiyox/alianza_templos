@@ -20,7 +20,10 @@ class CondicionesAdmin(admin.ModelAdmin):
         'terminacion': admin.VERTICAL,
     }
 
-    fieldsets = (      
+    fieldsets = ( 
+        (None, {
+            'fields': ('edificacion',)
+        }),
         ('Reportar progreso de construcción', {
             'fields': ('construccion',)
         }),

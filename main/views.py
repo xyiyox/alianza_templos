@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, redirect
+from django.shortcuts import render_to_response, render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.formtools.wizard.views import SessionWizardView
+
 
 from main.forms import *
 
@@ -14,6 +17,31 @@ def home(request):
 
 	return redirect('hacer_login')
 
+
+class Aplicacion(SessionWizardView):
+
+	template_name = "main/aplicacion.html"
+	
+	form_list = [EdificacionForm, ComunidadForm]
+
+
+	def get_form(self, step=None, data=None, files=None):
+		form = super(Aplicacion, self).get_form(step, data, files)
+
+		# determine the step if not given
+		if step is None:
+		    step = self.steps.current
+
+		# AQUI VA LA LOGICA PARA PROCESAR CADA FORM INDEPENDIENTE EN CADA PASO    
+		return form
+
+
+	def done(self, form_list, **kwargs):
+		# AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS
+		return render_to_response('main/done.html', {
+            'form_data': [form.cleaned_data for form in form_list],
+        })
+	
 
 
 def hacer_login(request):

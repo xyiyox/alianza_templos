@@ -1,47 +1,84 @@
-{% extends 'main/base.html' %}
-
 {% load crispy_forms_tags %}
+<!doctype html>
+<html lang="es_ES">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="robots" content="noindex,nofollow,noarchive,noodp,nosnippet">
+	<title> Login | Alianza Templos</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block title %} Login {% endblock %}
+	<!-- <link rel="icon" type="image/png" href="{{STATIC_URL}}main/fav128.png" sizes="128x128"> -->
+	<link rel="stylesheet" href="{{STATIC_URL}}main/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}main/font-awesome/css/font-awesome.min.css">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
-{% block body %} 
+	<style>	
+		body { padding-top: 70px; }	
+		.navbar-brand {padding: 0 15px !important;}	
+	</style>
 
+	<!--[if lt IE 9]>
+      <script src="{{STATIC_URL}}main/js/html5shiv/html5shiv.js"></script>
+      <script src="{{STATIC_URL}}main/js/respond/respond.src.js"></script>
+ 	<![endif]-->
 
-<div class="container">
-	
-	<div class="row">
+</head>
+<body>
 
-		<div class="col-sm-8">
-			<div class="jumbotron">
-				<h1>
-					<i class="fa fa-users"></i>
-					Bienvenidos!
-				</h1>
-				<h3>Construyamos juntos la Alianza</h3>
-
-				<p>Trabajemos juntos por el crecimiento integral de nuestra iglesia...</p>
+	<!--[if lt IE 8]>
+		<div class="container">
+		    <div class="alert alert-danger">
+			    <h1><i class="fa fa-frown-o"></i> Atención!</h1>
+			    <p>Estas usando un navegador muy obsoleto. Por favor <a href="http://browsehappy.com/">actualice su navegador</a> para continuar.</p>
+			    <p><a href="http://browsehappy.com/" class="btn btn-danger btn-lg" role="button">Actualizar</a></p>
 			</div>
 		</div>
+    <![endif]-->
+	{% include 'main/nav/menu_principal.html' %}
+	
+	<div class="container">
+	
+		<div class="row">
 
-		<div class="col-sm-4">
+			<div class="col-sm-8">
+				<div class="jumbotron">
+					<h1>
+						<i class="fa fa-users"></i>
+						Bienvenidos!
+					</h1>
+					<h3>Construyamos juntos la Alianza</h3>
 
-			<div class="panel panel-default">
-				<div class="panel-heading">Ingresar</div>
+					<p>Trabajemos juntos por el crecimiento integral de nuestra iglesia...</p>
+				</div>
+			</div>
 
-				<div class="panel-body">
-					
-					 {% crispy loginForm %} 
+			<div class="col-sm-4">
+
+				<div class="panel panel-default">
+					<div class="panel-heading">Ingresar</div>
+
+					<div class="panel-body">
+						
+						 {% crispy loginForm %} 
+					</div>
+
 				</div>
 
 			</div>
 
 		</div>
 
+
+
 	</div>
 
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{STATIC_URL}}main/js/jquery.js"><\/script>')</script>
 
-
-</div>
-
-
-{% endblock body %}
+	
+	<script src="{{STATIC_URL}}main/bootstrap/js/bootstrap.min.js"></script>
+	{% block js_body %} {% endblock %}
+	{% include 'session_security/all.html' %}
+</body>
+</html>
