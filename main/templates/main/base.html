@@ -31,13 +31,10 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-3">
-				<div class="panel panel-default">
-					<p>aqui va el menu de nivel de usuario</p>
+			<div class="col-sm-3">	
 				{% block sidebar_left %}{% endblock %}
-				</div>
 			</div>
-			<div class="col-sm-9">
+			<div class="col-sm-6">
 				{% block content %}{% endblock %}
 			</div>
 		</div>

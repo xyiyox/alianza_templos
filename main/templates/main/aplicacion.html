@@ -1,11 +1,29 @@
 {% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}Aplicacion{% endblock %}
 
 {% load i18n %}
 
+{% block sidebar_left %}
+	<div class="panel panel-default">
+		<h1 class="panel-title panel-heading">hola</h1>
+
+		<div class="panel-body">
+			<ul class="nav nav-pills nav-stacked">
+				{% for item in wizard.steps.all %}
+				<li class="active"><a href="#">{{item}}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+
+{% endblock %}
+
 {% block content %}
-	<p>Paso {{ wizard.steps.step1 }} de {{ wizard.steps.count }} </p>
+	<div class="page-header">
+	  	<h1>Edificacion <small>Paso {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</small></h1>
+	</div>
 
 	<form action="" method="post">{% csrf_token %}
 		<table>
@@ -13,7 +31,7 @@
 		{% if wizard.form.forms %}
 		    {{ wizard.form.management_form }}
 		    {% for form in wizard.form.forms %}
-		        {{ form }}
+		         {% crispy form %}
 		    {% endfor %}
 		{% else %}
 		    {{ wizard.form }}
