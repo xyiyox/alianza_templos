@@ -23,9 +23,9 @@ class Edificacion(models.Model):
 		(0, 'Comprado'),
 		(1, 'Donado'),
 	)
-	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición')
+	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES)
 
-	tiempo_limite = models.PositiveSmallIntegerField('Tiempo en que se terminará la construcción')
+	tiempo_limite = models.PositiveSmallIntegerField('Tiempo en que se terminará la construcción (Meses)')
 	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30)
 	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30)
 	TIPO_CONSTRUCCION_CHOICES = (
@@ -43,7 +43,7 @@ class Edificacion(models.Model):
 	requiere_permiso = models.BooleanField('¿Requiere de un permiso de construcción?')
 	is_icm_approved = models.BooleanField('¿Ya ha sido aprobado por la ICM?')
 	moneda_local = models.CharField('Moneda Local',max_length=20)
-	dolar_moneda_local = models.DecimalField('Valor de la moneda local en dolares',max_digits=6, decimal_places=3)
+	dolar_moneda_local = models.DecimalField('Valor de la moneda local en dolares',max_digits=8, decimal_places=3)
 
 	""" Informacion Financiera """
 	# Contribuciones estimadas de la congregacion
