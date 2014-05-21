@@ -39,7 +39,6 @@ class Edificacion(models.Model):
 		(1, 'Otro'),
 	)
 	metodo_construccion = models.SmallIntegerField('Método de Construcción',choices=METODO_CONSTRUCCION_CHOICES)
-	congregacion = models.OneToOneField('Congregacion') # Relacion 1 a 1 entre la edificacion y la congregacion
 
 	requiere_permiso = models.BooleanField('¿Requiere de un permiso de construcción?')
 	is_icm_approved = models.BooleanField('¿Ya ha sido aprobado por la ICM?')
@@ -67,6 +66,8 @@ class Edificacion(models.Model):
 	)
 	pago_fondo = models.SmallIntegerField('¿Como se pagara el fondo?',choices=TIPO_PAGO_FONDO)
 
+	estado = models.BooleanField(default=False) # False si el formulario ha sido registrado completamente y True en caso contrario
+
 class Comunidad(models.Model):
 	""" Informacion de la comunidad """
 	poblacion_comunidad = models.CharField(max_length=40)
@@ -78,6 +79,8 @@ class Comunidad(models.Model):
 	distancia_ciudad= models.PositiveSmallIntegerField('Distancia a la ciudad mas cercana (Km)') # En km
 	iglesia_cercana = models.CharField('Nombre de la iglesia mas cercana', max_length=30)
 	distancia_iglesia = models.PositiveSmallIntegerField('Distancia a la iglesia mas cercana (Km)') # En km
+
+	edificacion = models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la comunidad
 
 class Congregacion(models.Model):
 	nombre = models.CharField(max_length=30)
@@ -109,6 +112,7 @@ class Congregacion(models.Model):
 	q2_why_not = models.TextField('¿Por que no?', blank=True, null=True)
 	q2_how_do = models.TextField('¿Como lo hace?', blank=True, null=True)
 	
+	edificacion = models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la congregacion
 	
 class Fuentes_Financieras(models.Model):
 	""" 
@@ -118,6 +122,7 @@ class Fuentes_Financieras(models.Model):
 	descripcion = models.TextField('Descripción')
 	valor_local = models.DecimalField('Valor en moneda local', max_digits=15, decimal_places=3)
 	valor_dolares = models.DecimalField(max_digits=15, decimal_places=3)
+	
 	edificacion = models.ForeignKey('Edificacion') # Relacion 1 a n entre edificacion y fuentes_financieras
 
 
