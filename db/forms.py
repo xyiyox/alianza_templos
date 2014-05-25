@@ -78,6 +78,14 @@ class ComunidadForm(forms.ModelForm):
         model = Comunidad
         exclude = ['edificacion']
 
+    def __init__(self, *args, **kwargs):
+        super(ComunidadForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-9'
+
 class CongregacionForm(forms.ModelForm):
     class Meta:
         model = Congregacion
