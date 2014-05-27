@@ -25,7 +25,7 @@ class Edificacion(models.Model):
 	)
 	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES)
 
-	tiempo_limite = models.PositiveSmallIntegerField('Tiempo en que se terminará la construcción (Meses)')
+	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='en que se terminará la construcción (Meses)')
 	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30)
 	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30)
 	TIPO_CONSTRUCCION_CHOICES = (
@@ -43,30 +43,32 @@ class Edificacion(models.Model):
 	requiere_permiso = models.BooleanField('¿Requiere de un permiso de construcción?')
 	is_icm_approved = models.BooleanField('¿Ya ha sido aprobado por la ICM?')
 	moneda_local = models.CharField('Moneda Local',max_length=20)
-	dolar_moneda_local = models.DecimalField('Valor de la moneda local en dolares',max_digits=8, decimal_places=3)
 
 	""" Informacion Financiera """
 	# Contribuciones estimadas de la congregacion
-	labor_moneda_local = models.DecimalField(max_digits=12, decimal_places=3)
-	labor_dolares = models.DecimalField(max_digits=12, decimal_places=3)
-	materiales_moneda_local = models.DecimalField(max_digits=15, decimal_places=3)
-	materiales_dolares = models.DecimalField(max_digits=15, decimal_places=3)
-	dinero_moneda_local = models.DecimalField(max_digits=15, decimal_places=3)
-	dinero_dolares = models.DecimalField(max_digits=15, decimal_places=3)
-	terreno_moneda_local = models.DecimalField(max_digits=12, decimal_places=3)
-	terreno_dolares = models.DecimalField(max_digits=12, decimal_places=3)
+	mano_obra = models.DecimalField('Mano de obra', max_digits=12, decimal_places=3)
+	valor_materiales = models.DecimalField('Materiales de construcción', max_digits=15, decimal_places=3)
+	dinero_efectivo = models.DecimalField('Dinero en efectivo', max_digits=15, decimal_places=3)
+	aporte_terreno = models.DecimalField('Aporte para el Terreno', max_digits=12, decimal_places=3)
 
-	valor_solicitado_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
-	valor_solicitado_dolares = models.DecimalField(max_digits=12, decimal_places=3)
-	costo_total_monedalocal = models.DecimalField(max_digits=12, decimal_places=3)
-	costo_total_dolares = models.DecimalField(max_digits=12, decimal_places=3)
+	valor_solicitado = models.DecimalField('Dinero solicitado', max_digits=12, decimal_places=3)
+	costo_total = models.DecimalField('Costo total del proyecto', max_digits=12, decimal_places=3)
+
 	TIPO_PAGO_FONDO = (
 		(0, 'Cuota Fija Mensual'),
 		(1, 'Porcentaje Mensual de Ofrendas'),
 	)
 	pago_fondo = models.SmallIntegerField('¿Como se pagara el fondo?',choices=TIPO_PAGO_FONDO)
 
-	estado = models.BooleanField(default=False) # False si el formulario ha sido registrado completamente y True en caso contrario
+	ESTADO_FORMULARIO = (
+		(0, 'EdificacionForm'),
+		(1, 'ComunidadForm'),
+		(2, 'CongregacionForm'),
+		(3, 'FuentesFinancierasForm'),
+		(4, 'CondicionesForm'),
+		(5, 'Terminado'),
+	)
+	estado = models.SmallIntegerField()
 
 class Comunidad(models.Model):
 	""" Informacion de la comunidad """
@@ -120,8 +122,7 @@ class Fuentes_Financieras(models.Model):
 	"""
 	nombre = models.CharField(max_length=30)
 	descripcion = models.TextField('Descripción')
-	valor_local = models.DecimalField('Valor en moneda local', max_digits=15, decimal_places=3)
-	valor_dolares = models.DecimalField(max_digits=15, decimal_places=3)
+	valor = models.DecimalField('Valor en moneda local', max_digits=15, decimal_places=3)
 	
 	edificacion = models.ForeignKey('Edificacion') # Relacion 1 a n entre edificacion y fuentes_financieras
 
