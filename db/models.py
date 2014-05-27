@@ -25,7 +25,6 @@ class Edificacion(models.Model):
 	)
 	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES)
 
-	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='en que se terminará la construcción (Meses)')
 	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30)
 	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30)
 	TIPO_CONSTRUCCION_CHOICES = (
@@ -42,7 +41,9 @@ class Edificacion(models.Model):
 
 	requiere_permiso = models.BooleanField('¿Requiere de un permiso de construcción?')
 	is_icm_approved = models.BooleanField('¿Ya ha sido aprobado por la ICM?')
+
 	moneda_local = models.CharField('Moneda Local',max_length=20)
+	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 
 	""" Informacion Financiera """
 	# Contribuciones estimadas de la congregacion
@@ -50,15 +51,14 @@ class Edificacion(models.Model):
 	valor_materiales = models.DecimalField('Materiales de construcción', max_digits=15, decimal_places=3)
 	dinero_efectivo = models.DecimalField('Dinero en efectivo', max_digits=15, decimal_places=3)
 	aporte_terreno = models.DecimalField('Aporte para el Terreno', max_digits=12, decimal_places=3)
-
 	valor_solicitado = models.DecimalField('Dinero solicitado', max_digits=12, decimal_places=3)
 	costo_total = models.DecimalField('Costo total del proyecto', max_digits=12, decimal_places=3)
-
 	TIPO_PAGO_FONDO = (
 		(0, 'Cuota Fija Mensual'),
 		(1, 'Porcentaje Mensual de Ofrendas'),
 	)
 	pago_fondo = models.SmallIntegerField('¿Como se pagara el fondo?',choices=TIPO_PAGO_FONDO)
+
 
 	ESTADO_FORMULARIO = (
 		(0, 'EdificacionForm'),

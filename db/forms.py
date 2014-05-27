@@ -40,7 +40,6 @@ class EdificacionForm(forms.ModelForm):
                 'Propiedad de la tierra donde se construira el proyecto',
                 Field('owner_escritura', css_class='input-sm'),
                 Field('tipo_adquisicion', css_class='input-sm'),
-                Field('tiempo_limite', css_class='input-sm'),  # dudas con el tipo de campo 
                 Field('dimensiones_terreno', css_class='input-sm'),
                 Field('dimensiones_edificio', css_class='input-sm'),
                 Field('tipo_construccion', css_class='input-sm'),
@@ -48,28 +47,21 @@ class EdificacionForm(forms.ModelForm):
                 Field('requiere_permiso', css_class='input-sm'),
                 Field('is_icm_approved', css_class='input-sm'),
                 Field('moneda_local', css_class='input-sm'),
-                Field('requiere_permiso', css_class='input-sm'),
-                Field('dolar_moneda_local', css_class='input-sm'),
+                Field('tiempo_limite', css_class='input-sm'),
             ),
 
             Fieldset(
                 'Informacion Financiera',
-                Field('labor_moneda_local', css_class='input-sm'),
-                Field('labor_dolares', css_class='input-sm'),
-                Field('materiales_moneda_local', css_class='input-sm'),  # dudas con el tipo de campo 
-                Field('materiales_dolares', css_class='input-sm'),
-                Field('dinero_moneda_local', css_class='input-sm'),
-                Field('dinero_dolares', css_class='input-sm'),
-                Field('terreno_moneda_local', css_class='input-sm'),
-                Field('terreno_dolares', css_class='input-sm'),
-                Field('valor_solicitado_monedalocal', css_class='input-sm'),
-                Field('valor_solicitado_dolares', css_class='input-sm'),
-                Field('costo_total_monedalocal', css_class='input-sm'),
-                Field('costo_total_dolares', css_class='input-sm'),
+                Field('mano_obra', css_class='input-sm'),
+                Field('valor_materiales', css_class='input-sm'), 
+                Field('dinero_efectivo', css_class='input-sm'),
+                Field('aporte_terreno', css_class='input-sm'),
+                Field('valor_solicitado', css_class='input-sm'),
+                Field('costo_total', css_class='input-sm'),
                 Field('pago_fondo', css_class='input-sm'),        
             ),
 
-            'estado',  # este estado debe manejar mas de dos tipos,, por ejempo, uno por cada form y otro cuando fue envidado
+            'estado',
 
         )
 
