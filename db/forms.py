@@ -8,7 +8,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
-from db.models import Edificacion, Comunidad, Congregacion, Fuentes_Financieras, Condiciones
+from db.models import Edificacion, Comunidad, Congregacion, Fuentes_Financieras, Condiciones, InformacionFinanciera
 from .datos import EDIFICACION_COORDENADAS
 
 class EdificacionForm(forms.ModelForm):
@@ -50,6 +50,24 @@ class EdificacionForm(forms.ModelForm):
                 Field('tiempo_limite', css_class='input-sm'),
             ),
 
+            'estado',
+
+        )
+
+class InformacionFinancieraForm(forms.ModelForm):
+    class Meta:
+        model = InformacionFinanciera
+        exclude = ['edificacion']
+
+    def __init__(self, *args, **kwargs):
+        super(InformacionFinancieraForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = True
+        self.helper.form_tag = False
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-9'
+
+        self.helper.layout = Layout(
             Fieldset(
                 'Informacion Financiera',
                 Field('mano_obra', css_class='input-sm'),
@@ -60,9 +78,6 @@ class EdificacionForm(forms.ModelForm):
                 Field('costo_total', css_class='input-sm'),
                 Field('pago_fondo', css_class='input-sm'),        
             ),
-
-            'estado',
-
         )
 
 class ComunidadForm(forms.ModelForm):

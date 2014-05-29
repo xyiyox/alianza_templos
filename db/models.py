@@ -45,6 +45,17 @@ class Edificacion(models.Model):
 	moneda_local = models.CharField('Moneda Local',max_length=20)
 	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 
+	ESTADO_FORMULARIO = (
+		(0, 'EdificacionForm'),
+		(1, 'ComunidadForm'),
+		(2, 'CongregacionForm'),
+		(3, 'FuentesFinancierasForm'),
+		(4, 'CondicionesForm'),
+		(5, 'Terminado'),
+	)
+	estado = models.SmallIntegerField()
+
+class InformacionFinanciera(models.Model):
 	""" Informacion Financiera """
 	# Contribuciones estimadas de la congregacion
 	mano_obra = models.DecimalField('Mano de obra', max_digits=12, decimal_places=3)
@@ -59,16 +70,7 @@ class Edificacion(models.Model):
 	)
 	pago_fondo = models.SmallIntegerField('¿Como se pagara el fondo?',choices=TIPO_PAGO_FONDO)
 
-
-	ESTADO_FORMULARIO = (
-		(0, 'EdificacionForm'),
-		(1, 'ComunidadForm'),
-		(2, 'CongregacionForm'),
-		(3, 'FuentesFinancierasForm'),
-		(4, 'CondicionesForm'),
-		(5, 'Terminado'),
-	)
-	estado = models.SmallIntegerField()
+	edificacion = models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la informacion financiera
 
 class Comunidad(models.Model):
 	""" Informacion de la comunidad """
@@ -93,16 +95,19 @@ class Congregacion(models.Model):
 	miembros_adultos = models.SmallIntegerField('Cantidad de miembros adultos')
 	miembros_ninos = models.SmallIntegerField('Cantidad de miembros niños')
 
-	ingresos_ofrendas = models.DecimalField('Ingresos por ofrendas', max_digits=15, decimal_places=3) # ¿Unidad del dinero? Mensual
+	ingresos_ofrendas = models.DecimalField('Ingresos por ofrendas', max_digits=15, decimal_places=3)
 
+	""" 
+	Informacion del Pastor 
+	"""
 	nombre_pastor = models.CharField('Nombre del pastor', max_length=50)
-	entrenamiento_biblico = models.CharField('Entrenamiento Biblico', max_length=50)
 	ESTADO_CIVIL_CHOICES = (
 		(0, 'Soltero'),
 		(1, 'Casado'),
 	)
 	estado_civil = models.SmallIntegerField('Estado civil', choices=ESTADO_CIVIL_CHOICES)
 	numero_hijos = models.PositiveSmallIntegerField('Número de hijos')
+	entrenamiento_biblico = models.CharField('Entrenamiento Biblico', max_length=50)
 	titulos_obtenidos = models.CharField('Titulos obtenidos', max_length=50)
 	anios_iglesia = models.PositiveSmallIntegerField('Años de servicio en la congregación')
 	anios_ministerio = models.PositiveSmallIntegerField('Años de servicio en el ministerio')
