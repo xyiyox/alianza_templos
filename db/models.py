@@ -45,6 +45,8 @@ class Edificacion(models.Model):
 	moneda_local = models.CharField('Moneda Local',max_length=20)
 	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 
+	foto_construccion = models.FileField('Foto del sitio de la construcción', upload_to='media')
+
 	ESTADO_FORMULARIO = (
 		(0, 'EdificacionForm'),
 		(1, 'ComunidadForm'),
@@ -94,6 +96,7 @@ class Congregacion(models.Model):
 	asistentes_ninos = models.SmallIntegerField('Promedio de niños por servicio')
 	miembros_adultos = models.SmallIntegerField('Cantidad de miembros adultos')
 	miembros_ninos = models.SmallIntegerField('Cantidad de miembros niños')
+	foto_pastor = models.FileField('Foto de la congregación', upload_to='media')
 
 	ingresos_ofrendas = models.DecimalField('Ingresos por ofrendas', max_digits=15, decimal_places=3)
 
@@ -101,6 +104,7 @@ class Congregacion(models.Model):
 	Informacion del Pastor 
 	"""
 	nombre_pastor = models.CharField('Nombre del pastor', max_length=50)
+	foto_pastor = models.FileField('Foto del pastor', upload_to='media')
 	ESTADO_CIVIL_CHOICES = (
 		(0, 'Soltero'),
 		(1, 'Casado'),
