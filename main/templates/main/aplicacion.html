@@ -32,7 +32,7 @@
 
 {% block content %}
 	<div class="page-header">
-	  	<h1>Edificacion <span class="badge pull-right"> {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</span></h1>
+	  	<h1>{{wizard.form}} <span class="badge pull-right"> {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</span></h1>
 	</div>
 
 	<form action="" method="post" class="form-horizontal" role="form">{% csrf_token %}

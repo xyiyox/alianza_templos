@@ -11,14 +11,14 @@ from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, Str
 from db.models import Edificacion, Comunidad, Congregacion, Fuentes_Financieras, Condiciones, InformacionFinanciera
 from .datos import EDIFICACION_COORDENADAS
 
-class EdificacionForm(forms.ModelForm):
-
-    coordenadas = PointField(help_text=EDIFICACION_COORDENADAS)
+class EdificacionForm(forms.ModelForm):   
 
     class Meta:
         model = Edificacion
         exclude = ['estado']
         #widgets = {'coordenadas': LeafletWidget()}
+
+    coordenadas = PointField(help_text=EDIFICACION_COORDENADAS)
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)
@@ -49,10 +49,10 @@ class EdificacionForm(forms.ModelForm):
                 Field('moneda_local', css_class='input-sm'),
                 Field('tiempo_limite', css_class='input-sm'),
             ),
-
-            'estado',
-
         )
+    
+    def __unicode__(self):
+        return "Edificación"
 
 class InformacionFinancieraForm(forms.ModelForm):
     class Meta:
@@ -80,6 +80,9 @@ class InformacionFinancieraForm(forms.ModelForm):
             ),
         )
 
+    def __unicode__(self):
+        return "Información Financiera"
+
 class ComunidadForm(forms.ModelForm):
     class Meta:
         model = Comunidad
@@ -93,17 +96,53 @@ class ComunidadForm(forms.ModelForm):
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
 
+    def __unicode__(self):
+        return "Comunidad"
+
 class CongregacionForm(forms.ModelForm):
     class Meta:
         model = Congregacion
         exclude = ['edificacion']
+
+    def __init__(self, *args, **kwargs):
+        super(CongregacionForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-9'
+
+    def __unicode__(self):
+        return "Congregación"
 
 class FuentesFinancierasForm(forms.ModelForm):
     class Meta:
         model = Fuentes_Financieras
         exclude = ['edificacion']
 
+    def __init__(self, *args, **kwargs):
+        super(FuentesFinancierasForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-9'
+
+    def __unicode__(self):
+        return "Fuentes Financieras"
+
 class CondicionesForm(forms.ModelForm):
     class Meta:
         model = Condiciones
         exclude = ['edificacion']
+
+    def __init__(self, *args, **kwargs):
+        super(CondicionesForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-9'
+
+    def __unicode__(self):
+        return "Condiciones"
