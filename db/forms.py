@@ -48,6 +48,7 @@ class EdificacionForm(forms.ModelForm):
                 Field('is_icm_approved', css_class='input-sm'),
                 Field('moneda_local', css_class='input-sm'),
                 Field('tiempo_limite', css_class='input-sm'),
+                Field('foto_construccion', css_class='input-sm'),
             ),
         )
     
