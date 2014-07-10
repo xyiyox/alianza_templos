@@ -86,7 +86,8 @@ STATIC_URL = '/static/'
 
 # Configuracion de la ruta para los archivos e imagenes
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'public')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public')
+MEDIA_URL = MEDIA_ROOT + '/media/'
 
 ################### configuraciones de paquetes instalados ####################
 

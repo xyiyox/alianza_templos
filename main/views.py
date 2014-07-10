@@ -10,7 +10,7 @@ from django.core.files.storage import FileSystemStorage
 from main.forms import *
 from db.forms import *
 
-
+from alianza_templos.settings import MEDIA_URL
 
 
 def home(request):
@@ -27,7 +27,7 @@ class Aplicacion(SessionWizardView):
 	
 	form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, FuentesFinancierasForm, CondicionesForm]
 
-	file_storage = FileSystemStorage(location='media/fotos')
+	file_storage = FileSystemStorage(location=MEDIA_URL+'fotos/')
 
 	def get_form(self, step=None, data=None, files=None):
 		form = super(Aplicacion, self).get_form(step, data, files)
