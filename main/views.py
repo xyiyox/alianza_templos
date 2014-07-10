@@ -20,7 +20,6 @@ def home(request):
 
 	return redirect('hacer_login')
 
-
 class Aplicacion(SessionWizardView):
 
 	template_name = "main/aplicacion.html"

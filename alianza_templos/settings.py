@@ -122,3 +122,4 @@ LEAFLET_CONFIG = {
     'DEFAULT_ZOOM': 6,
 }
 
+LOGIN_URL = '/login'
