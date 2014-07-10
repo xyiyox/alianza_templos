@@ -45,7 +45,7 @@ class Edificacion(models.Model):
 	moneda_local = models.CharField('Moneda Local',max_length=20)
 	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 
-	foto_construccion = models.FileField('Foto del sitio de la construcción', upload_to='media')
+	foto_construccion = models.ImageField('Foto del sitio de la construcción', upload_to='media')
 
 	ESTADO_FORMULARIO = (
 		(0, 'EdificacionForm'),
