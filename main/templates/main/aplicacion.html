@@ -17,7 +17,7 @@
 
 {% block sidebar_left %}
 	<div class="panel panel-default">
-		<h1 class="panel-title panel-heading">hola</h1>
+		<h1 class="panel-title panel-heading">Pasos</h1>
 
 		<div class="panel-body">
 			<ul class="nav nav-pills nav-stacked">
@@ -35,7 +35,7 @@
 	  	<h1>{{wizard.form}} <span class="badge pull-right"> {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</span></h1>
 	</div>
 
-	<form action="" method="post" class="form-horizontal" role="form">{% csrf_token %}
+	<form enctype="multipart/form-data" action="" method="post" class="form-horizontal" role="form">{% csrf_token %}
 		
 		{{ wizard.management_form }}
 		{% if wizard.form.forms %}
