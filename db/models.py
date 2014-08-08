@@ -12,27 +12,34 @@ class Edificacion(models.Model):
 	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
 	direccion = models.TextField(verbose_name='Dirección')
 	coordenadas = PointField()
-	TIPO_OWNER_ESCRITURA_CHOICES = (
-		(0, 'Partner Organization'),
-		(1, 'Congregacion'),
-		(2, 'Lideres de la Iglesia'),
-		(3, 'Otro'),
+
+	TIPO_OWNER_LOTE_CHOICES = (
+		(0, 'Alianza Cristiana'),
+		(1, 'Otro'),
 	)
-	owner_escritura = models.SmallIntegerField('Dueño de la escritura', choices=TIPO_OWNER_ESCRITURA_CHOICES)
+	owner_lote= models.SmallIntegerField('Dueño del Lote', choices=TIPO_OWNER_LOTE_CHOICES)
+
 	TIPO_ADQUISICION_CHOICES = (
 		(0, 'Comprado'),
 		(1, 'Donado'),
 	)
 	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES)
 
-	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30)
-	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30)
+	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30, help_text=
+		"Ingrese Ancho x Largo en Metros")
+
+	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30, help_text=
+		"Ingrese las medidas en Metros")
+
+	num_pisos = models.SmallIntegerField('Cantidad de Pisos', choices=((0, 1), (1, 2)), default=0 )
+
 	TIPO_CONSTRUCCION_CHOICES = (
-		(0, 'Iglesia'),
-		(1, 'Capilla'),
-		(2, 'Otro'),
+		(0, 'Iglesia',),
+		(1, 'Guarderia'),
+		(2, 'Iglesia/Guarderia'),
 	)
 	tipo_construccion = models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES)
+
 	METODO_CONSTRUCCION_CHOICES = (
 		(0, 'Nueva Edificacion'),
 		(1, 'Otro'),
@@ -40,9 +47,7 @@ class Edificacion(models.Model):
 	metodo_construccion = models.SmallIntegerField('Método de Construcción',choices=METODO_CONSTRUCCION_CHOICES)
 
 	requiere_permiso = models.BooleanField('¿Requiere de un permiso de construcción?')
-	is_icm_approved = models.BooleanField('¿Ya ha sido aprobado por la ICM?')
 
-	moneda_local = models.CharField('Moneda Local',max_length=20)
 	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 
 	foto_construccion = models.ImageField('Foto del sitio de la construcción', upload_to='media')
@@ -60,45 +65,50 @@ class Edificacion(models.Model):
 class InformacionFinanciera(models.Model):
 	""" Informacion Financiera """
 	# Contribuciones estimadas de la congregacion
-	mano_obra = models.DecimalField('Mano de obra', max_digits=12, decimal_places=3)
-	valor_materiales = models.DecimalField('Materiales de construcción', max_digits=15, decimal_places=3)
-	dinero_efectivo = models.DecimalField('Dinero en efectivo', max_digits=15, decimal_places=3)
-	aporte_terreno = models.DecimalField('Aporte para el Terreno', max_digits=12, decimal_places=3)
-	valor_solicitado = models.DecimalField('Dinero solicitado', max_digits=12, decimal_places=3)
+	mano_obra = models.DecimalField('Costo de la Mano de obra', max_digits=12, decimal_places=3)
+	valor_materiales = models.DecimalField('Costo de Materiales de construcción', max_digits=15, decimal_places=3)
+	dinero_efectivo = models.DecimalField('Dinero Ahorrado', max_digits=15, decimal_places=3)
+	valor_terreno = models.DecimalField('Valor del Terreno', max_digits=12, decimal_places=3)
+	VALOR_SOLICITADO_CHOICES = (
+		(0, 14000),
+		(1, 25000),
+		(2, 39000),
+	)
+	valor_solicitado = models.DecimalField('Dinero solicitado', max_digits=12, decimal_places=3, 
+		choices= VALOR_SOLICITADO_CHOICES, default=0)
 	costo_total = models.DecimalField('Costo total del proyecto', max_digits=12, decimal_places=3)
 	TIPO_PAGO_FONDO = (
 		(0, 'Cuota Fija Mensual'),
 		(1, 'Porcentaje Mensual de Ofrendas'),
 	)
-	pago_fondo = models.SmallIntegerField('¿Como se pagara el fondo?',choices=TIPO_PAGO_FONDO)
 
 	edificacion = models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la informacion financiera
 
 class Comunidad(models.Model):
 	""" Informacion de la comunidad """
-	poblacion_comunidad = models.CharField(max_length=40)
 	nombre = models.CharField('Nombre', max_length=50)
-	region = models.CharField('Region, Estado o Distrito', max_length=30) # Tambien puede ser estado, region o distrito
-	pais = models.CharField('Pais', max_length=20)
+	poblacion_comunidad = models.CharField('Cantidad de población', max_length=40)
+	region = models.CharField('Departamento', max_length=30) 
 	
-	ciudad_cercana = models.CharField('Nombre de la ciudad mas cercana', max_length=30)
-	distancia_ciudad= models.PositiveSmallIntegerField('Distancia a la ciudad mas cercana (Km)') # En km
-	iglesia_cercana = models.CharField('Nombre de la iglesia mas cercana', max_length=30)
-	distancia_iglesia = models.PositiveSmallIntegerField('Distancia a la iglesia mas cercana (Km)') # En km
+	capital_depto = models.CharField('Capital del Departamento', max_length=30)
+	distancia_capital= models.PositiveSmallIntegerField('Distancia a la capital', 
+		help_text="Por favor ingrese el valor en Kilometros (Km)")
 
 	edificacion = models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la comunidad
 
 class Congregacion(models.Model):
 	nombre = models.CharField(max_length=30)
 	lengua_primaria = models.CharField('Lengua primaria hablada', max_length=20)
-	fecha_fundacion = models.DateField('Fecha de fundación')
-	asistentes_adultos = models.SmallIntegerField('Promedio de adultos por servicio')
-	asistentes_ninos = models.SmallIntegerField('Promedio de niños por servicio')
-	miembros_adultos = models.SmallIntegerField('Cantidad de miembros adultos')
-	miembros_ninos = models.SmallIntegerField('Cantidad de miembros niños')
+	fecha_fundacion = models.DateField('Fecha de fundación', help_text='Dia/Mes/Año')
+	asistencia_general = models.SmallIntegerField('Asistencia general promedio')
+	asistencia_ninos = models.SmallIntegerField('Asistencia general promedio de niños')
+	miembros_adultos = models.SmallIntegerField('Cantidad de miembros adultos', 
+		help_text='Recuerde que se considera como miembro a aquel que ha sido bautizado')
+	miembros_ninos = models.SmallIntegerField('Cantidad de miembros niños', 
+		help_text='Recuerde que se considera como miembro a aquel que ha sido bautizado')
 	foto_pastor = models.FileField('Foto de la congregación', upload_to='media')
 
-	ingresos_ofrendas = models.DecimalField('Ingresos por ofrendas', max_digits=15, decimal_places=3)
+	ingreso_mensual = models.DecimalField('Ingreso mensual promedio', max_digits=15, decimal_places=3)
 
 	""" 
 	Informacion del Pastor 
@@ -108,14 +118,15 @@ class Congregacion(models.Model):
 	ESTADO_CIVIL_CHOICES = (
 		(0, 'Soltero'),
 		(1, 'Casado'),
+		(2, 'Viudo'),
+		(3, 'Otro'),
 	)
 	estado_civil = models.SmallIntegerField('Estado civil', choices=ESTADO_CIVIL_CHOICES)
-	numero_hijos = models.PositiveSmallIntegerField('Número de hijos')
-	entrenamiento_biblico = models.CharField('Entrenamiento Biblico', max_length=50)
-	titulos_obtenidos = models.CharField('Titulos obtenidos', max_length=50)
-	anios_iglesia = models.PositiveSmallIntegerField('Años de servicio en la congregación')
+	cant_hijos = models.PositiveSmallIntegerField('Cantidad de hijos')
+	entrenamiento_biblico = models.PositiveSmallIntegerField('Años de entrenamiento Biblico')
+	titulos_obtenidos = models.CharField('Titulos obtenidos', max_length=70)
+	anios_iglesia = models.PositiveSmallIntegerField('Años de servicio en la congregación actual')
 	anios_ministerio = models.PositiveSmallIntegerField('Años de servicio en el ministerio')
-	# Se debe almacenar una foto del pastor
 
 	hay_material = models.BooleanField('¿El pastor ha hablado de la disponibilidad de material para estudio biblico?')
 	q1_why_not = models.TextField('¿Por que no?', blank=True, null=True)

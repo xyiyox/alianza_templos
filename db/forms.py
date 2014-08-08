@@ -38,15 +38,14 @@ class EdificacionForm(forms.ModelForm):
 
             Fieldset(
                 'Propiedad de la tierra donde se construira el proyecto',
-                Field('owner_escritura', css_class='input-sm'),
+                Field('owner_lote', css_class='input-sm'),
                 Field('tipo_adquisicion', css_class='input-sm'),
                 Field('dimensiones_terreno', css_class='input-sm'),
                 Field('dimensiones_edificio', css_class='input-sm'),
+                Field('num_pisos', css_class='input-sm'),                
                 Field('tipo_construccion', css_class='input-sm'),
                 Field('metodo_construccion', css_class='input-sm'),
                 Field('requiere_permiso', css_class='input-sm'),
-                Field('is_icm_approved', css_class='input-sm'),
-                Field('moneda_local', css_class='input-sm'),
                 Field('tiempo_limite', css_class='input-sm'),
                 Field('foto_construccion', css_class='input-sm'),
             ),
@@ -74,10 +73,9 @@ class InformacionFinancieraForm(forms.ModelForm):
                 Field('mano_obra', css_class='input-sm'),
                 Field('valor_materiales', css_class='input-sm'), 
                 Field('dinero_efectivo', css_class='input-sm'),
-                Field('aporte_terreno', css_class='input-sm'),
+                Field('valor_terreno', css_class='input-sm'),
                 Field('valor_solicitado', css_class='input-sm'),
-                Field('costo_total', css_class='input-sm'),
-                Field('pago_fondo', css_class='input-sm'),        
+                Field('costo_total', css_class='input-sm'),       
             ),
         )
 
