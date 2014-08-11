@@ -99,7 +99,17 @@ class Comunidad(models.Model):
 class Congregacion(models.Model):
 	nombre = models.CharField(max_length=30)
 	lengua_primaria = models.CharField('Lengua primaria hablada', max_length=20)
-	fecha_fundacion = models.DateField('Fecha de fundación', help_text='Dia/Mes/Año')
+	fecha_fundacion = models.DateField('Fecha de Fundación', help_text='Dia/Mes/Año')
+	REGION_CHOICES = (
+		(0, 'Central'),
+		(1, 'Sur Oriental'),
+		(2, 'Mecusab'),
+		(3, 'Pacífico'),
+		(4, 'Sur'),
+		(5, 'Valle'),
+	)
+	region = models.SmallIntegerField('Región', choices=REGION_CHOICES, 
+		help_text='La Región a la que pertenece la Iglesia')
 	asistencia_general = models.SmallIntegerField('Asistencia general promedio')
 	asistencia_ninos = models.SmallIntegerField('Asistencia general promedio de niños')
 	miembros_adultos = models.SmallIntegerField('Cantidad de miembros adultos', 
