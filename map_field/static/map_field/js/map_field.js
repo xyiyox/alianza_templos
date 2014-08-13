@@ -1,23 +1,10 @@
 
 /*
-Integration for Google Maps in the django admin.
-
-How it works:
-
-You have an address field on the page.
-Enter an address and an on change event will update the map
-with the address. A marker will be placed at the address.
-If the user needs to move the marker, they can and the geolocation
-field will be updated.
-
-Only one marker will remain present on the map at a time.
 
 This script expects:
 
 <input type="text" name="address" id="id_address" />
-<input type="text" name="geolocation" id="id_geolocation" />
-
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<input type="text" class="geolocation_field" />
 
 */
 
@@ -33,8 +20,6 @@ function leafletMap() {
             var lng = -74.098308;
             var zoom = 6;
 
-            // set up initial map to be world view. also, add change
-            // event so changing address will update the map
             existinglocation = self.getExistingLocation();
             if (existinglocation) {
                 lat = existinglocation[0];
@@ -42,14 +27,10 @@ function leafletMap() {
                 zoom = 16;
             }
 
-            existingZoom = self.getExistingZoom();
-            if (existingZoom) zoom = existingZoom;
+            // existingZoom = self.getExistingZoom();
+            // if (existingZoom) zoom = existingZoom;
 
             var latlng = L.latLng(lat, lng);
-
-            
-
-            //google.maps.event.addListener(map, 'zoom_changed', self.updateZoom);
 
             var mqUrl      = 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
                 osmAttrib  = 'Map data &copy; <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a> contributors',
@@ -71,19 +52,10 @@ function leafletMap() {
                 self.setMarker(latlng);
             };
 
-            map.on('click', function(e) {
-                
-                marker.setLatLng(e.latlng);
-                if (! map.hasLayer( marker)) {
-                   marker.addTo(map); 
-                };
-
-                var point = e.latlng.lat + "," + e.latlng.lng;
-                $('.geolocation_field').val(point);
-            });
-
-
+            map.on('click', self.onClick);
         },
+
+
 
         getExistingLocation: function() {
             var geolocation = $(".geolocation_field").val();
@@ -92,13 +64,16 @@ function leafletMap() {
             }
         },
 
-        getExistingZoom: function() {
-            var zoom = $("#id_zoom").val();
-            if (zoom) return parseInt(zoom);
+        // getExistingZoom: function() {
+        //     var zoom = $("#id_zoom").val();
+        //     if (zoom) return parseInt(zoom);
+        // },
+
+        onClick: function(e) {
+            self.setMarker(e.latlng)
         },
 
  
-
         setMarker: function(latlng) {
             if (map.hasLayer( marker)) {
                 marker.setLatLng(latlng);
@@ -106,6 +81,7 @@ function leafletMap() {
                 self.addMarker(latlng);
             }
             map.setView(latlng);
+            self.updateGeolocation(latlng);
         },
 
         addMarker: function(latlng) {
@@ -114,12 +90,9 @@ function leafletMap() {
         },
 
 
-        updateMarker: function(latlng) {
-            marker.setPosition(latlng);
-        },
-
         updateGeolocation: function(latlng) {
-            $("#id_geolocation").val(latlng.lat() + "," + latlng.lng());
+            var point = latlng.lat + "," + latlng.lng;
+            $('.geolocation_field').val(point);
         },
 
         updateZoom: function(latlng) {
