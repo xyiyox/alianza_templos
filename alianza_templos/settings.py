@@ -38,10 +38,11 @@ INSTALLED_APPS = (
 
     'crispy_forms',
     'session_security',
-    'leaflet',
-    'djgeojson',
-    'jsonfield',
+    #'leaflet',
+    #'djgeojson',
+    #'jsonfield',
     'debug_toolbar',
+    'map_field',
 
     'south',
     'usuarios',
@@ -116,10 +117,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # configuracion de leaflet
-LEAFLET_CONFIG = {
+#LEAFLET_CONFIG = {
     #'SPATIAL_EXTENT': (5.0, 44.0, 7.5, 46),
-    'DEFAULT_CENTER': (4.520855,-74.098308),
-    'DEFAULT_ZOOM': 6,
-}
+    #'DEFAULT_CENTER': (4.520855,-74.098308),
+    #'DEFAULT_ZOOM': 6,
+#}
 
 LOGIN_URL = '/login'

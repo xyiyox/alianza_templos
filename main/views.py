@@ -28,16 +28,13 @@ class Aplicacion(SessionWizardView):
 
 	file_storage = FileSystemStorage(location=MEDIA_URL+'fotos/')
 
-	def get_form(self, step=None, data=None, files=None):
-		form = super(Aplicacion, self).get_form(step, data, files)
+	def process_step(self, form):
+		#form.data['estado'] = form.data['aplicacion-current_step']
+		#model = self.get_form_instance(form.data['aplicacion-current_step'])
+		print form
+		#print model
 
-		# determine the step if not given
-		if step is None:
-		    step = self.steps.current
-
-		# AQUI VA LA LOGICA PARA PROCESAR CADA FORM INDEPENDIENTE EN CADA PASO    
-		return form
-
+		return self.get_form_step_data(form)
 
 	def done(self, form_list, **kwargs):
 		# AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS

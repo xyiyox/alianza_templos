@@ -2,6 +2,7 @@
 from django.db import models
 from djgeojson.fields import PointField
 from .datos import *
+from map_field import fields as map_fields
 
 
 class Edificacion(models.Model):
@@ -11,7 +12,7 @@ class Edificacion(models.Model):
 	"""
 	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
 	direccion = models.TextField(verbose_name='Dirección')
-	coordenadas = PointField()
+	coordenadas = map_fields.GeoLocationField(max_length=100) 
 
 	TIPO_OWNER_LOTE_CHOICES = (
 		(0, 'Alianza Cristiana'),
@@ -50,7 +51,7 @@ class Edificacion(models.Model):
 
 	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 
-	foto_construccion = models.ImageField('Foto del sitio de la construcción', upload_to='media')
+	#foto_construccion = models.ImageField('Foto del sitio de la construcción', upload_to='media')
 
 	ESTADO_FORMULARIO = (
 		(0, 'EdificacionForm'),

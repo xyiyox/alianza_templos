@@ -1,18 +1,17 @@
 {% extends 'main/base.html' %}
 {% load i18n %}
 {% load crispy_forms_tags %}
-{% load leaflet_tags %}
+
 
 {% block title %}Aplicacion{% endblock %}
 
 
 {% block css %} 
 	{{ wizard.form.media }}
-    {% leaflet_css plugins="forms" %}
 {% endblock %}
 
 {% block js_head %} 
-	{% leaflet_js plugins="forms" %}
+
 {% endblock %}
 
 {% block sidebar_left %}

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
 
-from leaflet.forms.fields import PointField
-from leaflet.forms.widgets import LeafletWidget
-
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
@@ -11,14 +8,16 @@ from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, Str
 from db.models import Edificacion, Comunidad, Congregacion, Fuentes_Financieras, Condiciones, InformacionFinanciera
 from .datos import EDIFICACION_COORDENADAS
 
-class EdificacionForm(forms.ModelForm):   
+from map_field import widgets as map_widgets
+from map_field import fields as map_fields
+
+class EdificacionForm(forms.ModelForm):  
+
+    coordenadas = forms.CharField(widget=map_widgets.MapsGeoPointhWidget()) 
 
     class Meta:
         model = Edificacion
         exclude = ['estado']
-        #widgets = {'coordenadas': LeafletWidget()}
-
-    coordenadas = PointField(help_text=EDIFICACION_COORDENADAS)
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)
@@ -47,7 +46,6 @@ class EdificacionForm(forms.ModelForm):
                 Field('metodo_construccion', css_class='input-sm'),
                 Field('requiere_permiso', css_class='input-sm'),
                 Field('tiempo_limite', css_class='input-sm'),
-                Field('foto_construccion', css_class='input-sm'),
             ),
         )
     
