@@ -40,14 +40,23 @@ class Aplicacion(SessionWizardView):
 
 	def process_step(self, form):
 
-		instance = form.save(commit=False)
-		instance.estado = form.data['aplicacion-current_step']
-		instance.save()
+
+		step_current = form.data['aplicacion-current_step']
+		if step_current == '0':
+			model_instance = form.save(commit=False)
+			model_instance.estado = step_current
+			model_instance.save()
+		else:
+			print "HOALAHSDHFAFH"
+			print self.storage.get_step_data('0')
+			instance = form.save(commit=False)
+			#instance.edificacion = model_instance.pk
+			#instance.save()
+
+			#model_instance.estado = step_current
+			#model_instance.save()
 
 		return self.get_form_step_data(form)
-
-	
-	
 
 
 def hacer_login(request):
