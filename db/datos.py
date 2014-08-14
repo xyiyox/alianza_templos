@@ -6,10 +6,7 @@ BOOL_CHOICES = ((True, _('Yes')), (False, _('No')))
 
 EDIFICACION_COORDENADAS       = """Navegue acercando el mapa con el botón 
 								<button type="button" class="btn btn-default btn-xs" disabled><i class="fa fa-plus"></i></button> o doble click 
-								y arrastrando el mouse hasta el lugar mas exacto posible donde se va a construir el templo y ponga un marcador 
-								dando click primero en 
-								<button type="button" class="btn btn-default btn-xs" disabled><i class="fa fa-map-marker"></i></button>  
-								y luego en el mapa."""
+								y arrastrando el mouse hasta el lugar mas exacto posible donde se realizará el proyecto y ubique ahi el marcador."""
 
 
 CONDICIONES_CONSTRUCCION      = """Proveeremos fotos y reportes del progres de la construcción con cada solicitud de pago y seguiremos los lineamientos 

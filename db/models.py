@@ -12,7 +12,7 @@ class Edificacion(models.Model):
 	"""
 	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
 	direccion = models.TextField(verbose_name='Dirección')
-	coordenadas = map_fields.GeoLocationField(max_length=100) 
+	coordenadas = map_fields.GeoLocationField(max_length=100, help_text=EDIFICACION_COORDENADAS) 
 
 	TIPO_OWNER_LOTE_CHOICES = (
 		(0, 'Alianza Cristiana'),

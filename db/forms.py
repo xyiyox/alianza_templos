@@ -11,9 +11,10 @@ from .datos import EDIFICACION_COORDENADAS
 from map_field import widgets as map_widgets
 from map_field import fields as map_fields
 
+
 class EdificacionForm(forms.ModelForm):  
 
-    coordenadas = forms.CharField(widget=map_widgets.MapsGeoPointhWidget()) 
+    #coordenadas = forms.CharField(widget=map_widgets.MapsGeoPointhWidget()) 
 
     class Meta:
         model = Edificacion
@@ -28,12 +29,13 @@ class EdificacionForm(forms.ModelForm):
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
         #self.fields['coordenadas'].label = False
-        self.fields['coordenadas'].field_class = 'col-sm-12'
+        self.fields['coordenadas'].widget = map_widgets.MapsGeoPointhWidget()
+        #self.fields['coordenadas'].field_class = 'col-sm-12'
 
         self.helper.layout = Layout(
             Field('nombre_proyecto', css_class='input-sm'),
             Field('direccion', rows="2", css_class='input-xlarge', wrapper_class="hoajajajjaj"),          
-            Field('coordenadas', css_class="col-sm-12"),
+            Field('coordenadas', css_class="col-sm-12 input-sm geolocation_field"),
 
             Fieldset(
                 'Propiedad de la tierra donde se construira el proyecto',

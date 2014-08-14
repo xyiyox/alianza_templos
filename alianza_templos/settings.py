@@ -38,9 +38,6 @@ INSTALLED_APPS = (
 
     'crispy_forms',
     'session_security',
-    #'leaflet',
-    #'djgeojson',
-    #'jsonfield',
     'debug_toolbar',
     'map_field',
 
@@ -82,13 +79,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'public/static')
 STATIC_URL = '/static/'
 
 # Configuracion de la ruta para los archivos e imagenes
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'public')
-MEDIA_URL = MEDIA_ROOT + '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media')
+MEDIA_URL = '/media/'
 
 ################### configuraciones de paquetes instalados ####################
 
@@ -116,11 +113,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #SESSION_SECURITY_EXPIRE_AFTER = 60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-# configuracion de leaflet
-#LEAFLET_CONFIG = {
-    #'SPATIAL_EXTENT': (5.0, 44.0, 7.5, 46),
-    #'DEFAULT_CENTER': (4.520855,-74.098308),
-    #'DEFAULT_ZOOM': 6,
-#}
 
 LOGIN_URL = '/login'
