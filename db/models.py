@@ -156,15 +156,14 @@ class Congregacion(models.Model):
 	def __str__(self):
 		return "Congregación"
 	
-class Fuentes_Financieras(models.Model):
+class Fuentes_Financiacion(models.Model):
 	""" 
-	Tabla que almacenara entradas economicas como mano de obra, materiales
+	Tabla que almacenara posibles entradas economicas dinstintas a ICM que tenga el proyecto
 	"""
-	nombre = models.CharField(max_length=30)
-	descripcion = models.TextField('Descripción')
-	valor = models.DecimalField('Valor en moneda local', max_digits=15, decimal_places=3)
+	nombre 			= models.CharField(max_length=30)
+	valor 			= models.DecimalField('Valor', max_digits=15, decimal_places=3)
 	
-	edificacion = models.ForeignKey('Edificacion') # Relacion 1 a n entre edificacion y fuentes_financieras
+	info_financiera = models.ForeignKey('InformacionFinanciera')
 
 
 class Condiciones(models.Model):
