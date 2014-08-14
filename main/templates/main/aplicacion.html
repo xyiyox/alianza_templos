@@ -31,7 +31,7 @@
 
 {% block content %}
 	<div class="page-header">
-	  	<h1>{{wizard.form}} <span class="badge pull-right"> {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</span></h1>
+	  	<h1>{{wizard.form.quien_soy}} <span class="badge pull-right"> {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</span></h1>
 	  	{% for field in form%}
 	  	 {{fiel.error}}
 	  	 {% endfor %}

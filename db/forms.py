@@ -5,14 +5,18 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
-from db.models import Edificacion, Comunidad, Congregacion, Fuentes_Financieras, Condiciones, InformacionFinanciera
+from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera
 from .datos import EDIFICACION_COORDENADAS
 
 from map_field import widgets as map_widgets
 from map_field import fields as map_fields
 
+class ModelFormBase(forms.ModelForm):
+            
+    def quien_soy(self):
+        return self.instance
 
-class EdificacionForm(forms.ModelForm):  
+class EdificacionForm(ModelFormBase):  
 
     #coordenadas = forms.CharField(widget=map_widgets.MapsGeoPointhWidget()) 
 
@@ -50,11 +54,8 @@ class EdificacionForm(forms.ModelForm):
                 Field('tiempo_limite', css_class='input-sm'),
             ),
         )
-    
-    def __unicode__(self):
-        return "Edificación"
 
-class InformacionFinancieraForm(forms.ModelForm):
+class InformacionFinancieraForm(ModelFormBase):
     class Meta:
         model = InformacionFinanciera
         exclude = ['edificacion']
@@ -79,10 +80,7 @@ class InformacionFinancieraForm(forms.ModelForm):
             ),
         )
 
-    def __unicode__(self):
-        return "Información Financiera"
-
-class ComunidadForm(forms.ModelForm):
+class ComunidadForm(ModelFormBase):
     class Meta:
         model = Comunidad
         exclude = ['edificacion']
@@ -95,10 +93,7 @@ class ComunidadForm(forms.ModelForm):
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
 
-    def __unicode__(self):
-        return "Comunidad"
-
-class CongregacionForm(forms.ModelForm):
+class CongregacionForm(ModelFormBase):
     class Meta:
         model = Congregacion
         exclude = ['edificacion']
@@ -111,26 +106,7 @@ class CongregacionForm(forms.ModelForm):
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
 
-    def __unicode__(self):
-        return "Congregación"
-
-class FuentesFinancierasForm(forms.ModelForm):
-    class Meta:
-        model = Fuentes_Financieras
-        exclude = ['edificacion']
-
-    def __init__(self, *args, **kwargs):
-        super(FuentesFinancierasForm, self).__init__(*args, **kwargs)
-
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.label_class = 'col-sm-3'
-        self.helper.field_class = 'col-sm-9'
-
-    def __unicode__(self):
-        return "Fuentes Financieras"
-
-class CondicionesForm(forms.ModelForm):
+class CondicionesForm(ModelFormBase):
     class Meta:
         model = Condiciones
         exclude = ['edificacion']
@@ -143,5 +119,17 @@ class CondicionesForm(forms.ModelForm):
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
 
-    def __unicode__(self):
-        return "Condiciones"
+class AdjuntosForm(ModelFormBase):
+    class Meta:
+        model = Adjuntos
+        exclude = ['edificacion']
+
+    def __init__(self, *args, **kwargs):
+        super(AdjuntosForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-9'
+        exclude = ['edificacion']
+

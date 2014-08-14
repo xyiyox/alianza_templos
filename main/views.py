@@ -25,7 +25,9 @@ class Aplicacion(SessionWizardView):
 
 	template_name = "main/aplicacion.html"
 	
-	form_list = [EdificacionForm, InformacionFinancieraForm]#, ComunidadForm, CongregacionForm, FuentesFinancierasForm, CondicionesForm]
+
+	form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
+
 
 	def done(self, form_list, **kwargs):
 		# AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS
