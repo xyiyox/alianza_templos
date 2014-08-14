@@ -25,7 +25,7 @@ class Aplicacion(SessionWizardView):
 
 	template_name = "main/aplicacion.html"
 	
-	form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, FuentesFinancierasForm, CondicionesForm]
+	form_list = [EdificacionForm, InformacionFinancieraForm]#, ComunidadForm, CongregacionForm, FuentesFinancierasForm, CondicionesForm]
 
 	def done(self, form_list, **kwargs):
 		# AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS
@@ -37,10 +37,11 @@ class Aplicacion(SessionWizardView):
 	file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'photos'))
 
 	def process_step(self, form):
-		#form.data['estado'] = form.data['aplicacion-current_step']
-		#model = self.get_form_instance(form.data['aplicacion-current_step'])
-		print form.data
-		#print model
+
+		instance = form.save(commit=False)
+		instance.estado = form.data['aplicacion-current_step']
+		instance.save()
+
 		return self.get_form_step_data(form)
 
 	
