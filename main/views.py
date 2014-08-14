@@ -12,6 +12,7 @@ from db.forms import *
 
 from django.conf import settings
 import os
+from db.models import Edificacion
 
 
 def home(request):
@@ -46,19 +47,23 @@ class Aplicacion(SessionWizardView):
 
 
 		step_current = form.data['aplicacion-current_step']
+
+		#step_data = super(MerlinWizard, self).process_step(form).copy()
 		if step_current == '0':
+
 			model_instance = form.save(commit=False)
 			model_instance.estado = step_current
 			model_instance.save()
+			form.data['edificacion_pk'] = model_instance.pk
 		else:
-			print "HOALAHSDHFAFH"
-			print self.storage.get_step_data('0')
+			data1 = self.storage.get_step_data('0')
 			instance = form.save(commit=False)
-			#instance.edificacion = model_instance.pk
-			#instance.save()
+			edificacion = Edificacion.objects.get(pk=data1['pk_primer_model'])
+			instance.edificacion = edificacion
+			instance.save()
 
-			#model_instance.estado = step_current
-			#model_instance.save()
+			edificacione.estado = step_current
+			edificacion.save()
 
 		return self.get_form_step_data(form)
 
