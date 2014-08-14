@@ -25,6 +25,10 @@ class Aplicacion(SessionWizardView):
 
 	template_name = "main/aplicacion.html"
 	
+	initial = {
+		'1': {'fuentes': FuentesFinanciacionForm()},
+	}
+	initial_dict = initial
 
 	form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
 

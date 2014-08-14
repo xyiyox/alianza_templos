@@ -60,4 +60,9 @@
 
 	<br><br><br><br>
 
+	{% if wizard.form.initial %}
+		<!-- Form FuentesFinanciacion -->
+		{% include 'main/forms/formFuentesFinanciacion.html' %}
+	{% endif %}
+	
 {% endblock content %}
