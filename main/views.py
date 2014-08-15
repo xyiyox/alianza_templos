@@ -44,25 +44,27 @@ class Aplicacion(SessionWizardView):
 	file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'photos'))
 
 	def process_step(self, form):
-
+		""" Metodo que procesa cada formulario al momento de ser enviado (submit) """
 
 		step_current = form.data['aplicacion-current_step']
 
 		#step_data = super(MerlinWizard, self).process_step(form).copy()
+		# Para el primer formulario se captura el id (pk) de la edificacion para usarlo en los otros formularios
 		if step_current == '0':
 
-			model_instance = form.save(commit=False)
-			model_instance.estado = step_current
+			model_instance 				= form.save(commit=False)
+			model_instance.estado 		= step_current
 			model_instance.save()
-			form.data['edificacion_pk'] = model_instance.pk
+			form.data['edificacion_pk'] = model_instance.pk 	# Almacena la pk en la data del primer formulario
 		else:
-			data1 = self.storage.get_step_data('0')
-			instance = form.save(commit=False)
-			edificacion = Edificacion.objects.get(pk=data1['pk_primer_model'])
-			instance.edificacion = edificacion
+			data1 		= self.storage.get_step_data('0')		# Se lee la data del primer formulario
+			instance 	= form.save(commit=False)		# Se almacena con commit False el formulario actual
+			edificacion = Edificacion.objects.get(pk=data1['edificacion_pk'])
+			# Se almacena la instancia del formulario actual con el id de la edificacion
+			instance.edificacion = edificacion 		
 			instance.save()
 
-			edificacione.estado = step_current
+			edificacion.estado = step_current	# Fijar el estado del formulario en el modelo edificacion
 			edificacion.save()
 
 		return self.get_form_step_data(form)
