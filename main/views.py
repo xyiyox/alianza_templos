@@ -29,6 +29,7 @@ class Aplicacion(SessionWizardView):
 	initial = {
 		'1': {'fuentes': FuentesFinanciacionForm()},
 	}
+
 	initial_dict = initial
 
 	form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
@@ -48,24 +49,30 @@ class Aplicacion(SessionWizardView):
 
 		step_current = form.data['aplicacion-current_step']
 
-		#step_data = super(MerlinWizard, self).process_step(form).copy()
+
 		# Para el primer formulario se captura el id (pk) de la edificacion para usarlo en los otros formularios
 		if step_current == '0':
-
-			model_instance 				= form.save(commit=False)
-			model_instance.estado 		= step_current
-			model_instance.save()
-			form.data['edificacion_pk'] = model_instance.pk 	# Almacena la pk en la data del primer formulario
+			
+			if self.instance_dict.get('0', False): #.get('edificacion_pk','') != '':
+				form.save()
+			else: 
+				model_instance 				= form.save(commit=False)
+				model_instance.estado 		= step_current
+				model_instance.save()
+				self.instance_dict['0'] = model_instance		
 		else:
-			data1 		= self.storage.get_step_data('0')		# Se lee la data del primer formulario
-			instance 	= form.save(commit=False)		# Se almacena con commit False el formulario actual
-			edificacion = Edificacion.objects.get(pk=data1['edificacion_pk'])
-			# Se almacena la instancia del formulario actual con el id de la edificacion
-			instance.edificacion = edificacion 		
-			instance.save()
+			if self.instance_dict.get(step_current, False): 
+				form.save()
+			else:
+				instance 	= form.save(commit=False)		# Se almacena con commit False el formulario actual
+				edificacion = self.instance_dict['0']	# Edificacion.objects.get(pk=data1['edificacion_pk'])
+				# Se almacena la instancia del formulario actual con el id de la edificacion
+				instance.edificacion = edificacion
+				instance.save()
+				self.instance_dict[step_current] = instance
 
-			edificacion.estado = step_current	# Fijar el estado del formulario en el modelo edificacion
-			edificacion.save()
+				edificacion.estado = step_current	# Fijar el estado del formulario en el modelo edificacion
+				edificacion.save()
 
 		return self.get_form_step_data(form)
 
