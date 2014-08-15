@@ -43,6 +43,12 @@ class Aplicacion(SessionWizardView):
 	#file_storage = FileSystemStorage(location=MEDIA_URL+'fotos/')
 	file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'photos'))
 
+	def get_context_data(self, form, **kwargs):
+	    context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
+	    if self.steps.current == '1':
+	        context.update({'fuentes': FuentesFinanciacionForm()})
+	    return context
+
 	def process_step(self, form):
 		""" Metodo que procesa cada formulario al momento de ser enviado (submit) """
 
