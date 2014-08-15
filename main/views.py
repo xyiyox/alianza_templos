@@ -25,15 +25,11 @@ def home(request):
 class Aplicacion(SessionWizardView):
 
 	template_name = "main/aplicacion.html"
-	
-	initial = {
-		'1': {'fuentes': FuentesFinanciacionForm()},
-	}
-
-	initial_dict = initial
 
 	form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
 
+	#file_storage = FileSystemStorage(location=MEDIA_URL+'fotos/')
+	file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
 
 	def done(self, form_list, **kwargs):
 		# AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS
@@ -41,9 +37,6 @@ class Aplicacion(SessionWizardView):
             'form_data': [form.cleaned_data for form in form_list],
         })
         
-	#file_storage = FileSystemStorage(location=MEDIA_URL+'fotos/')
-	file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'photos'))
-
 	def get_context_data(self, form, **kwargs):
 	    context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
 	    if self.steps.current == '1':
