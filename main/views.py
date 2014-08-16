@@ -47,6 +47,14 @@ class Aplicacion(SessionWizardView):
         
 	def get_context_data(self, form, **kwargs):
 	    context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
+	    
+	    context.update({'form_list': self.form_list})
+	    
+	    model_1 = self.instance_dict.get('0', False)
+	    if model_1:
+	    	context.update({'estado': model_1.estado}) # paso el valor del campo estado en el form 1
+
+
 	    if self.steps.current == '1':
 	        context.update({'fuentes': FuentesFinanciacionForm()})
 	    return context

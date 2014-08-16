@@ -19,11 +19,12 @@
 		<h1 class="panel-title panel-heading">Pasos</h1>
 
 		<div class="panel-body">
-			<ul class="nav nav-pills nav-stacked">
-				{% for item in wizard.steps.all %}
-				<li class="active"><a href="#">{{item}}</a></li>
-				{% endfor %}
-			</ul>
+			
+			{%for key, form in form_list.items %}
+				<button name="wizard_goto_step" type="submit" form="formulario" value="{{ key }}" {% if key > estado %}disabled="disabled"{% endif %} class="btn btn-lg btn-block btn-primary">{{form.quien_soy}}</button>
+			{%endfor%}
+			
+
 		</div>
 	</div>
 
@@ -32,13 +33,15 @@
 {% block content %}
 	<div class="page-header">
 	  	<h1>{{wizard.form.quien_soy}} <span class="badge pull-right"> {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</span></h1>
-	  	{% for field in form%}
+	  	{% for field in wizard.form%}
 	  	 {{fiel.error}}
 	  	 {% endfor %}
 	</div>
 
-	<form enctype="multipart/form-data" action="" method="post" class="form-horizontal" role="form">{% csrf_token %}
+	<form id="formulario" enctype="multipart/form-data" action="" method="post" class="form-horizontal" role="form">{% csrf_token %}
 		
+
+
 		{{ wizard.management_form }}
 		{% if wizard.form.forms %}
 		    {{ wizard.form.management_form }}
