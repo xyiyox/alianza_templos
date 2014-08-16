@@ -69,18 +69,17 @@ class Edificacion(models.Model):
 class InformacionFinanciera(models.Model):
 	""" Informacion Financiera """
 	# Contribuciones estimadas de la congregacion
-	mano_obra 			= models.DecimalField('Costo de la Mano de obra', max_digits=12, decimal_places=3)
-	valor_materiales 	= models.DecimalField('Costo de Materiales de construcción', max_digits=15, decimal_places=3)
-	dinero_efectivo 	= models.DecimalField('Dinero Ahorrado', max_digits=15, decimal_places=3)
-	valor_terreno 		= models.DecimalField('Valor del Terreno', max_digits=12, decimal_places=3)
+	mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
+	valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
+	dinero_efectivo 	= models.PositiveIntegerField('Dinero Ahorrado')
+	valor_terreno 		= models.PositiveIntegerField('Valor del Terreno')
 	VALOR_SOLICITADO_CHOICES = (
 		(0, 14000),
 		(1, 25000),
 		(2, 39000),
 	)
-	valor_solicitado 	= models.DecimalField('Dinero solicitado', max_digits=12, decimal_places=3, 
-							choices= VALOR_SOLICITADO_CHOICES, default=0)
-	costo_total 		= models.DecimalField('Costo total del proyecto', max_digits=12, decimal_places=3)
+	valor_solicitado 	= models.PositiveIntegerField('Dinero solicitado', choices= VALOR_SOLICITADO_CHOICES)
+	costo_total 		= models.PositiveIntegerField('Costo total del proyecto')
 	TIPO_PAGO_FONDO = (
 		(0, 'Cuota Fija Mensual'),
 		(1, 'Porcentaje Mensual de Ofrendas'),

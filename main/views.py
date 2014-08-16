@@ -31,6 +31,14 @@ class Aplicacion(SessionWizardView):
 	#file_storage = FileSystemStorage(location=MEDIA_URL+'fotos/')
 	file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
 
+	def get_form_initial(self, step):
+		# Fijar el valor solicitado dependiendo del tipo de construccion elegido en el formulario edificacion
+		if step == '1':
+			edificacion = self.instance_dict['0']
+			return self.initial_dict.get(step, {'valor_solicitado': edificacion.tipo_construccion})
+
+	 	return self.initial_dict.get(step, {})
+
 	def done(self, form_list, **kwargs):
 		# AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS
 		return render_to_response('main/done.html', {

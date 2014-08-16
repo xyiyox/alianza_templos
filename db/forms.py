@@ -54,11 +54,11 @@ class EdificacionForm(ModelFormBase):
                 Field('tiempo_limite', css_class='input-sm'),
             ),
         )
-
+from django.forms import TextInput
 class InformacionFinancieraForm(ModelFormBase):
     class Meta:
         model = InformacionFinanciera
-        exclude = ['edificacion']
+        exclude = ['edificacion', 'mano_obra', 'valor_materiales']
 
     def __init__(self, *args, **kwargs):
         super(InformacionFinancieraForm, self).__init__(*args, **kwargs)
@@ -67,18 +67,6 @@ class InformacionFinancieraForm(ModelFormBase):
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
-
-        self.helper.layout = Layout(
-            Fieldset(
-                'Informacion Financiera',
-                Field('mano_obra', css_class='input-sm'),
-                Field('valor_materiales', css_class='input-sm'), 
-                Field('dinero_efectivo', css_class='input-sm'),
-                Field('valor_terreno', css_class='input-sm'),
-                Field('valor_solicitado', css_class='input-sm'),
-                Field('costo_total', css_class='input-sm'),       
-            ),
-        )
 
 class ComunidadForm(ModelFormBase):
     class Meta:
