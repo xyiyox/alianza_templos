@@ -21,7 +21,8 @@
 		<div class="panel-body">
 			
 			{%for key, form in form_list.items %}
-				<button name="wizard_goto_step" type="submit" form="formulario" value="{{ key }}" {% if key > estado %}disabled="disabled"{% endif %} class="btn btn-lg btn-block btn-primary">{{form.quien_soy}}</button>
+			{{key}} > {{estado}}
+				<button name="wizard_goto_step" type="submit" form="formulario" value="{{ key }}" {% if key > estado %}disabled{%else%}nada{% endif %} class="btn  btn-block btn-primary">{{form.quien_soy}}</button>
 			{%endfor%}
 			
 

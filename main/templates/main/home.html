@@ -15,4 +15,24 @@
 		<a class="btn btn-primary" href="{% url 'aplicacion' %}" role="button">Aplicacion</a>
 	</div>
 
+	<div class="row">
+		{% for proyecto in proyectos %}
+		<div class="col-sm-4">
+
+			<div class="panel panel-default">
+			  <div class="panel-heading">{{proyecto.nombre_proyecto}}</div>
+			  <div class="panel-body">
+			    <a href="{% url 'aplicacion_edit' pk=proyecto.pk %}" class="btn btn-primary  btn-block " role="button">Editar</a>
+			  </div>
+			</div>
+			
+
+		</div>
+
+		{% empty %}
+			<h1>No hay proyectos aun</h1>	
+		{% endfor %}
+
+	</div>
+
 {% endblock content %}

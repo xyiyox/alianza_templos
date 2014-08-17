@@ -17,100 +17,120 @@ from db.models import Edificacion
 
 def home(request):
 
-	if request.user.is_authenticated():
-		return render(request, 'main/home.html')
+    if request.user.is_authenticated():
+        proyectos = Edificacion.objects.all()
+        ctx = {'proyectos': proyectos}
+        return render(request, 'main/home.html', ctx)
 
-	return redirect('hacer_login')
+    return redirect('hacer_login')
+
+
+
 
 class Aplicacion(SessionWizardView):
 
-	template_name = "main/aplicacion.html"
+    template_name = "main/aplicacion.html"
 
-	form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
+    form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
 
-	#file_storage = FileSystemStorage(location=MEDIA_URL+'fotos/')
-	file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
+    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
 
-	def get_form_initial(self, step):
-		# Fijar el valor solicitado dependiendo del tipo de construccion elegido en el formulario edificacion
-		if step == '1':
-			edificacion = self.instance_dict['0']
-			return self.initial_dict.get(step, {'valor_solicitado': edificacion.tipo_construccion})
+    def get_form_initial(self, step):
+        # Fijar el valor solicitado dependiendo del tipo de construccion elegido en el formulario edificacion
+        if step == '1':
+            edificacion = self.instance_dict['0']
+            return self.initial_dict.get(step, {'valor_solicitado': edificacion.tipo_construccion})
 
-	 	return self.initial_dict.get(step, {})
+        return self.initial_dict.get(step, {})
 
-	def done(self, form_list, **kwargs):
-		# AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS
-		return render_to_response('main/done.html', {
+    
+    def done(self, form_list, **kwargs):
+        # AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS
+        return render_to_response('main/done.html', {
             'form_data': [form.cleaned_data for form in form_list],
         })
+
+
+    def get_form_instance(self, step):
         
-	def get_context_data(self, form, **kwargs):
-	    context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
-	    
-	    context.update({'form_list': self.form_list})
-	    
-	    model_1 = self.instance_dict.get('0', False)
-	    if model_1:
-	    	context.update({'estado': model_1.estado}) # paso el valor del campo estado en el form 1
+        pk = self.kwargs.get('pk', None)
+        if pk:
+            self.instance_dict['0'] = Edificacion.objects.get(pk=pk)
+        return self.instance_dict.get(step, None)
+        
+    
+    def get_context_data(self, form, **kwargs):
+        context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
+
+       
+        context.update({'form_list': self.form_list})
+        
+        model_1 = self.instance_dict.get('0', False)
+        if model_1:
+            context.update({'estado': model_1.estado}) # paso el valor del campo estado en el form 1
 
 
-	    if self.steps.current == '1':
-	        context.update({'fuentes': FuentesFinanciacionForm()})
-	    return context
-
-	def process_step(self, form):
-		""" Metodo que procesa cada formulario al momento de ser enviado (submit) """
-
-		step_current = form.data['aplicacion-current_step']
+        if self.steps.current == '1':
+            context.update({'fuentes': FuentesFinanciacionForm()})
+        return context
+        
+             
+    
 
 
-		# Para el primer formulario se captura el id (pk) de la edificacion para usarlo en los otros formularios
-		if step_current == '0':
-			
-			if self.instance_dict.get('0', False): #.get('edificacion_pk','') != '':
-				form.save()
-			else: 
-				model_instance 				= form.save(commit=False)
-				model_instance.estado 		= step_current
-				model_instance.save()
-				self.instance_dict['0'] = model_instance		
-		else:
-			if self.instance_dict.get(step_current, False): 
-				form.save()
-			else:
-				instance 	= form.save(commit=False)		# Se almacena con commit False el formulario actual
-				edificacion = self.instance_dict['0']	# Edificacion.objects.get(pk=data1['edificacion_pk'])
-				# Se almacena la instancia del formulario actual con el id de la edificacion
-				instance.edificacion = edificacion
-				instance.save()
-				self.instance_dict[step_current] = instance
+    
+    def process_step(self, form):
+        """ Metodo que procesa cada formulario al momento de ser enviado (submit) """
 
-				edificacion.estado = step_current	# Fijar el estado del formulario en el modelo edificacion
-				edificacion.save()
+        step_current = form.data['aplicacion-current_step']
 
-		return self.get_form_step_data(form)
+
+        # Para el primer formulario se captura el id (pk) de la edificacion para usarlo en los otros formularios
+        if step_current == '0':
+            
+            if self.instance_dict.get('0', False): #.get('edificacion_pk','') != '':
+                form.save()
+            else: 
+                model_instance              = form.save(commit=False)
+                model_instance.estado       = step_current
+                model_instance.save()
+                self.instance_dict['0'] = model_instance        
+        else:
+            if self.instance_dict.get(step_current, False): 
+                form.save()
+            else:
+                instance    = form.save(commit=False)       # Se almacena con commit False el formulario actual
+                edificacion = self.instance_dict['0']   # Edificacion.objects.get(pk=data1['edificacion_pk'])
+                # Se almacena la instancia del formulario actual con el id de la edificacion
+                instance.edificacion = edificacion
+                instance.save()
+                self.instance_dict[step_current] = instance
+
+                edificacion.estado = step_current   # Fijar el estado del formulario en el modelo edificacion
+                edificacion.save()
+
+        return self.get_form_step_data(form)
 
 
 def hacer_login(request):
 
-	if request.method == 'POST':
-		print "ES POST"
-		form = LoginForm(data=request.POST)
-		print form
-		if form.is_valid():
-			print "ES VALID"
-			username = form.cleaned_data['username']
-			password = form.cleaned_data['password']
-			user = authenticate(username=username, password=password)
-			if user is not None and user.is_active:
-				login(request, user)
-				return redirect('home')
-		return render(request, 'main/login.html', {'loginForm': form})
+    if request.method == 'POST':
+        print "ES POST"
+        form = LoginForm(data=request.POST)
+        print form
+        if form.is_valid():
+            print "ES VALID"
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                login(request, user)
+                return redirect('home')
+        return render(request, 'main/login.html', {'loginForm': form})
 
 
-	ctx = {'loginForm': LoginForm()}
-	return render(request, 'main/login.html', ctx)
+    ctx = {'loginForm': LoginForm()}
+    return render(request, 'main/login.html', ctx)
 
 def hacer_logout(request):
     logout(request)
