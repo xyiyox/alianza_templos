@@ -3,6 +3,7 @@ from django.db import models
 from djgeojson.fields import PointField
 from .datos import *
 from map_field import fields as map_fields
+from django.conf import settings
 
 
 class Edificacion(models.Model):
@@ -63,8 +64,10 @@ class Edificacion(models.Model):
 	)
 	estado = models.SmallIntegerField()
 
+	usuario = models.ForeignKey(settings.AUTH_USER_MODEL)
+
 	def __str__(self):
-		return "Edificación"
+		return "%s" %"Edificación"
 
 class InformacionFinanciera(models.Model):
 	""" Informacion Financiera """

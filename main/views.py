@@ -108,10 +108,6 @@ class Aplicacion(SessionWizardView):
         if self.steps.current == '1':
             context.update({'fuentes': FuentesFinanciacionForm()})
         return context
-        
-             
-    
-
 
     
     def process_step(self, form):
@@ -128,6 +124,7 @@ class Aplicacion(SessionWizardView):
             else: 
                 model_instance              = form.save(commit=False)
                 model_instance.estado       = step_current
+                model_instance.usuario      = self.request.user
                 model_instance.save()
                 self.instance_dict['0'] = model_instance        
         else:
