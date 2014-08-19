@@ -67,6 +67,7 @@ class InformacionFinancieraForm(ModelFormBase):
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
+        self.fields['valor_solicitado'].widget.attrs['disabled'] = True
 
 class ComunidadForm(ModelFormBase):
     class Meta:
