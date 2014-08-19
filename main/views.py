@@ -53,9 +53,43 @@ class Aplicacion(SessionWizardView):
 
     def get_form_instance(self, step):
         
-        pk = self.kwargs.get('pk', None)
-        if pk:
-            self.instance_dict['0'] = Edificacion.objects.get(pk=pk)
+        pk = self.kwargs.get('pk', None)  # Recibo el pk argument que llega por el reques url
+        
+        # cargamos las instancias solo si estamos en modo edicion
+        if pk:   
+            model_0 = Edificacion.objects.get(pk=pk)   # pedimos el primer modelo
+            self.instance_dict['0'] = model_0
+            
+            try:
+                model_1 = InformacionFinanciera.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                self.instance_dict['1'] = model_1
+            except InformacionFinanciera.DoesNotExist:
+                print "No existe InformacionFinanciera"
+            
+            try:
+                model_2 = Comunidad.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                self.instance_dict['2'] = model_2
+            except Comunidad.DoesNotExist:
+                print "No existe Comunidad"
+
+            try:
+                model_3 = Congregacion.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                self.instance_dict['3'] = model_3
+            except Congregacion.DoesNotExist:
+                print "No existe Congregacion"
+
+            try:
+                model_4 = Adjuntos.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                self.instance_dict['4'] = model_4
+            except Adjuntos.DoesNotExist:
+                print "No existe Adjuntos"
+
+            try:
+                model_5 = Condiciones.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                self.instance_dict['5'] = model_5
+            except Condiciones.DoesNotExist:
+                print "No existe Condiciones"
+
         return self.instance_dict.get(step, None)
         
     
@@ -65,10 +99,11 @@ class Aplicacion(SessionWizardView):
        
         context.update({'form_list': self.form_list})
         
-        model_1 = self.instance_dict.get('0', False)
+        model_1 = self.instance_dict.get('0', False) 
         if model_1:
             context.update({'estado': model_1.estado}) # paso el valor del campo estado en el form 1
-
+        else:
+            context.update({'estado': -1}) # si no existe le envio -1 
 
         if self.steps.current == '1':
             context.update({'fuentes': FuentesFinanciacionForm()})

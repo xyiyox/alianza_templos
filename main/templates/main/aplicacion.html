@@ -21,8 +21,9 @@
 		<div class="panel-body">
 			
 			{%for key, form in form_list.items %}
-			{{key}} > {{estado}}
-				<button name="wizard_goto_step" type="submit" form="formulario" value="{{ key }}" {% if key > estado %}disabled{%else%}nada{% endif %} class="btn  btn-block btn-primary">{{form.quien_soy}}</button>
+				<button name="wizard_goto_step" type="submit" form="formulario" value="{{ key }}"
+						class="btn btn-block btn-primary" 
+						 {% if key|add:"0" > estado|add:"0" %} disabled="disabled" {% endif %}>{{form.quien_soy}}</button>
 			{%endfor%}
 			
 
@@ -59,7 +60,7 @@
 		<button name="wizard_goto_step" class="btn btn-default btn-lg" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
 		{% endif %}
 		
-		<input type="submit" class="btn btn-success input-lg" value="{% trans "submit" %}"/>
+		<input type="submit" class="btn btn-success input-lg" value="guardar y seguir"/>
 	</form>
 
 	<br><br><br><br>
