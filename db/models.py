@@ -74,15 +74,20 @@ class InformacionFinanciera(models.Model):
 	# Contribuciones estimadas de la congregacion
 	mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
 	valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
-	dinero_efectivo 	= models.PositiveIntegerField('Dinero Ahorrado')
-	valor_terreno 		= models.PositiveIntegerField('Valor del Terreno')
+	dinero_efectivo 	= models.PositiveIntegerField('Dinero Ahorrado', 
+							help_text='Ingrese el valor en Dolares (Estados Unidos). Puede usar el siguiente '
+							'enlace como ayuda http://www.colombia.com/cambio_moneda/')
+	valor_terreno 		= models.PositiveIntegerField('Valor del Terreno', 
+							help_text='Ingrese el valor en Dolares (Estados Unidos)')
 	VALOR_SOLICITADO_CHOICES = (
 		(0, 14000),
 		(1, 25000),
 		(2, 39000),
 	)
-	valor_solicitado 	= models.PositiveIntegerField('Dinero solicitado', choices= VALOR_SOLICITADO_CHOICES)
-	costo_total 		= models.PositiveIntegerField('Costo total del proyecto')
+	valor_solicitado 	= models.PositiveIntegerField('Dinero solicitado', choices= VALOR_SOLICITADO_CHOICES, 
+							help_text='Recuerde que este dinero esta expresado en Dolares (Estados Unidos)')
+	costo_total 		= models.PositiveIntegerField('Costo total del proyecto', 
+							help_text='Ingrese el valor en Dolares (Estados Unidos)')
 	TIPO_PAGO_FONDO = (
 		(0, 'Cuota Fija Mensual'),
 		(1, 'Porcentaje Mensual de Ofrendas'),
@@ -91,7 +96,7 @@ class InformacionFinanciera(models.Model):
 	edificacion 		= models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la informacion financiera
 
 	def __str__(self):
-		return "Información Financiera"
+		return "%s" %"Información Financiera"
 
 class Comunidad(models.Model):
 	""" Informacion de la comunidad """
@@ -106,12 +111,12 @@ class Comunidad(models.Model):
 	edificacion 		= models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la comunidad
 
 	def __str__(self):
-		return "Comunidad"
+		return "%s" %"Ciudad"
 
 class Congregacion(models.Model):
 	nombre 				= models.CharField(max_length=30)
-	lengua_primaria 	= models.CharField('Lengua primaria hablada', max_length=20)
 	fecha_fundacion 	= models.DateField('Fecha de Fundación', help_text='Dia/Mes/Año')
+	lengua_primaria 	= models.CharField('Lengua primaria hablada', max_length=20)
 	REGION_CHOICES = (
 		(0, 'Central'),
 		(1, 'Sur Oriental'),
@@ -126,8 +131,7 @@ class Congregacion(models.Model):
 	asistencia_ninos 		= models.SmallIntegerField('Asistencia general promedio de niños')
 	miembros_adultos 		= models.SmallIntegerField('Cantidad de miembros adultos', 
 							help_text='Recuerde que se considera como miembro a aquel que ha sido bautizado')
-	miembros_ninos 			= models.SmallIntegerField('Cantidad de miembros niños', 
-							help_text='Recuerde que se considera como miembro a aquel que ha sido bautizado')
+	miembros_ninos 			= models.SmallIntegerField('Cantidad de miembros niños')
 	ingreso_mensual 		= models.DecimalField('Ingreso mensual promedio', max_digits=15, decimal_places=3)
 
 	""" 
@@ -147,7 +151,7 @@ class Congregacion(models.Model):
 	anios_iglesia 			= models.PositiveSmallIntegerField('Años de servicio en la congregación actual')
 	anios_ministerio 		= models.PositiveSmallIntegerField('Años de servicio en el ministerio')
 
-	hay_material 			= models.BooleanField('¿El pastor ha hablado de la disponibilidad de material para estudio biblico?')
+	hay_material 			= models.BooleanField('¿El pastor conoce el material del Instituto Biblico del Aire?')
 	q1_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
 	usa_material			= models.BooleanField('¿El pastor ha acordado usar este material para crecimiento de la iglesia?') 
 	q2_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
@@ -156,7 +160,7 @@ class Congregacion(models.Model):
 	edificacion 			= models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la congregacion
 
 	def __str__(self):
-		return "Congregación"
+		return "%s" %"Congregación"
 	
 class Fuentes_Financiacion(models.Model):
 	""" 
@@ -188,7 +192,7 @@ class Condiciones(models.Model):
 	nombre_completo   = models.CharField(max_length=50, help_text=CONDICIONES_FULL_NAME)
 
 	def __str__(self):
-		return "Condiciones"
+		return "%s" %"Condiciones"
 
 
 class Adjuntos(models.Model):
@@ -216,4 +220,4 @@ class Adjuntos(models.Model):
 								help_text='Incluya el testimonio del pastor de la congregación')	
 
 	def __str__(self):
-		return "Adjuntos"
+		return "%s" %"Adjuntos"
