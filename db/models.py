@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from djgeojson.fields import PointField
 from .datos import *
 from map_field import fields as map_fields
 from django.conf import settings
