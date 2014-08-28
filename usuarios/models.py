@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
 
 
 class UsuarioManager(BaseUserManager):
+
     def create_user(self, email, nombre, apellidos, password=None):
  
         if not email:
@@ -35,14 +36,25 @@ class UsuarioManager(BaseUserManager):
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
 
-    email = models.EmailField(max_length=255, unique=True)
-    nombre = models.CharField(max_length=50)
-    apellidos = models.CharField(max_length=50)
+    LOCAL       = "local" # '0'
+    REGIONAL    = "regional" # '1'
+    NACIONAL    = "nacional" # '2'
 
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    TIPO_USUARIO = (
+        (LOCAL, "Local"),
+        (REGIONAL, "Regional"),
+        (NACIONAL, "Nacional"),
+    )
 
-    objects = UsuarioManager()
+    email       = models.EmailField(max_length=255, unique=True)
+    nombre      = models.CharField(max_length=50)
+    apellidos   = models.CharField(max_length=50)
+    tipo        = models.CharField(max_length=10, choices=TIPO_USUARIO)
+
+    is_active   = models.BooleanField(default=True)
+    is_admin    = models.BooleanField(default=False)
+
+    objects     = UsuarioManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nombre', 'apellidos']
@@ -58,7 +70,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     # On Python 3: def __str__(self):
-    def __unicode__(self):
+    def __str__(self):
     	if self.nombre:
         	return "%s %s" %(self.nombre, self.apellidos)
         return self.email
