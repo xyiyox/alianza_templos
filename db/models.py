@@ -74,8 +74,9 @@ class InformacionFinanciera(models.Model):
 	mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
 	valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
 	dinero_efectivo 	= models.PositiveIntegerField('Dinero Ahorrado', 
-							help_text='Ingrese el valor en Dolares (Estados Unidos). Puede usar el siguiente '
-							'enlace como ayuda http://www.colombia.com/cambio_moneda/')
+							help_text='Ingrese el valor en Dolares (Estados Unidos). <br>Puede usar '
+							'<a href="http://www.colombia.com/cambio_moneda/" target="_blank">este enlace</a> '
+							'como convertidor de moneda.')
 	valor_terreno 		= models.PositiveIntegerField('Valor del Terreno', 
 							help_text='Ingrese el valor en Dolares (Estados Unidos)')
 	VALOR_SOLICITADO_CHOICES = (

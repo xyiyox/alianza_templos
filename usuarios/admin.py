@@ -18,7 +18,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ('email',)
+        fields = ('email', 'nombre', 'apellidos', 'tipo', 'password1', 'password2',)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -71,34 +71,35 @@ class UserChangeForm(forms.ModelForm):
 
 
 class UsuarioAdmin(UserAdmin):
+
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
-
+    
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'nombre', 'is_active', 'is_admin', 'is_superuser')
+    list_display = ('email', 'nombre', 'apellidos', 'is_active', 'is_admin', 'is_superuser')
     list_filter = ('is_admin',)
     fieldsets = (
         
-        ('Información personal', {'fields': ('nombre', 'apellidos', 'email')}),
+        ('Información personal', {'fields': ('nombre', 'apellidos', 'email', 'tipo', 'user_padre')}),
         ('Permisos', {'fields': ('is_active', 'is_admin', 'groups')}),
-        ('Cambiar Password', {'fields': ('last_login', 'password')}),
+        ('Cambiar Contraseña', {'fields': ('last_login', 'password')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
-        (None, {
+        ('Crear Nuevo Usuario', {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
+            'fields': add_form.Meta.fields }
         ),
     )
+
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
-    readonly_fields = ('last_login', 'is_superuser')
-
+    readonly_fields = ('last_login', 'is_superuser', 'user_padre')
 
 
 # Now register the new UserAdmin...

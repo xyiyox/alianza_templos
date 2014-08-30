@@ -36,14 +36,16 @@ class UsuarioManager(BaseUserManager):
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
 
-    LOCAL       = "local" # '0'
-    REGIONAL    = "regional" # '1'
-    NACIONAL    = "nacional" # '2'
+    LOCAL           = "local"
+    #REGIONAL        = "regional" 
+    NACIONAL        = "nacional" 
+    #ADMINISTRADOR   = "administrador" 
 
     TIPO_USUARIO = (
         (LOCAL, "Local"),
-        (REGIONAL, "Regional"),
+        #(REGIONAL, "Regional"),
         (NACIONAL, "Nacional"),
+        #(ADMINISTRADOR, "Administrador")
     )
 
     email       = models.EmailField(max_length=255, unique=True)
@@ -53,6 +55,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     is_active   = models.BooleanField(default=True)
     is_admin    = models.BooleanField(default=False)
+
+    user_padre  = models.ForeignKey('self', null=True, blank=True, verbose_name="Creador por")
 
     objects     = UsuarioManager()
 
