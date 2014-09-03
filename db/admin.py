@@ -60,7 +60,9 @@ class CondicionesAdmin(admin.ModelAdmin):
 
 admin.site.register(Edificacion, LeafletGeoAdmin)
 admin.site.register(Comunidad)
+admin.site.register(Congregacion)
 admin.site.register(Fuentes_Financiacion)
+admin.site.register(InformacionFinanciera)
 admin.site.register(Condiciones, CondicionesAdmin)
 admin.site.register(Adjuntos)
 

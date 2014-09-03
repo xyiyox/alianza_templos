@@ -18,7 +18,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ('email', 'nombre', 'apellidos', 'tipo', 'password1', 'password2',)
+        fields = ('email', 'nombre', 'apellidos', 'password1', 'password2',)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -61,7 +61,6 @@ class UserChangeForm(forms.ModelForm):
         widgets = {
             'groups': admin.widgets.FilteredSelectMultiple('Permisos', False)
         }
-        #fields = ('email', 'password', 'nombre', 'apellidos', 'is_active', 'is_admin')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -79,11 +78,11 @@ class UsuarioAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'nombre', 'apellidos', 'is_active', 'is_admin', 'is_superuser')
+    list_display = ('email', 'nombre', 'apellidos', 'tipo', 'is_active', 'is_admin', 'is_superuser')
     list_filter = ('is_admin',)
     fieldsets = (
         
-        ('Información personal', {'fields': ('nombre', 'apellidos', 'email', 'tipo', 'user_padre')}),
+        ('Información personal', {'fields': ('nombre', 'apellidos', 'email', 'tipo', 'user_creador')}),
         ('Permisos', {'fields': ('is_active', 'is_admin', 'groups')}),
         ('Cambiar Contraseña', {'fields': ('last_login', 'password')}),
     )
@@ -96,11 +95,40 @@ class UsuarioAdmin(UserAdmin):
         ),
     )
 
+    def save_model(self, request, obj, form, change):
+
+        if change:
+            obj.save()
+
+        elif request.user.is_superuser:
+            obj.tipo = Usuario.NACIONAL
+            obj.is_admin = True
+            obj.user_creador = request.user
+            obj.save()
+            print obj.is_superuser
+
+            g = Group.objects.get(name="nacional")
+            obj.groups.add(g)
+
+        elif request.user.tipo == Usuario.NACIONAL:
+            obj.tipo = Usuario.LOCAL
+            obj.user_creador = request.user
+            obj.save()
+
+            g = Group.objects.get(name="local")
+            obj.groups.add(g)
+
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
-    readonly_fields = ('last_login', 'is_superuser', 'user_padre')
+    readonly_fields = ('last_login', 'is_superuser', 'user_creador')
 
+    #Muestra en el admin solo los modelos creados por el usuario y al usuario mismo
+    def queryset(self, request): 
+        qs = super(UsuarioAdmin, self).queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(user_creador=request.user.id)
 
 # Now register the new UserAdmin...
 admin.site.register(Usuario, UsuarioAdmin)

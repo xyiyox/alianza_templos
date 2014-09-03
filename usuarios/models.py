@@ -48,17 +48,17 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         #(ADMINISTRADOR, "Administrador")
     )
 
-    email       = models.EmailField(max_length=255, unique=True)
-    nombre      = models.CharField(max_length=50)
-    apellidos   = models.CharField(max_length=50)
-    tipo        = models.CharField(max_length=10, choices=TIPO_USUARIO)
+    email           = models.EmailField(max_length=255, unique=True)
+    nombre          = models.CharField(max_length=50)
+    apellidos       = models.CharField(max_length=50)
+    tipo            = models.CharField(max_length=10, choices=TIPO_USUARIO)
 
-    is_active   = models.BooleanField(default=True)
-    is_admin    = models.BooleanField(default=False)
+    is_active       = models.BooleanField(default=True)
+    is_admin        = models.BooleanField(default=False)
 
-    user_padre  = models.ForeignKey('self', null=True, blank=True, verbose_name="Creador por")
+    user_creador    = models.ForeignKey('self', null=True, blank=True, verbose_name="Creador por")
 
-    objects     = UsuarioManager()
+    objects         = UsuarioManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nombre', 'apellidos']
@@ -74,20 +74,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     # On Python 3: def __str__(self):
-    def __str__(self):
+    def __unicode__(self):
     	if self.nombre:
         	return "%s %s" %(self.nombre, self.apellidos)
         return self.email
-
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
-
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return True
 
     @property
     def is_staff(self):

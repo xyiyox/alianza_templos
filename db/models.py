@@ -10,6 +10,9 @@ class Edificacion(models.Model):
 	Representacion de un Proyecto de construccion 
 	de un templo para una iglesia de la IACYMC
 	"""
+	class Meta:
+		verbose_name_plural = "edificaciones"
+			
 	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
 	direccion = models.TextField(verbose_name='Dirección')
 	coordenadas = map_fields.GeoLocationField(max_length=100, help_text=EDIFICACION_COORDENADAS) 
@@ -70,6 +73,10 @@ class Edificacion(models.Model):
 
 class InformacionFinanciera(models.Model):
 	""" Informacion Financiera """
+
+	class Meta:
+		verbose_name_plural = "informaciones financieras"
+
 	# Contribuciones estimadas de la congregacion
 	mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
 	valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
@@ -99,7 +106,11 @@ class InformacionFinanciera(models.Model):
 		return "%s" %"Información Financiera"
 
 class Comunidad(models.Model):
-	""" Informacion de la comunidad """
+	""" Informacion de la ciudad """
+
+	class Meta:
+		verbose_name_plural = "ciudades"
+
 	nombre 				= models.CharField('Nombre', max_length=50)
 	poblacion_comunidad = models.CharField('Cantidad de población', max_length=40)
 	region 				= models.CharField('Departamento', max_length=30) 
@@ -114,6 +125,11 @@ class Comunidad(models.Model):
 		return "%s" %"Ciudad"
 
 class Congregacion(models.Model):
+	""" Informacion de la congregación """
+
+	class Meta:
+		verbose_name_plural = "congregaciones"
+
 	nombre 				= models.CharField(max_length=30)
 	fecha_fundacion 	= models.DateField('Fecha de Fundación', help_text='Dia/Mes/Año')
 	lengua_primaria 	= models.CharField('Lengua primaria hablada', max_length=20)
@@ -174,6 +190,10 @@ class Fuentes_Financiacion(models.Model):
 
 class Condiciones(models.Model):
 	""" Condiciones """
+
+	class Meta:
+		verbose_name_plural = "condiciones"
+
 	edificacion       = models.ForeignKey('Edificacion')
 	construccion      = models.BooleanField(CONDICIONES_CONSTRUCCION, choices=BOOL_CHOICES)
 	mantenimiento     = models.BooleanField(CONDICIONES_MANTENIMIENTO, choices=BOOL_CHOICES)
@@ -197,6 +217,10 @@ class Condiciones(models.Model):
 
 class Adjuntos(models.Model):
 	""" Modelo para almacenar los archivos adjuntos """
+
+	class Meta:
+		verbose_name_plural = "adjuntos"
+
 	edificacion   			= models.ForeignKey('Edificacion')
 
 	foto_construccion 		= models.ImageField('Foto del sitio de construcción', upload_to='adjuntos',
