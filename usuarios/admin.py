@@ -39,11 +39,11 @@ class UserCreationForm(forms.ModelForm):
 
 
 
-class SelectSingleAsList(forms.Select):
-    def value_from_datadict(self, data, files, name):
-        if isinstance(data, (MultiValueDict, MergeDict)):
-            return data.getlist(name)  # NOTE this returns a list rather than a single value.
-        return data.get(name, None)
+# class SelectSingleAsList(forms.Select):
+#     def value_from_datadict(self, data, files, name):
+#         if isinstance(data, (MultiValueDict, MergeDict)):
+#             return data.getlist(name)  # NOTE this returns a list rather than a single value.
+#         return data.get(name, None)
 
 
 class UserChangeForm(forms.ModelForm):

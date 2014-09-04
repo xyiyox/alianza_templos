@@ -54,7 +54,7 @@ class EdificacionForm(ModelFormBase):
                 Field('tiempo_limite', css_class='input-sm'),
             ),
         )
-from django.forms import TextInput
+from crispy_forms.bootstrap import UneditableField
 class InformacionFinancieraForm(ModelFormBase):
     class Meta:
         model = InformacionFinanciera
@@ -68,6 +68,7 @@ class InformacionFinancieraForm(ModelFormBase):
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
         self.fields['valor_solicitado'].widget.attrs['disabled'] = True
+
 
 class ComunidadForm(ModelFormBase):
     class Meta:

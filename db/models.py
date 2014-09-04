@@ -10,6 +10,7 @@ class Edificacion(models.Model):
 	Representacion de un Proyecto de construccion 
 	de un templo para una iglesia de la IACYMC
 	"""
+
 	class Meta:
 		verbose_name_plural = "edificaciones"
 			
@@ -70,6 +71,7 @@ class Edificacion(models.Model):
 
 	def __str__(self):
 		return "%s" %"Edificación"
+
 
 class InformacionFinanciera(models.Model):
 	""" Informacion Financiera """
