@@ -6,6 +6,23 @@ from django.forms import RadioSelect
 from leaflet.admin import LeafletGeoAdmin
 from .models import *
 
+class EdificacionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre_proyecto', 'direccion', 'coordenadas', 'owner_lote', 
+        'tipo_adquisicion', 'dimensiones_terreno', 'dimensiones_edificio', 'num_pisos', 'tipo_construccion',
+        'metodo_construccion', 'requiere_permiso', 'tiempo_limite', 'estado', 'usuario')
+
+class InformacionFinancieraAdmin(admin.ModelAdmin):
+    list_display = ('edificacion', 'dinero_efectivo', 'valor_terreno', 'valor_solicitado', 
+        'costo_total', 'mano_obra', 'valor_materiales',)
+
+class ComunidadAdmin(admin.ModelAdmin):
+    list_display = ('edificacion', 'nombre', 'poblacion_comunidad', 'region', 
+        'capital_depto', 'distancia_capital',)
+
+class CongregacionAdmin(admin.ModelAdmin):  
+    list_display = ('edificacion', 'nombre', 'fecha_fundacion','region', 'asistencia_general', 
+        'asistencia_ninos', 'miembros_adultos', 'miembros_ninos', 'ingreso_mensual',
+        'nombre_pastor',)
 
 class CondicionesAdmin(admin.ModelAdmin):
     radio_fields = {
@@ -56,14 +73,18 @@ class CondicionesAdmin(admin.ModelAdmin):
             'fields': ('aceptacion', 'nombre_completo')
         }),
     )
+
+class AdjuntosAdmin(admin.ModelAdmin):  
+    list_display = ('edificacion', 'foto_construccion', 'foto_congregacion','foto_pastor', 'permiso_construccion', 
+        'escritura_terreno', 'plan_terreno', 'plan_construccion', 'historia_congregacion', 'testimonio_pastor',)
         
 
-admin.site.register(Edificacion, LeafletGeoAdmin)
-admin.site.register(Comunidad)
-admin.site.register(Congregacion)
+admin.site.register(Edificacion, EdificacionAdmin)#LeafletGeoAdmin)
+admin.site.register(InformacionFinanciera, InformacionFinancieraAdmin)
+admin.site.register(Comunidad, ComunidadAdmin)
+admin.site.register(Congregacion, CongregacionAdmin)
 admin.site.register(Fuentes_Financiacion)
-admin.site.register(InformacionFinanciera)
 admin.site.register(Condiciones, CondicionesAdmin)
-admin.site.register(Adjuntos)
+admin.site.register(Adjuntos, AdjuntosAdmin)
 
 

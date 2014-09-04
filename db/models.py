@@ -67,7 +67,7 @@ class Edificacion(models.Model):
 	)
 	estado = models.SmallIntegerField()
 
-	usuario = models.ForeignKey(settings.AUTH_USER_MODEL)
+	usuario = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable')
 
 	def __str__(self):
 		return "%s" %"Edificación"
