@@ -66,6 +66,7 @@ class Edificacion(models.Model):
 		(5, 'Terminado'),
 	)
 	estado = models.SmallIntegerField()
+	etapa_actual = models.PositiveSmallIntegerField()
 
 	usuario = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable')
 
