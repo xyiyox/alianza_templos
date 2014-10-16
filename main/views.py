@@ -136,13 +136,15 @@ class Aplicacion(SessionWizardView):
         if step_current == '0':
             
             if self.instance_dict.get('0', False): #.get('edificacion_pk','') != '':
-                form.save()
+                form.save() # Esto sucede cuando se esta editanto el primer formulario
             else: 
                 model_instance              = form.save(commit=False)
                 model_instance.estado       = step_current
                 model_instance.usuario      = self.request.user
+                # Indicar que esta en etapa de Diligenciamiento
+                model_instance.etapa_actual = Edificacion.ETAPA_ACTUAL[0][0]
                 model_instance.save()
-                self.instance_dict['0'] = model_instance        
+                self.instance_dict['0'] = model_instance
         else:
             if self.instance_dict.get(step_current, False): 
                 form.save()
@@ -155,6 +157,8 @@ class Aplicacion(SessionWizardView):
                 self.instance_dict[step_current] = instance
 
                 edificacion.estado = step_current   # Fijar el estado del formulario en el modelo edificacion
+                # Indicar que esta en etapa de Diligenciamiento
+                edificacion.etapa_actual = Edificacion.ETAPA_ACTUAL[0]
                 edificacion.save()
 
         return self.get_form_step_data(form)
