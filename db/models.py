@@ -65,8 +65,21 @@ class Edificacion(models.Model):
 		(4, 'CondicionesForm'),
 		(5, 'Terminado'),
 	)
-	estado = models.SmallIntegerField()
-	etapa_actual = models.PositiveSmallIntegerField()
+	estado = models.SmallIntegerField(choices=ESTADO_FORMULARIO)
+
+	ETAPA_ACTUAL = (
+		(0, 'En Diligenciamiento'),
+		(1, 'En Revisión Regional'), # 1 semana para revisar por usuario regional
+		(1, 'Aprobado por la Regional'),
+		(1, 'En Revisión Nacional'), # 1 semana para revisar por usuario nacional
+		(1, 'Esperando Cupo'),
+		(2, 'Esperando Fondos'),
+		(3, 'En Construcción'),
+		(4, 'Finalizado'),
+		(5, 'Esperando Correciones'),
+		(6, 'Rechazado'),
+	)
+	etapa_actual = models.PositiveSmallIntegerField(choices=ETAPA_ACTUAL)
 
 	usuario = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable')
 
