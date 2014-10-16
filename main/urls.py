@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = patterns('main.views',
 
     url(r'^$', 'home', name='home'),
+    url(r'^home-local$', 'home_local', name='home_local'),
+    url(r'^home-nacional$', 'home_nacional', name='home_nacional'),
     url(r'^login$', 'hacer_login', name='hacer_login'),
     url(r'^logout$', 'hacer_logout', name='hacer_logout'),
     

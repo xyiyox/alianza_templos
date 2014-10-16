@@ -13,17 +13,31 @@ from db.forms import *
 from django.conf import settings
 import os
 from db.models import Edificacion
+from usuarios.models import Usuario
 
 
 def home(request):
 
     if request.user.is_authenticated():
-        proyectos = Edificacion.objects.all()
-        ctx = {'proyectos': proyectos}
-        return render(request, 'main/home.html', ctx)
+        
+        if request.user.tipo == Usuario.LOCAL:
+            return redirect('home_local')
 
+        if request.user.tipo == Usuario.NACIONAL:
+            return redirect('home_nacional')
+        
     return redirect('hacer_login')
 
+
+def home_local(request):
+    #proyectos = Edificacion.objects.all()
+    #ctx = {'proyectos': proyectos}
+    #return render(request, 'main/home_local.html', ctx)
+    return HttpResponse('<h1>HOLA SOY HOME LOCAL</h1>')
+
+
+def home_nacional(request):
+    return HttpResponse('<h1>HOLA SOY HOME NACIONAL</h1>')
 
 
 
