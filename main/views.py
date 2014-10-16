@@ -30,14 +30,16 @@ def home(request):
 
 
 def home_local(request):
-    #proyectos = Edificacion.objects.all()
-    #ctx = {'proyectos': proyectos}
-    #return render(request, 'main/home_local.html', ctx)
-    return HttpResponse('<h1>HOLA SOY HOME LOCAL</h1>')
+    proyectos = Edificacion.objects.filter(usuario__exact=request.user.pk)
+    ctx = {'proyectos': proyectos}
+    return render(request, 'main/home-local.html', ctx)
+
 
 
 def home_nacional(request):
-    return HttpResponse('<h1>HOLA SOY HOME NACIONAL</h1>')
+    proyectos = Edificacion.objects.all()
+    ctx = {'proyectos': proyectos}
+    return render(request, 'main/home-nacional.html', ctx)
 
 
 
