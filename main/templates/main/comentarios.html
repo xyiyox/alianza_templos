@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Observaciones {% endblock %}
+
+{% block sidebar_left %}
+	
+{% endblock sidebar_left %}
+
+{% block content %}
+
+	{% for comentario in comentarios %}
+		<ul>{{ comentario.commenter }} dice:</ul>
+		<ul>{{ comentario.descripcion }}</ul>
+	{% empty %}
+		<h1>No hay observaciones aún</h1>
+	{% endfor %}
+
+	<form id="formulario" action="" method="post" class="form-horizontal" role="form">{% csrf_token %}
+		<h4>Agregar un comentario:</h4>
+		{{ form.as_p }}
+		<input type="submit" class="btn btn-success input-lg" value="Agregar Comentario"/>
+	</form>
+
+{% endblock content %}
