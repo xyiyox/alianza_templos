@@ -30,16 +30,6 @@ def deploy():
 	reiniciar_servidor()
 
 def update_code():
-	print(green('agregando archivos al repositorio local'))
-	local('git add .')
-
-	with settings(warn_only=True):
-		msg = prompt("mensaje del commit: ")
-		result = local('git commit -a -m %s' % msg, capture=True)
-	if result.failed:
-		abort(red("Abortando. No hay nada para hacer commit"))
-
-
 	print(green('Actualizando repositorio central...'))
 	local('git push origin master')
 
@@ -53,12 +43,12 @@ def actualizar_requerimientos():
 
 def colectar_estaticos():
 	with cd(PROD_PATH):
-		run('source ../bin/activate && ./manage.py collectstatic')
+		run('source ../bin/activate && ./manage.py collectstatic --noinput')
  	#collectstatic()
 
 def sincronizar_bd():
 	with cd(PROD_PATH):
-		run('source ../bin/activate && ./manage.py syncdb')
+		run('source ../bin/activate && ./manage.py syncdb --no-initial-data')
 		run('source ../bin/activate && ./manage.py migrate')
 
 def reiniciar_servidor():
