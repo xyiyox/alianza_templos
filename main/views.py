@@ -29,13 +29,14 @@ def home(request):
     return redirect('hacer_login')
 
 
+@login_required
 def home_local(request):
     proyectos = Edificacion.objects.filter(usuario__exact=request.user.pk)
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-local.html', ctx)
 
 
-
+@login_required
 def home_nacional(request):
     proyectos = Edificacion.objects.all()
     ctx = {'proyectos': proyectos}

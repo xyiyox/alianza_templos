@@ -15,7 +15,7 @@ except ImportError:
 
 RUTA_PROYECTO = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 env.hosts = [private.HOST1]
-PROD_PATH = '/home/alianza/webapps/alianza_templos/alianza_templos'
+PROD_PATH = private.PROD_PATH
 ENV = 'alianza_templos'
 
 #####################################################################
