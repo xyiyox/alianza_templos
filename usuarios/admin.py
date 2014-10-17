@@ -105,13 +105,13 @@ class UsuarioAdmin(UserAdmin):
             obj.is_admin = True
             obj.user_creador = request.user
             obj.save()
-            print obj.is_superuser
 
             g = Group.objects.get(name="nacional")
             obj.groups.add(g)
 
         elif request.user.tipo == Usuario.NACIONAL:
             obj.tipo = Usuario.LOCAL
+            obj.is_admin = True
             obj.user_creador = request.user
             obj.save()
 
