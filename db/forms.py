@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
-from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, Fuentes_Financiacion
+from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, Fuentes_Financiacion, Comentario
 from .datos import EDIFICACION_COORDENADAS
 
 from map_field import widgets as map_widgets
@@ -67,7 +67,7 @@ class InformacionFinancieraForm(ModelFormBase):
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
-        self.fields['valor_solicitado'].widget.attrs['disabled'] = True
+        #self.fields['valor_solicitado'].widget.attrs['disabled'] = True
 
 
 class ComunidadForm(ModelFormBase):
@@ -134,4 +134,12 @@ class FuentesFinanciacionForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
-        
+    
+class ComentarioForm(forms.ModelForm):
+    """Formulario para crear un comentario"""
+    
+    class Meta:
+        model = Comentario
+        exclude = ['edificacion', 'commenter']
+
+           
