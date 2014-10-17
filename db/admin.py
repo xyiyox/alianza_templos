@@ -74,10 +74,12 @@ class CondicionesAdmin(admin.ModelAdmin):
         }),
     )
 
-class AdjuntosAdmin(admin.ModelAdmin):  
+class AdjuntosAdmin(admin.ModelAdmin):
     list_display = ('edificacion', 'foto_construccion', 'foto_congregacion','foto_pastor', 'permiso_construccion', 
         'escritura_terreno', 'plan_terreno', 'plan_construccion', 'historia_congregacion', 'testimonio_pastor',)
         
+class ComentarioAdmin(admin.ModelAdmin):
+    list_display = ('id', 'edificacion', 'commenter', 'descripcion')
 
 admin.site.register(Edificacion, EdificacionAdmin)#LeafletGeoAdmin)
 admin.site.register(InformacionFinanciera, InformacionFinancieraAdmin)
@@ -86,5 +88,4 @@ admin.site.register(Congregacion, CongregacionAdmin)
 admin.site.register(Fuentes_Financiacion)
 admin.site.register(Condiciones, CondicionesAdmin)
 admin.site.register(Adjuntos, AdjuntosAdmin)
-
-
+admin.site.register(Comentario, ComentarioAdmin)

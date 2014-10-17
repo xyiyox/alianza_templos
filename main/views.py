@@ -12,7 +12,7 @@ from db.forms import *
 
 from django.conf import settings
 import os
-from db.models import Edificacion
+from db.models import Edificacion, Comentario
 from usuarios.models import Usuario
 
 
@@ -42,7 +42,12 @@ def home_nacional(request):
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-nacional.html', ctx)
 
-
+@login_required
+def ver_comentarios(request, pk):
+    form = ComentarioForm()
+    comentarios = Comentario.objects.filter(edificacion=pk)
+    ctx = {'comentarios': comentarios, 'form': form}
+    return render(request, 'main/comentarios.html', ctx)
 
 class Aplicacion(SessionWizardView):
 
@@ -159,7 +164,7 @@ class Aplicacion(SessionWizardView):
 
                 edificacion.estado = step_current   # Fijar el estado del formulario en el modelo edificacion
                 # Indicar que esta en etapa de Diligenciamiento
-                edificacion.etapa_actual = Edificacion.ETAPA_ACTUAL[0]
+                edificacion.etapa_actual = Edificacion.ETAPA_ACTUAL[0][0]
                 edificacion.save()
 
         return self.get_form_step_data(form)
