@@ -112,6 +112,7 @@ class UsuarioAdmin(UserAdmin):
 
         elif request.user.tipo == Usuario.NACIONAL:
             obj.tipo = Usuario.LOCAL
+            obj.is_admin = True
             obj.user_creador = request.user
             obj.save()
 
@@ -128,6 +129,8 @@ class UsuarioAdmin(UserAdmin):
         qs = super(UsuarioAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
+        elif request.user.tipo == Usuario.NACIONAL:
+            return qs.filter(tipo=Usuario.LOCAL)
         return qs.filter(user_creador=request.user.id)
 
 # Now register the new UserAdmin...
