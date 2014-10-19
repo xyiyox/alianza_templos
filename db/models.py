@@ -73,8 +73,9 @@ class Edificacion(models.Model):
 		(2, 'Aprobado por la Regional'),
 		(3, 'En Revisión Nacional'), # 1 semana para revisar por usuario nacional
 		(4, 'Esperando Cupo'),
+		(5, 'Aprobado'),
 		(5, 'Esperando Fondos'),
-		(6, 'En Construcción'),
+		(6, 'En Construcción'), # Tiene 3 etapas (3 pagos)
 		(7, 'Finalizado'),
 		(8, 'Esperando Correcciones'),
 		(9, 'Rechazado'),
