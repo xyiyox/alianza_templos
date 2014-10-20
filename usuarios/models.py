@@ -37,13 +37,13 @@ class UsuarioManager(BaseUserManager):
 class Usuario(AbstractBaseUser, PermissionsMixin):
 
     LOCAL           = "local"
-    #REGIONAL        = "regional" 
+    REGIONAL        = "regional" 
     NACIONAL        = "nacional" 
     #ADMINISTRADOR   = "administrador" 
 
     TIPO_USUARIO = (
         (LOCAL, "Local"),
-        #(REGIONAL, "Regional"),
+        (REGIONAL, "Regional"),
         (NACIONAL, "Nacional"),
         #(ADMINISTRADOR, "Administrador")
     )
@@ -57,6 +57,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_admin        = models.BooleanField(default=False)
 
     user_creador    = models.ForeignKey('self', null=True, blank=True, verbose_name="Creador por")
+    user_padre      = models.ForeignKey('self', null=True, blank=True, related_name='padre', 
+                        verbose_name='Asignado a')
 
     objects         = UsuarioManager()
 

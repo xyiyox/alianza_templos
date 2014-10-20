@@ -74,11 +74,11 @@ class Edificacion(models.Model):
 		(3, 'En Revisión Nacional'), # 1 semana para revisar por usuario nacional
 		(4, 'Esperando Cupo'),
 		(5, 'Aprobado'),
-		(5, 'Esperando Fondos'),
-		(6, 'En Construcción'), # Tiene 3 etapas (3 pagos)
-		(7, 'Finalizado'),
-		(8, 'Esperando Correcciones'),
-		(9, 'Rechazado'),
+		(7, 'Esperando Fondos'),
+		(7, 'En Construcción'), # Tiene 3 etapas (3 pagos)
+		(8, 'Finalizado'),
+		(9, 'Esperando Correcciones'),
+		(10, 'Rechazado'),
 	)
 	etapa_actual = models.PositiveSmallIntegerField(choices=ETAPA_ACTUAL)
 

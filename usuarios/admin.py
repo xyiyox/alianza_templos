@@ -6,6 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils.datastructures import MultiValueDict, MergeDict  # para que select retorne una lista
+from django.db.models import Q
 
 from usuarios.models import Usuario
 
@@ -13,8 +14,8 @@ from usuarios.models import Usuario
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Repita su contraseña', widget=forms.PasswordInput)
 
     class Meta:
         model = Usuario
@@ -25,7 +26,7 @@ class UserCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
+            raise forms.ValidationError("Las contraseñas no coinciden")
         return password2
 
     def save(self, commit=True):
@@ -82,7 +83,8 @@ class UsuarioAdmin(UserAdmin):
     list_filter = ('is_admin',)
     fieldsets = (
         
-        ('Información personal', {'fields': ('nombre', 'apellidos', 'email', 'tipo', 'user_creador')}),
+        ('Información personal', {'fields': ('nombre', 'apellidos', 'email', 'tipo', 
+            'user_creador', 'user_padre')}),
         ('Permisos', {'fields': ('is_active', 'is_admin', 'groups')}),
         ('Cambiar Contraseña', {'fields': ('last_login', 'password')}),
     )
@@ -98,30 +100,38 @@ class UsuarioAdmin(UserAdmin):
     def save_model(self, request, obj, form, change):
 
         if change:
-            obj.save()
+            if obj.tipo == Usuario.LOCAL:
+                g = Group.objects.get(name="local")
+                obj.groups.clear()
+                obj.groups.add(g)
 
-        elif request.user.is_superuser:
-            obj.tipo = Usuario.NACIONAL
-            obj.is_admin = True
-            obj.user_creador = request.user
-            obj.save()
+            elif obj.tipo == Usuario.REGIONAL:
+                g = Group.objects.get(name="regional")
+                obj.groups.clear()
+                obj.groups.add(g)
 
-            g = Group.objects.get(name="nacional")
-            obj.groups.add(g)
+            elif obj.tipo == Usuario.NACIONAL:
+                g = Group.objects.get(name="nacional")
+                obj.groups.clear()
+                obj.groups.add(g)
 
-        elif request.user.tipo == Usuario.NACIONAL:
-            obj.tipo = Usuario.LOCAL
-            obj.is_admin = True
-            obj.user_creador = request.user
-            obj.save()
+        obj.is_admin = True
+        obj.user_creador = request.user
+        obj.save()
 
-            g = Group.objects.get(name="local")
-            obj.groups.add(g)
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == "tipo":
+            kwargs['choices'] = (
+                Usuario.TIPO_USUARIO[0], #('local', 'Local'),  
+            )
+            if request.user.is_superuser or request.user.tipo == Usuario.NACIONAL:
+                kwargs['choices'] += Usuario.TIPO_USUARIO[1:3] #(('regional', 'Regional'),('nacional', 'Nacional'))
+        return super(UsuarioAdmin, self).formfield_for_choice_field(db_field, request, **kwargs)
 
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
-    readonly_fields = ('last_login', 'is_superuser', 'user_creador')
+    readonly_fields = ('last_login', 'is_superuser', 'user_creador', 'groups', 'is_admin', 'is_active')
 
     #Muestra en el admin solo los modelos creados por el usuario y al usuario mismo
     def queryset(self, request): 
@@ -129,7 +139,12 @@ class UsuarioAdmin(UserAdmin):
         if request.user.is_superuser:
             return qs
         elif request.user.tipo == Usuario.NACIONAL:
-            return qs.filter(tipo=Usuario.LOCAL)
+            return qs.filter(Q(pk=request.user.pk) | Q(tipo=Usuario.REGIONAL) | 
+                Q(tipo=Usuario.LOCAL))
+        elif request.user.tipo == Usuario.REGIONAL:
+            return qs.filter(Q(pk=request.user.pk) | Q(tipo=Usuario.LOCAL))
+        elif request.user.tipo == Usuario.LOCAL:
+            return qs.filter(pk=request.user.pk)
         return qs.filter(user_creador=request.user.id)
 
 # Now register the new UserAdmin...
