@@ -1,0 +1,37 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Proyecto {% endblock %}
+
+
+{% block sidebar_left %}
+	
+{% endblock sidebar_left %}
+
+{% block content %}
+
+<div class="page-header ">
+  <h1>{{proyecto.nombre_proyecto}} <small></small> <span class="label label-primary pull-right">{{proyecto.pk}}</span></h1>
+</div>
+
+	<div class="clearfix">
+		{% crispy form %}
+	</div>
+
+	{% for coment in comentarios %}
+		
+		<div class="media clearfix">
+			<span class="glyphicon glyphicon-comment pull-left"></span>  
+			<!-- <i class="fa fa-comments-o pull-left"></i> -->
+			<div class="media-body">
+				<h5 class="text-primary media-heading">{{coment.commenter}}  <small>hace {{coment.created|timesince}}</small></h5>	
+				<blockquote>
+				  <p class="" style="font-size:14px;">{{coment.descripcion}}</p>
+				</blockquote>
+			</div>
+		</div>
+	{% endfor %}
+
+	
+
+{% endblock content %}

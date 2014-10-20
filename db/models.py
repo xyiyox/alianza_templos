@@ -263,9 +263,12 @@ class Adjuntos(models.Model):
 	def __str__(self):
 		return "%s" %"Adjuntos"
 
+
+
 class Comentario(models.Model):
 	""" Modelo para almacenar los comentarios de una edificacion """
 	
 	edificacion = models.ForeignKey('Edificacion')
 	commenter 	= models.ForeignKey(settings.AUTH_USER_MODEL)
 	descripcion = models.TextField('Comentario')
+	created     = models.DateTimeField(auto_now_add = True) 

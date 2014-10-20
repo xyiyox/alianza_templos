@@ -49,6 +49,32 @@ def ver_comentarios(request, pk):
     ctx = {'comentarios': comentarios, 'form': form}
     return render(request, 'main/comentarios.html', ctx)
 
+
+@login_required
+def proyecto(request, pk):
+    
+    proyecto     = Edificacion.objects.get(pk=pk)
+   
+    if request.method == 'POST':
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            new_coment = form.save(commit=False)
+            new_coment.edificacion = proyecto
+            new_coment.commenter = request.user
+            new_coment.save()
+            #form.save_m2m()
+            return redirect('/proyecto/%s/' % pk)
+
+    
+    comentarios  = Comentario.objects.filter(edificacion=pk)
+    form         = ComentarioForm()
+    ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'form': form}
+    
+    return render(request, 'main/proyecto.html', ctx)
+
+
+
+
 class Aplicacion(SessionWizardView):
 
     template_name = "main/aplicacion.html"

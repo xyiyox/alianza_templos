@@ -140,6 +140,15 @@ class ComentarioForm(forms.ModelForm):
     
     class Meta:
         model = Comentario
-        exclude = ['edificacion', 'commenter']
+        exclude = ['edificacion', 'commenter', 'created']
 
-           
+    def __init__(self, *args, **kwargs):
+        super(ComentarioForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+
+        self.helper.layout = Layout(
+            PrependedText('descripcion', "<i class='fa fa-user fa-lg'></i>", placeholder="Agrega tu comentario", rows="2"),
+            Submit('enviar', 'Enviar', css_class='btn-info pull-right btn-xs')
+        )
+
