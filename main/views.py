@@ -66,7 +66,7 @@ def proyecto(request, pk):
             return redirect('/proyecto/%s/' % pk)
 
     
-    comentarios  = Comentario.objects.filter(edificacion=pk)
+    comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
     form         = ComentarioForm()
     ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'form': form}
     
