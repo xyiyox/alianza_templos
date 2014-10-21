@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.core.urlresolvers import reverse
+
 from .datos import *
 from map_field import fields as map_fields
 from django.conf import settings
@@ -86,6 +88,12 @@ class Edificacion(models.Model):
 
 	def __str__(self):
 		return "%s" %"Edificación"
+
+
+	def get_absolute_url(self):
+		return reverse('main.views.proyecto', args=[str(self.id)])
+
+
 
 
 class InformacionFinanciera(models.Model):

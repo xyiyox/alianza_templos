@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response, render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render_to_response, render, redirect, get_object_or_404
+from django.http import HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.formtools.wizard.views import WizardView, SessionWizardView
@@ -53,7 +53,10 @@ def ver_comentarios(request, pk):
 @login_required
 def proyecto(request, pk):
     
-    proyecto     = Edificacion.objects.get(pk=pk)
+    proyecto  =  get_object_or_404(Edificacion, pk=pk)  # validamos que el proyecto exista
+
+    if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:   # validamos que el usuario tenga permiso de ver el proyecto
+        raise Http404 
    
     if request.method == 'POST':
         form = ComentarioForm(request.POST)
@@ -62,8 +65,7 @@ def proyecto(request, pk):
             new_coment.edificacion = proyecto
             new_coment.commenter = request.user
             new_coment.save()
-            #form.save_m2m()
-            return redirect('/proyecto/%s/' % pk)
+            return redirect(proyecto) # redirect funciona con el objeto si en el existe el metodo get_absolute_url
 
     
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
