@@ -20,13 +20,35 @@ def home(request):
 
     if request.user.is_authenticated():
         
+        if request.user.tipo == Usuario.NACIONAL:
+            return redirect('home_nacional')
+
+        if request.user.tipo == Usuario.REGIONAL:
+            return redirect('home_regional')
+
         if request.user.tipo == Usuario.LOCAL:
             return redirect('home_local')
 
-        if request.user.tipo == Usuario.NACIONAL:
-            return redirect('home_nacional')
+        
         
     return redirect('hacer_login')
+
+
+
+
+@login_required
+def home_nacional(request):
+    proyectos = Edificacion.objects.all()
+    ctx = {'proyectos': proyectos}
+    return render(request, 'main/home-nacional.html', ctx)
+
+
+@login_required
+def home_regional(request):
+    users_hijos = Usuario.objects.filter(user_padre__exact=request.user.pk).values('pk')
+    proyectos = Edificacion.objects.filter(usuario__in=users_hijos)
+    ctx = {'proyectos': proyectos}
+    return render(request, 'main/home-regional.html', ctx)
 
 
 @login_required
@@ -35,12 +57,6 @@ def home_local(request):
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-local.html', ctx)
 
-
-@login_required
-def home_nacional(request):
-    proyectos = Edificacion.objects.all()
-    ctx = {'proyectos': proyectos}
-    return render(request, 'main/home-nacional.html', ctx)
 
 @login_required
 def ver_comentarios(request, pk):

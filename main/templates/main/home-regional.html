@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Home Regional {% endblock %}
+
+
+{% block sidebar_left %}
+	
+{% endblock sidebar_left %}
+
+{% block content %}
+	
+	<div class="jumbotron clearfix">
+		<h1>Bienvenido Usuario Regional</h1>
+	</div>
+
+	<div class="row">
+		{% for proyecto in proyectos %}
+		<div class="col-sm-4">
+
+			<div class="panel panel-default">
+			  <div class="panel-heading">{{proyecto.nombre_proyecto}}</div>
+			  <div class="panel-body">
+			    <a href="{% url 'proyecto' proyecto.pk %}" class="btn btn-primary  btn-block " role="button">Ver</a>
+			  </div>
+			</div>
+			
+
+		</div>
+
+		{% empty %}
+			<h1>No hay proyectos aun</h1>	
+		{% endfor %}
+
+	</div>
+
+{% endblock content %}

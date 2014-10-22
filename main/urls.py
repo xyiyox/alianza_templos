@@ -7,11 +7,15 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = patterns('main.views',
 
     url(r'^$', 'home', name='home'),
-    url(r'^home-local$', 'home_local', name='home_local'),
-    url(r'^home-nacional$', 'home_nacional', name='home_nacional'),
-    url(r'^proyecto/(\d+)/$', 'proyecto', name='proyecto'),
-    url(r'^login$', 'hacer_login', name='hacer_login'),
+    url(r'^login$',  'hacer_login',  name='hacer_login'),
     url(r'^logout$', 'hacer_logout', name='hacer_logout'),
+    
+    url(r'^home-nacional$', 'home_nacional', name='home_nacional'),
+    url(r'^home-regional$', 'home_regional', name='home_regional'),
+    url(r'^home-local$',    'home_local',    name='home_local'),
+    
+    url(r'^proyecto/(\d+)/$', 'proyecto', name='proyecto'),
+    
     
     url(r'^aplicacion/(?P<pk>\d+)/$', login_required(Aplicacion.as_view()), name='aplicacion_edit'),
     url(r'^aplicacion$', login_required(Aplicacion.as_view()), name='aplicacion'),

@@ -149,6 +149,6 @@ class ComentarioForm(forms.ModelForm):
 
         self.helper.layout = Layout(
             PrependedText('descripcion', "<i class='fa fa-user fa-lg'></i>", placeholder="Agrega tu comentario", rows="2"),
-            Submit('enviar', 'Enviar', css_class='btn-info pull-right btn-xs')
+            Submit('enviar', 'Submit', css_class='btn-info pull-right btn-xs')
         )
 

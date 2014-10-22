@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.db import models
 from django.forms import RadioSelect
 
-from leaflet.admin import LeafletGeoAdmin
 from .models import *
 
 class EdificacionAdmin(admin.ModelAdmin):
