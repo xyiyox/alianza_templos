@@ -77,8 +77,8 @@ class UsuarioAdmin(UserAdmin):
     form      = UserChangeForm
     add_form  = UserCreationForm
     
-    list_display = ('email', 'nombre', 'apellidos', 'tipo', 'is_active', 'is_admin', 'is_superuser')
-    list_filter  = ('is_admin', 'tipo',)
+    list_display = ('email', 'nombre', 'apellidos', 'tipo', 'is_active', 'is_admin', 'is_superuser', 'user_padre')
+    list_filter  = ('is_admin', 'tipo', 'user_padre',)
     
     fieldsets = [      
         ('Información personal', {'fields': ['nombre', 'apellidos', 'email', 'tipo','user_creador', 'user_padre']}),
@@ -96,7 +96,7 @@ class UsuarioAdmin(UserAdmin):
 
     search_fields = ('email',)
     ordering = ('email',)
-    readonly_fields = ('last_login', 'user_creador',)#'is_superuser', 'is_admin', 'is_active')
+    readonly_fields = ('groups', 'last_login', 'user_creador',)
 
 
     def get_form(self, request, obj=None, **kwargs):
@@ -105,8 +105,17 @@ class UsuarioAdmin(UserAdmin):
         if request.user.is_superuser:
             self.exclude.append('user_padre')
             self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'tipo', 'user_creador')
-            #self.fieldsets[1][1]["fields"] = ('is_active', 'is_admin')
-            self.readonly_fields = self.readonly_fields + ('groups',) 
+
+        if request.user.tipo == Usuario.NACIONAL:
+            self.exclude = ['is_admin', 'is_superuser']
+            self.fieldsets[1][1]["fields"] = ('is_active', 'groups')
+
+            if obj is not None and obj.tipo != Usuario.LOCAL:    # solo muestro el campo de asignar padre si el tipo es local
+                self.exclude.append('user_padre')
+                self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'tipo', 'user_creador')
+            else:
+                self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'tipo', 'user_creador', 'user_padre')
+                
 
         return super(UsuarioAdmin, self).get_form(request, obj, **kwargs)
 
@@ -124,12 +133,16 @@ class UsuarioAdmin(UserAdmin):
 
         if not change:
             
-            if request.user.is_superuser:  
-                pass                              
+            if obj.user_padre is None:
+                obj.user_padre = request.user
+            
             obj.save()
             
         
         if change:
+            if request.user.tipo == Usuario.NACIONAL:
+                if obj.tipo != Usuario.LOCAL:
+                    obj.user_padre = request.user
             obj.save()
 
         if obj.tipo != Usuario.SUPER:
@@ -137,6 +150,11 @@ class UsuarioAdmin(UserAdmin):
             g = Group.objects.get(name=obj.tipo)
             obj.groups.add(g) 
 
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "user_padre":
+            kwargs["queryset"] = Usuario.objects.filter(tipo=Usuario.REGIONAL) #Q(tipo=Usuario.NACIONAL) | Q(tipo=Usuario.REGIONAL))
+        return super(UsuarioAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
@@ -146,8 +164,8 @@ class UsuarioAdmin(UserAdmin):
             if request.user.is_superuser:    # solo le permito ver tipo super nacional
                 kwargs['choices'] = db_field.choices[0:2]
 
-            elif request.user.tipo == Usuario.NACIONAL:    # solo le permito ver tipo nacional, regional, local, ingeniero y tesorero
-                kwargs['choices'] = db_field.choices[1:6] 
+            elif request.user.tipo == Usuario.NACIONAL:    # solo le permito ver tipo regional, local, ingeniero y tesorero
+                kwargs['choices'] = db_field.choices[2:6] 
 
             elif request.user.tipo == Usuario.REGIONAL:    # solo le permito ver tipo  local
                 kwargs['choices'] = db_field.choices[3:4] 
