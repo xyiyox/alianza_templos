@@ -19,7 +19,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ('email', 'nombre', 'apellidos', 'password1', 'password2',)
+        fields = ('email', 'nombre', 'apellidos', 'tipo', 'password1', 'password2',)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -59,9 +59,9 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        widgets = {
-            'groups': admin.widgets.FilteredSelectMultiple('Permisos', False)
-        }
+        # widgets = {
+        #     'groups': admin.widgets.FilteredSelectMultiple('Permisos', False)
+        # }
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -70,26 +70,22 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
+
+
 class UsuarioAdmin(UserAdmin):
 
-    # The forms to add and change user instances
-    form = UserChangeForm
-    add_form = UserCreationForm
+    form      = UserChangeForm
+    add_form  = UserCreationForm
     
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
     list_display = ('email', 'nombre', 'apellidos', 'tipo', 'is_active', 'is_admin', 'is_superuser')
-    list_filter = ('is_admin',)
-    fieldsets = (
-        
-        ('Información personal', {'fields': ('nombre', 'apellidos', 'email', 'tipo', 
-            'user_creador', 'user_padre')}),
-        ('Permisos', {'fields': ('is_active', 'is_admin', 'groups')}),
-        ('Cambiar Contraseña', {'fields': ('last_login', 'password')}),
-    )
-    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
-    # overrides get_fieldsets to use this attribute when creating a user.
+    list_filter  = ('is_admin', 'tipo',)
+    
+    fieldsets = [      
+        ('Información personal', {'fields': ['nombre', 'apellidos', 'email', 'tipo','user_creador', 'user_padre']}),
+        ('Permisos',             {'fields': ['is_active', 'is_admin', 'is_superuser', 'groups']}),
+        ('Cambiar Contraseña',   {'fields': ['last_login', 'password']}),
+    ]
+
     add_fieldsets = (
         ('Crear Nuevo Usuario', {
             'classes': ('wide',),
@@ -97,55 +93,106 @@ class UsuarioAdmin(UserAdmin):
         ),
     )
 
-    def save_model(self, request, obj, form, change):
-
-        if change:
-            if obj.tipo == Usuario.LOCAL:
-                g = Group.objects.get(name="local")
-                obj.groups.clear()
-                obj.groups.add(g)
-
-            elif obj.tipo == Usuario.REGIONAL:
-                g = Group.objects.get(name="regional")
-                obj.groups.clear()
-                obj.groups.add(g)
-
-            elif obj.tipo == Usuario.NACIONAL:
-                g = Group.objects.get(name="nacional")
-                obj.groups.clear()
-                obj.groups.add(g)
-
-        obj.is_admin = True
-        obj.user_creador = request.user
-        obj.save()
-
-    def formfield_for_choice_field(self, db_field, request, **kwargs):
-        if db_field.name == "tipo":
-            kwargs['choices'] = (
-                Usuario.TIPO_USUARIO[0], #('local', 'Local'),  
-            )
-            if request.user.is_superuser or request.user.tipo == Usuario.NACIONAL:
-                kwargs['choices'] += Usuario.TIPO_USUARIO[1:3] #(('regional', 'Regional'),('nacional', 'Nacional'))
-        return super(UsuarioAdmin, self).formfield_for_choice_field(db_field, request, **kwargs)
 
     search_fields = ('email',)
     ordering = ('email',)
-    filter_horizontal = ()
-    readonly_fields = ('last_login', 'is_superuser', 'user_creador', 'groups', 'is_admin', 'is_active')
+    readonly_fields = ('last_login', 'user_creador',)#'is_superuser', 'is_admin', 'is_active')
 
-    #Muestra en el admin solo los modelos creados por el usuario y al usuario mismo
-    def queryset(self, request): 
-        qs = super(UsuarioAdmin, self).queryset(request)
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.exclude = []
+
+        if request.user.is_superuser:
+            self.exclude.append('user_padre')
+            self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'tipo', 'user_creador')
+            #self.fieldsets[1][1]["fields"] = ('is_active', 'is_admin')
+            self.readonly_fields = self.readonly_fields + ('groups',) 
+
+        return super(UsuarioAdmin, self).get_form(request, obj, **kwargs)
+
+
+
+    def save_model(self, request, obj, form, change):
+
+        obj.user_creador = request.user   
+        obj.is_admin     = True
+        obj.is_superuser = False
+        
+        if obj.tipo == Usuario.SUPER:
+            obj.is_superuser = True 
+            obj.groups.clear()
+
+        if not change:
+            
+            if request.user.is_superuser:  
+                pass                              
+            obj.save()
+            
+        
+        if change:
+            obj.save()
+
+        if obj.tipo != Usuario.SUPER:
+            obj.groups.clear()
+            g = Group.objects.get(name=obj.tipo)
+            obj.groups.add(g) 
+
+
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        
+        if db_field.name == "tipo":
+
+            if request.user.is_superuser:    # solo le permito ver tipo super nacional
+                kwargs['choices'] = db_field.choices[0:2]
+
+            elif request.user.tipo == Usuario.NACIONAL:    # solo le permito ver tipo nacional, regional, local, ingeniero y tesorero
+                kwargs['choices'] = db_field.choices[1:6] 
+
+            elif request.user.tipo == Usuario.REGIONAL:    # solo le permito ver tipo  local
+                kwargs['choices'] = db_field.choices[3:4] 
+
+            else:   # si usuario es de tipo LOCAL, INGENIERO O TESORERO solo le permito ver tipo igual a si mismo
+                kwargs['choices'] = ((request.user.tipo, request.user.tipo),)  
+
+        return super(UsuarioAdmin, self).formfield_for_choice_field(db_field, request, **kwargs)    
+
+
+    def get_queryset(self, request):
+        
+        qs = super(UsuarioAdmin, self).get_queryset(request)
+        
         if request.user.is_superuser:
             return qs
-        elif request.user.tipo == Usuario.NACIONAL:
-            return qs.filter(Q(pk=request.user.pk) | Q(tipo=Usuario.REGIONAL) | 
-                Q(tipo=Usuario.LOCAL))
-        elif request.user.tipo == Usuario.REGIONAL:
-            return qs.filter(Q(pk=request.user.pk) | Q(tipo=Usuario.LOCAL))
-        elif request.user.tipo == Usuario.LOCAL:
-            return qs.filter(pk=request.user.pk)
-        return qs.filter(user_creador=request.user.id)
 
-# Now register the new UserAdmin...
+        elif request.user.tipo == Usuario.NACIONAL: # puede ver usuarios regionales y locales y a si mismo
+            return qs.filter(Q(pk=request.user.pk) | Q(tipo=Usuario.REGIONAL) | Q(tipo=Usuario.LOCAL) | Q(tipo=Usuario.INGENIERO) | Q(tipo=Usuario.TESORERO))
+
+        elif request.user.tipo == Usuario.REGIONAL:  # puede ver usuarios locales y a si mismo
+            return qs.filter(Q(pk=request.user.pk) | Q(user_padre=request.user.pk))
+
+        return qs.filter(pk=request.user.pk)  # los demas usuarios solo pueden verse a si mismos
+
+
+
+
+
+# Esta funcion permite pasarle al campo "name" del modelo "Group", la tupla con las variables estáticas 
+# de los tipos de usuarios en el modelo "Usuario", para garantizar consistencia de la aplicación
+class GroupAdmin(admin.ModelAdmin):
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        
+        if db_field.name == 'name':
+            kwargs['widget'] = forms.Select(choices=Usuario.TIPO_USUARIO)
+
+        if db_field.name == 'permissions':
+            kwargs['widget'] = admin.widgets.FilteredSelectMultiple('Permisos', False)
+
+        return super(GroupAdmin,self).formfield_for_dbfield(db_field,**kwargs)
+
+
+
+admin.site.unregister(Group)
+admin.site.register(Group, GroupAdmin)
 admin.site.register(Usuario, UsuarioAdmin)

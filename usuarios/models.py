@@ -36,27 +36,33 @@ class UsuarioManager(BaseUserManager):
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
 
-    LOCAL           = "local"
-    REGIONAL        = "regional" 
+    SUPER           = "super"
     NACIONAL        = "nacional" 
-    #ADMINISTRADOR   = "administrador" 
+    REGIONAL        = "regional" 
+    LOCAL           = "local" 
+    
+    INGENIERO       = "ingeniero"
+    TESORERO        = "tesorero"
 
     TIPO_USUARIO = (
-        (LOCAL, "Local"),
-        (REGIONAL, "Regional"),
-        (NACIONAL, "Nacional"),
-        #(ADMINISTRADOR, "Administrador")
+        (SUPER,     "super"),
+        (NACIONAL,  "Nacional"),
+        (REGIONAL,  "Regional"),
+        (LOCAL,     "Local"),
+
+        (INGENIERO, "Ingeniero"),
+        (TESORERO,  "Tesorero"),
     )
 
     email           = models.EmailField(max_length=255, unique=True)
     nombre          = models.CharField(max_length=50)
     apellidos       = models.CharField(max_length=50)
-    tipo            = models.CharField(max_length=10, choices=TIPO_USUARIO)
+    tipo            = models.CharField(max_length=10, choices=TIPO_USUARIO, help_text='Escoja bien el tipo de usuario que desea crear')
 
     is_active       = models.BooleanField(default=True)
     is_admin        = models.BooleanField(default=False)
 
-    user_creador    = models.ForeignKey('self', null=True, blank=True, verbose_name="Creador por")
+    user_creador    = models.ForeignKey('self', null=True, blank=True, verbose_name="Creado por")
     user_padre      = models.ForeignKey('self', null=True, blank=True, related_name='padre', 
                         verbose_name='Asignado a')
 
