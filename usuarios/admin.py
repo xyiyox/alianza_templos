@@ -95,7 +95,6 @@ class UsuarioAdmin(UserAdmin):
         ),
     )
 
-
     search_fields = ('email',)
     ordering = ('email',)
     readonly_fields = ('groups', 'last_login', 'user_creador',)
@@ -114,16 +113,19 @@ class UsuarioAdmin(UserAdmin):
             self.exclude = ['user_padre']
             self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'tipo', 'user_creador')
 
+
         elif request.user.tipo == Usuario.NACIONAL:
             self.exclude = ['is_admin', 'is_superuser']
             self.fieldsets[1][1]["fields"] = ('is_active', 'groups')
 
+            if obj is not None and obj.pk == request.user.pk:  # validamos que el usuario no se pueda desactivar o cambiar el tipo a si mismo
+                self.readonly_fields = ('groups', 'last_login', 'user_creador', 'tipo', 'is_active',)  
+
             if obj is not None and obj.tipo != Usuario.LOCAL:    # solo muestro el campo de asignar padre si el tipo es local
                 self.exclude = ['user_padre']
                 self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'tipo', 'user_creador')
-            else:
-                self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'tipo', 'user_creador', 'user_padre')
         
+
         elif request.user.tipo == Usuario.REGIONAL:
             self.exclude = ['tipo', 'is_admin', 'is_superuser']
             self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'user_creador', 'user_padre')   
@@ -192,8 +194,8 @@ class UsuarioAdmin(UserAdmin):
             if request.user.is_superuser:    # le permito ver todo
                 kwargs['choices'] = db_field.choices
 
-            elif request.user.tipo == Usuario.NACIONAL:    # solo le permito ver tipo nacional, regional, local, ingeniero y tesorero
-                kwargs['choices'] = db_field.choices[1:6] 
+            elif request.user.tipo == Usuario.NACIONAL:    # solo le permito ver tipo  regional, local, ingeniero y tesorero
+                kwargs['choices'] = db_field.choices[2:6] 
 
             elif request.user.tipo == Usuario.REGIONAL:    # solo le permito ver tipo  local
                 kwargs['choices'] = db_field.choices[3:4] 
