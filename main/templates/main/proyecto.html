@@ -4,15 +4,29 @@
 {% block title %} Proyecto {% endblock %}
 
 
+{% block ngApp %} ng-app="alianzaTemplosApp"{% endblock %}
+{% block controller %} ng-controller="ProyectoCtrl"{% endblock %}
+
 {% block sidebar_left %}
 	
 {% endblock sidebar_left %}
 
 {% block content %}
 
-<div class="page-header ">
+<div class="page-header">
   <h1>{{proyecto.nombre_proyecto}} <small></small> <span class="label label-primary pull-right">{{proyecto.pk}}</span></h1>
 </div>
+	<p>
+		<a class="btn btn-success" href="{% url "aplicacion_edit" pk=proyecto.pk %}">
+			{% if user.tipo == user.LOCAL %}
+				Editar
+			{% elif user.tipo == user.REGIONAL or user.tipo == user.NACIONAL %}
+				Revisar
+			{% else %}
+				Ver en detalle
+			{% endif%}
+		</a>
+	</p>
 
 	<div class="clearfix">
 		{% crispy form %}
@@ -35,3 +49,7 @@
 	
 
 {% endblock content %}
+
+{% block js_body %} 
+<script src="{{STATIC_URL}}main/app/proyectoApp.js"></script>
+{% endblock %}

@@ -45,7 +45,7 @@ def home_nacional(request):
 
 @login_required
 def home_regional(request):
-    users_hijos = Usuario.objects.filter(user_padre__exact=request.user.pk).values('pk')
+    users_hijos = Usuario.objects.filter(user_padre__exact=request.user.pk).values('pk')  # Obtengo los usuarios que son hijos del regional
     proyectos = Edificacion.objects.filter(usuario__in=users_hijos)
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-regional.html', ctx)

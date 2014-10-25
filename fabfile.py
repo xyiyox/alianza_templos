@@ -76,3 +76,7 @@ def reiniciar_servidor():
 # def deploy():
 # 	with virtualenv():
 # 		local('pip freeze')
+
+def git_log():
+	with cd(PROD_PATH):
+		run('git log')
