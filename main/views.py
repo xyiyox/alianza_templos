@@ -4,7 +4,6 @@ from django.http import HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.formtools.wizard.views import WizardView, SessionWizardView
-
 from django.core.files.storage import FileSystemStorage
 
 from main.forms import *
@@ -86,6 +85,8 @@ def proyecto(request, pk):
     
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
     form         = ComentarioForm()
+    form.helper.form_action = proyecto.get_absolute_url()
+
     ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'form': form}
     
     return render(request, 'main/proyecto.html', ctx)
