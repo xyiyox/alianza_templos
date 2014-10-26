@@ -19,6 +19,6 @@ urlpatterns = patterns('main.views',
     
     url(r'^aplicacion/(?P<pk>\d+)/$', login_required(Aplicacion.as_view()), name='aplicacion_edit'),
     url(r'^aplicacion$', login_required(Aplicacion.as_view()), name='aplicacion'),
-    url(r'^aplicacion/(?P<pk>\d+)/comentarios$', 'ver_comentarios', name='ver_comentarios')
+    #url(r'^aplicacion/(?P<pk>\d+)/comentarios$', 'ver_comentarios', name='ver_comentarios')
 )
 

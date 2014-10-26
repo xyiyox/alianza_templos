@@ -29,9 +29,9 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="/admin/usuarios/usuario/" target="_blank">Editar Usuarios</a></li>
+                        <li><a href="{% url 'admin:usuarios_usuario_changelist' %}" target="_blank">Editar Usuarios</a></li>
                         <li class="divider"></li> 
-                        <li><a href="/admin/usuarios/usuario/add/" target="_blank">Crear Usuario</a></li>
+                        <li><a href="{% url 'admin:usuarios_usuario_add' %}" target="_blank">Crear Usuario</a></li>
 
                     </ul>
                 </li>
@@ -51,7 +51,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="/admin/usuarios/usuario/{{user.pk}}/" target="_blank">Editar Perfil</a>
-                            <a href="/admin/password_change/" target="_blank">Cambiar contraseña</a>
+                            <a href="{% url 'admin:password_change' %}" target="_blank">Cambiar contraseña</a>
                         </li>
                         <li class="divider"></li> 
                         <li><a href="{% url 'hacer_logout' %}"> <i class="fa fa-cog"></i>  Salir</a></li>

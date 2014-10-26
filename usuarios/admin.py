@@ -150,8 +150,7 @@ class UsuarioAdmin(UserAdmin):
 
 
     def save_model(self, request, obj, form, change):
-
-        obj.user_creador = request.user   
+  
         obj.is_admin     = True
         obj.is_superuser = False
         
@@ -159,9 +158,12 @@ class UsuarioAdmin(UserAdmin):
             obj.is_superuser = True 
             obj.groups.clear()
 
-        if not change:      
-            if obj.user_padre is None:
-                obj.user_padre = request.user
+        if not change:  
+
+            obj.user_creador = request.user      # solo asigno el creador al momento de crear y no en editar
+
+            if obj.user_padre is None:           # si no hay ningun valor en el campo del formulario    
+                obj.user_padre = request.user    # se le asigna como padre el que lo crea
 
             if request.user.tipo == Usuario.REGIONAL:
                 obj.tipo = Usuario.LOCAL

@@ -92,3 +92,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+    @property 
+    def username(self):
+        if self.nombre:
+            return self.nombre
+        return self.email
