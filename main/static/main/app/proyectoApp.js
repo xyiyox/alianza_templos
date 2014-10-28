@@ -2,10 +2,35 @@
 
 angular
 	.module('alianzaTemplosApp', [
-		'ngAnimate'
+		'ngAnimate',
+		'ui.bootstrap',
+		'leaflet-directive'
 	])
 	
-	.controller('ProyectoCtrl', function ($scope) {
+	.controller('ProyectoCtrl',['$scope', '$window', function ($scope, $window) {
+
+		$scope.lat = $window.latitud;
+		$scope.lng = $window.longitud;
+
+		$scope.proyectCenter= {
+            lat: $scope.lat,
+            lng: $scope.lng,
+            zoom: 16
+        };
+        $scope.markers= {
+            proyectMarker: {
+                lat: $scope.lat,
+                lng: $scope.lng,
+                //message: "I want to travel here!",
+                focus: true,
+                draggable: false
+            }
+        };
+        $scope.defaults={
+            scrollWheelZoom: false
+        };
+        	
+       
 
 		$scope.verSubmit = false;
 
@@ -25,6 +50,6 @@ angular
 	  		}
 	    };
 		
-	});
+	}]);
 
 

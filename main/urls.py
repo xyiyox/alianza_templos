@@ -15,10 +15,8 @@ urlpatterns = patterns('main.views',
     url(r'^home-local$',    'home_local',    name='home_local'),
     
     url(r'^proyecto/(\d+)/$', 'proyecto', name='proyecto'),
+    url(r'^proyecto/nuevo/$', login_required(Aplicacion.as_view()), name='proyecto_new'),
+    url(r'^proyecto/(?P<pk>\d+)/editar/$', login_required(Aplicacion.as_view()), name='proyecto_edit'),
     
-    
-    url(r'^aplicacion/(?P<pk>\d+)/$', login_required(Aplicacion.as_view()), name='aplicacion_edit'),
-    url(r'^aplicacion$', login_required(Aplicacion.as_view()), name='aplicacion'),
-    #url(r'^aplicacion/(?P<pk>\d+)/comentarios$', 'ver_comentarios', name='ver_comentarios')
 )
 

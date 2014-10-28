@@ -38,7 +38,7 @@ class Edificacion(models.Model):
 	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30, help_text=
 		"Ingrese las medidas en Metros")
 
-	num_pisos = models.SmallIntegerField('Cantidad de Pisos', choices=((0, 1), (1, 2)), default=0 )
+	num_pisos = models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
 
 	TIPO_CONSTRUCCION_CHOICES = (
 		(0, 'Iglesia',),

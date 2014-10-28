@@ -2,10 +2,13 @@
 {% load crispy_forms_tags %}
 
 {% block title %} Proyecto {% endblock %}
-
+{% block css %} 
+<link rel="stylesheet" href="{{STATIC_URL}}main/leaflet/leaflet.css"> 
+{% endblock %}
 
 {% block ngApp %} ng-app="alianzaTemplosApp"{% endblock %}
 {% block controller %} ng-controller="ProyectoCtrl"{% endblock %}
+
 
 {% block sidebar_left %}
 	
@@ -17,7 +20,7 @@
   <h1>{{proyecto.nombre_proyecto}} <small></small> <span class="label label-primary pull-right">{{proyecto.pk}}</span></h1>
 </div>
 	<p>
-		<a class="btn btn-success" href="{% url "aplicacion_edit" pk=proyecto.pk %}">
+		<a class="btn btn-success" href="{% url "proyecto_edit" pk=proyecto.pk %}">
 			{% if user.tipo == user.LOCAL %}
 				Editar
 			{% elif user.tipo == user.REGIONAL or user.tipo == user.NACIONAL %}
@@ -27,6 +30,50 @@
 			{% endif%}
 		</a>
 	</p>
+
+	<tabset>
+		<tab heading="Edificacion">
+						
+				
+				<div class="panel panel-default" style="margin-top:10px;">
+					<leaflet defaults="defaults" markers="markers" center="proyectCenter"  height="200px"></leaflet>
+				</div>
+			
+			
+			<div class="row">
+				<div class="col-sm-12">
+					<table class="table table-bordered table-striped">
+						<tbody>	
+							<tr> <th>Dirección: </th>       <td>{{ proyecto.direccion}}</td> </tr>													
+							<tr> <th>Coordenadas: </th> 	<td>{{ proyecto.coordenadas }}</td> </tr>
+							<tr> <th>Dueño del Lote: </th> 	<td>{{ proyecto.get_owner_lote_display }}</td> </tr>
+							<tr> <th>Adquisición: </th> 	<td>{{ proyecto.get_tipo_adquisicion_display }}</td> </tr>
+							<tr> <th>Terreno: </th> 	    <td>{{ proyecto.dimensiones_terreno }}</td> </tr>
+							<tr> <th>Edificio: </th> 	    <td>{{ proyecto.dimensiones_edificio }}</td> </tr>
+							<tr> <th>No. pisos: </th> 	    <td>{{ proyecto.num_pisos }}</td> </tr>
+							<tr> <th>Tipo: </th> 	        <td>{{ proyecto.get_tipo_construccion_display }}</td> </tr>
+							<tr> <th>Metodo: </th> 	        <td>{{ proyecto.get_metodo_construccion_display }}</td> </tr>
+							<tr> <th>Requiere permiso: </th>  <td>{{ proyecto.requiere_permiso|yesno:"Si,No,No sabemos" }}</td> </tr>
+							<tr> <th>Tiempo límite: </th>     <td>{{ proyecto.tiempo_limite }} meses</td> </tr>			
+						</tbody>
+						
+					</table>
+				</div>
+			</div>
+
+		</tab>
+		
+		<tab heading="Finanzas">Static content</tab>
+		<tab heading="Comunidad">Static content</tab>
+		<tab heading="Congregación">Static content</tab>
+		<tab heading="Adjuntos">Static content</tab>
+		<tab heading="Condiciones">Static content</tab>
+		
+	</tabset>
+
+
+	<br><br>
+
 
 	<div class="clearfix">
 		{% crispy form %}
@@ -50,6 +97,15 @@
 
 {% endblock content %}
 
+
 {% block js_body %} 
-<script src="{{STATIC_URL}}main/app/proyectoApp.js"></script>
-{% endblock %}
+	<script src="{{STATIC_URL}}main/leaflet/leaflet.js"></script>
+	<script src="{{STATIC_URL}}main/js/angular-leaflet-directive.min.js"></script>
+	
+	<script>
+		window.latitud  = parseFloat( '{{proyecto.coordenadas.lat}}'.replace(",", ".") );
+		window.longitud = parseFloat( '{{proyecto.coordenadas.lon}}'.replace(",", ".") );
+	</script>
+	
+	<script src="{{STATIC_URL}}main/app/proyectoApp.js"></script>
+{% endblock js_body %}
