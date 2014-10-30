@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.formtools.wizard.views import WizardView, SessionWizardView
@@ -37,6 +38,10 @@ def home(request):
 
 @login_required
 def home_nacional(request):
+
+    if request.user.tipo != Usuario.NACIONAL:   # validamos que el usuario tenga permiso de ver esta vista
+        raise PermissionDenied 
+        
     proyectos = Edificacion.objects.all()
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-nacional.html', ctx)
@@ -44,14 +49,23 @@ def home_nacional(request):
 
 @login_required
 def home_regional(request):
+
+    if request.user.tipo != Usuario.REGIONAL:   # validamos que el usuario tenga permiso de ver esta vista
+        raise PermissionDenied 
+
     users_hijos = Usuario.objects.filter(user_padre__exact=request.user.pk).values('pk')  # Obtengo los usuarios que son hijos del regional
     proyectos = Edificacion.objects.filter(usuario__in=users_hijos)
+
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-regional.html', ctx)
 
 
 @login_required
 def home_local(request):
+
+    if request.user.tipo != Usuario.LOCAL:   # validamos que el usuario tenga permiso de ver esta vista
+        raise PermissionDenied 
+
     proyectos = Edificacion.objects.filter(usuario__exact=request.user.pk)
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-local.html', ctx)
@@ -217,22 +231,30 @@ class Aplicacion(SessionWizardView):
 
 def hacer_login(request):
 
+    NEXT = request.GET.get('next', "")
+
     if request.method == 'POST':
-        print "ES POST"
+        
         form = LoginForm(data=request.POST)
-        print form
+        
         if form.is_valid():
-            print "ES VALID"
+
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
+            user     = authenticate(username=username, password=password)
+
             if user is not None and user.is_active:
                 login(request, user)
+                
+                if request.POST.get('next', ""):
+                    return redirect(request.POST['next'])
+
                 return redirect('home')
-        return render(request, 'main/login.html', {'loginForm': form})
+
+        return render(request, 'main/login.html', {'loginForm': form, 'NEXT':NEXT})
 
 
-    ctx = {'loginForm': LoginForm()}
+    ctx = {'loginForm': LoginForm(), 'NEXT':NEXT}
     return render(request, 'main/login.html', ctx)
 
 def hacer_logout(request):

@@ -3,17 +3,13 @@
 {% block title %} Home Local {% endblock %}
 
 
-{% block sidebar_left %}
-	
-{% endblock sidebar_left %}
 
 {% block content %}
 	
-	<div class="jumbotron clearfix">
-		<h1>Bienvenido </h1>
-		<p>Inicie creando una aplicacion para su proyecto de construccion.</p>
+	<h1 class="page-header clearfix">Dashboard
+		
 		<a class="btn btn-primary" href="{% url 'proyecto_new' %}" role="button">Aplicacion</a>
-	</div>
+	</h1>
 
 	<div class="row">
 		{% for proyecto in proyectos %}

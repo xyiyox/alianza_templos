@@ -35,8 +35,9 @@ class EdificacionForm(ModelFormBase):
         # Esta es una manera mas sencilla de agregar atributos a los campos
         self.helper.all().wrap(Field, css_class='input-sm') 
         self.helper['direccion'].wrap(Field, css_class="input-xlarge", rows="2")
-        self.helper['coordenadas'].wrap(Field, css_class="col-sm-12 input-sm geolocation_field")
-        self.helper.filter_by_widget(forms.Select).wrap(Field, css_class='select select-primary mbl') 
+        self.helper['coordenadas'].wrap(Field, css_class="geolocation_field")
+        #self.helper['requiere_permiso'].wrap(Field, css_class="col-sm-offset-2")
+        #self.helper.filter_by_widget(forms.Select).wrap(Field, css_class='select select-primary mbl') 
 
 
 

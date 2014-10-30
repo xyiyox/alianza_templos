@@ -20,6 +20,7 @@ class LoginForm(AuthenticationForm):
 		self.helper.layout = Layout(
 			PrependedText('username', "@", css_class="input-sm", placeholder="email"),
 			PrependedText('password', "<i class='fa fa-key'></i>", css_class="input-sm", placeholder="password"),
+			Hidden('next', '{{NEXT}}'),
 			FormActions(
 	            Submit('entrar', 'Entrar', css_class="btn-success btn-block"),
 	        )

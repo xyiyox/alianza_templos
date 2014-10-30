@@ -10,90 +10,191 @@
 {% block controller %} ng-controller="ProyectoCtrl"{% endblock %}
 
 
-{% block sidebar_left %}
-	
-{% endblock sidebar_left %}
 
 {% block content %}
 
 <div class="page-header">
-  <h1>{{proyecto.nombre_proyecto}} <small></small> <span class="label label-primary pull-right">{{proyecto.pk}}</span></h1>
+	<h1>{{proyecto.nombre_proyecto}} 
+		<small>
+			<a class="btn btn-success" href="{% url "proyecto_edit" pk=proyecto.pk %}">
+				{% if user.tipo == user.LOCAL %}
+					Editar
+				{% elif user.tipo == user.REGIONAL or user.tipo == user.NACIONAL %}
+					Revisar
+				{% else %}
+					Ver en detalle
+				{% endif%}
+			</a>
+  	
+  		</small> 
+  		<span class="label label-primary pull-right">{{proyecto.pk}}</span></h1>
 </div>
-	<p>
-		<a class="btn btn-success" href="{% url "proyecto_edit" pk=proyecto.pk %}">
-			{% if user.tipo == user.LOCAL %}
-				Editar
-			{% elif user.tipo == user.REGIONAL or user.tipo == user.NACIONAL %}
-				Revisar
-			{% else %}
-				Ver en detalle
-			{% endif%}
-		</a>
-	</p>
 
-	<tabset>
-		<tab heading="Edificacion">
-						
-				
+<div class="row">
+
+	<div class="col-sm-8">
+
+		<tabset>
+			<tab heading="Edificacion">
+							
+					
 				<div class="panel panel-default" style="margin-top:10px;">
 					<leaflet defaults="defaults" markers="markers" center="proyectCenter"  height="200px"></leaflet>
 				</div>
+				
+				
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>	
+								<tr> <th>Dirección: </th>       <td>{{ proyecto.direccion}}</td> </tr>													
+								<tr> <th>Coordenadas: </th> 	<td>{{ proyecto.coordenadas }}</td> </tr>
+								<tr> <th>Dueño del Lote: </th> 	<td>{{ proyecto.get_owner_lote_display }}</td> </tr>
+								<tr> <th>Adquisición: </th> 	<td>{{ proyecto.get_tipo_adquisicion_display }}</td> </tr>
+								<tr> <th>Terreno: </th> 	    <td>{{ proyecto.dimensiones_terreno }}</td> </tr>
+								<tr> <th>Edificio: </th> 	    <td>{{ proyecto.dimensiones_edificio }}</td> </tr>
+								<tr> <th>No. pisos: </th> 	    <td>{{ proyecto.num_pisos }}</td> </tr>
+								<tr> <th>Tipo: </th> 	        <td>{{ proyecto.get_tipo_construccion_display }}</td> </tr>
+								<tr> <th>Metodo: </th> 	        <td>{{ proyecto.get_metodo_construccion_display }}</td> </tr>
+								<tr> <th>Requiere permiso: </th>  <td>{{ proyecto.requiere_permiso|yesno:"Si,No,No sabemos" }}</td> </tr>
+								<tr> <th>Tiempo límite: </th>     <td>{{ proyecto.tiempo_limite }} meses</td> </tr>			
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+
+			</tab>
 			
+			<tab heading="Finanzas">Static content</tab>
+			<tab heading="Comunidad">Static content</tab>
+			<tab heading="Congregación">Static content</tab>
+			<tab heading="Adjuntos">Static content</tab>
+			<tab heading="Condiciones">Static content</tab>
 			
-			<div class="row">
-				<div class="col-sm-12">
-					<table class="table table-bordered table-striped">
-						<tbody>	
-							<tr> <th>Dirección: </th>       <td>{{ proyecto.direccion}}</td> </tr>													
-							<tr> <th>Coordenadas: </th> 	<td>{{ proyecto.coordenadas }}</td> </tr>
-							<tr> <th>Dueño del Lote: </th> 	<td>{{ proyecto.get_owner_lote_display }}</td> </tr>
-							<tr> <th>Adquisición: </th> 	<td>{{ proyecto.get_tipo_adquisicion_display }}</td> </tr>
-							<tr> <th>Terreno: </th> 	    <td>{{ proyecto.dimensiones_terreno }}</td> </tr>
-							<tr> <th>Edificio: </th> 	    <td>{{ proyecto.dimensiones_edificio }}</td> </tr>
-							<tr> <th>No. pisos: </th> 	    <td>{{ proyecto.num_pisos }}</td> </tr>
-							<tr> <th>Tipo: </th> 	        <td>{{ proyecto.get_tipo_construccion_display }}</td> </tr>
-							<tr> <th>Metodo: </th> 	        <td>{{ proyecto.get_metodo_construccion_display }}</td> </tr>
-							<tr> <th>Requiere permiso: </th>  <td>{{ proyecto.requiere_permiso|yesno:"Si,No,No sabemos" }}</td> </tr>
-							<tr> <th>Tiempo límite: </th>     <td>{{ proyecto.tiempo_limite }} meses</td> </tr>			
-						</tbody>
-						
-					</table>
+		</tabset>
+
+
+		<br><br>
+
+
+		<div class="clearfix">
+			{% crispy form %}
+		</div>
+
+		{% for coment in comentarios %}
+			
+			<div class="media clearfix">
+				<span class="glyphicon glyphicon-comment pull-left"></span>  
+				<!-- <i class="fa fa-comments-o pull-left"></i> -->
+				<div class="media-body">
+					<h5 class="text-primary media-heading">{{coment.commenter}}  <small>hace {{coment.created|timesince}}</small></h5>	
+					<blockquote>
+					  <p class="" style="font-size:14px;">{{coment.descripcion}}</p>
+					</blockquote>
 				</div>
 			</div>
+		{% endfor %}
 
-		</tab>
-		
-		<tab heading="Finanzas">Static content</tab>
-		<tab heading="Comunidad">Static content</tab>
-		<tab heading="Congregación">Static content</tab>
-		<tab heading="Adjuntos">Static content</tab>
-		<tab heading="Condiciones">Static content</tab>
-		
-	</tabset>
+	</div>  <!-- col-sm-8   -->
 
+	<div class="col-sm-4">
 
-	<br><br>
-
-
-	<div class="clearfix">
-		{% crispy form %}
-	</div>
-
-	{% for coment in comentarios %}
-		
-		<div class="media clearfix">
-			<span class="glyphicon glyphicon-comment pull-left"></span>  
-			<!-- <i class="fa fa-comments-o pull-left"></i> -->
-			<div class="media-body">
-				<h5 class="text-primary media-heading">{{coment.commenter}}  <small>hace {{coment.created|timesince}}</small></h5>	
-				<blockquote>
-				  <p class="" style="font-size:14px;">{{coment.descripcion}}</p>
-				</blockquote>
-			</div>
+		<div class="panel panel-green">
+		    <div class="panel-heading">
+		        <div class="row">
+		            <div class="col-xs-3">
+		                <i class="fa fa-check fa-2x"></i>
+		            </div>
+		            <div class="col-xs-9 text-right">
+		                <i class="fa fa-user"></i>  REGIONAL  
+		            </div>
+		        </div>
+		    </div>
+		    <a href="#">
+		        <div class="panel-footer">
+		            <span class="pull-left">Autorizado</span>
+		            {% if user.tipo == user.REGIONAL %}
+		            <button type="button" class="btn btn-danger btn-xs pull-right"> <i class="fa fa-check"></i>  Autorizar</button>		
+		            {% endif %}            
+		            <div class="clearfix"></div>
+		        </div>
+		    </a>
 		</div>
-	{% endfor %}
 
-	
+		<div class="panel panel-red">
+		    <div class="panel-heading">
+		        <div class="row">
+		            <div class="col-xs-3">
+		                <i class="fa fa-lock fa-2x"></i>
+		            </div>
+		            <div class="col-xs-9 text-right">
+		                <i class="fa fa-user"></i>  NACIONAL  
+		            </div>
+		        </div>
+		    </div>
+		    <a href="#">
+		        <div class="panel-footer">
+		            <span class="pull-left">Esperando autorizacion</span>
+		            {% if user.tipo != user.INGENIERO %}
+		            <button type="button" class="btn btn-danger btn-xs pull-right"> <i class="fa fa-check"></i>  Autorizar</button>		
+		            {% endif %}            
+		            <div class="clearfix"></div>
+		        </div>
+		    </a>
+		</div>
+
+		<div class="panel panel-red">
+		    <div class="panel-heading">
+		        <div class="row">
+		            <div class="col-xs-3">
+		                <i class="fa fa-lock fa-2x"></i>
+		            </div>
+		            <div class="col-xs-9 text-right">
+		                <i class="fa fa-user"></i>  INGENIERO  
+		            </div>
+		        </div>
+		    </div>
+		    <a href="#">
+		        <div class="panel-footer">
+		            <span class="pull-left">Esperando autorizacion</span>
+		            {% if user.tipo != user.INGENIERO %}
+		            <button type="button" class="btn btn-danger btn-xs pull-right"> <i class="fa fa-check"></i>  Autorizar</button>		
+		            {% endif %}            
+		            <div class="clearfix"></div>
+		        </div>
+		    </a>
+		</div>
+
+		<div class="panel panel-red">
+		    <div class="panel-heading">
+		        <div class="row">
+		            <div class="col-xs-3">
+		                <i class="fa fa-lock fa-2x"></i>
+		            </div>
+		            <div class="col-xs-9 text-right">
+		                <i class="fa fa-user"></i>  TESORERO  
+		            </div>
+		        </div>
+		    </div>
+		    <a href="#">
+		        <div class="panel-footer">
+		            <span class="pull-left">Esperando autorizacion</span>
+		            {% if user.tipo != user.INGENIERO %}
+		            <button type="button" class="btn btn-danger btn-xs pull-right"> <i class="fa fa-check"></i>  Autorizar</button>		
+		            {% endif %}            
+		            <div class="clearfix"></div>
+		        </div>
+		    </a>
+		</div>
+
+
+
+
+	</div> <!-- col-sm-4   -->
+
+
+</div>	
 
 {% endblock content %}
 

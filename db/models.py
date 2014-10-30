@@ -53,7 +53,7 @@ class Edificacion(models.Model):
 	)
 	metodo_construccion = models.SmallIntegerField('Método de Construcción',choices=METODO_CONSTRUCCION_CHOICES)
 
-	requiere_permiso = models.BooleanField('¿Requiere de un permiso de construcción?')
+	requiere_permiso = models.BooleanField('¿Requiere permiso de construcción?')
 
 	tiempo_limite = models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 
