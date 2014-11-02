@@ -86,7 +86,8 @@ class Edificacion(models.Model):
 
 	usuario = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable')
 
-	def __str__(self):
+
+	def __unicode__(self):
 		return "%s" %"Edificación"
 
 
@@ -127,7 +128,7 @@ class InformacionFinanciera(models.Model):
 
 	edificacion 		= models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la informacion financiera
 
-	def __str__(self):
+	def __unicode__(self):
 		return "%s" %"Información Financiera"
 
 class Comunidad(models.Model):

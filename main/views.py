@@ -4,8 +4,9 @@ from django.http import HttpResponse, Http404
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.formtools.wizard.views import WizardView, SessionWizardView
+from django.contrib.formtools.wizard.views import SessionWizardView, NamedUrlSessionWizardView
 from django.core.files.storage import FileSystemStorage
+from django.core.urlresolvers import reverse
 
 from main.forms import *
 from db.forms import *
@@ -111,7 +112,7 @@ def proyecto(request, pk):
 class Aplicacion(SessionWizardView):
 
     template_name = "main/aplicacion.html"
-
+    
     form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
 
     file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
@@ -131,7 +132,7 @@ class Aplicacion(SessionWizardView):
             'form_data': [form.cleaned_data for form in form_list],
         })
 
-
+    
     def get_form_instance(self, step):
         
         pk = self.kwargs.get('pk', None)  # Recibo el pk argument que llega por el reques url
@@ -175,14 +176,14 @@ class Aplicacion(SessionWizardView):
         
     
     def get_context_data(self, form, **kwargs):
-        context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
 
+        context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
        
         context.update({'form_list': self.form_list})
         
         model_1 = self.instance_dict.get('0', False) 
         if model_1:
-            context.update({'estado': model_1.estado}) # paso el valor del campo estado en el form 1
+            context.update({"proyecto": model_1, 'estado': model_1.estado}) # paso el valor del campo estado en el form 1
         else:
             context.update({'estado': -1}) # si no existe le envio -1 
 
@@ -227,6 +228,7 @@ class Aplicacion(SessionWizardView):
                 edificacion.save()
 
         return self.get_form_step_data(form)
+        
 
 
 def hacer_login(request):
@@ -256,6 +258,7 @@ def hacer_login(request):
 
     ctx = {'loginForm': LoginForm(), 'NEXT':NEXT}
     return render(request, 'main/login.html', ctx)
+
 
 def hacer_logout(request):
     logout(request)

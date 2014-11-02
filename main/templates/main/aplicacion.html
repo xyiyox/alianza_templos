@@ -14,25 +14,19 @@
 
 {% endblock %}
 
-{% block sidebar_left %}
-	<div class="panel panel-default">
-		<h1 class="panel-title panel-heading">Pasos</h1>
 
-		<div class="panel-body">
-			
-			{%for key, form in form_list.items %}
-				<button name="wizard_goto_step" type="submit" form="formulario" value="{{ key }}"
-						class="btn btn-block btn-primary" 
-						 {% if key|add:"0" > estado|add:"0" %} disabled="disabled" {% endif %}>{{form.quien_soy}}</button>
-			{%endfor%}
-			
 
-		</div>
-	</div>
-
-{% endblock %}
 
 {% block content %}
+
+	<ol class="breadcrumb" style="margin-top:20px;">
+	  <li><a href="/">Inicio</a></li>
+	  {% if proyecto %}
+	  <li><a href="{{proyecto.get_absolute_url}}"> {{proyecto.nombre_proyecto}} </a></li>
+	  {% endif %}
+	  <li class="active">{{form.instance}}</li>
+	</ol>
+
 	<div class="page-header">
 	  	<h1>{{wizard.form.quien_soy}} <span class="badge pull-right"> {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</span></h1>
 	  	{% for field in wizard.form%}
@@ -40,28 +34,56 @@
 	  	 {% endfor %}
 	</div>
 
-	<form id="formulario" enctype="multipart/form-data" action="" method="post" class="form-horizontal" role="form">{% csrf_token %}
-		
+
+	<div class="row">
+		<div class="col-sm-9">
+			
+			<form id="formulario" enctype="multipart/form-data" action="" method="post" class="form-horizontal" role="form">{% csrf_token %}
+				
 
 
-		{{ wizard.management_form }}
-		{% if wizard.form.forms %}
-		    {{ wizard.form.management_form }}
-		    {% for form in wizard.form.forms %}
-		         {{ form|crispy }}
-		    {% endfor %}
-		{% else %}
-		    {% crispy wizard.form %}
-		{% endif %}
+				{{ wizard.management_form }}
+				{% if wizard.form.forms %}
+				    {{ wizard.form.management_form }}
+				    {% for form in wizard.form.forms %}
+				         {{ form|crispy }}
+				    {% endfor %}
+				{% else %}
+				    {% crispy wizard.form %}
+				{% endif %}
+					
+
+				{% if wizard.steps.prev %}
+				<button name="wizard_goto_step" class="btn btn-default btn-lg" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
+				<button name="wizard_goto_step" class="btn btn-default btn-lg" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+				{% endif %}
+				
+				<input type="submit" class="btn btn-primary input-lg" value="guardar y seguir"/>
+			</form>
+
+		</div>
+
+		<div class="col-sm-3">
+			{{hola}}
+			<div class="panel panel-default">
+				<h1 class="panel-title panel-heading">Pasos</h1>
+
+				<div class="panel-body">
+					
+					{%for key, form in form_list.items %}
+						<button name="wizard_goto_step" type="submit" form="formulario" value="{{ key }}"
+								class="btn btn-block btn-primary" 
+								 {% if key|add:"0" > estado|add:"0" %} disabled="disabled" {% endif %}>{{form.instance}}</button>
+					{%endfor%}
+					
+
+				</div>
+			</div>
 			
 
-		{% if wizard.steps.prev %}
-		<button name="wizard_goto_step" class="btn btn-default btn-lg" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
-		<button name="wizard_goto_step" class="btn btn-default btn-lg" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
-		{% endif %}
-		
-		<input type="submit" class="btn btn-primary input-lg" value="guardar y seguir"/>
-	</form>
+		</div>
+
+	</div>
 
 	<br><br><br><br>
 
@@ -69,5 +91,9 @@
 		<!-- Form FuentesFinanciacion -->
 		{% include 'main/forms/formFuentesFinanciacion.html' %}
 	{% endif %}
+
+
+
+			
 	
 {% endblock content %}
