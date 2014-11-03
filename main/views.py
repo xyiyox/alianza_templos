@@ -127,7 +127,7 @@ class Aplicacion(SessionWizardView):
 
     
     def done(self, form_list, **kwargs):
-        # AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZAR AL FINAL DE TODOS LOS PASOS
+        # AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZARD AL FINAL DE TODOS LOS PASOS
         return render_to_response('main/done.html', {
             'form_data': [form.cleaned_data for form in form_list],
         })
@@ -135,11 +135,12 @@ class Aplicacion(SessionWizardView):
     
     def get_form_instance(self, step):
         
-        pk = self.kwargs.get('pk', None)  # Recibo el pk argument que llega por el reques url
+        pk = self.kwargs.get('pk', None)  # Recibo el pk argument que llega por el request url
         
         # cargamos las instancias solo si estamos en modo edicion
-        if pk:   
+        if pk:
             model_0 = Edificacion.objects.get(pk=pk)   # pedimos el primer modelo
+            self.instance_dict.clear() # Resetea el diccionario de instancias
             self.instance_dict['0'] = model_0
             
             try:
