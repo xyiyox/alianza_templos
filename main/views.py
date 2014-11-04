@@ -116,16 +116,7 @@ class Aplicacion(SessionWizardView):
     form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
 
     file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
-
-    def get_form_initial(self, step):
-        # Fijar el valor solicitado dependiendo del tipo de construccion elegido en el formulario edificacion
-        if step == '1':
-            edificacion = self.instance_dict['0']
-            return self.initial_dict.get(step, {'valor_solicitado': edificacion.tipo_construccion})
-
-        return self.initial_dict.get(step, {})
-
-    
+   
     def done(self, form_list, **kwargs):
         # AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZARD AL FINAL DE TODOS LOS PASOS
         return render_to_response('main/done.html', {
@@ -135,6 +126,12 @@ class Aplicacion(SessionWizardView):
     
     def get_form_instance(self, step):
         
+        if step == '4':
+            model_0 = self.instance_dict.get('0', None)
+            if model_0:
+                model_4 = Adjuntos.objects.get(edificacion=model_0.pk)
+                self.instance_dict['4'] = model_4
+
         pk = self.kwargs.get('pk', None)  # Recibo el pk argument que llega por el request url
         
         # cargamos las instancias solo si estamos en modo edicion

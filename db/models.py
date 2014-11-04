@@ -249,29 +249,33 @@ class Adjuntos(models.Model):
 
 	edificacion   			= models.ForeignKey('Edificacion')
 
-	foto_construccion 		= models.ImageField('Foto del sitio de construcción', upload_to='adjuntos',
+	def calcular_ruta(self, filename):
+		return 'adjuntos/%s/%s' %(self.edificacion.pk, filename)
+
+	foto_construccion 		= models.ImageField('Foto del sitio de construcción', upload_to=calcular_ruta,
 								help_text='Mostrando claramente el área donde se va a construir la iglesia')
-	foto_congregacion 		= models.ImageField('Foto de la congregación', upload_to='adjuntos', 
+	foto_congregacion 		= models.ImageField('Foto de la congregación', upload_to=calcular_ruta, 
 								help_text='Mostrando el lugar donde se reunen actualmente')
-	foto_pastor 			= models.FileField('Foto del Pastor', upload_to='adjuntos', null=True, blank=True,
+	foto_pastor 			= models.FileField('Foto del Pastor', upload_to=calcular_ruta, null=True, blank=True,
 								help_text='Incluya una foto del pastor en caso de no aparecer en la foto de la congregación')
 
-	permiso_construccion 	= models.FileField('Permiso de construcción', upload_to='adjuntos', null=True, blank=True,
+	permiso_construccion 	= models.FileField('Permiso de construcción', upload_to=calcular_ruta, null=True, blank=True,
 								help_text='Si se requiere, debe agregarlo')
-	escritura_terreno 		= models.FileField('Escritura del terreno', upload_to='adjuntos',
+	escritura_terreno 		= models.FileField('Escritura del terreno', upload_to=calcular_ruta,
 								help_text='Mostrando la prueba de propiedad')
-	plan_terreno 			= models.FileField('Plan de Terreno', upload_to='adjuntos', 
+	plan_terreno 			= models.FileField('Plan de Terreno', upload_to=calcular_ruta, 
 								help_text='Mostrando las dimensiones de la propiedad y la ubicación de la tierra')
-	plan_construccion 		= models.FileField('Plan de construcción', upload_to='adjuntos', null=True, blank=True,
+	plan_construccion 		= models.FileField('Plan de construcción', upload_to=calcular_ruta, null=True, blank=True,
 								help_text='Obligatorio para todos los planes que no hacen parte de los aprobados por ICM')
-	historia_congregacion 	= models.FileField('Historia de la congregación', upload_to='adjuntos',
+	historia_congregacion 	= models.FileField('Historia de la congregación', upload_to=calcular_ruta,
 								help_text='Incluya una breve historia de la congregación')
-	testimonio_pastor 		= models.FileField('Testimonio del pastor', upload_to='adjuntos',
+	testimonio_pastor 		= models.FileField('Testimonio del pastor', upload_to=calcular_ruta,
 								help_text='Incluya el testimonio del pastor de la congregación')	
 
 	def __str__(self):
 		return "%s" %"Adjuntos"
 
+	
 
 
 class Comentario(models.Model):
