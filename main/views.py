@@ -126,12 +126,6 @@ class Aplicacion(SessionWizardView):
     
     def get_form_instance(self, step):
         
-        if step == '4':
-            model_0 = self.instance_dict.get('0', None)
-            if model_0:
-                model_4 = Adjuntos.objects.get(edificacion=model_0.pk)
-                self.instance_dict['4'] = model_4
-
         pk = self.kwargs.get('pk', None)  # Recibo el pk argument que llega por el request url
         
         # cargamos las instancias solo si estamos en modo edicion

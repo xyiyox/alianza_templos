@@ -20,7 +20,7 @@ class EdificacionForm(ModelFormBase):
 
     class Meta:
         model = Edificacion
-        exclude = ['estado', 'usuario', 'etapa_actual']
+        exclude = ['estado', 'usuario', 'etapa_actual', 'ingeniero', 'arquitecto']
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)

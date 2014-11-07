@@ -36,21 +36,23 @@ class UsuarioManager(BaseUserManager):
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
 
-    SUPER           = "super"
+    SUPERADMIN      = "superadmin"
     NACIONAL        = "nacional" 
     REGIONAL        = "regional" 
     LOCAL           = "local" 
     
     INGENIERO       = "ingeniero"
+    ARQUITECTO      = "arquitecto"
     TESORERO        = "tesorero"
 
     TIPO_USUARIO = (
-        (SUPER,     "super"),
+        (SUPERADMIN,"Superadmin"),
         (NACIONAL,  "Nacional"),
         (REGIONAL,  "Regional"),
         (LOCAL,     "Local"),
 
         (INGENIERO, "Ingeniero"),
+        (ARQUITECTO, "Arquitecto"),
         (TESORERO,  "Tesorero"),
     )
 
@@ -62,7 +64,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_active       = models.BooleanField(default=True)
     is_admin        = models.BooleanField(default=False)
 
-    user_creador    = models.ForeignKey('self', null=True, blank=True, verbose_name="Creado por")
+    user_creador    = models.ForeignKey('self', null=True, blank=True, verbose_name="Creado por", 
+                        related_name='creador')
     user_padre      = models.ForeignKey('self', null=True, blank=True, related_name='padre', 
                         verbose_name='Asignado a', help_text='Asigne este usuario a un usuario regional')
 
