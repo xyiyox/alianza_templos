@@ -91,6 +91,12 @@ class Edificacion(models.Model):
 	arquitecto 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Arquitecto Asignado', 
 					null=True, blank=True, related_name='arquitecto')
 
+	aprobacion_regional 	= models.BooleanField('Dar aprobación Regional', default=False)
+	aprobacion_arquitecto 	= models.BooleanField('Dar aprobación de Arquitecto', default=False)
+	aprobacion_ingeniero 	= models.BooleanField('Dar aprobación de Ingeniero', default=False)
+	aprobacion_nacional 	= models.BooleanField('Dar aprobación Nacional', default=False)
+
+
 	def __unicode__(self):
 		return "%s" %"Edificación"
 
