@@ -46,20 +46,35 @@ class Edificacion(models.Model):
 		(5, 'Terminado'),
 	)
 
+	# Posibles etapas del proyecto
+	DILIGENCIAMIENTO 	= 0
+	APROB_REGIONAL 		= 1
+	ASIGN_ING_ARQ 		= 2
+	PLANOS 				= 3
+	APROB_INGENIERO 	= 4
+	APROB_TESORERO 		= 5
+	APROB_NACIONAL 		= 6
+	APROB_INTERNACIONAL = 7
+	ESPERANDO_CUPO 		= 8
+	ESPERANDO_RECURSOS 	= 9
+	EN_CONSTRUCCION 	= 10
+	CORRECIONES 		= 11
+	FINALIZACION 		= 12
+
 	ETAPA_ACTUAL = (
-		(0, 'Diligenciamiento'),
-		(1, 'Aprobación Regional'), # 1 semana para revisar por usuario regional
-		(2, 'Asignación de Ingeniero/Arquitecto'),
-		(3, 'Creación de Planos'), # 5 dias para subir planos del proyecto de construcción
-		(4, 'Aprobación Ingeniero'), # 3 dias para ser aprobado por un ingeniero
-		(5, 'Aprobación Tesorero'),
-		(6, 'Aprobación Nacional'),
-		(7, 'Aprobación Internacional'), # 2 semanas para recibir aprobación internacional
-		(8, 'En Espera de Cupo'),
-		(9, 'En Espera de Recursos'),
-		(10, 'En Construcción'), # Tiene 3 etapas (3 pagos)
-		(11, 'Esperando Correcciones'),
-		(12, 'Finalización'),
+		(DILIGENCIAMIENTO, 'Diligenciamiento'),
+		(APROB_REGIONAL, 'Aprobación Regional'), # 1 semana para revisar por usuario regional
+		(ASIGN_ING_ARQ, 'Asignación de Ingeniero/Arquitecto'),
+		(PLANOS, 'Creación de Planos'), # 5 dias para subir planos del proyecto de construcción
+		(APROB_INGENIERO, 'Aprobación Ingeniero'), # 3 dias para ser aprobado por un ingeniero
+		(APROB_TESORERO, 'Aprobación Tesorero'),
+		(APROB_NACIONAL, 'Aprobación Nacional'),
+		(APROB_INTERNACIONAL, 'Aprobación Internacional'), # 2 semanas para recibir aprobación internacional
+		(ESPERANDO_CUPO, 'En Espera de Cupo'),
+		(ESPERANDO_RECURSOS, 'En Espera de Recursos'),
+		(EN_CONSTRUCCION, 'En Construcción'), # Tiene 3 etapas (3 pagos)
+		(CORRECIONES, 'Esperando Correcciones'),
+		(FINALIZACION, 'Finalización'),
 	)
 
 	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
@@ -298,7 +313,9 @@ class Adjuntos(models.Model):
 class Comentario(models.Model):
 	""" Modelo para almacenar los comentarios de una edificacion """
 	
-	edificacion = models.ForeignKey('Edificacion')
-	commenter 	= models.ForeignKey(settings.AUTH_USER_MODEL)
-	descripcion = models.TextField('Comentario')
-	created     = models.DateTimeField(auto_now_add = True) 
+	edificacion 		= models.ForeignKey('Edificacion')
+
+	commenter 			= models.ForeignKey(settings.AUTH_USER_MODEL)
+	descripcion 		= models.TextField('Comentario')
+	comentario_padre 	= models.ForeignKey('Comentario', null=True, blank=True)
+	created     		= models.DateTimeField(auto_now_add = True) 
