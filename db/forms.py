@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons, UneditableField
 
-from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, Fuentes_Financiacion, Comentario
+from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, FuentesFinanciacion, Comentario
 from .datos import EDIFICACION_COORDENADAS
 
 from map_field import widgets as map_widgets
@@ -132,7 +132,7 @@ class AdjuntosForm(ModelFormBase):
 class FuentesFinanciacionForm(forms.ModelForm):
     
     class Meta:
-        model = Fuentes_Financiacion
+        model = FuentesFinanciacion
         exclude = ['info_financiera']
 
     def __init__(self, *args, **kwargs):
