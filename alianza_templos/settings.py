@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'map_field',
 
-    'south',
     'usuarios',
     'main',
     'db',

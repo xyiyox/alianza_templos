@@ -98,7 +98,7 @@ class Edificacion(models.Model):
 	num_pisos 			= models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
 	tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES)
 	metodo_construccion = models.SmallIntegerField('Método de Construcción',choices=METODO_CONSTRUCCION_CHOICES)
-	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?')
+	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?', default=False)
 	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 	
 	estado 			= models.SmallIntegerField(choices=ESTADO_FORMULARIO)
@@ -118,7 +118,7 @@ class Edificacion(models.Model):
 
 
 	def __unicode__(self):
-		return "%s" %"Edificación"
+		return "%s" %u"Edificación"
 
 	def get_absolute_url(self):
 		return reverse('main.views.proyecto', args=[str(self.id)])
@@ -165,7 +165,7 @@ class InformacionFinanciera(models.Model):
 	edificacion 		= models.OneToOneField('Edificacion')
 
 	def __unicode__(self):
-		return "%s" %"Información Financiera"
+		return "%s" %u"Información Financiera"
 
 
 class Comunidad(models.Model):
@@ -232,9 +232,9 @@ class Congregacion(models.Model):
 	anios_iglesia 			= models.PositiveSmallIntegerField('Años de servicio en la congregación actual')
 	anios_ministerio 		= models.PositiveSmallIntegerField('Años de servicio en el ministerio')
 
-	hay_material 			= models.BooleanField('¿El pastor conoce el material del Instituto Biblico del Aire?')
+	hay_material 			= models.BooleanField('¿El pastor conoce el material del Instituto Biblico del Aire?', default=False)
 	q1_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
-	usa_material			= models.BooleanField('¿El pastor ha acordado usar este material para crecimiento de la iglesia?') 
+	usa_material			= models.BooleanField('¿El pastor ha acordado usar este material para crecimiento de la iglesia?', default=False) 
 	q2_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
 	q2_how_do 				= models.TextField('¿Como lo hace?', blank=True, null=True)
 	# Relacion 1 a 1 entre la edificacion y la congregacion
@@ -260,25 +260,27 @@ class Condiciones(models.Model):
 		verbose_name_plural = "condiciones"
 
 	edificacion       = models.ForeignKey('Edificacion')
-	construccion      = models.BooleanField(CONDICIONES_CONSTRUCCION, choices=BOOL_CHOICES)
-	mantenimiento     = models.BooleanField(CONDICIONES_MANTENIMIENTO, choices=BOOL_CHOICES)
-	actividades       = models.BooleanField(CONDICIONES_ACTIVIDADES, choices=BOOL_CHOICES)
-	discipulado       = models.BooleanField(CONDICIONES_DISCIPULADO, choices=BOOL_CHOICES)
-	alcance           = models.BooleanField(CONDICIONES_ALCANCE, choices=BOOL_CHOICES)
+	construccion      = models.BooleanField(CONDICIONES_CONSTRUCCION, choices=BOOL_CHOICES, default=False)
+	mantenimiento     = models.BooleanField(CONDICIONES_MANTENIMIENTO, choices=BOOL_CHOICES, default=False)
+	actividades       = models.BooleanField(CONDICIONES_ACTIVIDADES, choices=BOOL_CHOICES, default=False)
+	discipulado       = models.BooleanField(CONDICIONES_DISCIPULADO, choices=BOOL_CHOICES, default=False)
+	alcance           = models.BooleanField(CONDICIONES_ALCANCE, choices=BOOL_CHOICES, default=False)
 	
-	found_trust       = models.BooleanField(CONDICIONES_FOUND_TRUST, choices=BOOL_CHOICES)
-	found_commitment  = models.BooleanField(CONDICIONES_FOUND_COMMITMENT, choices=BOOL_CHOICES)
+	found_trust       = models.BooleanField(CONDICIONES_FOUND_TRUST, choices=BOOL_CHOICES, default=False)
+	found_commitment  = models.BooleanField(CONDICIONES_FOUND_COMMITMENT, choices=BOOL_CHOICES, default=False)
 	found_payment     = models.CharField(CONDICIONES_FOUND_PAYMENT, max_length=20, help_text='Cantidad o Porcentaje')
 
-	presupuesto       = models.BooleanField(CONDICIONES_PRESUPUESTO, choices=BOOL_CHOICES)
-	terminacion       = models.BooleanField(CONDICIONES_TERMINACION, choices=BOOL_CHOICES)
+	presupuesto       = models.BooleanField(CONDICIONES_PRESUPUESTO, choices=BOOL_CHOICES, default=False)
+	terminacion       = models.BooleanField(CONDICIONES_TERMINACION, choices=BOOL_CHOICES, default=False)
 	comentarios       = models.TextField(CONDICIONES_COMENTARIOS, blank=True)
-	aceptacion        = models.BooleanField(help_text=CONDICIONES_ACEPTACION)
+	aceptacion        = models.BooleanField(help_text=CONDICIONES_ACEPTACION, default=False)
 	nombre_completo   = models.CharField(max_length=50, help_text=CONDICIONES_FULL_NAME)
 
 	def __str__(self):
 		return "%s" %"Condiciones"
 
+def calcular_ruta(self, filename):
+	return 'adjuntos/%s/%s' %(self.edificacion.pk, filename)
 
 class Adjuntos(models.Model):
 	""" Modelo para almacenar los archivos adjuntos """
@@ -287,9 +289,6 @@ class Adjuntos(models.Model):
 		verbose_name_plural = "adjuntos"
 
 	edificacion   			= models.ForeignKey('Edificacion')
-
-	def calcular_ruta(self, filename):
-		return 'adjuntos/%s/%s' %(self.edificacion.pk, filename)
 
 	foto_construccion 		= models.ImageField('Foto del sitio de construcción', upload_to=calcular_ruta,
 								help_text='Mostrando claramente el área donde se va a construir la iglesia')

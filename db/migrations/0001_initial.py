@@ -1,294 +1,216 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import db.models
+from django.conf import settings
+import map_field.fields
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Edificacion'
-        db.create_table(u'db_edificacion', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nombre_proyecto', self.gf('django.db.models.fields.CharField')(max_length=40)),
-            ('direccion', self.gf('django.db.models.fields.TextField')()),
-            ('coordenadas', self.gf('map_field.fields.GeoLocationField')(max_length=100)),
-            ('owner_lote', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('tipo_adquisicion', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('dimensiones_terreno', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('dimensiones_edificio', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('num_pisos', self.gf('django.db.models.fields.SmallIntegerField')(default=0)),
-            ('tipo_construccion', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('metodo_construccion', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('requiere_permiso', self.gf('django.db.models.fields.BooleanField')()),
-            ('tiempo_limite', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('estado', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('usuario', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['usuarios.Usuario'])),
-        ))
-        db.send_create_signal(u'db', ['Edificacion'])
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-        # Adding model 'InformacionFinanciera'
-        db.create_table(u'db_informacionfinanciera', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('mano_obra', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, blank=True)),
-            ('valor_materiales', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, blank=True)),
-            ('dinero_efectivo', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('valor_terreno', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('valor_solicitado', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('costo_total', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('edificacion', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['db.Edificacion'], unique=True)),
-        ))
-        db.send_create_signal(u'db', ['InformacionFinanciera'])
-
-        # Adding model 'Comunidad'
-        db.create_table(u'db_comunidad', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nombre', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('poblacion_comunidad', self.gf('django.db.models.fields.CharField')(max_length=40)),
-            ('region', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('capital_depto', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('distancia_capital', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('edificacion', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['db.Edificacion'], unique=True)),
-        ))
-        db.send_create_signal(u'db', ['Comunidad'])
-
-        # Adding model 'Congregacion'
-        db.create_table(u'db_congregacion', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nombre', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('fecha_fundacion', self.gf('django.db.models.fields.DateField')()),
-            ('lengua_primaria', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('region', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('asistencia_general', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('asistencia_ninos', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('miembros_adultos', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('miembros_ninos', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('ingreso_mensual', self.gf('django.db.models.fields.DecimalField')(max_digits=15, decimal_places=3)),
-            ('nombre_pastor', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('estado_civil', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('cant_hijos', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('entrenamiento_biblico', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('titulos_obtenidos', self.gf('django.db.models.fields.CharField')(max_length=70)),
-            ('anios_iglesia', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('anios_ministerio', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('hay_material', self.gf('django.db.models.fields.BooleanField')()),
-            ('q1_why_not', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('usa_material', self.gf('django.db.models.fields.BooleanField')()),
-            ('q2_why_not', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('q2_how_do', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('edificacion', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['db.Edificacion'], unique=True)),
-        ))
-        db.send_create_signal(u'db', ['Congregacion'])
-
-        # Adding model 'Fuentes_Financiacion'
-        db.create_table(u'db_fuentes_financiacion', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nombre', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('valor', self.gf('django.db.models.fields.DecimalField')(max_digits=15, decimal_places=3)),
-            ('info_financiera', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['db.InformacionFinanciera'])),
-        ))
-        db.send_create_signal(u'db', ['Fuentes_Financiacion'])
-
-        # Adding model 'Condiciones'
-        db.create_table(u'db_condiciones', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('edificacion', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['db.Edificacion'])),
-            ('construccion', self.gf('django.db.models.fields.BooleanField')()),
-            ('mantenimiento', self.gf('django.db.models.fields.BooleanField')()),
-            ('actividades', self.gf('django.db.models.fields.BooleanField')()),
-            ('discipulado', self.gf('django.db.models.fields.BooleanField')()),
-            ('alcance', self.gf('django.db.models.fields.BooleanField')()),
-            ('found_trust', self.gf('django.db.models.fields.BooleanField')()),
-            ('found_commitment', self.gf('django.db.models.fields.BooleanField')()),
-            ('found_payment', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('presupuesto', self.gf('django.db.models.fields.BooleanField')()),
-            ('terminacion', self.gf('django.db.models.fields.BooleanField')()),
-            ('comentarios', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('aceptacion', self.gf('django.db.models.fields.BooleanField')()),
-            ('nombre_completo', self.gf('django.db.models.fields.CharField')(max_length=50)),
-        ))
-        db.send_create_signal(u'db', ['Condiciones'])
-
-        # Adding model 'Adjuntos'
-        db.create_table(u'db_adjuntos', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('edificacion', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['db.Edificacion'])),
-            ('foto_construccion', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('foto_congregacion', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('foto_pastor', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('permiso_construccion', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('escritura_terreno', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('plan_terreno', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('plan_construccion', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('historia_congregacion', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('testimonio_pastor', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-        ))
-        db.send_create_signal(u'db', ['Adjuntos'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Edificacion'
-        db.delete_table(u'db_edificacion')
-
-        # Deleting model 'InformacionFinanciera'
-        db.delete_table(u'db_informacionfinanciera')
-
-        # Deleting model 'Comunidad'
-        db.delete_table(u'db_comunidad')
-
-        # Deleting model 'Congregacion'
-        db.delete_table(u'db_congregacion')
-
-        # Deleting model 'Fuentes_Financiacion'
-        db.delete_table(u'db_fuentes_financiacion')
-
-        # Deleting model 'Condiciones'
-        db.delete_table(u'db_condiciones')
-
-        # Deleting model 'Adjuntos'
-        db.delete_table(u'db_adjuntos')
-
-
-    models = {
-        u'auth.group': {
-            'Meta': {'object_name': 'Group'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
-        },
-        u'auth.permission': {
-            'Meta': {'ordering': "(u'content_type__app_label', u'content_type__model', u'codename')", 'unique_together': "((u'content_type', u'codename'),)", 'object_name': 'Permission'},
-            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        u'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'db.adjuntos': {
-            'Meta': {'object_name': 'Adjuntos'},
-            'edificacion': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['db.Edificacion']"}),
-            'escritura_terreno': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'foto_congregacion': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            'foto_construccion': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            'foto_pastor': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'historia_congregacion': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'permiso_construccion': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'plan_construccion': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'plan_terreno': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'testimonio_pastor': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
-        },
-        u'db.comunidad': {
-            'Meta': {'object_name': 'Comunidad'},
-            'capital_depto': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'distancia_capital': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'edificacion': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['db.Edificacion']", 'unique': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'poblacion_comunidad': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
-            'region': ('django.db.models.fields.CharField', [], {'max_length': '30'})
-        },
-        u'db.condiciones': {
-            'Meta': {'object_name': 'Condiciones'},
-            'aceptacion': ('django.db.models.fields.BooleanField', [], {}),
-            'actividades': ('django.db.models.fields.BooleanField', [], {}),
-            'alcance': ('django.db.models.fields.BooleanField', [], {}),
-            'comentarios': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'construccion': ('django.db.models.fields.BooleanField', [], {}),
-            'discipulado': ('django.db.models.fields.BooleanField', [], {}),
-            'edificacion': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['db.Edificacion']"}),
-            'found_commitment': ('django.db.models.fields.BooleanField', [], {}),
-            'found_payment': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'found_trust': ('django.db.models.fields.BooleanField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'mantenimiento': ('django.db.models.fields.BooleanField', [], {}),
-            'nombre_completo': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'presupuesto': ('django.db.models.fields.BooleanField', [], {}),
-            'terminacion': ('django.db.models.fields.BooleanField', [], {})
-        },
-        u'db.congregacion': {
-            'Meta': {'object_name': 'Congregacion'},
-            'anios_iglesia': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'anios_ministerio': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'asistencia_general': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'asistencia_ninos': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'cant_hijos': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'edificacion': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['db.Edificacion']", 'unique': 'True'}),
-            'entrenamiento_biblico': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'estado_civil': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'fecha_fundacion': ('django.db.models.fields.DateField', [], {}),
-            'hay_material': ('django.db.models.fields.BooleanField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'ingreso_mensual': ('django.db.models.fields.DecimalField', [], {'max_digits': '15', 'decimal_places': '3'}),
-            'lengua_primaria': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'miembros_adultos': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'miembros_ninos': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'nombre_pastor': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'q1_why_not': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'q2_how_do': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'q2_why_not': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'region': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'titulos_obtenidos': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
-            'usa_material': ('django.db.models.fields.BooleanField', [], {})
-        },
-        u'db.edificacion': {
-            'Meta': {'object_name': 'Edificacion'},
-            'coordenadas': ('map_field.fields.GeoLocationField', [], {'max_length': '100'}),
-            'dimensiones_edificio': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'dimensiones_terreno': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'direccion': ('django.db.models.fields.TextField', [], {}),
-            'estado': ('django.db.models.fields.SmallIntegerField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'metodo_construccion': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'nombre_proyecto': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
-            'num_pisos': ('django.db.models.fields.SmallIntegerField', [], {'default': '0'}),
-            'owner_lote': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'requiere_permiso': ('django.db.models.fields.BooleanField', [], {}),
-            'tiempo_limite': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'tipo_adquisicion': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'tipo_construccion': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'usuario': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['usuarios.Usuario']"})
-        },
-        u'db.fuentes_financiacion': {
-            'Meta': {'object_name': 'Fuentes_Financiacion'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'info_financiera': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['db.InformacionFinanciera']"}),
-            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'valor': ('django.db.models.fields.DecimalField', [], {'max_digits': '15', 'decimal_places': '3'})
-        },
-        u'db.informacionfinanciera': {
-            'Meta': {'object_name': 'InformacionFinanciera'},
-            'costo_total': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'dinero_efectivo': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'edificacion': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['db.Edificacion']", 'unique': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'mano_obra': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'blank': 'True'}),
-            'valor_materiales': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'blank': 'True'}),
-            'valor_solicitado': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'valor_terreno': ('django.db.models.fields.PositiveIntegerField', [], {})
-        },
-        u'usuarios.usuario': {
-            'Meta': {'object_name': 'Usuario'},
-            'apellidos': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '255'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"})
-        }
-    }
-
-    complete_apps = ['db']
+    operations = [
+        migrations.CreateModel(
+            name='Adjuntos',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('foto_construccion', models.ImageField(help_text=b'Mostrando claramente el \xc3\xa1rea donde se va a construir la iglesia', upload_to=db.models.calcular_ruta, verbose_name=b'Foto del sitio de construcci\xc3\xb3n')),
+                ('foto_congregacion', models.ImageField(help_text=b'Mostrando el lugar donde se reunen actualmente', upload_to=db.models.calcular_ruta, verbose_name=b'Foto de la congregaci\xc3\xb3n')),
+                ('foto_pastor', models.FileField(help_text=b'Incluya una foto del pastor en caso de no aparecer en la foto de la congregaci\xc3\xb3n', upload_to=db.models.calcular_ruta, null=True, verbose_name=b'Foto del Pastor', blank=True)),
+                ('permiso_construccion', models.FileField(help_text=b'Si se requiere, debe agregarlo', upload_to=db.models.calcular_ruta, null=True, verbose_name=b'Permiso de construcci\xc3\xb3n', blank=True)),
+                ('escritura_terreno', models.FileField(help_text=b'Mostrando la prueba de propiedad', upload_to=db.models.calcular_ruta, verbose_name=b'Escritura del terreno')),
+                ('plan_terreno', models.FileField(help_text=b'Mostrando las dimensiones de la propiedad y la ubicaci\xc3\xb3n de la tierra', upload_to=db.models.calcular_ruta, verbose_name=b'Plan de Terreno')),
+                ('plan_construccion', models.FileField(help_text=b'Obligatorio para todos los planes que no hacen parte de los aprobados por ICM', upload_to=db.models.calcular_ruta, null=True, verbose_name=b'Plan de construcci\xc3\xb3n', blank=True)),
+                ('historia_congregacion', models.FileField(help_text=b'Incluya una breve historia de la congregaci\xc3\xb3n', upload_to=db.models.calcular_ruta, verbose_name=b'Historia de la congregaci\xc3\xb3n')),
+                ('testimonio_pastor', models.FileField(help_text=b'Incluya el testimonio del pastor de la congregaci\xc3\xb3n', upload_to=db.models.calcular_ruta, verbose_name=b'Testimonio del pastor')),
+            ],
+            options={
+                'verbose_name_plural': 'adjuntos',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Comentario',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('descripcion', models.TextField(verbose_name=b'Comentario')),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('comentario_padre', models.ForeignKey(blank=True, to='db.Comentario', null=True)),
+                ('commenter', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Comunidad',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('nombre', models.CharField(max_length=50, verbose_name=b'Nombre')),
+                ('poblacion_comunidad', models.CharField(max_length=40, verbose_name=b'Cantidad de poblaci\xc3\xb3n')),
+                ('region', models.CharField(max_length=30, verbose_name=b'Departamento')),
+                ('capital_depto', models.CharField(max_length=30, verbose_name=b'Capital del Departamento')),
+                ('distancia_capital', models.PositiveSmallIntegerField(help_text=b'Por favor ingrese el valor en Kilometros (Km)', verbose_name=b'Distancia a la capital')),
+            ],
+            options={
+                'verbose_name_plural': 'ciudades',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Condiciones',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('construccion', models.BooleanField(default=False, verbose_name=b'Proveeremos fotos y reportes del progres de la construcci\xc3\xb3n con cada solicitud de pago y seguiremos los lineamientos \n\t\t\t\t\t\t\t\texplicados en el manual Church Growth Partnership.', choices=[(True, 'Yes'), (False, 'No')])),
+                ('mantenimiento', models.BooleanField(default=False, verbose_name=b'Lorem ipsum Enim dolore nisi reprehenderit sunt ea non elit ad ex ad qui consequat esse.', choices=[(True, 'Yes'), (False, 'No')])),
+                ('actividades', models.BooleanField(default=False, verbose_name=b'Lorem ipsum Duis do ut ut commodo anim nostrud dolor ex velit mollit in deserunt reprehenderit quis dolor nulla Ut \n\t\t\t\t\t\t\t\tlaborum Duis nulla laborum et dolor consectetur eiusmod adipisicing ea veniam.', choices=[(True, 'Yes'), (False, 'No')])),
+                ('discipulado', models.BooleanField(default=False, verbose_name=b'Lorem ipsum Est in Ut id aliqua aliqua et deserunt sunt adipisicing.', choices=[(True, 'Yes'), (False, 'No')])),
+                ('alcance', models.BooleanField(default=False, verbose_name=b'Lorem ipsum Adipisicing eu laboris dolore dolor deserunt adipisicing laborum mollit dolore exercitation occaecat \n\t\t\t\t\t\t\t\treprehenderit anim qui velit in.', choices=[(True, 'Yes'), (False, 'No')])),
+                ('found_trust', models.BooleanField(default=False, verbose_name=b'We will accept funds from ICM as a trust from the Lord.', choices=[(True, 'Yes'), (False, 'No')])),
+                ('found_commitment', models.BooleanField(default=False, verbose_name=b'We understand that we have our Church building because others have shared with us. As a way to give to others what \n\t\t\t\t\t\t\t\tothers have given to us, we will contribute to the Covenant Fund account maintained by our Church organization. \n\t\t\t\t\t\t\t\tOur commitment to do this is in realization of God\xe2\x80\x99s goodness to our Congregation and of the many Congregations still \n\t\t\t\t\t\t\t\twaiting for an opportunity to build. Our monthly contribution amount will be agreed upon by our Church organization \n\t\t\t\t\t\t\t\tand reviewed annually. The monthly contribution will be a reflection of how God has prospered our Church organization.', choices=[(True, 'Yes'), (False, 'No')])),
+                ('found_payment', models.CharField(help_text=b'Cantidad o Porcentaje', max_length=20, verbose_name=b"Fund Payment: The monthly contribution to the Covenant Fund, will begin the month following the dedication of the \n\t\t\t\t\t\t\t\tbuilding. This contribution will be either a fixed amount each month or a fixed percentage of the congregation's monthly \n\t\t\t\t\t\t\t\tofferings")),
+                ('presupuesto', models.BooleanField(default=False, verbose_name=b"We will, with God's help, complete the building of this project within the stated budget and we understand that any \n\t\t\t\t\t\t\t\tadditional costs must be covered by the congregation.", choices=[(True, 'Yes'), (False, 'No')])),
+                ('terminacion', models.BooleanField(default=False, verbose_name=b'We will, with God\xe2\x80\x99s help, complete the building of this project on schedule. ICM is to be notified by the Partner of \n\t\t\t\t\t\t\t\tany changes to planned Dedication Date.', choices=[(True, 'Yes'), (False, 'No')])),
+                ('comentarios', models.TextField(verbose_name=b'Comentarios adiccionanles (OPCIONAL) (Provea cualquier otra informaci\xc3\xb3n que ayudar\xc3\xa1 a ICM a procesar esta aplicaci\xc3\xb3n).', blank=True)),
+                ('aceptacion', models.BooleanField(default=False, help_text=b'I acknowledge and agree to the terms and conditions outlined in the Church Growth Partnership Manual.')),
+                ('nombre_completo', models.CharField(help_text=b'(Nombre de la persona autorizada a presentar esta aplicaci\xc3\xb3n.)', max_length=50)),
+            ],
+            options={
+                'verbose_name_plural': 'condiciones',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Congregacion',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('nombre', models.CharField(max_length=30)),
+                ('fecha_fundacion', models.DateField(help_text=b'Dia/Mes/A\xc3\xb1o', verbose_name=b'Fecha de Fundaci\xc3\xb3n')),
+                ('lengua_primaria', models.CharField(max_length=20, verbose_name=b'Lengua primaria hablada')),
+                ('region', models.SmallIntegerField(help_text=b'La Regi\xc3\xb3n a la que pertenece la Iglesia', verbose_name=b'Regi\xc3\xb3n', choices=[(0, b'Central'), (1, b'Sur Oriental'), (2, b'Mecusab'), (3, b'Pac\xc3\xadfico'), (4, b'Sur'), (5, b'Valle')])),
+                ('asistencia_general', models.SmallIntegerField(verbose_name=b'Asistencia general promedio')),
+                ('asistencia_ninos', models.SmallIntegerField(verbose_name=b'Asistencia general promedio de ni\xc3\xb1os')),
+                ('miembros_adultos', models.SmallIntegerField(help_text=b'Recuerde que se considera como miembro a aquel que ha sido bautizado', verbose_name=b'Cantidad de miembros adultos')),
+                ('miembros_ninos', models.SmallIntegerField(verbose_name=b'Cantidad de miembros ni\xc3\xb1os')),
+                ('ingreso_mensual', models.DecimalField(verbose_name=b'Ingreso mensual promedio', max_digits=15, decimal_places=3)),
+                ('nombre_pastor', models.CharField(max_length=50, verbose_name=b'Nombre del pastor')),
+                ('estado_civil', models.SmallIntegerField(verbose_name=b'Estado civil', choices=[(0, b'Soltero'), (1, b'Casado'), (2, b'Viudo'), (3, b'Otro')])),
+                ('cant_hijos', models.PositiveSmallIntegerField(verbose_name=b'Cantidad de hijos')),
+                ('entrenamiento_biblico', models.PositiveSmallIntegerField(verbose_name=b'A\xc3\xb1os de entrenamiento Biblico')),
+                ('titulos_obtenidos', models.CharField(max_length=70, verbose_name=b'Titulos obtenidos')),
+                ('anios_iglesia', models.PositiveSmallIntegerField(verbose_name=b'A\xc3\xb1os de servicio en la congregaci\xc3\xb3n actual')),
+                ('anios_ministerio', models.PositiveSmallIntegerField(verbose_name=b'A\xc3\xb1os de servicio en el ministerio')),
+                ('hay_material', models.BooleanField(default=False, verbose_name=b'\xc2\xbfEl pastor conoce el material del Instituto Biblico del Aire?')),
+                ('q1_why_not', models.TextField(null=True, verbose_name=b'\xc2\xbfPor que no?', blank=True)),
+                ('usa_material', models.BooleanField(default=False, verbose_name=b'\xc2\xbfEl pastor ha acordado usar este material para crecimiento de la iglesia?')),
+                ('q2_why_not', models.TextField(null=True, verbose_name=b'\xc2\xbfPor que no?', blank=True)),
+                ('q2_how_do', models.TextField(null=True, verbose_name=b'\xc2\xbfComo lo hace?', blank=True)),
+            ],
+            options={
+                'verbose_name_plural': 'congregaciones',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Edificacion',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('nombre_proyecto', models.CharField(max_length=40, verbose_name=b'Nombre del Proyecto')),
+                ('direccion', models.TextField(verbose_name=b'Direcci\xc3\xb3n')),
+                ('coordenadas', map_field.fields.GeoLocationField(help_text=b'Navegue acercando el mapa con el bot\xc3\xb3n \n\t\t\t\t\t\t\t\t<button type="button" class="btn btn-default btn-xs" disabled><i class="fa fa-plus"></i></button> o doble click \n\t\t\t\t\t\t\t\ty arrastrando el mouse hasta el lugar mas exacto posible donde se realizar\xc3\xa1 el proyecto y ubique ahi el marcador.', max_length=100)),
+                ('owner_lote', models.SmallIntegerField(verbose_name=b'Due\xc3\xb1o del Lote', choices=[(0, b'Alianza Cristiana'), (1, b'Otro')])),
+                ('tipo_adquisicion', models.SmallIntegerField(verbose_name=b'M\xc3\xa9todo de Adquisici\xc3\xb3n', choices=[(0, b'Comprado'), (1, b'Donado')])),
+                ('dimensiones_terreno', models.CharField(help_text=b'Ingrese Ancho x Largo en Metros', max_length=30, verbose_name=b'Dimensiones del Terreno')),
+                ('dimensiones_edificio', models.CharField(help_text=b'Ingrese las medidas en Metros. Para construcci\xc3\xb3n de templos las m\xc3\xa9didas autorizadas son 200 mt cuadrados y para guarderias 150 mt cuadrados. Si las m\xc3\xa9didas superan estos valores entonces se asume que la congregaci\xc3\xb3n aporta el excedente del dinero', max_length=30, verbose_name=b'Dimensiones del Edificio')),
+                ('num_pisos', models.SmallIntegerField(default=1, verbose_name=b'Cantidad de Pisos', choices=[(1, 1), (2, 2)])),
+                ('tipo_construccion', models.SmallIntegerField(verbose_name=b'Tipo de Construcci\xc3\xb3n', choices=[(0, b'Iglesia'), (1, b'Guarderia'), (2, b'Iglesia/Guarderia')])),
+                ('metodo_construccion', models.SmallIntegerField(verbose_name=b'M\xc3\xa9todo de Construcci\xc3\xb3n', choices=[(0, b'Nueva Edificacion'), (1, b'Otro')])),
+                ('requiere_permiso', models.BooleanField(default=False, verbose_name=b'\xc2\xbfRequiere permiso de construcci\xc3\xb3n?')),
+                ('tiempo_limite', models.PositiveSmallIntegerField(help_text=b'Tiempo en que se terminar\xc3\xa1 la construcci\xc3\xb3n (Meses)', verbose_name=b'Tiempo Limite')),
+                ('estado', models.SmallIntegerField(choices=[(0, b'EdificacionForm'), (1, b'ComunidadForm'), (2, b'CongregacionForm'), (3, b'FuentesFinancierasForm'), (4, b'CondicionesForm'), (5, b'Terminado')])),
+                ('etapa_actual', models.PositiveSmallIntegerField(choices=[(0, b'Diligenciamiento'), (1, b'Aprobaci\xc3\xb3n Regional'), (2, b'Asignaci\xc3\xb3n de Ingeniero/Arquitecto'), (3, b'Creaci\xc3\xb3n de Planos'), (4, b'Aprobaci\xc3\xb3n Ingeniero'), (5, b'Aprobaci\xc3\xb3n Tesorero'), (6, b'Aprobaci\xc3\xb3n Nacional'), (7, b'Aprobaci\xc3\xb3n Internacional'), (8, b'En Espera de Cupo'), (9, b'En Espera de Recursos'), (10, b'En Construcci\xc3\xb3n'), (11, b'Esperando Correcciones'), (12, b'Finalizaci\xc3\xb3n')])),
+                ('aprobacion_regional', models.BooleanField(default=False, verbose_name=b'Dar aprobaci\xc3\xb3n Regional')),
+                ('aprobacion_arquitecto', models.BooleanField(default=False, verbose_name=b'Dar aprobaci\xc3\xb3n de Arquitecto')),
+                ('aprobacion_ingeniero', models.BooleanField(default=False, verbose_name=b'Dar aprobaci\xc3\xb3n de Ingeniero')),
+                ('aprobacion_nacional', models.BooleanField(default=False, verbose_name=b'Dar aprobaci\xc3\xb3n Nacional')),
+                ('arquitecto', models.ForeignKey(related_name='arquitecto', verbose_name=b'Arquitecto Asignado', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('ingeniero', models.ForeignKey(related_name='ingeniero', verbose_name=b'Ingeniero Asignado', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('usuario', models.ForeignKey(related_name='usuario', verbose_name=b'Responsable', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'verbose_name_plural': 'edificaciones',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='FuentesFinanciacion',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('nombre', models.CharField(max_length=30)),
+                ('valor', models.DecimalField(verbose_name=b'Valor', max_digits=15, decimal_places=3)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='InformacionFinanciera',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('mano_obra', models.PositiveIntegerField(default=0, verbose_name=b'Costo de la Mano de obra', blank=True)),
+                ('valor_materiales', models.PositiveIntegerField(default=0, verbose_name=b'Costo de Materiales de construcci\xc3\xb3n', blank=True)),
+                ('dinero_efectivo', models.PositiveIntegerField(help_text=b'Ingrese el valor en Dolares (Estados Unidos). <br>Puede usar <a href="http://www.colombia.com/cambio_moneda/" target="_blank">este enlace</a> como convertidor de moneda.', verbose_name=b'Dinero Ahorrado')),
+                ('valor_terreno', models.PositiveIntegerField(help_text=b'Ingrese el valor en Dolares (Estados Unidos)', verbose_name=b'Valor del Terreno')),
+                ('valor_solicitado', models.PositiveIntegerField(help_text=b'Recuerde que este dinero esta expresado en Dolares (Estados Unidos)', verbose_name=b'Dinero Solicitado', choices=[(0, 14000), (1, 25000), (2, 39000)])),
+                ('num_voluntarios', models.PositiveSmallIntegerField(help_text=b'\xc2\xbfCuantas personas tiene disponibles para ayudar fisicamente en la construcci\xc3\xb3n?', verbose_name=b'Cantidad de Voluntarios')),
+                ('desc_voluntarios', models.TextField(help_text=b'Describa que trabajos pueden hacer los Voluntarios y cuantas horas semanales pueden donar', verbose_name=b'Descripci\xc3\xb3n')),
+                ('dias_donados', models.PositiveSmallIntegerField(help_text=b'\xc2\xbfCuantos dias de trabajo donaran aquellos que no pueden ayudar fisicamente a la obra?', null=True, verbose_name=b'Dias Donados', blank=True)),
+                ('costo_total', models.PositiveIntegerField(help_text=b'Ingrese el valor en Dolares (Estados Unidos)', verbose_name=b'Costo total del proyecto')),
+                ('edificacion', models.OneToOneField(to='db.Edificacion')),
+            ],
+            options={
+                'verbose_name_plural': 'informaciones financieras',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='fuentesfinanciacion',
+            name='info_financiera',
+            field=models.ForeignKey(to='db.InformacionFinanciera'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='congregacion',
+            name='edificacion',
+            field=models.OneToOneField(to='db.Edificacion'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='condiciones',
+            name='edificacion',
+            field=models.ForeignKey(to='db.Edificacion'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='comunidad',
+            name='edificacion',
+            field=models.OneToOneField(to='db.Edificacion'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='comentario',
+            name='edificacion',
+            field=models.ForeignKey(to='db.Edificacion'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='adjuntos',
+            name='edificacion',
+            field=models.ForeignKey(to='db.Edificacion'),
+            preserve_default=True,
+        ),
+    ]

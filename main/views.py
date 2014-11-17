@@ -160,6 +160,7 @@ class Aplicacion(SessionWizardView):
                 # pedimos el segundo modelo
                 model_5 = Condiciones.objects.get(edificacion=pk)
                 self.instance_dict['5'] = model_5
+                print('aceptacion=',model_5.aceptacion)
             except Condiciones.DoesNotExist:
                 print("No existe Condiciones")
         return self.instance_dict.get(step, None)
