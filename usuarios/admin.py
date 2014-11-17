@@ -5,7 +5,8 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.utils.datastructures import MultiValueDict, MergeDict  # para que select retorne una lista
+# para que select retorne una lista
+from django.utils.datastructures import MultiValueDict, MergeDict
 from django.db.models import Q
 
 from usuarios.models import Usuario
@@ -36,8 +37,6 @@ class UserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-
-
 
 
 # class SelectSingleAsList(forms.Select):
@@ -117,11 +116,11 @@ class UsuarioAdmin(UserAdmin):
         elif request.user.tipo == Usuario.NACIONAL:
             self.exclude = ['is_admin', 'is_superuser']
             self.fieldsets[1][1]["fields"] = ('is_active', 'groups')
-
-            if obj is not None and obj.pk == request.user.pk:  # validamos que el usuario no se pueda desactivar o cambiar el tipo a si mismo
+            # validamos que el usuario no se pueda desactivar o cambiar el tipo a si mismo
+            if obj is not None and obj.pk == request.user.pk:
                 self.readonly_fields = ('groups', 'last_login', 'user_creador', 'tipo', 'is_active',)  
-
-            if obj is not None and obj.tipo != Usuario.LOCAL:    # solo muestro el campo de asignar padre si el tipo es local
+            # solo muestro el campo de asignar padre si el tipo es local
+            if obj is not None and obj.tipo != Usuario.LOCAL:
                 self.exclude = ['user_padre']
                 self.fieldsets[0][1]["fields"] = ('nombre', 'apellidos', 'email', 'tipo', 'user_creador')
         
@@ -132,8 +131,8 @@ class UsuarioAdmin(UserAdmin):
             self.add_fieldsets[0][1]["fields"] = ('email', 'nombre', 'apellidos', 'password1', 'password2',)
             self.fieldsets[1][1]["fields"] = ('is_active', 'groups')
             self.readonly_fields = ('groups', 'last_login', 'user_creador', 'user_padre',) 
-
-            if obj is not None and obj.pk == request.user.pk:  # validamos que el usuario no se puede desactivar a si mismo
+            # validamos que el usuario no se puede desactivar a si mismo
+            if obj is not None and obj.pk == request.user.pk:
                 self.readonly_fields = ('groups', 'last_login', 'user_creador', 'user_padre', 'is_active',)
             else:
                 self.readonly_fields = ('groups', 'last_login', 'user_creador', 'user_padre',)
@@ -159,23 +158,25 @@ class UsuarioAdmin(UserAdmin):
             obj.groups.clear()
 
         if not change:  
-
-            obj.user_creador = request.user      # solo asigno el creador al momento de crear y no en editar
-
-            if obj.user_padre is None:           # si no hay ningun valor en el campo del formulario    
-                obj.user_padre = request.user    # se le asigna como padre el que lo crea
+            # solo asigno el creador al momento de crear y no en editar
+            obj.user_creador = request.user
+            # si no hay ningun valor en el campo del formulario    
+            if obj.user_padre is None:
+                # se le asigna como padre el que lo crea    
+                obj.user_padre = request.user
 
             if request.user.tipo == Usuario.REGIONAL:
                 obj.tipo = Usuario.LOCAL
             
             obj.save()
-            
         
         if change:
-            if request.user.tipo == Usuario.NACIONAL:  # si estoy logueado como Nacional
-                if obj.tipo != Usuario.LOCAL:          # y el usuario que estoy editando no es de tipo Local
-                    obj.user_padre = request.user      # Entoces le asigno como user_padre al usuario logueado osea Nacional
-            obj.save()                                 # de lo contrario se asignara como user_padre el que se escoja en el form 
+            # si estoy logueado como Nacional y el usuario que estoy editando no es de tipo Local
+            if request.user.tipo == Usuario.NACIONAL and obj.tipo != Usuario.LOCAL:
+                # Entoces le asigno como user_padre al usuario logueado osea Nacional
+                obj.user_padre = request.user
+            # de lo contrario se asignara como user_padre el que se escoja en el form 
+            obj.save()                                 
 
         if obj.tipo != Usuario.SUPER:
             obj.groups.clear()
@@ -185,24 +186,24 @@ class UsuarioAdmin(UserAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "user_padre":
-            kwargs["queryset"] = Usuario.objects.filter(tipo=Usuario.REGIONAL) #Q(tipo=Usuario.NACIONAL) | Q(tipo=Usuario.REGIONAL))
+            kwargs["queryset"] = Usuario.objects.filter(tipo=Usuario.REGIONAL)
         return super(UsuarioAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         
         if db_field.name == "tipo":
-
-            if request.user.is_superuser:    # le permito ver todo
+            # le permito ver todo
+            if request.user.is_superuser:
                 kwargs['choices'] = db_field.choices
-
-            elif request.user.tipo == Usuario.NACIONAL:    # solo le permito ver tipo  regional, local, ingeniero y tesorero
+            # solo le permito ver tipo  regional, local, ingeniero y tesorero
+            elif request.user.tipo == Usuario.NACIONAL:
                 kwargs['choices'] = db_field.choices[2:6] 
-
-            elif request.user.tipo == Usuario.REGIONAL:    # solo le permito ver tipo  local
+            # solo le permito ver tipo  local
+            elif request.user.tipo == Usuario.REGIONAL:
                 kwargs['choices'] = db_field.choices[3:4] 
-
-            else:   # si usuario es de tipo LOCAL, INGENIERO O TESORERO solo le permito ver tipo igual a si mismo
+            # si usuario es de tipo LOCAL, INGENIERO O TESORERO solo le permito ver tipo igual a si mismo
+            else:
                 kwargs['choices'] = ((request.user.tipo, request.user.tipo),)  
 
         return super(UsuarioAdmin, self).formfield_for_choice_field(db_field, request, **kwargs)    
@@ -214,17 +215,14 @@ class UsuarioAdmin(UserAdmin):
         
         if request.user.is_superuser:
             return qs
-
-        elif request.user.tipo == Usuario.NACIONAL: # puede ver usuarios regionales y locales y a si mismo
+        # puede ver usuarios regionales y locales y a si mismo
+        elif request.user.tipo == Usuario.NACIONAL:
             return qs.filter(Q(pk=request.user.pk) | Q(tipo=Usuario.REGIONAL) | Q(tipo=Usuario.LOCAL) | Q(tipo=Usuario.INGENIERO) | Q(tipo=Usuario.TESORERO))
-
-        elif request.user.tipo == Usuario.REGIONAL:  # puede ver usuarios locales y a si mismo
+        # puede ver usuarios locales y a si mismo
+        elif request.user.tipo == Usuario.REGIONAL:
             return qs.filter(Q(pk=request.user.pk) | Q(user_padre=request.user.pk))
-
-        return qs.filter(pk=request.user.pk)  # los demas usuarios solo pueden verse a si mismos
-
-
-
+        # los demas usuarios solo pueden verse a si mismos
+        return qs.filter(pk=request.user.pk)
 
 
 # Esta funcion permite pasarle al campo "name" del modelo "Group", la tupla con las variables estáticas 
@@ -240,7 +238,6 @@ class GroupAdmin(admin.ModelAdmin):
             kwargs['widget'] = admin.widgets.FilteredSelectMultiple('Permisos', False)
 
         return super(GroupAdmin,self).formfield_for_dbfield(db_field,**kwargs)
-
 
 
 admin.site.unregister(Group)

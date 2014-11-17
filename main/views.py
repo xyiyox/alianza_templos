@@ -39,8 +39,8 @@ def home(request):
 
 @login_required
 def home_nacional(request):
-
-    if request.user.tipo != Usuario.NACIONAL:   # validamos que el usuario tenga permiso de ver esta vista
+    # validamos que el usuario tenga permiso de ver esta vista
+    if request.user.tipo != Usuario.NACIONAL:
         raise PermissionDenied 
         
     proyectos = Edificacion.objects.all()
@@ -51,10 +51,11 @@ def home_nacional(request):
 @login_required
 def home_regional(request):
 
-    if request.user.tipo != Usuario.REGIONAL:   # validamos que el usuario tenga permiso de ver esta vista
+    # validamos que el usuario tenga permiso de ver esta vista
+    if request.user.tipo != Usuario.REGIONAL:
         raise PermissionDenied 
-
-    users_hijos = Usuario.objects.filter(user_padre__exact=request.user.pk).values('pk')  # Obtengo los usuarios que son hijos del regional
+    # Obtengo los usuarios que son hijos del regional
+    users_hijos = Usuario.objects.filter(user_padre__exact=request.user.pk).values('pk')
     proyectos = Edificacion.objects.filter(usuario__in=users_hijos)
 
     ctx = {'proyectos': proyectos}
@@ -63,29 +64,20 @@ def home_regional(request):
 
 @login_required
 def home_local(request):
-
-    if request.user.tipo != Usuario.LOCAL:   # validamos que el usuario tenga permiso de ver esta vista
+    # validamos que el usuario tenga permiso de ver esta vista
+    if request.user.tipo != Usuario.LOCAL:
         raise PermissionDenied 
 
     proyectos = Edificacion.objects.filter(usuario__exact=request.user.pk)
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-local.html', ctx)
 
-
-@login_required
-def ver_comentarios(request, pk):
-    form = ComentarioForm()
-    comentarios = Comentario.objects.filter(edificacion=pk)
-    ctx = {'comentarios': comentarios, 'form': form}
-    return render(request, 'main/comentarios.html', ctx)
-
-
 @login_required
 def proyecto(request, pk):
-    
-    proyecto  =  get_object_or_404(Edificacion, pk=pk)  # validamos que el proyecto exista
-
-    if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:   # validamos que el usuario tenga permiso de ver el proyecto
+    # validamos que el proyecto exista
+    proyecto  =  get_object_or_404(Edificacion, pk=pk)
+    # validamos que el usuario tenga permiso de ver el proyecto
+    if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
         raise Http404 
    
     if request.method == 'POST':
@@ -95,7 +87,8 @@ def proyecto(request, pk):
             new_coment.edificacion = proyecto
             new_coment.commenter = request.user
             new_coment.save()
-            return redirect(proyecto) # redirect funciona con el objeto si en el existe el metodo get_absolute_url
+            # redirect funciona con el objeto si en el existe el metodo get_absolute_url
+            return redirect(proyecto)
 
     
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
@@ -105,8 +98,6 @@ def proyecto(request, pk):
     ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'form': form}
     
     return render(request, 'main/proyecto.html', ctx)
-
-
 
 
 class Aplicacion(SessionWizardView):
@@ -126,44 +117,51 @@ class Aplicacion(SessionWizardView):
     
     def get_form_instance(self, step):
         
-        pk = self.kwargs.get('pk', None)  # Recibo el pk argument que llega por el request url
+        # Recibo el pk argument que llega por el request url
+        pk = self.kwargs.get('pk', None)
         
         # cargamos las instancias solo si estamos en modo edicion
         if pk:
-            model_0 = Edificacion.objects.get(pk=pk)   # pedimos el primer modelo
-            self.instance_dict.clear() # Resetea el diccionario de instancias
+            # pedimos el primer modelo
+            model_0 = Edificacion.objects.get(pk=pk)   
+            # Resetea el diccionario de instancias
+            self.instance_dict.clear()
             self.instance_dict['0'] = model_0
             
             try:
-                model_1 = InformacionFinanciera.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                # pedimos el segundo modelo
+                model_1 = InformacionFinanciera.objects.get(edificacion=pk)
                 self.instance_dict['1'] = model_1
             except InformacionFinanciera.DoesNotExist:
-                print "No existe InformacionFinanciera"
+                print("No existe InformacionFinanciera")
             
             try:
-                model_2 = Comunidad.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                # pedimos el segundo modelo
+                model_2 = Comunidad.objects.get(edificacion=pk)
                 self.instance_dict['2'] = model_2
             except Comunidad.DoesNotExist:
-                print "No existe Comunidad"
+                print("No existe Comunidad")
 
             try:
-                model_3 = Congregacion.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                # pedimos el segundo modelo
+                model_3 = Congregacion.objects.get(edificacion=pk)
                 self.instance_dict['3'] = model_3
             except Congregacion.DoesNotExist:
-                print "No existe Congregacion"
+                print("No existe Congregacion")
 
             try:
-                model_4 = Adjuntos.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                # pedimos el segundo modelo
+                model_4 = Adjuntos.objects.get(edificacion=pk)
                 self.instance_dict['4'] = model_4
             except Adjuntos.DoesNotExist:
-                print "No existe Adjuntos"
+                print("No existe Adjuntos")
 
             try:
-                model_5 = Condiciones.objects.get(edificacion=pk)  # pedimos el segundo modelo
+                # pedimos el segundo modelo
+                model_5 = Condiciones.objects.get(edificacion=pk)
                 self.instance_dict['5'] = model_5
             except Condiciones.DoesNotExist:
-                print "No existe Condiciones"
-
+                print("No existe Condiciones")
         return self.instance_dict.get(step, None)
         
     
@@ -175,9 +173,11 @@ class Aplicacion(SessionWizardView):
         
         model_1 = self.instance_dict.get('0', False) 
         if model_1:
-            context.update({"proyecto": model_1, 'estado': model_1.estado}) # paso el valor del campo estado en el form 1
+            # paso el valor del campo estado en el form 1
+            context.update({"proyecto": model_1, 'estado': model_1.estado})
         else:
-            context.update({'estado': -1}) # si no existe le envio -1 
+            # si no existe le envio -1 
+            context.update({'estado': -1})
 
         if self.steps.current == '1':
             context.update({'fuentes': FuentesFinanciacionForm()})
@@ -185,16 +185,17 @@ class Aplicacion(SessionWizardView):
 
     
     def process_step(self, form):
-        """ Metodo que procesa cada formulario al momento de ser enviado (submit) """
-
+        """ 
+        Metodo que procesa cada formulario al momento de ser enviado (submit)
+        """
         step_current = form.data['aplicacion-current_step']
-
 
         # Para el primer formulario se captura el id (pk) de la edificacion para usarlo en los otros formularios
         if step_current == '0':
             
-            if self.instance_dict.get('0', False): #.get('edificacion_pk','') != '':
-                form.save() # Esto sucede cuando se esta editanto el primer formulario
+            if self.instance_dict.get('0', False):
+                # Esto sucede cuando se esta editanto el primer formulario
+                form.save()
             else: 
                 model_instance              = form.save(commit=False)
                 model_instance.estado       = step_current
@@ -207,21 +208,31 @@ class Aplicacion(SessionWizardView):
             if self.instance_dict.get(step_current, False): 
                 form.save()
             else:
-                instance    = form.save(commit=False)       # Se almacena con commit False el formulario actual
-                edificacion = self.instance_dict['0']   # Edificacion.objects.get(pk=data1['edificacion_pk'])
+                # Se almacena con commit False el formulario actual
+                instance    = form.save(commit=False)    
+                edificacion = self.instance_dict['0']   
                 # Se almacena la instancia del formulario actual con el id de la edificacion
                 instance.edificacion = edificacion
                 instance.save()
                 self.instance_dict[step_current] = instance
-
-                edificacion.estado = step_current   # Fijar el estado del formulario en el modelo edificacion
+                # Fijar el estado del formulario en el modelo edificacion
+                edificacion.estado = step_current
                 # Indicar que esta en etapa de Diligenciamiento
                 edificacion.etapa_actual = Edificacion.ETAPA_ACTUAL[0][0]
                 edificacion.save()
-
         return self.get_form_step_data(form)
-        
-
+    
+    def render_goto_step(self, goto_step, **kwargs):
+        """
+        This method gets called when the current step has to be changed.
+        `goto_step` contains the requested step to go to.
+        """
+        self.storage.reset()
+        self.storage.current_step = goto_step        
+        form = self.get_form(
+            data=self.storage.get_step_data(self.steps.current),
+            files=self.storage.get_step_files(self.steps.current))
+        return self.render(form)
 
 def hacer_login(request):
 

@@ -63,16 +63,21 @@ class Edificacion(models.Model):
 
 	ETAPA_ACTUAL = (
 		(DILIGENCIAMIENTO, 'Diligenciamiento'),
-		(APROB_REGIONAL, 'Aprobación Regional'), # 1 semana para revisar por usuario regional
+		# 1 semana para revisar por usuario regional
+		(APROB_REGIONAL, 'Aprobación Regional'),
 		(ASIGN_ING_ARQ, 'Asignación de Ingeniero/Arquitecto'),
-		(PLANOS, 'Creación de Planos'), # 5 dias para subir planos del proyecto de construcción
-		(APROB_INGENIERO, 'Aprobación Ingeniero'), # 3 dias para ser aprobado por un ingeniero
+		# 5 dias para subir planos del proyecto de construcción
+		(PLANOS, 'Creación de Planos'),
+		# 3 dias para ser aprobado por un ingeniero
+		(APROB_INGENIERO, 'Aprobación Ingeniero'),
 		(APROB_TESORERO, 'Aprobación Tesorero'),
 		(APROB_NACIONAL, 'Aprobación Nacional'),
-		(APROB_INTERNACIONAL, 'Aprobación Internacional'), # 2 semanas para recibir aprobación internacional
+		# 2 semanas para recibir aprobación internacional
+		(APROB_INTERNACIONAL, 'Aprobación Internacional'),
 		(ESPERANDO_CUPO, 'En Espera de Cupo'),
 		(ESPERANDO_RECURSOS, 'En Espera de Recursos'),
-		(EN_CONSTRUCCION, 'En Construcción'), # Tiene 3 etapas (3 pagos)
+		# Tiene 3 etapas (3 pagos)
+		(EN_CONSTRUCCION, 'En Construcción'),
 		(CORRECIONES, 'Esperando Correcciones'),
 		(FINALIZACION, 'Finalización'),
 	)
@@ -156,8 +161,8 @@ class InformacionFinanciera(models.Model):
 							null=True, blank=True)
 	costo_total 		= models.PositiveIntegerField('Costo total del proyecto', 
 							help_text='Ingrese el valor en Dolares (Estados Unidos)')
-	
-	edificacion 		= models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la informacion financiera
+	# Relacion 1 a 1 entre la edificacion y la informacion financiera
+	edificacion 		= models.OneToOneField('Edificacion')
 
 	def __unicode__(self):
 		return "%s" %"Información Financiera"
@@ -175,8 +180,8 @@ class Comunidad(models.Model):
 	capital_depto 		= models.CharField('Capital del Departamento', max_length=30)
 	distancia_capital	= models.PositiveSmallIntegerField('Distancia a la capital', 
 							help_text="Por favor ingrese el valor en Kilometros (Km)")
-
-	edificacion 		= models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la comunidad
+	# Relacion 1 a 1 entre la edificacion y la comunidad
+	edificacion 		= models.OneToOneField('Edificacion')
 
 	def __str__(self):
 		return "%s" %"Ciudad"
@@ -232,13 +237,13 @@ class Congregacion(models.Model):
 	usa_material			= models.BooleanField('¿El pastor ha acordado usar este material para crecimiento de la iglesia?') 
 	q2_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
 	q2_how_do 				= models.TextField('¿Como lo hace?', blank=True, null=True)
-	
-	edificacion 			= models.OneToOneField('Edificacion') # Relacion 1 a 1 entre la edificacion y la congregacion
+	# Relacion 1 a 1 entre la edificacion y la congregacion
+	edificacion 			= models.OneToOneField('Edificacion')
 
 	def __str__(self):
 		return "%s" %"Congregación"
 	
-class Fuentes_Financiacion(models.Model):
+class FuentesFinanciacion(models.Model):
 	""" 
 	Tabla que almacenara posibles entradas economicas dinstintas a ICM que tenga el proyecto
 	"""

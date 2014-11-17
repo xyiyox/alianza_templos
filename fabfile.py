@@ -10,7 +10,7 @@ import re
 try:
   import private # llamamos un private file con variables estaticas 
 except ImportError:
-  print 'no se encuentran los datos privados'
+  print('no se encuentran los datos privados')
   pass 
 
 RUTA_PROYECTO = os.path.join(os.path.dirname(os.path.abspath(__file__)))

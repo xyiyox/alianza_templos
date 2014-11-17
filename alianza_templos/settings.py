@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 try:
     from local_settings import *
 except ImportError:
-    print 'no se encuentra local_settings'
+    print('no se encuentra local_settings')
     pass 
 
 
