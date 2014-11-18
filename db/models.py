@@ -209,7 +209,7 @@ class Congregacion(models.Model):
 	)
 
 	nombre 				= models.CharField(max_length=30)
-	fecha_fundacion 	= models.DateField('Fecha de Fundación', help_text='Dia/Mes/Año')
+	fecha_fundacion 	= models.DateField('Fecha de Fundación')
 	lengua_primaria 	= models.CharField('Lengua primaria hablada', max_length=20)
 	region 				= models.SmallIntegerField('Región', choices=REGION_CHOICES, 
 							help_text='La Región a la que pertenece la Iglesia')

@@ -153,7 +153,7 @@ class UsuarioAdmin(UserAdmin):
         obj.is_admin     = True
         obj.is_superuser = False
         
-        if obj.tipo == Usuario.SUPER:
+        if obj.tipo == Usuario.SUPERADMIN:
             obj.is_superuser = True 
             obj.groups.clear()
 
@@ -178,7 +178,7 @@ class UsuarioAdmin(UserAdmin):
             # de lo contrario se asignara como user_padre el que se escoja en el form 
             obj.save()                                 
 
-        if obj.tipo != Usuario.SUPER:
+        if obj.tipo != Usuario.SUPERADMIN:
             obj.groups.clear()
             g = Group.objects.get(name=obj.tipo)
             obj.groups.add(g) 

@@ -30,6 +30,7 @@ class UsuarioManager(BaseUserManager):
         )
         user.is_admin = True
         user.is_superuser = True
+        user.tipo = user.SUPERADMIN
         user.save(using=self._db)
         return user
 

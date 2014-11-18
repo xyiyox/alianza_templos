@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.forms.extras.widgets import SelectDateWidget
+from datetime import date
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
@@ -87,6 +89,8 @@ class CongregacionForm(ModelFormBase):
     def __init__(self, *args, **kwargs):
         super(CongregacionForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
+
+        self.fields['fecha_fundacion'].widget = SelectDateWidget(years=( range(1900, date.today().year + 1) ) )
         
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
@@ -95,6 +99,7 @@ class CongregacionForm(ModelFormBase):
         self.helper.all().wrap(Field, css_class='input-sm')
         self.helper.filter_by_widget(forms.Select).wrap(Field, css_class='select select-primary mbl') 
         self.helper.filter_by_widget(forms.Textarea).wrap(Field, css_class="input-xlarge", rows="2") 
+        self.helper.filter_by_widget(SelectDateWidget).wrap(Field, css_class="input-sm", style="width:110px; float:left; margin-right:5px;") 
 
 class CondicionesForm(ModelFormBase):
     
