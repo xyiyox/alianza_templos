@@ -5,7 +5,7 @@ from datetime import date
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons, UneditableField
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons, UneditableField, InlineRadios, InlineCheckboxes
 
 from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, FuentesFinanciacion, Comentario
 from .datos import EDIFICACION_COORDENADAS
@@ -40,8 +40,7 @@ class EdificacionForm(ModelFormBase):
         self.helper.all().wrap(Field, css_class='input-sm') 
         self.helper['direccion'].wrap(Field, css_class="input-xlarge", rows="2")
         self.helper['coordenadas'].wrap(Field, css_class="geolocation_field")
-        #self.helper['requiere_permiso'].wrap(Field, css_class="col-sm-offset-2")
-        #self.helper.filter_by_widget(forms.Select).wrap(Field, css_class='select select-primary mbl') 
+        self.helper.filter_by_widget(forms.Select).wrap(InlineRadios) 
 
 
 
@@ -58,11 +57,9 @@ class InformacionFinancieraForm(ModelFormBase):
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
-        #self.fields['valor_solicitado'].widget.attrs['disabled'] = True
 
         self.helper.all().wrap(Field, css_class='input-sm') 
-        self.helper.filter_by_widget(forms.Select).wrap(Field, css_class='select select-primary mbl') 
-
+        self.helper.filter_by_widget(forms.Select).wrap(InlineRadios)
 
 class ComunidadForm(ModelFormBase):
     
@@ -97,9 +94,9 @@ class CongregacionForm(ModelFormBase):
         self.helper.field_class = 'col-sm-9'
 
         self.helper.all().wrap(Field, css_class='input-sm')
-        self.helper.filter_by_widget(forms.Select).wrap(Field, css_class='select select-primary mbl') 
         self.helper.filter_by_widget(forms.Textarea).wrap(Field, css_class="input-xlarge", rows="2") 
         self.helper.filter_by_widget(SelectDateWidget).wrap(Field, css_class="input-sm", style="width:110px; float:left; margin-right:5px;") 
+        self.helper.filter_by_widget(forms.Select).wrap(InlineRadios)
 
 class CondicionesForm(ModelFormBase):
     
@@ -116,7 +113,7 @@ class CondicionesForm(ModelFormBase):
         self.helper.field_class = 'col-sm-8'
 
         self.helper.all().wrap(Field, css_class='input-sm')
-        self.helper.filter_by_widget(forms.Select).wrap(Field, css_class='select select-primary mbl') 
+        self.helper.filter_by_widget(forms.Select).wrap(InlineRadios)
         self.helper.filter_by_widget(forms.Textarea).wrap(Field, css_class="input-xlarge", rows="4") 
 
 class AdjuntosForm(ModelFormBase):
