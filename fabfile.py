@@ -48,7 +48,7 @@ def colectar_estaticos():
 
 def sincronizar_bd():
 	with cd(PROD_PATH):
-		run('source ../bin/activate && ./manage.py syncdb --no-initial-data')
+		#run('source ../bin/activate && ./manage.py syncdb --no-initial-data')
 		run('source ../bin/activate && ./manage.py migrate')
 
 def reiniciar_servidor():
@@ -59,24 +59,30 @@ def reiniciar_servidor():
 ########				SERVIDOR DE DESARROLLO				#########
 #####################################################################
 
-# def test():
-# 	#local('git log --oneline --graph --decorate')
-# 	with cd('/home/alianza/webapps/alianza_templos'):
-# 		run('source bin/activate')
-
-# def django_manage(command='help', virtualenv='alianza_templos'):
-# 	return "/bin/bash -l -c 'source ~/env/alianza_templos/bin/activate && pip freeze'"  %(virtualenv, command)
-
-# @_contextmanager
-# def virtualenv():
-# 	with lcd('/home/yiyo/env/alianza_templos/'):
-# 		with prefix('source bin/activate'):
-# 			yield
-
-# def deploy():
-# 	with virtualenv():
-# 		local('pip freeze')
+def consolidar_local():
+	consolidar_requirements()
+	update_default_data()
+	verificar_status_repo()
+	commit()
 
 def git_log():
-	with cd(PROD_PATH):
-		run('git log')
+	local('git log --oneline --graph --decorate')
+
+def update_default_data():
+	local('./manage.py dumpdata auth --natural-foreign --indent 4  > auth_data.json')
+
+def load_default_data():
+	local('./manage.py loaddata auth_data.json')
+
+
+def consolidar_requirements():
+	local('pip freeze > requirements.txt')
+
+def verificar_status_repo():
+	local('git status') 
+	if not confirm(yellow("status verificado, desea continuar?")):
+		abort('Abortado por el usuario')
+	print 'Adelante ...'
+
+def commit():
+	local('git add . && git commit -a')
