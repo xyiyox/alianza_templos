@@ -1,1 +1,35 @@
-<h1>Hola soy done.html</h1>
+{% extends 'main/base.html' %}
+
+
+{% block title %} Terminado {% endblock %}
+
+{% block css %} 
+
+{% endblock %}
+
+
+
+
+
+{% block content %}
+<ol class="breadcrumb" style="margin-top:20px;">
+  <li><a href="/">Inicio</a></li> 
+  <li><a href="{{proyecto.get_absolute_url}}">{{proyecto.nombre_proyecto}}</a></li> 
+  <li class="active">Enviado</li>
+</ol>
+<div class="page-header">
+	<h1> <i class="fa fa-smile-o text-success"></i>  Enviado Exitosamente!</h1>	
+</div>
+
+
+<div class="row">
+	<div class="col-sm-4">
+		<h2 class="text-center">{{proyecto.nombre_proyecto}}</h2>
+		
+		<p>
+			<a class="btn btn-success btn-block" href="{{proyecto.get_absolute_url}}" role="button">Ver proyeto creado »</a>
+		</p>
+	</div>
+</div>
+
+{% endblock content %}

@@ -171,8 +171,8 @@ class UsuarioAdmin(UserAdmin):
             obj.save()
         
         if change:
-            # si estoy logueado como Nacional y el usuario que estoy editando no es de tipo Local
-            if request.user.tipo == Usuario.NACIONAL and obj.tipo != Usuario.LOCAL:
+            # si estoy logueado como Nacional y el usuario que estoy editando no es de tipo Local, ni soy yo mismo
+            if request.user.tipo == Usuario.NACIONAL and obj.tipo != Usuario.LOCAL and obj.tipo != Usuario.NACIONAL:
                 # Entoces le asigno como user_padre al usuario logueado osea Nacional
                 obj.user_padre = request.user
             # de lo contrario se asignara como user_padre el que se escoja en el form 

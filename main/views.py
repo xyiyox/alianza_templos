@@ -108,11 +108,9 @@ class Aplicacion(SessionWizardView):
 
     file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
    
-    def done(self, form_list, **kwargs):
-        # AQUI VA LA LOGICA PARA PROCESAR TODO EL WIZARD AL FINAL DE TODOS LOS PASOS
-        return render_to_response('main/done.html', {
-            'form_data': [form.cleaned_data for form in form_list],
-        })
+    def done(self, form_list, form_dict, **kwargs):
+        edificacion = form_dict['0'].instance.id
+        return redirect('done', pk=edificacion.id )
 
     
     def get_form_instance(self, step):
@@ -262,6 +260,19 @@ def hacer_login(request):
 
     ctx = {'loginForm': LoginForm(), 'NEXT':NEXT}
     return render(request, 'main/login.html', ctx)
+
+
+
+@login_required
+def done(request, pk):
+
+    proyecto  =  get_object_or_404(Edificacion, pk=pk)
+    # validamos que el usuario tenga permiso de ver el proyecto
+    if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
+        raise Http404 
+    
+    ctx = {'proyecto': proyecto}
+    return render(request, 'main/done.html', ctx)
 
 
 def hacer_logout(request):
