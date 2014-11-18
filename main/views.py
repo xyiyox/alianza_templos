@@ -109,7 +109,7 @@ class Aplicacion(SessionWizardView):
     file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
    
     def done(self, form_list, form_dict, **kwargs):
-        edificacion = form_dict['0'].instance.id
+        edificacion = form_dict['0'].instance
         return redirect('done', pk=edificacion.id )
 
     
@@ -158,7 +158,6 @@ class Aplicacion(SessionWizardView):
                 # pedimos el segundo modelo
                 model_5 = Condiciones.objects.get(edificacion=pk)
                 self.instance_dict['5'] = model_5
-                print('aceptacion=',model_5.aceptacion)
             except Condiciones.DoesNotExist:
                 print("No existe Condiciones")
         return self.instance_dict.get(step, None)

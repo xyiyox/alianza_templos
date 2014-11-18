@@ -644,6 +644,11 @@
                 "change_informacionfinanciera",
                 "db",
                 "informacionfinanciera"
+            ],
+            [
+                "change_usuario",
+                "usuarios",
+                "usuario"
             ]
         ]
     },
