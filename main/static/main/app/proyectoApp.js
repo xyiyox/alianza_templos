@@ -7,7 +7,7 @@ angular
 		'leaflet-directive'
 	])
 	
-	.controller('ProyectoCtrl',['$scope', '$window', function ($scope, $window) {
+	.controller('ProyectoCtrl',['$scope', '$window', '$location', '$anchorScroll', function ($scope, $window, $location, $anchorScroll) {
 
 		$scope.lat = $window.latitud;
 		$scope.lng = $window.longitud;
@@ -29,9 +29,16 @@ angular
         $scope.defaults={
             scrollWheelZoom: false
         };
+
+        /* -----------------------------------------*/  
+
+        $scope.scrollTo = function(destino) {
+        	$location.hash(destino);
+      		$anchorScroll();
+        };
         	
        
-
+       /* -----------------------------------------*/    
 		$scope.verSubmit = false;
 
 		$scope.procesarFoco = function(event) {
@@ -50,7 +57,7 @@ angular
 	  		}
 	    };
 
-
+	    /* -----------------------------------------*/  
 
 	    $scope.showForm = function(comentId, event) {
 
@@ -63,7 +70,7 @@ angular
 		    	nestedForm.attr("id","nested-comentario-form");
 		    	nestedForm.find('#id_comentario_padre').val(comentId);
 		    	nestedForm.insertAfter(event.currentTarget);
-		    	nestedForm.find('#submit-id-submit').addClass('show');//.css( "display", "block !important");
+		    	nestedForm.find('#submit-id-submit').addClass('show'); //.attr("disabled", "disabled");
 
 		    };
 

@@ -158,6 +158,8 @@ class ComentarioForm(forms.ModelForm):
         
         self.helper.form_show_labels = False
         self.helper.form_id = 'comentario-form'
+        self.helper.form_class = 'clearfix'
+
 
         self.helper.layout = Layout(
             PrependedText('descripcion', "<i class='fa fa-user '></i>", placeholder="Agrega tu comentario", rows="1", ng_focus="procesarFoco($event)", ng_blur="procesarFoco($event)"),

@@ -30,6 +30,7 @@
 					Ver en detalle
 				{% endif%}
 			</a>
+			<a href="" class="btn btn-info" ng-click="scrollTo('comentarios')" role="button">Comentar</a>
   	
   		</small> 
   		<span class="label label-primary pull-right">{{proyecto.pk}}</span></h1>
@@ -79,14 +80,15 @@
 			
 		</tabset>
 
+		<br>
 
-		<br><br>
-
+		<div id="comentarios" class="page-header">
+			<h2>Comentarios ({{comentarios|length}})</h2>
+		</div>
 
 		<div class="clearfix">
 			{% crispy form %}
 		</div>
-
 
 		{% for coment in comentarios %}
 		<ul class="media-list">
@@ -94,9 +96,9 @@
 				<li class="media clearfix">
 					<i class="fa fa-comment-o fa-3x pull-left"></i>
 					<div class="media-body">
-						<h4 class="text-primary media-heading">{{coment.commenter}}  <small>hace {{coment.created|timesince}}</small> </h4>
+						<h5 class="text-primary media-heading">{{coment.commenter}}  <small>hace {{coment.created|timesince}}</small> </h5>
 						<p style="margin-bottom:0;" >{{coment.descripcion}}</p>
-						<a href="#" ng-click="showForm({{coment.id}}, $event)"><small>responder</small></a>
+						<a href="" ng-click="showForm({{coment.id}}, $event)"><small>responder</small></a>
 
 						{% for coment1 in comentarios %}
 							{% if coment1.comentario_padre.id == coment.id %}
@@ -106,25 +108,7 @@
 							  	<div class="media-body">
 							  		<h5 class="text-primary media-heading">{{coment1.commenter}}  <small>hace {{coment1.created|timesince}}</small> </h5>
 							  	
-							  		<p style="margin-bottom:0;" >{{coment1.descripcion}}</p>
-									<a href="#" ng-click="showForm({{coment1.id}}, $event)"><small>responder</small></a>
-
-									{% for coment2 in comentarios %}
-										{% if coment2.comentario_padre.id == coment1.id %}
-										 
-										  <div class="media clearfix">
-										  	<i class="fa fa-comments-o fa-lg pull-left"></i>
-										  	<div class="media-body">
-										  		<h5 class="text-primary media-heading">{{coment2.commenter}}  <small>hace {{coment2.created|timesince}}</small> </h5>
-										  	
-										  		<p style="margin-bottom:0;" >{{coment2.descripcion}}</p>
-
-										  	</div>
-										  </div>
-
-										{% endif %}
-									{% endfor %}
-									
+							  		<p style="margin-bottom:0;" >{{coment1.descripcion}}</p>		
 
 
 							  	</div>
