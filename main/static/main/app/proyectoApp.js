@@ -49,6 +49,25 @@ angular
 				}	  			
 	  		}
 	    };
+
+
+
+	    $scope.showForm = function(comentId, event) {
+
+	    	// pregunto si existe el form
+	    	var btn  = angular.element(event.currentTarget);
+
+	    	if (!btn.next("#nested-comentario-form").length) {
+
+		    	var nestedForm = angular.element('#comentario-form').clone();
+		    	nestedForm.attr("id","nested-comentario-form");
+		    	nestedForm.find('#id_comentario_padre').val(comentId);
+		    	nestedForm.insertAfter(event.currentTarget);
+		    	nestedForm.find('#submit-id-submit').addClass('show');//.css( "display", "block !important");
+
+		    };
+
+	    }
 		
 	}]);
 

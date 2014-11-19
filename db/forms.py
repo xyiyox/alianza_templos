@@ -157,9 +157,11 @@ class ComentarioForm(forms.ModelForm):
         self.helper = FormHelper(self)
         
         self.helper.form_show_labels = False
+        self.helper.form_id = 'comentario-form'
 
         self.helper.layout = Layout(
             PrependedText('descripcion', "<i class='fa fa-user '></i>", placeholder="Agrega tu comentario", rows="1", ng_focus="procesarFoco($event)", ng_blur="procesarFoco($event)"),
+            Field('comentario_padre', type="hidden"),
             FormActions(
                 Submit('Submit', 'Enviar', css_class='btn-info pull-right btn-xs', ng_show="verSubmit")
             )
