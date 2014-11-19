@@ -34,5 +34,6 @@ CONDICIONES_TERMINACION       = """We will, with God’s help, complete the buil
 								any changes to planned Dedication Date."""
 CONDICIONES_COMENTARIOS       = "Comentarios adiccionanles (OPCIONAL) (Provea cualquier otra información que ayudará a ICM a procesar esta aplicación)."
 
-CONDICIONES_ACEPTACION        = "I acknowledge and agree to the terms and conditions outlined in the Church Growth Partnership Manual."
+CONDICIONES_ACEPTACION        = u"""Al aceptar usted reconoce que es responsable de la información suministrada en cada uno de los pasos anteriores
+								y se compromete el cumplimiento de las condiciones aqui expuestas."""
 CONDICIONES_FULL_NAME         = "(Nombre de la persona autorizada a presentar esta aplicación.)"

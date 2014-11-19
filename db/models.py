@@ -251,7 +251,11 @@ class FuentesFinanciacion(models.Model):
 	valor 			= models.DecimalField('Valor', max_digits=15, decimal_places=3)
 	
 	info_financiera = models.ForeignKey('InformacionFinanciera')
+from django.core.exceptions import ValidationError
 
+def validate_terminos(value):
+    if value != True:
+        raise ValidationError(u'Debe aceptar las condiciones antes de continuar')
 
 class Condiciones(models.Model):
 	""" Condiciones """
@@ -273,7 +277,8 @@ class Condiciones(models.Model):
 	presupuesto       = models.BooleanField(CONDICIONES_PRESUPUESTO, choices=BOOL_CHOICES, default=False)
 	terminacion       = models.BooleanField(CONDICIONES_TERMINACION, choices=BOOL_CHOICES, default=False)
 	comentarios       = models.TextField(CONDICIONES_COMENTARIOS, blank=True)
-	aceptacion        = models.BooleanField(help_text=CONDICIONES_ACEPTACION, default=False)
+	aceptacion        = models.BooleanField('He leído y estoy de acuerdo con los Términos y Condiciones', 
+						help_text=CONDICIONES_ACEPTACION, default=False, validators=[validate_terminos])
 	nombre_completo   = models.CharField(max_length=50, help_text=CONDICIONES_FULL_NAME)
 
 	def __str__(self):
