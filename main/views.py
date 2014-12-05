@@ -72,6 +72,7 @@ def home_local(request):
     ctx = {'proyectos': proyectos}
     return render(request, 'main/home-local.html', ctx)
 
+
 @login_required
 def proyecto(request, pk):
     # validamos que el proyecto exista
@@ -92,12 +93,23 @@ def proyecto(request, pk):
 
     
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
-    form         = ComentarioForm()
-    form.helper.form_action = proyecto.get_absolute_url()
+    comentarioForm         = ComentarioForm()
+    comentarioForm.helper.form_action = proyecto.get_absolute_url()
 
-    ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'form': form}
+    ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
+    ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)
     
     return render(request, 'main/proyecto.html', ctx)
+
+@login_required
+def autorizaciones(request, pk):
+    if request.method == 'POST':
+        proyecto  =  get_object_or_404(Edificacion, pk=pk)
+        form = AprobacionRegionalForm(request.POST, instance=proyecto)
+        form.save()
+        return redirect('proyecto', pk)
+    raise Http404 
+
 
 
 class Aplicacion(SessionWizardView):

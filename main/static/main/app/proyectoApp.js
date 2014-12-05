@@ -75,6 +75,13 @@ angular
 		    };
 
 	    }
+
+	    /* -----------------------------------------*/  
+	    $scope.verFormAutorizacion = false;
+
+	    $scope.showAutorizacionForm = function(event) {
+	    	$scope.verFormAutorizacion = event.type == 'mouseenter' ? true : false;
+	    }
 		
 	}]);
 

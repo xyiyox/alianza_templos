@@ -169,3 +169,15 @@ class ComentarioForm(forms.ModelForm):
             )
         )
 
+
+
+""" FORMULARIOS PARA ACTUALIZAR MODEL EDIFICACION """
+
+class AprobacionRegionalForm(ModelFormBase):  
+
+    class Meta:
+        model = Edificacion
+        fields = ['aprobacion_regional']
+
+  
+

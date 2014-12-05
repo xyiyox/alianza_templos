@@ -87,7 +87,7 @@
 		</div>
 
 		<div class="clearfix">
-			{% crispy form %}
+			{% crispy comentarioForm %}
 		</div>
 
 		{% for coment in comentarios %}
@@ -136,93 +136,78 @@
 
 	<div class="col-sm-4">
 
-		<div class="panel panel-green">
+		<div class="page-header" style="margin-top:0;">
+		  <h4>Autorizaciones</h4>
+		</div>
+
+		<div {% if user.tipo == user.REGIONAL %} ng-mouseenter="showAutorizacionForm($event)" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
+			 class="panel {% if proyecto.aprobacion_regional %} panel-green {% else %} panel-red {% endif %}">
 		    <div class="panel-heading">
 		        <div class="row">
 		            <div class="col-xs-3">
-		                <i class="fa fa-check fa-2x"></i>
+		            	
+		                <i class="fa {% if proyecto.aprobacion_regional %} fa-check {% else %} fa-lock {% endif %}  fa-2x"></i>
 		            </div>
 		            <div class="col-xs-9 text-right">
 		                <i class="fa fa-user"></i>  REGIONAL  
 		            </div>
 		        </div>
 		    </div>
-		    <a href="#">
-		        <div class="panel-footer">
-		            <span class="pull-left">Autorizado</span>
-		            {% if user.tipo == user.REGIONAL %}
-		            <button type="button" class="btn btn-danger btn-xs pull-right"> <i class="fa fa-check"></i>  Autorizar</button>		
-		            {% endif %}            
-		            <div class="clearfix"></div>
-		        </div>
-		    </a>
+			{% if user.tipo == user.REGIONAL %}
+		    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
+		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
+					{{ aprobacionRegionalForm.aprobacion_regional }}
+					 <button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button>
+				</form>
+		    </div>
+		    {% endif %}
 		</div>
 
-		<div class="panel panel-red">
+
+		<div class="panel {% if proyecto.aprobacion_arquitecto %} panel-green {% else %} panel-red {% endif %}">
 		    <div class="panel-heading">
 		        <div class="row">
 		            <div class="col-xs-3">
-		                <i class="fa fa-lock fa-2x"></i>
+		            	
+		                <i class="fa {% if proyecto.aprobacion_arquitecto %} fa-check {% else %} fa-lock {% endif %}  fa-2x"></i>
 		            </div>
 		            <div class="col-xs-9 text-right">
-		                <i class="fa fa-user"></i>  NACIONAL  
+		                <i class="fa fa-user"></i>  ARQUITECTO  
 		            </div>
 		        </div>
 		    </div>
-		    <a href="#">
-		        <div class="panel-footer">
-		            <span class="pull-left">Esperando autorizacion</span>
-		            {% if user.tipo != user.INGENIERO %}
-		            <button type="button" class="btn btn-danger btn-xs pull-right"> <i class="fa fa-check"></i>  Autorizar</button>		
-		            {% endif %}            
-		            <div class="clearfix"></div>
-		        </div>
-		    </a>
 		</div>
 
-		<div class="panel panel-red">
+		<div class="panel {% if proyecto.aprobacion_ingeniero %} panel-green {% else %} panel-red {% endif %}">
 		    <div class="panel-heading">
 		        <div class="row">
 		            <div class="col-xs-3">
-		                <i class="fa fa-lock fa-2x"></i>
+		            	
+		                <i class="fa {% if proyecto.aprobacion_ingeniero %} fa-check {% else %} fa-lock {% endif %}  fa-2x"></i>
 		            </div>
 		            <div class="col-xs-9 text-right">
 		                <i class="fa fa-user"></i>  INGENIERO  
 		            </div>
 		        </div>
 		    </div>
-		    <a href="#">
-		        <div class="panel-footer">
-		            <span class="pull-left">Esperando autorizacion</span>
-		            {% if user.tipo != user.INGENIERO %}
-		            <button type="button" class="btn btn-danger btn-xs pull-right"> <i class="fa fa-check"></i>  Autorizar</button>		
-		            {% endif %}            
-		            <div class="clearfix"></div>
-		        </div>
-		    </a>
 		</div>
 
-		<div class="panel panel-red">
+		<div class="panel {% if proyecto.aprobacion_nacional %} panel-green {% else %} panel-red {% endif %}">
 		    <div class="panel-heading">
 		        <div class="row">
 		            <div class="col-xs-3">
-		                <i class="fa fa-lock fa-2x"></i>
+		            	
+		                <i class="fa {% if proyecto.aprobacion_nacional %} fa-check {% else %} fa-lock {% endif %}  fa-2x"></i>
 		            </div>
 		            <div class="col-xs-9 text-right">
-		                <i class="fa fa-user"></i>  TESORERO  
+		                <i class="fa fa-user"></i>  NACIONAL  
 		            </div>
 		        </div>
 		    </div>
-		    <a href="#">
-		        <div class="panel-footer">
-		            <span class="pull-left">Esperando autorizacion</span>
-		            {% if user.tipo != user.INGENIERO %}
-		            <button type="button" class="btn btn-danger btn-xs pull-right"> <i class="fa fa-check"></i>  Autorizar</button>		
-		            {% endif %}            
-		            <div class="clearfix"></div>
-		        </div>
-		    </a>
 		</div>
+		
+
+		
 
 
 
