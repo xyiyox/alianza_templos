@@ -98,6 +98,11 @@ def proyecto(request, pk):
 
     ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
     ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)
+
+    if request.user.tipo == Usuario.NACIONAL:
+        asignarUsuariosForm = AsignarUsuariosForm(instance=proyecto)
+        asignarUsuariosForm.helper.form_action = reverse('asignaciones', args=[proyecto.pk])
+        ctx['asignarUsuariosForm'] = asignarUsuariosForm
     
     return render(request, 'main/proyecto.html', ctx)
 
@@ -110,6 +115,14 @@ def autorizaciones(request, pk):
         return redirect('proyecto', pk)
     raise Http404 
 
+@login_required
+def asignaciones(request, pk):
+    if request.method == 'POST':
+        proyecto  =  get_object_or_404(Edificacion, pk=pk)
+        form = AsignarUsuariosForm(request.POST, instance=proyecto)
+        form.save()
+        return redirect(proyecto)
+    raise Http404
 
 
 class Aplicacion(SessionWizardView):

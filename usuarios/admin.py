@@ -198,7 +198,7 @@ class UsuarioAdmin(UserAdmin):
                 kwargs['choices'] = db_field.choices
             # solo le permito ver tipo  regional, local, ingeniero y tesorero
             elif request.user.tipo == Usuario.NACIONAL:
-                kwargs['choices'] = db_field.choices[2:6] 
+                kwargs['choices'] = db_field.choices[2:7] 
             # solo le permito ver tipo  local
             elif request.user.tipo == Usuario.REGIONAL:
                 kwargs['choices'] = db_field.choices[3:4] 
@@ -217,7 +217,7 @@ class UsuarioAdmin(UserAdmin):
             return qs
         # puede ver usuarios regionales y locales y a si mismo
         elif request.user.tipo == Usuario.NACIONAL:
-            return qs.filter(Q(pk=request.user.pk) | Q(tipo=Usuario.REGIONAL) | Q(tipo=Usuario.LOCAL) | Q(tipo=Usuario.INGENIERO) | Q(tipo=Usuario.TESORERO))
+            return qs.filter(Q(pk=request.user.pk) | Q(tipo=Usuario.REGIONAL) | Q(tipo=Usuario.LOCAL) | Q(tipo=Usuario.ARQUITECTO)| Q(tipo=Usuario.INGENIERO) | Q(tipo=Usuario.TESORERO))
         # puede ver usuarios locales y a si mismo
         elif request.user.tipo == Usuario.REGIONAL:
             return qs.filter(Q(pk=request.user.pk) | Q(user_padre=request.user.pk))

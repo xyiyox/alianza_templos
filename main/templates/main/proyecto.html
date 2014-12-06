@@ -156,15 +156,21 @@
 			{% if user.tipo == user.REGIONAL %}
 		    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
 		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
-					{{ aprobacionRegionalForm.aprobacion_regional }}
-					 <button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button>
+					{{ aprobacionRegionalForm.aprobacion_regional }}&nbsp;&nbsp;&nbsp;
+					{% if proyecto.aprobacion_regional %} 
+						<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
+					{% else %} 
+						<button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button> 
+					{% endif %}
+					 
 				</form>
 		    </div>
 		    {% endif %}
 		</div>
 
 
-		<div class="panel {% if proyecto.aprobacion_arquitecto %} panel-green {% else %} panel-red {% endif %}">
+		<div {% if user.tipo == user.ARQUITECTO %} ng-mouseenter="showAutorizacionForm($event)" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
+			 class="panel {% if proyecto.aprobacion_arquitecto %} panel-green {% else %} panel-red {% endif %}">
 		    <div class="panel-heading">
 		        <div class="row">
 		            <div class="col-xs-3">
@@ -176,40 +182,51 @@
 		            </div>
 		        </div>
 		    </div>
-		</div>
-
-		<div class="panel {% if proyecto.aprobacion_ingeniero %} panel-green {% else %} panel-red {% endif %}">
-		    <div class="panel-heading">
-		        <div class="row">
-		            <div class="col-xs-3">
-		            	
-		                <i class="fa {% if proyecto.aprobacion_ingeniero %} fa-check {% else %} fa-lock {% endif %}  fa-2x"></i>
-		            </div>
-		            <div class="col-xs-9 text-right">
-		                <i class="fa fa-user"></i>  INGENIERO  
-		            </div>
-		        </div>
+			{% if user.tipo == user.ARQUITECTO %}
+		    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
+		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
+					{{ aprobacionRegionalForm.aprobacion_arquitecto }}&nbsp;&nbsp;&nbsp;
+					{% if proyecto.aprobacion_arquitecto %} 
+						<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
+					{% else %} 
+						<button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button> 
+					{% endif %}
+					 
+				</form>
 		    </div>
+		    {% endif %}
 		</div>
-
-		<div class="panel {% if proyecto.aprobacion_nacional %} panel-green {% else %} panel-red {% endif %}">
-		    <div class="panel-heading">
-		        <div class="row">
-		            <div class="col-xs-3">
-		            	
-		                <i class="fa {% if proyecto.aprobacion_nacional %} fa-check {% else %} fa-lock {% endif %}  fa-2x"></i>
-		            </div>
-		            <div class="col-xs-9 text-right">
-		                <i class="fa fa-user"></i>  NACIONAL  
-		            </div>
-		        </div>
-		    </div>
-		</div>
-		
 
 		
+		<div class="page-header" >
+		  <h4>Asignaciones</h4>
+		</div>
 
 
+		<ul class="list-group" 
+			{% if user.tipo == user.NACIONAL %} ng-mouseenter="showAsignacionForm($event)" ng-mouseleave="showAsignacionForm($event)"{% endif %}>
+
+		    <li class="list-group-item">
+		      <span class="badge">{{proyecto.arquitecto.tipo}}</span>
+		      <i class="fa fa-user fa-fw"></i> {{proyecto.arquitecto|default_if_none:"arquitecto no asignado"}}
+		    </li>
+		    <li class="list-group-item">
+		      <span class="badge">{{proyecto.ingeniero.tipo}}</span>
+		      <i class="fa fa-user fa-fw"></i> {{proyecto.ingeniero|default_if_none:"ingeniero no asignado"}}
+		    </li>
+		    <li class="list-group-item">
+		      <span class="badge">{{proyecto.tesorero.tipo}}</span>
+		      <i class="fa fa-user fa-fw"></i> {{proyecto.tesorero|default_if_none:"tesorero no asignado"}}
+		    </li>
+		    
+		    {% if user.tipo == user.NACIONAL %}
+			<li class="list-group-item" ng-show="verFormAsignacion">
+				<div class="well well-sm">Asignar usuarios</div>
+				{% crispy asignarUsuariosForm %}				
+			</li>
+			{% endif %}
+
+		</ul>
 
 
 	</div> <!-- col-sm-4   -->

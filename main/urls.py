@@ -18,6 +18,7 @@ urlpatterns = patterns('main.views',
     url(r'^proyecto/nuevo/$', login_required(Aplicacion.as_view()), name='proyecto_new'),
     url(r'^proyecto/(?P<pk>\d+)/editar/$', login_required(Aplicacion.as_view()), name='proyecto_edit'),
     url(r'^proyecto/(?P<pk>\d+)/done/$', 'done', name='done'),
-    url(r'^proyecto/(?P<pk>\d+)/autorizaciones/$', 'autorizaciones', name='autorizaciones')  
+    url(r'^proyecto/(?P<pk>\d+)/autorizaciones/$', 'autorizaciones', name='autorizaciones'),
+    url(r'^proyecto/(?P<pk>\d+)/asignaciones/$', 'asignaciones', name='asignaciones')  
 )
 

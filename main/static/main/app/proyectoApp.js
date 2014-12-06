@@ -82,6 +82,12 @@ angular
 	    $scope.showAutorizacionForm = function(event) {
 	    	$scope.verFormAutorizacion = event.type == 'mouseenter' ? true : false;
 	    }
+
+	    $scope.verFormAsignacion = false;
+
+	    $scope.showAsignacionForm = function(event) {
+	    	$scope.verFormAsignacion = event.type == 'mouseenter' ? true : false;
+	    }
 		
 	}]);
 

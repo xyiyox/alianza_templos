@@ -110,11 +110,14 @@ class Edificacion(models.Model):
 					null=True, blank=True, related_name='ingeniero')
 	arquitecto 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Arquitecto Asignado', 
 					null=True, blank=True, related_name='arquitecto')
+	tesorero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Tesorero Asignado', 
+					null=True, blank=True, related_name='tesorero')
 
 	aprobacion_regional 	= models.BooleanField(default=False)
 	aprobacion_arquitecto 	= models.BooleanField(default=False)
 	aprobacion_ingeniero 	= models.BooleanField(default=False)
 	aprobacion_nacional 	= models.BooleanField(default=False)
+	aprobacion_tesorero 	= models.BooleanField(default=False)
 
 
 	def __unicode__(self):

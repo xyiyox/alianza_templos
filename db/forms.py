@@ -5,13 +5,14 @@ from datetime import date
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons, UneditableField, InlineRadios, InlineCheckboxes
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons, UneditableField, InlineRadios, InlineCheckboxes, PrependedAppendedText
 
 from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, FuentesFinanciacion, Comentario
 from .datos import EDIFICACION_COORDENADAS
 
 from map_field import widgets as map_widgets
 from map_field import fields as map_fields
+from usuarios.models import Usuario
 
 class ModelFormBase(forms.ModelForm):
             
@@ -22,9 +23,9 @@ class EdificacionForm(ModelFormBase):
 
     class Meta:
         model = Edificacion
-        exclude = ['estado', 'usuario', 'etapa_actual', 'ingeniero', 'arquitecto', 
+        exclude = ['estado', 'usuario', 'etapa_actual', 'ingeniero', 'arquitecto', 'tesorero',
                     'aprobacion_regional', 'aprobacion_arquitecto', 
-                    'aprobacion_ingeniero', 'aprobacion_nacional']
+                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero']
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)
@@ -171,7 +172,7 @@ class ComentarioForm(forms.ModelForm):
 
 
 
-""" FORMULARIOS PARA ACTUALIZAR MODEL EDIFICACION """
+""" FORMULARIOS AUTORIZACION """
 
 class AprobacionRegionalForm(ModelFormBase):  
 
@@ -180,4 +181,28 @@ class AprobacionRegionalForm(ModelFormBase):
         fields = ['aprobacion_regional']
 
   
+""" FORMULARIOS ASIGNACION USUARIOS A PROYECTOS """
 
+class AsignarUsuariosForm(ModelFormBase):
+
+    def __init__(self, *args, **kwargs):
+        super(AsignarUsuariosForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+        self.helper.form_action = "home"
+
+        self.fields['arquitecto'].queryset = Usuario.objects.filter(tipo=Usuario.ARQUITECTO)
+        self.fields['ingeniero'].queryset = Usuario.objects.filter(tipo=Usuario.INGENIERO)
+        self.fields['tesorero'].queryset = Usuario.objects.filter(tipo=Usuario.TESORERO)
+
+        self.helper.layout = Layout(
+            PrependedAppendedText('arquitecto', "<i class='fa fa-user fa-fw'></i>", "arquitecto", css_class="input-sm"),
+            PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "ingeniero", css_class="input-sm"),
+            PrependedAppendedText('tesorero', "<i class='fa fa-user fa-fw'></i>", "tesorero", css_class="input-sm"),
+            StrictButton('Guardar cambios', type="Submit", css_class="btn-success btn-block btn-sm"),
+        )
+
+    class Meta:
+        model  = Edificacion
+        fields = ['arquitecto', 'ingeniero', 'tesorero']
