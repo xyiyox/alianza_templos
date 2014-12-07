@@ -77,16 +77,17 @@ angular
 	    }
 
 	    /* -----------------------------------------*/  
-	    $scope.verFormAutorizacion = false;
+	    $scope.verFormAutorizacion          = false;
+	    $scope.verFormAsignacionArquitecto  = false;
+	    $scope.verFormAsignacionIngeniero   = false;
+	    $scope.verFormAsignacionTesorero    = false;
 
-	    $scope.showAutorizacionForm = function(event) {
-	    	$scope.verFormAutorizacion = event.type == 'mouseenter' ? true : false;
-	    }
-
-	    $scope.verFormAsignacion = false;
-
-	    $scope.showAsignacionForm = function(event) {
-	    	$scope.verFormAsignacion = event.type == 'mouseenter' ? true : false;
+	    $scope.showAutorizacionForm = function(event, user) {
+	    	console.log(user);
+	    	$scope.verFormAutorizacion = event.type == 'mouseenter' && user != 'nacional' ? true : false;
+	    	$scope.verFormAsignacionArquitecto   =   user == 'nacional' && event.currentTarget.id == 'panel-arquitecto' ? true : false;
+	    	$scope.verFormAsignacionIngeniero   =   user == 'nacional' && event.currentTarget.id == 'panel-ingeniero' ? true : false;
+	    	$scope.verFormAsignacionTesorero     =   user == 'nacional' && event.currentTarget.id == 'panel-tesorero' ? true : false;
 	    }
 		
 	}]);

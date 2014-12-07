@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Home Otros {% endblock %}
+
+
+
+{% block content %}
+	
+	<ol class="breadcrumb" style="margin-top:20px;">
+	  <li class="active">Inicio</li>
+	</ol>
+	
+	<h1 class="page-header clearfix">Dashboard
+		
+		<a class="btn btn-primary" href="{% url 'proyecto_new' %}" role="button">Aplicacion</a>
+	</h1>
+
+	<div class="row">
+		{% for proyecto in proyectos %}
+		<div class="col-sm-4">
+
+			<div class="panel panel-default">
+			  <div class="panel-heading">{{proyecto.nombre_proyecto}}</div>
+			  <div class="panel-body">
+			    <a href="{% url 'proyecto' proyecto.pk %}" class="btn btn-primary  btn-block " role="button">Ver</a>
+			  </div>
+			</div>
+			
+
+		</div>
+
+		{% empty %}
+			<h1>No hay proyectos aun</h1>	
+		{% endfor %}
+
+	</div>
+
+{% endblock content %}

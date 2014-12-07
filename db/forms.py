@@ -175,12 +175,31 @@ class ComentarioForm(forms.ModelForm):
 """ FORMULARIOS AUTORIZACION """
 
 class AprobacionRegionalForm(ModelFormBase):  
-
     class Meta:
         model = Edificacion
-        fields = ['aprobacion_regional']
+        fields = ['aprobacion_regional'] 
 
+class AprobacionArquitectoForm(ModelFormBase):  
+    class Meta:
+        model = Edificacion
+        fields = ['aprobacion_arquitecto']
   
+class AprobacionIngenieroForm(ModelFormBase):  
+    class Meta:
+        model = Edificacion
+        fields = ['aprobacion_ingeniero']
+
+class AprobacionTesoreroForm(ModelFormBase):  
+    class Meta:
+        model = Edificacion
+        fields = ['aprobacion_tesorero']
+
+class AprobacionNacionalForm(ModelFormBase):  
+    class Meta:
+        model = Edificacion
+        fields = ['aprobacion_nacional']
+
+
 """ FORMULARIOS ASIGNACION USUARIOS A PROYECTOS """
 
 class AsignarUsuariosForm(ModelFormBase):
@@ -197,10 +216,10 @@ class AsignarUsuariosForm(ModelFormBase):
         self.fields['tesorero'].queryset = Usuario.objects.filter(tipo=Usuario.TESORERO)
 
         self.helper.layout = Layout(
-            PrependedAppendedText('arquitecto', "<i class='fa fa-user fa-fw'></i>", "arquitecto", css_class="input-sm"),
-            PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "ingeniero", css_class="input-sm"),
-            PrependedAppendedText('tesorero', "<i class='fa fa-user fa-fw'></i>", "tesorero", css_class="input-sm"),
-            StrictButton('Guardar cambios', type="Submit", css_class="btn-success btn-block btn-sm"),
+            PrependedAppendedText('arquitecto', "<i class='fa fa-user fa-fw'></i>", "arquitecto <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
+            PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "ingeniero <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
+            PrependedAppendedText('tesorero', "<i class='fa fa-user fa-fw'></i>", "tesorero <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
+            StrictButton('Guardar cambios', type="Submit", css_class="btn-info btn-block btn-sm"),
         )
 
     class Meta:

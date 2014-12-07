@@ -30,7 +30,15 @@ def home(request):
         if request.user.tipo == Usuario.LOCAL:
             return redirect('home_local')
 
-        
+        if request.user.tipo == Usuario.ARQUITECTO:
+            return redirect('home_otros')
+
+        if request.user.tipo == Usuario.INGENIERO:
+            return redirect('home_otros')
+
+        if request.user.tipo == Usuario.TESORERO:
+            return redirect('home_otros')
+
         
     return redirect('hacer_login')
 
@@ -74,6 +82,24 @@ def home_local(request):
 
 
 @login_required
+def home_otros(request):
+    # validamos que el usuario tenga permiso de ver esta vista
+    users = [Usuario.LOCAL, Usuario.REGIONAL, Usuario.NACIONAL]
+    if request.user.tipo in users:
+        raise PermissionDenied 
+    if request.user.tipo == Usuario.ARQUITECTO: 
+        proyectos = Edificacion.objects.filter(arquitecto__exact=request.user.pk)
+    if request.user.tipo == Usuario.INGENIERO:
+        proyectos = Edificacion.objects.filter(ingeniero__exact=request.user.pk)
+    if request.user.tipo == Usuario.TESORERO:
+        proyectos = Edificacion.objects.filter(tesorero__exact=request.user.pk)
+
+    ctx = {'proyectos': proyectos}
+    return render(request, 'main/home-otros.html', ctx)
+
+
+
+@login_required
 def proyecto(request, pk):
     # validamos que el proyecto exista
     proyecto  =  get_object_or_404(Edificacion, pk=pk)
@@ -97,9 +123,21 @@ def proyecto(request, pk):
     comentarioForm.helper.form_action = proyecto.get_absolute_url()
 
     ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
-    ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)
 
+    if request.user.tipo == Usuario.REGIONAL:
+        ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)  
+        
+    if request.user.tipo == Usuario.ARQUITECTO:
+        ctx['aprobacionArquitectoForm'] = AprobacionArquitectoForm(instance=proyecto) 
+
+    if request.user.tipo == Usuario.INGENIERO:
+        ctx['aprobacionIngenieroForm'] = AprobacionIngenieroForm(instance=proyecto) 
+
+    if request.user.tipo == Usuario.TESORERO:
+        ctx['aprobacionTesoreroForm'] = AprobacionTesoreroForm(instance=proyecto) 
+    
     if request.user.tipo == Usuario.NACIONAL:
+        ctx['aprobacionNacionalForm'] = AprobacionNacionalForm(instance=proyecto) 
         asignarUsuariosForm = AsignarUsuariosForm(instance=proyecto)
         asignarUsuariosForm.helper.form_action = reverse('asignaciones', args=[proyecto.pk])
         ctx['asignarUsuariosForm'] = asignarUsuariosForm
@@ -108,11 +146,27 @@ def proyecto(request, pk):
 
 @login_required
 def autorizaciones(request, pk):
+    
     if request.method == 'POST':
         proyecto  =  get_object_or_404(Edificacion, pk=pk)
-        form = AprobacionRegionalForm(request.POST, instance=proyecto)
+       
+        if request.user.tipo == Usuario.REGIONAL:
+            form = AprobacionRegionalForm(request.POST, instance=proyecto)
+        
+        if request.user.tipo == Usuario.ARQUITECTO:
+            form = AprobacionArquitectoForm(request.POST, instance=proyecto)
+
+        if request.user.tipo == Usuario.INGENIERO:
+            form = AprobacionIngenieroForm(request.POST, instance=proyecto)
+
+        if request.user.tipo == Usuario.TESORERO:
+            form = AprobacionTesoreroForm(request.POST, instance=proyecto)
+
+        if request.user.tipo == Usuario.NACIONAL:
+            form = AprobacionNacionalForm(request.POST, instance=proyecto)
+
         form.save()
-        return redirect('proyecto', pk)
+        return redirect(proyecto)
     raise Http404 
 
 @login_required

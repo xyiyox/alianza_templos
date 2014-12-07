@@ -13,6 +13,7 @@ urlpatterns = patterns('main.views',
     url(r'^home-nacional$', 'home_nacional', name='home_nacional'),
     url(r'^home-regional$', 'home_regional', name='home_regional'),
     url(r'^home-local$',    'home_local',    name='home_local'),
+    url(r'^home-otros$',    'home_otros',    name='home_otros'),
     
     url(r'^proyecto/(\d+)/$', 'proyecto', name='proyecto'),
     url(r'^proyecto/nuevo/$', login_required(Aplicacion.as_view()), name='proyecto_new'),

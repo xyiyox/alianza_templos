@@ -97,7 +97,7 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
 )
 
 SUIT_CONFIG = {
-    'ADMIN_NAME': 'La Alianza',
+    'ADMIN_NAME': '<a href="/"><img width="150" height=40 src="/static/main/img/logo.png"></a>',
     'MENU_ICONS': {
         'usuarios': 'icon-user',
         'auth': 'icon-lock',
