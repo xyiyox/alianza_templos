@@ -150,17 +150,20 @@ def proyecto(request, pk):
     return render(request, 'main/proyecto.html', ctx)
 
 
-def enviar_email(coment, proyecto):
+def enviar_email(coment, proyecto):      # user es el usuario logueado 
     subject        = "Nuevo comentario en proyecto %s" % proyecto.nombre_proyecto
     message        = coment.descripcion+' /n /n  por favor no responda a esta correo'
     from_email     = settings.EMAIL_HOST_USER
-    recipient_list = [
-        proyecto.usuario.user_padre.user_padre.email,   #nacional
-        proyecto.usuario.user_padre.email,              # regional
-        proyecto.usuario.email                        #local
-    ]
+    recipient_list = [proyecto.usuario.email]  #local
+    
+    # componer la lista de destinatarios
+    for user in Usuario.objects.filter(tipo=Usuario.NACIONAL):
+        recipient_list.append(user.email)   
 
-    if coment.comentario_padre:
+    if proyecto.usuario.user_padre.tipo != Usuario.NACIONAL:    # esto porque el user_padre puede ser tambien en Nacional
+        recipient_list.append(proyecto.usuario.user_padre.email) #regional
+
+    if coment.comentario_padre:   # le enviamos a los siguentes usuarios solo si les contestaron un comentario
         
         if coment.comentario_padre.commenter.tipo == Usuario.ARQUITECTO:
             recipient_list.append(coment.comentario_padre.commenter.email)
@@ -170,6 +173,9 @@ def enviar_email(coment, proyecto):
         
         if coment.comentario_padre.commenter.tipo == Usuario.TESORERO:
             recipient_list.append(coment.comentario_padre.commenter.email)
+
+    if coment.commenter.email in recipient_list:
+        recipient_list.remove(coment.commenter.email)  # no le enviamos email al que comento
 
     return send_mail(subject, message, from_email, recipient_list, fail_silently=True)
 
