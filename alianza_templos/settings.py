@@ -86,8 +86,14 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media')
 MEDIA_URL = '/media/'
 
-################### configuraciones de paquetes instalados ####################
+################### configuraciones adicionales ####################
 
+# configuarcion de email
+EMAIL_USE_TLS = EMAIL_USE_TLS
+EMAIL_HOST = EMAIL_HOST
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+EMAIL_PORT = EMAIL_PORT
 
 # configuracion de django suit
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP

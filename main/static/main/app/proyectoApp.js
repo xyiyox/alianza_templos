@@ -57,6 +57,11 @@ angular
 	  		}
 	    };
 
+	    $scope.alClickComentario = function(event) {
+	    	var btn  = angular.element(event.currentTarget);
+	    	btn.button('loading');  
+	    };
+
 	    /* -----------------------------------------*/  
 
 	    $scope.showForm = function(comentId, event) {
@@ -70,7 +75,12 @@ angular
 		    	nestedForm.attr("id","nested-comentario-form");
 		    	nestedForm.find('#id_comentario_padre').val(comentId);
 		    	nestedForm.insertAfter(event.currentTarget);
-		    	nestedForm.find('#submit-id-submit').addClass('show'); //.attr("disabled", "disabled");
+		    	var btn = nestedForm.find('.btn');
+		    	btn.addClass('show'); 
+
+		    	btn.one('click', function () {
+			    	btn.button('loading'); 
+			    });
 
 		    };
 

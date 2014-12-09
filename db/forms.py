@@ -145,6 +145,8 @@ class FuentesFinanciacionForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
+
+
     
 class ComentarioForm(forms.ModelForm):
     """Formulario para crear un comentario"""
@@ -166,7 +168,7 @@ class ComentarioForm(forms.ModelForm):
             PrependedText('descripcion', "<i class='fa fa-user '></i>", placeholder="Agrega tu comentario", rows="1", ng_focus="procesarFoco($event)", ng_blur="procesarFoco($event)"),
             Field('comentario_padre', type="hidden"),
             FormActions(
-                Submit('Submit', 'Enviar', css_class='btn-info pull-right btn-xs', ng_show="verSubmit")
+                StrictButton('Enviar', type="Submit", css_class="btn-info pull-right btn-xs", ng_show="verSubmit", ng_click="alClickComentario($event)", data_loading_text="Enviando...", autocomplete="off"),
             )
         )
 

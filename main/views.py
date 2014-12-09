@@ -5,8 +5,11 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.formtools.wizard.views import SessionWizardView, NamedUrlSessionWizardView
+from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
+from threading import Timer
 
 from main.forms import *
 from db.forms import *
@@ -114,6 +117,8 @@ def proyecto(request, pk):
             new_coment.edificacion = proyecto
             new_coment.commenter = request.user
             new_coment.save()
+
+            result_email = enviar_email(new_coment, proyecto)
             # redirect funciona con el objeto si en el existe el metodo get_absolute_url
             return redirect(proyecto)
 
@@ -143,6 +148,31 @@ def proyecto(request, pk):
         ctx['asignarUsuariosForm'] = asignarUsuariosForm
     
     return render(request, 'main/proyecto.html', ctx)
+
+
+def enviar_email(coment, proyecto):
+    subject        = "Nuevo comentario en proyecto %s" % proyecto.nombre_proyecto
+    message        = coment.descripcion+' /n /n  por favor no responda a esta correo'
+    from_email     = settings.EMAIL_HOST_USER
+    recipient_list = [
+        proyecto.usuario.user_padre.user_padre.email,   #nacional
+        proyecto.usuario.user_padre.email,              # regional
+        proyecto.usuario.email                        #local
+    ]
+
+    if coment.comentario_padre:
+        
+        if coment.comentario_padre.commenter.tipo == Usuario.ARQUITECTO:
+            recipient_list.append(coment.comentario_padre.commenter.email)
+        
+        if coment.comentario_padre.commenter.tipo == Usuario.INGENIERO:
+            recipient_list.append(coment.comentario_padre.commenter.email)
+        
+        if coment.comentario_padre.commenter.tipo == Usuario.TESORERO:
+            recipient_list.append(coment.comentario_padre.commenter.email)
+
+    return send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+
 
 @login_required
 def autorizaciones(request, pk):
