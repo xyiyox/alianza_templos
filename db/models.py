@@ -7,6 +7,53 @@ from map_field import fields as map_fields
 from django.conf import settings
 
 
+class Etapa(models.Model):
+
+	# Posibles etapas del proyecto
+	DILIGENCIAMIENTO 	= 0   # set on proyect creation
+	APROB_REGIONAL 		= 1   # set on proyect sending only once
+	ASIGN_ING_ARQ 		= 2
+	PLANOS 				= 3   # el arquitecto sube planos y chequea la aprobacion suya
+	APROB_INGENIERO 	= 4
+	APROB_TESORERO 		= 5
+	APROB_NACIONAL 		= 6
+	APROB_INTERNACIONAL = 7
+	ESPERANDO_CUPO 		= 8
+	ESPERANDO_RECURSOS 	= 9
+	EN_CONSTRUCCION 	= 10
+	CORRECIONES 		= 11
+	FINALIZACION 		= 12
+
+	ETAPA_ACTUAL = (
+		(DILIGENCIAMIENTO, 'Diligenciamiento'),
+		# 1 semana para revisar por usuario regional
+		(APROB_REGIONAL, 'Aprobación Regional'),
+		(ASIGN_ING_ARQ, 'Asignación de Ingeniero/Arquitecto'),
+		# 5 dias para subir planos del proyecto de construcción
+		(PLANOS, 'Creación de Planos'),
+		# 3 dias para ser aprobado por un ingeniero
+		(APROB_INGENIERO, 'Aprobación Ingeniero'),
+		(APROB_TESORERO, 'Aprobación Tesorero'),
+		(APROB_NACIONAL, 'Aprobación Nacional'),
+		# 2 semanas para recibir aprobación internacional
+		(APROB_INTERNACIONAL, 'Aprobación Internacional'),
+		(ESPERANDO_CUPO, 'En Espera de Cupo'),
+		(ESPERANDO_RECURSOS, 'En Espera de Recursos'),
+		# Tiene 3 etapas (3 pagos)
+		(EN_CONSTRUCCION, 'En Construcción'),
+		(CORRECIONES, 'Esperando Correcciones'),
+		(FINALIZACION, 'Finalización'),
+	)
+
+	edificacion = models.ForeignKey('Edificacion')
+	etapa       = models.IntegerField(max_length=2, choices=ETAPA_ACTUAL)
+	
+	created     = models.DateField(auto_now_add =True)
+
+	def __unicode__(self):
+		return "%s" % self.id
+
+
 class Edificacion(models.Model):
 	"""
 	Representacion de un Proyecto de construccion 
@@ -46,41 +93,7 @@ class Edificacion(models.Model):
 		(5, 'Terminado'),
 	)
 
-	# Posibles etapas del proyecto
-	DILIGENCIAMIENTO 	= 0
-	APROB_REGIONAL 		= 1
-	ASIGN_ING_ARQ 		= 2
-	PLANOS 				= 3
-	APROB_INGENIERO 	= 4
-	APROB_TESORERO 		= 5
-	APROB_NACIONAL 		= 6
-	APROB_INTERNACIONAL = 7
-	ESPERANDO_CUPO 		= 8
-	ESPERANDO_RECURSOS 	= 9
-	EN_CONSTRUCCION 	= 10
-	CORRECIONES 		= 11
-	FINALIZACION 		= 12
-
-	ETAPA_ACTUAL = (
-		(DILIGENCIAMIENTO, 'Diligenciamiento'),
-		# 1 semana para revisar por usuario regional
-		(APROB_REGIONAL, 'Aprobación Regional'),
-		(ASIGN_ING_ARQ, 'Asignación de Ingeniero/Arquitecto'),
-		# 5 dias para subir planos del proyecto de construcción
-		(PLANOS, 'Creación de Planos'),
-		# 3 dias para ser aprobado por un ingeniero
-		(APROB_INGENIERO, 'Aprobación Ingeniero'),
-		(APROB_TESORERO, 'Aprobación Tesorero'),
-		(APROB_NACIONAL, 'Aprobación Nacional'),
-		# 2 semanas para recibir aprobación internacional
-		(APROB_INTERNACIONAL, 'Aprobación Internacional'),
-		(ESPERANDO_CUPO, 'En Espera de Cupo'),
-		(ESPERANDO_RECURSOS, 'En Espera de Recursos'),
-		# Tiene 3 etapas (3 pagos)
-		(EN_CONSTRUCCION, 'En Construcción'),
-		(CORRECIONES, 'Esperando Correcciones'),
-		(FINALIZACION, 'Finalización'),
-	)
+	
 
 	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
 	direccion 		= models.TextField(verbose_name='Dirección')
@@ -102,7 +115,7 @@ class Edificacion(models.Model):
 	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 	
 	estado 			= models.SmallIntegerField(choices=ESTADO_FORMULARIO)
-	etapa_actual 	= models.PositiveSmallIntegerField(choices=ETAPA_ACTUAL)
+	etapa_actual 	= models.PositiveSmallIntegerField(choices=Etapa.ETAPA_ACTUAL)
 
 	usuario 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable', 
 					related_name='usuario')
@@ -119,6 +132,8 @@ class Edificacion(models.Model):
 	aprobacion_nacional 	= models.BooleanField(default=False)
 	aprobacion_tesorero 	= models.BooleanField(default=False)
 
+	created     = models.DateField(auto_now_add =True)
+	updated     = models.DateField(auto_now = True)
 
 	def __unicode__(self):
 		return "%s" %u"Edificación"

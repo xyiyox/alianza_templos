@@ -25,7 +25,7 @@ class EdificacionForm(ModelFormBase):
         model = Edificacion
         exclude = ['estado', 'usuario', 'etapa_actual', 'ingeniero', 'arquitecto', 'tesorero',
                     'aprobacion_regional', 'aprobacion_arquitecto', 
-                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero']
+                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero', 'created', 'updated']
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)

@@ -505,6 +505,42 @@
 },
 {
     "fields": {
+        "codename": "add_etapa",
+        "name": "Can add etapa",
+        "content_type": [
+            "db",
+            "etapa"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 43
+},
+{
+    "fields": {
+        "codename": "change_etapa",
+        "name": "Can change etapa",
+        "content_type": [
+            "db",
+            "etapa"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 44
+},
+{
+    "fields": {
+        "codename": "delete_etapa",
+        "name": "Can delete etapa",
+        "content_type": [
+            "db",
+            "etapa"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 45
+},
+{
+    "fields": {
         "name": "nacional",
         "permissions": [
             [

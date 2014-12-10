@@ -16,7 +16,7 @@ from db.forms import *
 
 from django.conf import settings
 import os
-from db.models import Edificacion, Comentario
+from db.models import Edificacion, Comentario, Etapa
 from usuarios.models import Usuario
 
 
@@ -301,9 +301,9 @@ class Aplicacion(SessionWizardView):
         """ 
         Metodo que procesa cada formulario al momento de ser enviado (submit)
         """
-        step_current = form.data['aplicacion-current_step']
+        step_current = form.data['aplicacion-current_step']   # esto es innecesario ya que self.steps.current hace los mismo
 
-        # Para el primer formulario se captura el id (pk) de la edificacion para usarlo en los otros formularios
+
         if step_current == '0':
             
             if self.instance_dict.get('0', False):
@@ -314,9 +314,12 @@ class Aplicacion(SessionWizardView):
                 model_instance.estado       = step_current
                 model_instance.usuario      = self.request.user
                 # Indicar que esta en etapa de Diligenciamiento
-                model_instance.etapa_actual = Edificacion.ETAPA_ACTUAL[0][0]
+                model_instance.etapa_actual = Etapa.DILIGENCIAMIENTO
                 model_instance.save()
                 self.instance_dict['0'] = model_instance
+                # registamos la etapa 
+                etapa = Etapa(edificacion=model_instance, etapa=Etapa.DILIGENCIAMIENTO)
+                etapa.save()
         else:
             if self.instance_dict.get(step_current, False): 
                 form.save()
@@ -330,9 +333,16 @@ class Aplicacion(SessionWizardView):
                 self.instance_dict[step_current] = instance
                 # Fijar el estado del formulario en el modelo edificacion
                 edificacion.estado = step_current
-                # Indicar que esta en etapa de Diligenciamiento
-                edificacion.etapa_actual = Edificacion.ETAPA_ACTUAL[0][0]
-                edificacion.save()
+                edificacion.save(update_fields=['estado'])
+
+                # notificar el cambio de etapa al enviar el ultimo formulario
+                if step_current == self.steps.last:
+                    edificacion.etapa_actual = Etapa.APROB_REGIONAL
+                    edificacion.save(update_fields=['etapa_actual'])
+                    
+                    etapa = Etapa(edificacion=edificacion, etapa=Etapa.APROB_REGIONAL)
+                    etapa.save()
+
         return self.get_form_step_data(form)
     
     def render_goto_step(self, goto_step, **kwargs):
