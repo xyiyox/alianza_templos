@@ -12,7 +12,7 @@ class Etapa(models.Model):
 	# Posibles etapas del proyecto
 	DILIGENCIAMIENTO 	= 0   # set on proyect creation
 	APROB_REGIONAL 		= 1   # set on proyect sending only once
-	ASIGN_ING_ARQ 		= 2
+	ASIGN_USUARIOS 		= 2
 	PLANOS 				= 3   # el arquitecto sube planos y chequea la aprobacion suya
 	APROB_INGENIERO 	= 4
 	APROB_TESORERO 		= 5
@@ -25,24 +25,24 @@ class Etapa(models.Model):
 	FINALIZACION 		= 12
 
 	ETAPA_ACTUAL = (
-		(DILIGENCIAMIENTO, 'Diligenciamiento'),
+		(DILIGENCIAMIENTO, u'Diligenciamiento'),
 		# 1 semana para revisar por usuario regional
-		(APROB_REGIONAL, 'Aprobación Regional'),
-		(ASIGN_ING_ARQ, 'Asignación de Ingeniero/Arquitecto'),
+		(APROB_REGIONAL, u'Aprobación Regional'),
+		(ASIGN_USUARIOS, u'Asignación de Arquitecto/Ingeniero/Tesorero'),
 		# 5 dias para subir planos del proyecto de construcción
-		(PLANOS, 'Creación de Planos'),
+		(PLANOS, u'Creación de Planos'),
 		# 3 dias para ser aprobado por un ingeniero
-		(APROB_INGENIERO, 'Aprobación Ingeniero'),
-		(APROB_TESORERO, 'Aprobación Tesorero'),
-		(APROB_NACIONAL, 'Aprobación Nacional'),
+		(APROB_INGENIERO, u'Aprobación Ingeniero'),
+		(APROB_TESORERO, u'Aprobación Tesorero'),
+		(APROB_NACIONAL, u'Aprobación Nacional'),
 		# 2 semanas para recibir aprobación internacional
-		(APROB_INTERNACIONAL, 'Aprobación Internacional'),
-		(ESPERANDO_CUPO, 'En Espera de Cupo'),
-		(ESPERANDO_RECURSOS, 'En Espera de Recursos'),
+		(APROB_INTERNACIONAL, u'Aprobación Internacional'),
+		(ESPERANDO_CUPO, u'En Espera de Cupo'),
+		(ESPERANDO_RECURSOS, u'En Espera de Recursos'),
 		# Tiene 3 etapas (3 pagos)
-		(EN_CONSTRUCCION, 'En Construcción'),
-		(CORRECIONES, 'Esperando Correcciones'),
-		(FINALIZACION, 'Finalización'),
+		(EN_CONSTRUCCION, u'En Construcción'),
+		(CORRECIONES, u'Esperando Correcciones'),
+		(FINALIZACION, u'Finalización'),
 	)
 
 	edificacion = models.ForeignKey('Edificacion')
