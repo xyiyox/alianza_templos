@@ -9,20 +9,21 @@ from django.conf import settings
 
 class Etapa(models.Model):
 
-	# Posibles etapas del proyecto
-	DILIGENCIAMIENTO 	= 0   # set on project creation
-	APROB_REGIONAL 		= 1   # set on project sending only once
-	ASIGN_USUARIOS 		= 2
-	PLANOS 				= 3   # el arquitecto sube planos y chequea la aprobacion suya
-	APROB_INGENIERO 	= 4
-	APROB_TESORERO 		= 5
-	APROB_NACIONAL 		= 6
-	APROB_INTERNACIONAL = 7
-	ESPERANDO_CUPO 		= 8
-	ESPERANDO_RECURSOS 	= 9
-	EN_CONSTRUCCION 	= 10
-	CORRECIONES 		= 11
-	FINALIZACION 		= 12
+
+	DILIGENCIAMIENTO 	= 1   # set on proyect creation
+	APROB_REGIONAL 		= 2   # set on proyect sending only once
+	ASIGN_USUARIOS 		= 3
+	PLANOS 				= 4   # el arquitecto sube planos y chequea la aprobacion suya
+	APROB_INGENIERO 	= 5
+	APROB_TESORERO 		= 6
+	APROB_NACIONAL 		= 7
+	APROB_INTERNACIONAL = 8
+	ESPERANDO_CUPO 		= 9
+	ESPERANDO_RECURSOS 	= 10
+	EN_CONSTRUCCION 	= 11
+	CORRECIONES 		= 12
+	FINALIZACION 		= 13
+
 
 	ETAPA_ACTUAL = (
 		(DILIGENCIAMIENTO, u'Diligenciamiento'),

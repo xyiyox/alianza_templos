@@ -38,7 +38,7 @@ INSTALLED_APPS = (
 
     'crispy_forms',
     'session_security',
-    #'debug_toolbar',
+    'debug_toolbar',
     'map_field',
 
     'usuarios',

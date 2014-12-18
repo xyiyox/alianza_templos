@@ -49,13 +49,23 @@ def home(request):
 
 
 @login_required
-def home_nacional(request):
+def home_nacional(request, etapa=None):
+    
     # validamos que el usuario tenga permiso de ver esta vista
     if request.user.tipo != Usuario.NACIONAL:
         raise PermissionDenied 
-        
-    proyectos = Edificacion.objects.all()
-    ctx = {'proyectos': proyectos}
+    
+    proyectos = None
+    ctx = {'Etapa':Etapa()}
+    
+    if etapa:
+        proyectos = Edificacion.objects.filter(etapa_actual=etapa)  
+        ctx['etapa_actual'] = int(etapa) 
+    else:
+        proyectos = Edificacion.objects.all()
+    
+    
+    ctx['proyectos'] = proyectos
     return render(request, 'main/home-nacional.html', ctx)
 
 
@@ -150,14 +160,26 @@ def proyecto(request, pk):
     return render(request, 'main/proyecto.html', ctx)
 
 
+
+def registrar_etapa(edificacion, etapa):
+    _etapa = Etapa(edificacion=edificacion, etapa=etapa)
+    _etapa.save()
+
 @login_required
 def autorizaciones(request, pk):
-    
+
     if request.method == 'POST':
         proyecto  =  get_object_or_404(Edificacion, pk=pk)
        
         if request.user.tipo == Usuario.REGIONAL:
-            form = AprobacionRegionalForm(request.POST, instance=proyecto)
+            
+            proyecto.aprobacion_regional = request.POST.get('aprobacion_regional', False) 
+            proyecto.etapa_actual = Etapa.ASIGN_USUARIOS
+            proyecto.save(update_fields=['aprobacion_regional', 'etapa_actual'])
+            
+            registrar_etapa(proyecto, Etapa.ASIGN_USUARIOS)  
+            mail_change_etapa(proyecto, request.user)
+            
         
         if request.user.tipo == Usuario.ARQUITECTO:
             form = AprobacionArquitectoForm(request.POST, instance=proyecto)
@@ -171,9 +193,12 @@ def autorizaciones(request, pk):
         if request.user.tipo == Usuario.NACIONAL:
             form = AprobacionNacionalForm(request.POST, instance=proyecto)
 
-        form.save()
+       
+
         return redirect(proyecto)
+
     raise Http404 
+
 
 @login_required
 def asignaciones(request, pk):
@@ -182,6 +207,7 @@ def asignaciones(request, pk):
         form = AsignarUsuariosForm(request.POST, instance=proyecto)
         form.save()
         return redirect(proyecto)
+
     raise Http404
 
 
@@ -313,7 +339,7 @@ class Aplicacion(SessionWizardView):
                     etapa = Etapa(edificacion=edificacion, etapa=Etapa.APROB_REGIONAL)
                     etapa.save()
                     # send email notification
-                    print mail_change_etapa(edificacion, self.request.user)
+                    mail_change_etapa(edificacion, self.request.user)
 
         return self.get_form_step_data(form)
     

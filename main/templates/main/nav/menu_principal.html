@@ -128,22 +128,20 @@
                 <li>
                     <a class="active" href="/"><i class="fa fa-home fa-fw"></i> Inicio</a>
                 </li>
-
+                
+                {% if user.tipo == user.NACIONAL %}
                 <li>
                     <a href="#"><i class="fa fa-tasks fa-fw"></i> Proyectos<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li>
-                            <a href="#">En Diligenciamiento</a>
-                        </li>
-                        <li>
-                            <a href="#">Esperando Autorizacion</a>
-                        </li>
-                         <li>
-                            <a href="#">Esperando Cupo</a>
-                        </li>
+                        {% for key,value in Etapa.ETAPA_ACTUAL %}
+                            <li>
+                                <a href="{% url 'home_nacional_etapa' etapa=key %}">{{value}}</a>
+                            </li>
+                        {% endfor %}
                     </ul> <!-- /.nav-second-level -->
                             
                 </li>
+                {% endif %}
 
             </ul>  <!-- nav  -->
 
