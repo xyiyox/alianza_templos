@@ -10,8 +10,8 @@ from django.conf import settings
 class Etapa(models.Model):
 
 	# Posibles etapas del proyecto
-	DILIGENCIAMIENTO 	= 0   # set on proyect creation
-	APROB_REGIONAL 		= 1   # set on proyect sending only once
+	DILIGENCIAMIENTO 	= 0   # set on project creation
+	APROB_REGIONAL 		= 1   # set on project sending only once
 	ASIGN_USUARIOS 		= 2
 	PLANOS 				= 3   # el arquitecto sube planos y chequea la aprobacion suya
 	APROB_INGENIERO 	= 4
@@ -91,9 +91,7 @@ class Edificacion(models.Model):
 		(3, 'FuentesFinancierasForm'),
 		(4, 'CondicionesForm'),
 		(5, 'Terminado'),
-	)
-
-	
+	)	
 
 	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
 	direccion 		= models.TextField(verbose_name='Dirección')

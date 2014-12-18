@@ -505,6 +505,114 @@
 },
 {
     "fields": {
+        "codename": "add_source",
+        "name": "Can add source",
+        "content_type": [
+            "easy_thumbnails",
+            "source"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 43
+},
+{
+    "fields": {
+        "codename": "change_source",
+        "name": "Can change source",
+        "content_type": [
+            "easy_thumbnails",
+            "source"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 44
+},
+{
+    "fields": {
+        "codename": "delete_source",
+        "name": "Can delete source",
+        "content_type": [
+            "easy_thumbnails",
+            "source"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 45
+},
+{
+    "fields": {
+        "codename": "add_thumbnail",
+        "name": "Can add thumbnail",
+        "content_type": [
+            "easy_thumbnails",
+            "thumbnail"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 46
+},
+{
+    "fields": {
+        "codename": "change_thumbnail",
+        "name": "Can change thumbnail",
+        "content_type": [
+            "easy_thumbnails",
+            "thumbnail"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 47
+},
+{
+    "fields": {
+        "codename": "delete_thumbnail",
+        "name": "Can delete thumbnail",
+        "content_type": [
+            "easy_thumbnails",
+            "thumbnail"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 48
+},
+{
+    "fields": {
+        "codename": "add_thumbnaildimensions",
+        "name": "Can add thumbnail dimensions",
+        "content_type": [
+            "easy_thumbnails",
+            "thumbnaildimensions"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 49
+},
+{
+    "fields": {
+        "codename": "change_thumbnaildimensions",
+        "name": "Can change thumbnail dimensions",
+        "content_type": [
+            "easy_thumbnails",
+            "thumbnaildimensions"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 50
+},
+{
+    "fields": {
+        "codename": "delete_thumbnaildimensions",
+        "name": "Can delete thumbnail dimensions",
+        "content_type": [
+            "easy_thumbnails",
+            "thumbnaildimensions"
+        ]
+    },
+    "model": "auth.permission",
+    "pk": 51
+},
+{
+    "fields": {
         "codename": "add_etapa",
         "name": "Can add etapa",
         "content_type": [
@@ -513,7 +621,7 @@
         ]
     },
     "model": "auth.permission",
-    "pk": 43
+    "pk": 52
 },
 {
     "fields": {
@@ -525,7 +633,7 @@
         ]
     },
     "model": "auth.permission",
-    "pk": 44
+    "pk": 53
 },
 {
     "fields": {
@@ -537,7 +645,7 @@
         ]
     },
     "model": "auth.permission",
-    "pk": 45
+    "pk": 54
 },
 {
     "fields": {

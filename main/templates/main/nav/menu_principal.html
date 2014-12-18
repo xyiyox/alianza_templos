@@ -17,6 +17,41 @@
     {% if user.is_authenticated %}
    
     <ul class="nav navbar-top-links navbar-right">
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-bell"></i>
+                <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-alerts">
+                {% for etapa in etapas %}
+                    <li>
+                        <a href="#">
+                            <div>
+                                <i class="glyphicon glyphicon-home"></i>
+                                <strong>{{etapa.edificacion.nombre_proyecto}}</strong>
+                                <p class="text-muted small">
+                                    <i class="fa fa-clock-o"></i>
+                                    <em>El {{etapa.created}}</em>
+                                </p>
+                            </div>
+                            <div> El proyecto cambió a la etapa {{etapa.get_etapa_display}}</div>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                {% empty %}
+                    <div>
+                        <i class="fa fa-bell-slash"></i>
+                        <span>No hay novedades</span>
+                    </div>
+                {% endfor %}
+                <li>
+                    <a href="" class="text-center" style="cursor:default">
+                        <strong>Ultimos Eventos</strong>    
+                    </a>
+                </li>
+            </ul>
+        </li>
         
         {% if user.tipo == user.NACIONAL or user.tipo == user.REGIONAL %}
         

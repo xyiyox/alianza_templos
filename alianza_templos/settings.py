@@ -51,7 +51,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'session_security.middleware.SessionSecurityMiddleware', # para django session security
+    # para django session security
+    'session_security.middleware.SessionSecurityMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -100,6 +101,7 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     'django.core.context_processors.request',
+    'main.context_processors.notificaciones',
 )
 
 SUIT_CONFIG = {
