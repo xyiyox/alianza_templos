@@ -8,10 +8,11 @@ import os
 import re
 
 try:
-  import private # llamamos un private file con variables estaticas 
+ 	# llamamos un private file con variables estaticas 
+	import private
 except ImportError:
-  print('no se encuentran los datos privados')
-  pass 
+	print('no se encuentran los datos privados')
+	pass 
 
 RUTA_PROYECTO = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 env.hosts = [private.HOST1]

@@ -9,8 +9,9 @@ def notificaciones(request):
 		elif request.user.tipo == Usuario.REGIONAL:
 			pass
 		elif request.user.tipo == Usuario.LOCAL:
-			edificaciones_user = Edificacion.objects.filter(usuario=request.user).order_by('-pk')
+			edificaciones_user = Edificacion.objects.filter(usuario=request.user)
 			etapas = []
 			for e in edificaciones_user:
-				etapas += e.etapa_set.filter()[:20]
+				etapas += e.etapa_set.all().order_by('-pk')[:20]
+			etapas = sorted(etapas, key=lambda etapa: -etapa.pk)
 	return {'etapas': etapas}

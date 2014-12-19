@@ -41,11 +41,8 @@ def home(request):
 
         if request.user.tipo == Usuario.TESORERO:
             return redirect('home_otros')
-
         
     return redirect('hacer_login')
-
-
 
 
 @login_required
@@ -111,7 +108,6 @@ def home_otros(request):
     return render(request, 'main/home-otros.html', ctx)
 
 
-
 @login_required
 def proyecto(request, pk):
     # validamos que el proyecto exista
@@ -132,7 +128,6 @@ def proyecto(request, pk):
             # redirect funciona con el objeto si en el existe el metodo get_absolute_url
             return redirect(proyecto)
 
-    
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
     comentarioForm         = ComentarioForm()
     comentarioForm.helper.form_action = proyecto.get_absolute_url()
@@ -160,10 +155,10 @@ def proyecto(request, pk):
     return render(request, 'main/proyecto.html', ctx)
 
 
-
 def registrar_etapa(edificacion, etapa):
     _etapa = Etapa(edificacion=edificacion, etapa=etapa)
     _etapa.save()
+
 
 @login_required
 def autorizaciones(request, pk):
@@ -178,8 +173,7 @@ def autorizaciones(request, pk):
             proyecto.save(update_fields=['aprobacion_regional', 'etapa_actual'])
             
             registrar_etapa(proyecto, Etapa.ASIGN_USUARIOS)  
-            mail_change_etapa(proyecto, request.user)
-            
+            mail_change_etapa(proyecto, request.user)      
         
         if request.user.tipo == Usuario.ARQUITECTO:
             form = AprobacionArquitectoForm(request.POST, instance=proyecto)
@@ -192,8 +186,6 @@ def autorizaciones(request, pk):
 
         if request.user.tipo == Usuario.NACIONAL:
             form = AprobacionNacionalForm(request.POST, instance=proyecto)
-
-       
 
         return redirect(proyecto)
 
@@ -297,7 +289,7 @@ class Aplicacion(SessionWizardView):
         """ 
         Metodo que procesa cada formulario al momento de ser enviado (submit)
         """
-        step_current = form.data['aplicacion-current_step']   # esto es innecesario ya que self.steps.current hace los mismo
+        step_current = self.steps.current
 
 
         if step_current == '0':
@@ -309,11 +301,8 @@ class Aplicacion(SessionWizardView):
                 model_instance              = form.save(commit=False)
                 model_instance.estado       = step_current
                 model_instance.usuario      = self.request.user
-                # Indicar que esta en etapa de Diligenciamiento
-                model_instance.etapa_actual = Etapa.DILIGENCIAMIENTO
-                model_instance.save()
                 self.instance_dict['0'] = model_instance
-                # registamos la etapa 
+                # Registramos la etapa de Diligenciamiento
                 etapa = Etapa(edificacion=model_instance, etapa=Etapa.DILIGENCIAMIENTO)
                 etapa.save()
         else:
@@ -331,11 +320,8 @@ class Aplicacion(SessionWizardView):
                 edificacion.estado = step_current
                 edificacion.save(update_fields=['estado'])
 
-                # notificar el cambio de etapa al enviar el ultimo formulario
-                if step_current == self.steps.last:
-                    edificacion.etapa_actual = Etapa.APROB_REGIONAL
-                    edificacion.save(update_fields=['etapa_actual'])
-                    
+                # Notificar el cambio de etapa al enviar el ultimo formulario
+                if step_current == self.steps.last:                    
                     etapa = Etapa(edificacion=edificacion, etapa=Etapa.APROB_REGIONAL)
                     etapa.save()
                     # send email notification
@@ -384,7 +370,6 @@ def hacer_login(request):
     return render(request, 'main/login.html', ctx)
 
 
-
 @login_required
 def done(request, pk):
 
@@ -399,4 +384,4 @@ def done(request, pk):
 
 def hacer_logout(request):
     logout(request)
-    return redirect('hacer_login') 
+    return redirect('hacer_login')

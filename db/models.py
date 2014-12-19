@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 from .datos import *
 from map_field import fields as map_fields
@@ -9,11 +10,13 @@ from django.conf import settings
 
 class Etapa(models.Model):
 
-
-	DILIGENCIAMIENTO 	= 1   # set on proyect creation
-	APROB_REGIONAL 		= 2   # set on proyect sending only once
+	# set on project creation
+	DILIGENCIAMIENTO 	= 1
+	# set on project sending only once
+	APROB_REGIONAL 		= 2
 	ASIGN_USUARIOS 		= 3
-	PLANOS 				= 4   # el arquitecto sube planos y chequea la aprobacion suya
+	# el arquitecto sube planos y chequea la aprobacion suya
+	PLANOS 				= 4
 	APROB_INGENIERO 	= 5
 	APROB_TESORERO 		= 6
 	APROB_NACIONAL 		= 7
@@ -50,6 +53,13 @@ class Etapa(models.Model):
 	etapa       = models.IntegerField(max_length=2, choices=ETAPA_ACTUAL)
 	
 	created     = models.DateField(auto_now_add =True)
+
+	def save(self, *args, **kwargs):
+		# Aqui ponemos el codigo del trigger -------
+		self.edificacion.etapa_actual = self.etapa
+		self.edificacion.save(update_fields=['etapa_actual'])
+		# fin de trigger ------
+		return super(Etapa, self).save( *args, **kwargs)
 
 	def __unicode__(self):
 		return "%s" % self.id
@@ -268,11 +278,10 @@ class FuentesFinanciacion(models.Model):
 	valor 			= models.DecimalField('Valor', max_digits=15, decimal_places=3)
 	
 	info_financiera = models.ForeignKey('InformacionFinanciera')
-from django.core.exceptions import ValidationError
 
 def validate_terminos(value):
-    if value != True:
-        raise ValidationError(u'Debe aceptar las condiciones antes de continuar')
+	if value != True:
+		raise ValidationError(u'Debe aceptar las condiciones antes de continuar')
 
 class Condiciones(models.Model):
 	""" Condiciones """
