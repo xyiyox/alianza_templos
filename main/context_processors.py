@@ -12,6 +12,6 @@ def notificaciones(request):
 			edificaciones_user = Edificacion.objects.filter(usuario=request.user)
 			etapas = []
 			for e in edificaciones_user:
-				etapas += e.etapa_set.all().order_by('-pk')[:20]
+				etapas += e.etapa_set.all()[:20]
 			etapas = sorted(etapas, key=lambda etapa: -etapa.pk)
 	return {'etapas': etapas}

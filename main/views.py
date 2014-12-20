@@ -303,8 +303,9 @@ class Aplicacion(SessionWizardView):
                 model_instance.usuario      = self.request.user
                 self.instance_dict['0'] = model_instance
                 # Registramos la etapa de Diligenciamiento
-                etapa = Etapa(edificacion=model_instance, etapa=Etapa.DILIGENCIAMIENTO)
-                etapa.save()
+                registrar_etapa(model_instance, Etapa.DILIGENCIAMIENTO)
+                #etapa = Etapa(edificacion=model_instance, etapa=Etapa.DILIGENCIAMIENTO)
+                #etapa.save()
         else:
             if self.instance_dict.get(step_current, False): 
                 form.save()
@@ -321,9 +322,10 @@ class Aplicacion(SessionWizardView):
                 edificacion.save(update_fields=['estado'])
 
                 # Notificar el cambio de etapa al enviar el ultimo formulario
-                if step_current == self.steps.last:                    
-                    etapa = Etapa(edificacion=edificacion, etapa=Etapa.APROB_REGIONAL)
-                    etapa.save()
+                if step_current == self.steps.last:
+                    registrar_etapa(edificacion, Etapa.APROB_REGIONAL)
+                    #etapa = Etapa(edificacion=edificacion, etapa=Etapa.APROB_REGIONAL)
+                    #etapa.save()
                     # send email notification
                     mail_change_etapa(edificacion, self.request.user)
 
