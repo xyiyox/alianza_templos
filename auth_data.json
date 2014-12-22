@@ -8,8 +8,7 @@
             "logentry"
         ]
     },
-    "model": "auth.permission",
-    "pk": 1
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -20,8 +19,7 @@
             "logentry"
         ]
     },
-    "model": "auth.permission",
-    "pk": 2
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -32,8 +30,7 @@
             "logentry"
         ]
     },
-    "model": "auth.permission",
-    "pk": 3
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -44,8 +41,7 @@
             "permission"
         ]
     },
-    "model": "auth.permission",
-    "pk": 4
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -56,8 +52,7 @@
             "permission"
         ]
     },
-    "model": "auth.permission",
-    "pk": 5
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -68,8 +63,7 @@
             "permission"
         ]
     },
-    "model": "auth.permission",
-    "pk": 6
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -80,8 +74,7 @@
             "group"
         ]
     },
-    "model": "auth.permission",
-    "pk": 7
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -92,8 +85,7 @@
             "group"
         ]
     },
-    "model": "auth.permission",
-    "pk": 8
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -104,8 +96,7 @@
             "group"
         ]
     },
-    "model": "auth.permission",
-    "pk": 9
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -116,8 +107,7 @@
             "contenttype"
         ]
     },
-    "model": "auth.permission",
-    "pk": 10
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -128,8 +118,7 @@
             "contenttype"
         ]
     },
-    "model": "auth.permission",
-    "pk": 11
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -140,8 +129,7 @@
             "contenttype"
         ]
     },
-    "model": "auth.permission",
-    "pk": 12
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -152,8 +140,7 @@
             "session"
         ]
     },
-    "model": "auth.permission",
-    "pk": 13
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -164,8 +151,7 @@
             "session"
         ]
     },
-    "model": "auth.permission",
-    "pk": 14
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -176,8 +162,7 @@
             "session"
         ]
     },
-    "model": "auth.permission",
-    "pk": 15
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -188,8 +173,7 @@
             "usuario"
         ]
     },
-    "model": "auth.permission",
-    "pk": 16
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -200,8 +184,7 @@
             "usuario"
         ]
     },
-    "model": "auth.permission",
-    "pk": 17
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -212,8 +195,7 @@
             "usuario"
         ]
     },
-    "model": "auth.permission",
-    "pk": 18
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -224,8 +206,7 @@
             "edificacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 19
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -236,8 +217,7 @@
             "edificacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 20
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -248,8 +228,7 @@
             "edificacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 21
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -260,8 +239,7 @@
             "informacionfinanciera"
         ]
     },
-    "model": "auth.permission",
-    "pk": 22
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -272,8 +250,7 @@
             "informacionfinanciera"
         ]
     },
-    "model": "auth.permission",
-    "pk": 23
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -284,8 +261,7 @@
             "informacionfinanciera"
         ]
     },
-    "model": "auth.permission",
-    "pk": 24
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -296,8 +272,7 @@
             "comunidad"
         ]
     },
-    "model": "auth.permission",
-    "pk": 25
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -308,8 +283,7 @@
             "comunidad"
         ]
     },
-    "model": "auth.permission",
-    "pk": 26
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -320,8 +294,7 @@
             "comunidad"
         ]
     },
-    "model": "auth.permission",
-    "pk": 27
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -332,8 +305,7 @@
             "congregacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 28
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -344,8 +316,7 @@
             "congregacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 29
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -356,8 +327,7 @@
             "congregacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 30
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -368,8 +338,7 @@
             "fuentesfinanciacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 31
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -380,8 +349,7 @@
             "fuentesfinanciacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 32
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -392,8 +360,7 @@
             "fuentesfinanciacion"
         ]
     },
-    "model": "auth.permission",
-    "pk": 33
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -404,8 +371,7 @@
             "condiciones"
         ]
     },
-    "model": "auth.permission",
-    "pk": 34
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -416,8 +382,7 @@
             "condiciones"
         ]
     },
-    "model": "auth.permission",
-    "pk": 35
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -428,8 +393,7 @@
             "condiciones"
         ]
     },
-    "model": "auth.permission",
-    "pk": 36
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -440,8 +404,7 @@
             "adjuntos"
         ]
     },
-    "model": "auth.permission",
-    "pk": 37
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -452,8 +415,7 @@
             "adjuntos"
         ]
     },
-    "model": "auth.permission",
-    "pk": 38
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -464,8 +426,7 @@
             "adjuntos"
         ]
     },
-    "model": "auth.permission",
-    "pk": 39
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -476,8 +437,7 @@
             "comentario"
         ]
     },
-    "model": "auth.permission",
-    "pk": 40
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -488,8 +448,7 @@
             "comentario"
         ]
     },
-    "model": "auth.permission",
-    "pk": 41
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -500,8 +459,7 @@
             "comentario"
         ]
     },
-    "model": "auth.permission",
-    "pk": 42
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -512,8 +470,7 @@
             "etapa"
         ]
     },
-    "model": "auth.permission",
-    "pk": 43
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -524,8 +481,7 @@
             "etapa"
         ]
     },
-    "model": "auth.permission",
-    "pk": 44
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -536,8 +492,7 @@
             "etapa"
         ]
     },
-    "model": "auth.permission",
-    "pk": 45
+    "model": "auth.permission"
 },
 {
     "fields": {
@@ -565,8 +520,7 @@
             ]
         ]
     },
-    "model": "auth.group",
-    "pk": 1
+    "model": "auth.group"
 },
 {
     "fields": {
@@ -594,8 +548,7 @@
             ]
         ]
     },
-    "model": "auth.group",
-    "pk": 2
+    "model": "auth.group"
 },
 {
     "fields": {
@@ -688,8 +641,7 @@
             ]
         ]
     },
-    "model": "auth.group",
-    "pk": 3
+    "model": "auth.group"
 },
 {
     "fields": {
@@ -712,8 +664,7 @@
             ]
         ]
     },
-    "model": "auth.group",
-    "pk": 4
+    "model": "auth.group"
 },
 {
     "fields": {
@@ -736,8 +687,7 @@
             ]
         ]
     },
-    "model": "auth.group",
-    "pk": 5
+    "model": "auth.group"
 },
 {
     "fields": {
@@ -760,7 +710,6 @@
             ]
         ]
     },
-    "model": "auth.group",
-    "pk": 6
+    "model": "auth.group"
 }
 ]

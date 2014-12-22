@@ -52,6 +52,10 @@ def sincronizar_bd():
 		#run('source ../bin/activate && ./manage.py syncdb --no-initial-data')
 		run('source ../bin/activate && ./manage.py migrate')
 
+def default_data():
+	with cd(PROD_PATH):
+		run('source ../bin/activate && ./manage.py loaddata auth_data.json')
+
 def reiniciar_servidor():
 	with cd('/home/alianza/webapps/alianza_templos/apache2'):
 		run('bin/restart')
@@ -70,7 +74,7 @@ def git_log():
 	local('git log --oneline --graph --decorate')
 
 def update_default_data():
-	local('./manage.py dumpdata auth --natural-foreign --indent 4  > auth_data.json')
+	local('./manage.py dumpdata auth --natural-foreign --natural-primary --indent 4  > auth_data.json')
 
 def load_default_data():
 	local('./manage.py loaddata auth_data.json')
