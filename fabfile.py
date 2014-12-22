@@ -28,6 +28,7 @@ def deploy():
 	actualizar_requerimientos()
 	colectar_estaticos()
 	sincronizar_bd()
+	actualizar_default_data
 	reiniciar_servidor()
 
 def update_code():
@@ -52,7 +53,7 @@ def sincronizar_bd():
 		#run('source ../bin/activate && ./manage.py syncdb --no-initial-data')
 		run('source ../bin/activate && ./manage.py migrate')
 
-def default_data():
+def actualizar_default_data():
 	with cd(PROD_PATH):
 		run('source ../bin/activate && ./manage.py loaddata auth_data.json')
 
