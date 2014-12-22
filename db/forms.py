@@ -44,7 +44,6 @@ class EdificacionForm(ModelFormBase):
         self.helper.filter_by_widget(forms.Select).wrap(InlineRadios) 
 
 
-
 class InformacionFinancieraForm(ModelFormBase):
     
     class Meta:
@@ -78,6 +77,7 @@ class ComunidadForm(ModelFormBase):
 
         self.helper.all().wrap(Field, css_class='input-sm')
 
+
 class CongregacionForm(ModelFormBase):
     
     class Meta:
@@ -98,6 +98,7 @@ class CongregacionForm(ModelFormBase):
         self.helper.filter_by_widget(forms.Textarea).wrap(Field, css_class="input-xlarge", rows="2") 
         self.helper.filter_by_widget(SelectDateWidget).wrap(Field, css_class="input-sm", style="width:110px; float:left; margin-right:5px;") 
         self.helper.filter_by_widget(forms.Select).wrap(InlineRadios)
+
 
 class CondicionesForm(ModelFormBase):
     
@@ -121,7 +122,7 @@ class AdjuntosForm(ModelFormBase):
     
     class Meta:
         model = Adjuntos
-        exclude = ['edificacion']
+        exclude = ['edificacion', 'planos_arquitecto']
 
     def __init__(self, *args, **kwargs):
         super(AdjuntosForm, self).__init__(*args, **kwargs)
@@ -145,7 +146,6 @@ class FuentesFinanciacionForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
-
 
     
 class ComentarioForm(forms.ModelForm):
@@ -173,7 +173,6 @@ class ComentarioForm(forms.ModelForm):
         )
 
 
-
 """ FORMULARIOS AUTORIZACION """
 
 class AprobacionRegionalForm(ModelFormBase):  
@@ -181,10 +180,21 @@ class AprobacionRegionalForm(ModelFormBase):
         model = Edificacion
         fields = ['aprobacion_regional'] 
 
-class AprobacionArquitectoForm(ModelFormBase):  
+class AprobacionArquitectoForm(ModelFormBase):
+    planos = forms.FileField(label='Subir Planos')
     class Meta:
         model = Edificacion
-        fields = ['aprobacion_arquitecto']
+        fields = ['planos', 'aprobacion_arquitecto']
+
+    def save(self, planos, commit=True):
+        print('Datos', self.fields['planos'])
+        instance = super(AprobacionArquitectoForm, self).save(commit=False)
+        adj = Adjuntos.objects.get(edificacion=instance)
+        adj.planos_arquitecto = planos
+        adj.save()
+        if commit:
+            instance.save()
+        return instance
   
 class AprobacionIngenieroForm(ModelFormBase):  
     class Meta:

@@ -53,7 +53,7 @@ def home_nacional(request, etapa=None):
         raise PermissionDenied 
     
     proyectos = None
-    ctx = {'Etapa':Etapa()}
+    ctx = {}
     
     if etapa:
         proyectos = Edificacion.objects.filter(etapa_actual=etapa)  
@@ -138,7 +138,7 @@ def proyecto(request, pk):
         ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)  
         
     if request.user.tipo == Usuario.ARQUITECTO:
-        ctx['aprobacionArquitectoForm'] = AprobacionArquitectoForm(instance=proyecto) 
+        ctx['aprobacionArquitectoForm'] = AprobacionArquitectoForm(instance=proyecto)
 
     if request.user.tipo == Usuario.INGENIERO:
         ctx['aprobacionIngenieroForm'] = AprobacionIngenieroForm(instance=proyecto) 
@@ -169,14 +169,13 @@ def autorizaciones(request, pk):
         if request.user.tipo == Usuario.REGIONAL:
             
             proyecto.aprobacion_regional = request.POST.get('aprobacion_regional', False) 
-            proyecto.etapa_actual = Etapa.ASIGN_USUARIOS
-            proyecto.save(update_fields=['aprobacion_regional', 'etapa_actual'])
+            proyecto.save(update_fields=['aprobacion_regional'])
             
             registrar_etapa(proyecto, Etapa.ASIGN_USUARIOS)  
             mail_change_etapa(proyecto, request.user)      
         
         if request.user.tipo == Usuario.ARQUITECTO:
-            form = AprobacionArquitectoForm(request.POST, instance=proyecto)
+            form = AprobacionArquitectoForm(request.POST, request.FILES, instance=proyecto)
 
         if request.user.tipo == Usuario.INGENIERO:
             form = AprobacionIngenieroForm(request.POST, instance=proyecto)
@@ -194,10 +193,17 @@ def autorizaciones(request, pk):
 
 @login_required
 def asignaciones(request, pk):
+    """ 
+    Metodo encargado de procesar las asignaciones de usuarios
+    Arquitecto, Ingeniero y Tesorero en un proyecto
+    """
     if request.method == 'POST':
         proyecto  =  get_object_or_404(Edificacion, pk=pk)
         form = AsignarUsuariosForm(request.POST, instance=proyecto)
         form.save()
+        if proyecto.arquitecto and proyecto.ingeniero and proyecto.tesorero:
+            registrar_etapa(proyecto, Etapa.PLANOS)
+            mail_change_etapa(proyecto, request.user) 
         return redirect(proyecto)
 
     raise Http404

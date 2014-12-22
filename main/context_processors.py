@@ -1,12 +1,21 @@
 from db.models import Etapa, Edificacion
 from usuarios.models import Usuario
 
+def listar_etapas(request):
+	return {'ETAPA_ACTUAL': Etapa.ETAPA_ACTUAL}
+
 def notificaciones(request):
 	etapas = {}
 	if request.user.is_authenticated():
 		if request.user.tipo == Usuario.NACIONAL:
 			etapas = Etapa.objects.filter().order_by('-created', '-pk')[:20]
 		elif request.user.tipo == Usuario.REGIONAL:
+			pass
+		elif request.user.tipo == Usuario.ARQUITECTO:
+			pass
+		elif request.user.tipo == Usuario.INGENIERO:
+			pass
+		elif request.user.tipo == Usuario.TESORERO:
 			pass
 		elif request.user.tipo == Usuario.LOCAL:
 			edificaciones_user = Edificacion.objects.filter(usuario=request.user)

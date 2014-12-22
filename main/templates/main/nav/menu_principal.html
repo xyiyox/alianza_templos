@@ -141,7 +141,7 @@
                 <li>
                     <a href="#"><i class="fa fa-tasks fa-fw"></i> Proyectos<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        {% for key,value in Etapa.ETAPA_ACTUAL %}
+                        {% for key,value in ETAPA_ACTUAL %}
                             <li>
                                 <a href="{% url 'home_nacional_etapa' etapa=key %}">{{value}}</a>
                             </li>
