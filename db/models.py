@@ -2,10 +2,15 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.conf import settings
+from django.utils import timezone
+
+from datetime import datetime, timedelta
+
 
 from .datos import *
 from map_field import fields as map_fields
-from django.conf import settings
+
 
 
 class Etapa(models.Model):
@@ -52,7 +57,10 @@ class Etapa(models.Model):
 	edificacion = models.ForeignKey('Edificacion')
 	etapa       = models.IntegerField(max_length=2, choices=ETAPA_ACTUAL)
 	
-	created     = models.DateField(auto_now_add =True)
+	created     = models.DateTimeField(auto_now_add = True) 
+
+	class Meta:
+		get_latest_by = "created"
 
 	def save(self, *args, **kwargs):
 		# Aqui ponemos el codigo del trigger -------
@@ -149,6 +157,28 @@ class Edificacion(models.Model):
 
 	def get_absolute_url(self):
 		return reverse('main.views.proyecto', args=[str(self.id)])
+
+	
+	def get_plazo(self):
+		now = timezone.now()
+		if timezone.is_aware(now):
+			now = timezone.localtime(now)
+
+		init_etapa = self.etapa_set.latest().created #- timedelta(days=15)
+
+		#if self.etapa_actual == Etapa.APROB_REGIONAL:
+		plazo = init_etapa + timedelta(days=8)
+
+		if now <= plazo:
+			# 100%
+			delta_rango = (plazo - init_etapa).total_seconds() 
+			# porcentaje completado
+			delta_van   = (now - init_etapa).total_seconds()   
+			# abs() retorna valores absolutos...
+			result = (abs(delta_van) * 100) / abs(delta_rango)    
+			return int(result)
+
+		return 111
 
 
 class InformacionFinanciera(models.Model):

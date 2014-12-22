@@ -32,6 +32,7 @@
 			<div class="panel panel-default">
 			  <div class="panel-heading">{{proyecto.nombre_proyecto}}</div>
 			  <div class="panel-body">
+			  	{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
 			    <a href="{% url 'proyecto' proyecto.pk %}" class="btn btn-primary  btn-block " role="button">Ver</a>
 			  </div>
 			</div>

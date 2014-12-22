@@ -21,6 +21,7 @@
 			<div class="panel panel-default">
 			  <div class="panel-heading">{{proyecto.nombre_proyecto}}</div>
 			  <div class="panel-body">
+			  	{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
 			    <a href="{% url 'aplicacion_edit' pk=proyecto.pk %}" class="btn btn-primary  btn-block " role="button">Editar</a>
 			  </div>
 			</div>
