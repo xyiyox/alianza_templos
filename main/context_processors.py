@@ -1,8 +1,8 @@
 from db.models import Etapa, Edificacion
 from usuarios.models import Usuario
 
-def listar_etapas(request):
-	return {'ETAPA_ACTUAL': Etapa.ETAPA_ACTUAL}
+def etapa(request):
+	return {'Etapa': Etapa}
 
 def notificaciones(request):
 	etapas = {}
