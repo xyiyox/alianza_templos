@@ -15,12 +15,14 @@ from map_field import fields as map_fields
 
 class Etapa(models.Model):
 
+	PLAZO_VENCIDO = 111
+
 	# set on project creation
 	DILIGENCIAMIENTO 	= 1
 	# set on project sending only once
 	APROB_REGIONAL 		= 2
 	ASIGN_USUARIOS 		= 3
-	# el arquitecto sube planos y chequea la aprobacion suya
+	# el arquitecto sube planos y che
 	PLANOS 				= 4
 	APROB_INGENIERO 	= 5
 	APROB_TESORERO 		= 6
@@ -68,6 +70,34 @@ class Etapa(models.Model):
 		self.edificacion.save(update_fields=['etapa_actual'])
 		# fin de trigger ------
 		return super(Etapa, self).save( *args, **kwargs)
+
+
+	def _get_plazo_actual(self):
+		#if self.etapa_actual == APROB_REGIONAL:
+		return self.created + timedelta(days=8)
+
+	
+	plazo = property(_get_plazo_actual)
+
+	# calcular porcentaje de tiempo hasta el plazo
+
+	def _get_porcentaje_plazo(self):
+		now = timezone.now()
+		if timezone.is_aware(now):
+			now = timezone.localtime(now)
+
+		if now <= self.plazo:
+			# calculamos el cien por ciento
+			delta_rango = (self.plazo - self.created).total_seconds() 
+			# calculamos el porcentaje completado
+			delta_van   = (now - self.created).total_seconds()   
+			result      = (abs(delta_van) * 100) / abs(delta_rango)    
+			return int(result)
+
+		return self.PLAZO_VENCIDO
+	
+	percent = property(_get_porcentaje_plazo)
+
 
 	def __unicode__(self):
 		return "%s" % self.id
@@ -158,27 +188,11 @@ class Edificacion(models.Model):
 	def get_absolute_url(self):
 		return reverse('main.views.proyecto', args=[str(self.id)])
 
+	# properties
+	def _get_registro_etapa(self):
+		return self.etapa_set.latest()
 	
-	def get_plazo(self):
-		now = timezone.now()
-		if timezone.is_aware(now):
-			now = timezone.localtime(now)
-
-		init_etapa = self.etapa_set.latest().created #- timedelta(days=15)
-
-		#if self.etapa_actual == Etapa.APROB_REGIONAL:
-		plazo = init_etapa + timedelta(days=8)
-
-		if now <= plazo:
-			# 100%
-			delta_rango = (plazo - init_etapa).total_seconds() 
-			# porcentaje completado
-			delta_van   = (now - init_etapa).total_seconds()   
-			# abs() retorna valores absolutos...
-			result = (abs(delta_van) * 100) / abs(delta_rango)    
-			return int(result)
-
-		return 111
+	etapa = property(_get_registro_etapa)
 
 
 class InformacionFinanciera(models.Model):

@@ -1,15 +1,8 @@
-
+{% load main_tags %}
 <small> {{proyect.get_etapa_actual_display}}</small>
+      
 <div class="progress">
-  	<div class="progress-bar 
-	{% if proyect.get_plazo >= 90 %}
-  	progress-bar-warning 
-  	{% elif proyect.get_plazo == '111' %}
-	progress-bar-danger
-	{% else %}
-	progress-bar-success"
-	{% endif %}
-  	role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="width: {{proyect.get_plazo}}%;">
-    {{proyect.get_plazo}}%
+  	<div class="progress-bar progress-bar-{{proyect.etapa.percent|percent_to_color}}" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="width: {{proyect.etapa.percent}}%;">
+    {{proyect.etapa.percent|percent_to_msg:proyect.etapa.plazo}}
   	</div>
 </div>
