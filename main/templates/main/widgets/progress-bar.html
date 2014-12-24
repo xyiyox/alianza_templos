@@ -1,8 +1,16 @@
 {% load main_tags %}
-<small> {{proyect.get_etapa_actual_display}}</small>
-      
-<div class="progress">
-  	<div class="progress-bar progress-bar-{{proyect.etapa.percent|percent_to_color}}" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="width: {{proyect.etapa.percent}}%;">
-    {{proyect.etapa.percent|percent_to_msg:proyect.etapa.plazo}}
-  	</div>
+<div style="margin-bottom:20px;">
+    <small> {{proyect.get_etapa_actual_display}}</small>
+          
+    <div class="progress" style="margin-bottom:2px;">
+      	<div class="progress-bar progress-bar-{{proyect.etapa.percent|percent_to_color}}" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="width: {{proyect.etapa.percent}}%;">
+        {{proyect.etapa.percent|percent_to_msg:proyect.etapa.plazo}}
+      	</div>
+    </div>
+    <small class="text-primary  pull-left">{{proyect.etapa.created|date:"D d M Y"}}</small>  
+    <small class="text-primary  pull-right">{{proyect.etapa.plazo|date:'D d M Y'}}</small>
+    <div class="clearfix"></div>
+    <small class="text-muted pull-left">van {{proyect.etapa.created|timesince}} </small>
+    <small class="text-muted pull-right">faltan {{proyect.etapa.plazo|timeuntil}}</small>
+    <div class="clearfix"></div>
 </div>
