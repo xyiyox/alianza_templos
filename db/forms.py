@@ -180,21 +180,27 @@ class AprobacionRegionalForm(ModelFormBase):
         model = Edificacion
         fields = ['aprobacion_regional'] 
 
+class PlanosArquitectoForm(ModelFormBase):
+    """Aqui se subiran los planos del arquitecto antes de que de su autorizacion"""
+    class Meta:
+        model = Adjuntos
+        fields = ['planos_arquitecto']
+        
 class AprobacionArquitectoForm(ModelFormBase):
-    planos = forms.FileField(label='Subir Planos')
+    #planos = forms.FileField(label='Subir Planos')
     class Meta:
         model = Edificacion
-        fields = ['planos', 'aprobacion_arquitecto']
+        fields = ['aprobacion_arquitecto']
 
-    def save(self, planos, commit=True):
-        print('Datos', self.fields['planos'])
-        instance = super(AprobacionArquitectoForm, self).save(commit=False)
-        adj = Adjuntos.objects.get(edificacion=instance)
-        adj.planos_arquitecto = planos
-        adj.save()
-        if commit:
-            instance.save()
-        return instance
+    # def save(self, planos, commit=True):
+    #     print('Datos', self.fields['planos'])
+    #     instance = super(AprobacionArquitectoForm, self).save(commit=False)
+    #     adj = Adjuntos.objects.get(edificacion=instance)
+    #     adj.planos_arquitecto = planos
+    #     adj.save()
+    #     if commit:
+    #         instance.save()
+    #     return instance
   
 class AprobacionIngenieroForm(ModelFormBase):  
     class Meta:

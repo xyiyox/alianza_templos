@@ -139,6 +139,8 @@ def proyecto(request, pk):
         
     if request.user.tipo == Usuario.ARQUITECTO:
         ctx['aprobacionArquitectoForm'] = AprobacionArquitectoForm(instance=proyecto)
+        adj = proyecto.adjuntos_set.get()
+        ctx['planosArquitectoForm'] = PlanosArquitectoForm(instance=adj)
 
     if request.user.tipo == Usuario.INGENIERO:
         ctx['aprobacionIngenieroForm'] = AprobacionIngenieroForm(instance=proyecto) 
@@ -176,6 +178,14 @@ def autorizaciones(request, pk):
         
         if request.user.tipo == Usuario.ARQUITECTO:
             form = AprobacionArquitectoForm(request.POST, request.FILES, instance=proyecto)
+            adj = proyecto.adjuntos_set.get()
+            form_plano = PlanosArquitectoForm(request.POST, request.FILES, instance=adj)
+            if form.is_valid() and form_plano.is_valid():
+                print('Somos Validos')
+                form.save()
+                form_plano.save()
+            else:
+                print('No Somos Validos', form.errors, form_plano.errors)
 
         if request.user.tipo == Usuario.INGENIERO:
             form = AprobacionIngenieroForm(request.POST, instance=proyecto)
