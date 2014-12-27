@@ -34,6 +34,7 @@ class Etapa(models.Model):
 	CORRECIONES 		= 12
 	FINALIZACION 		= 13
 
+	ICONS = ['edit', 'check', 'users', 'area-chart', 'anchor', 'dollar', 'thumbs-o-up', 'globe', 'clock-o', 'cogs', 'home', 'home', 'home']
 
 	ETAPA_ACTUAL = (
 		(DILIGENCIAMIENTO, u'Diligenciamiento'),

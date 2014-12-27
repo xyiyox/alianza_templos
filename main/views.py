@@ -16,7 +16,7 @@ from threading import Timer
 from main.forms import *
 from main.email import *
 from db.forms import *
-from db.models import Edificacion, Comentario, Etapa
+from db.models import Edificacion, Comunidad, Comentario, Etapa
 from usuarios.models import Usuario
 
 
@@ -112,6 +112,7 @@ def home_otros(request):
 def proyecto(request, pk):
     # validamos que el proyecto exista
     proyecto  =  get_object_or_404(Edificacion, pk=pk)
+    comunidad =  Comunidad.objects.get(edificacion=proyecto)
     # validamos que el usuario tenga permiso de ver el proyecto
     if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
         raise Http404 
@@ -132,7 +133,7 @@ def proyecto(request, pk):
     comentarioForm         = ComentarioForm()
     comentarioForm.helper.form_action = proyecto.get_absolute_url()
 
-    ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
+    ctx = {'proyecto': proyecto, 'comunidad': comunidad, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
 
     if request.user.tipo == Usuario.REGIONAL:
         ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)  

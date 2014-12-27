@@ -26,12 +26,10 @@ def percent_to_msg(percent, plazo):
 
 @register.filter
 def etapa_to_icon(etapa):
-	
-	icons = ['edit', 'check', 'users', 'area-chart', 'anchor', 'dollar', 'thumbs-o-up', 'globe']
 
 	for key, value in Etapa.ETAPA_ACTUAL:
 		if etapa == key:
-			return icons[key-1]
+			return Etapa.ICONS[key-1]
 	
 	return "home"
 

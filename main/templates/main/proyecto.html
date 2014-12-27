@@ -19,33 +19,64 @@
   <li class="active">{{proyecto.nombre_proyecto}}</li>
 </ol>
 
-<div class="page-header">
-	<h1> <i class="fa fa-fw fa-{{proyecto.etapa_actual|etapa_to_icon}}"></i> {{proyecto.nombre_proyecto}} 
-		<small>
-			<a class="btn btn-success" href="{% url "proyecto_edit" pk=proyecto.pk %}">
-				{% if user.tipo == user.LOCAL %}
-					Editar
-				{% elif user.tipo == user.REGIONAL or user.tipo == user.NACIONAL %}
-					Revisar
-				{% else %}
-					Ver en detalle
-				{% endif%}
-			</a>
-			<a href="" class="btn btn-info" ng-click="scrollTo('comentarios')" role="button">Comentar</a>
-  	
-  		</small> 
-  		<span class="label label-primary pull-right">{{proyecto.pk}}</span>
-  	</h1>
-  	
-</div>
-
 <div class="row">
 
-	<div class="col-sm-8">
+	<div class="col-md-8">
+
+		<div class="page-header" style="margin-top:0;">
+			
+			<div class="row">
+
+				<div class="col-sm-2 text-center">
+					<i class="fa fa-fw fa-{{proyecto.etapa_actual|etapa_to_icon}} fa-3x"></i></br></br>
+					<a class="btn btn-xs btn-block btn-default" href="{% url "proyecto_edit" pk=proyecto.pk %}">
+						{% if user.tipo == user.LOCAL %}
+							Editar
+						{% elif user.tipo == user.REGIONAL or user.tipo == user.NACIONAL %}
+							Revisar
+						{% else %}
+							Ver en detalle
+						{% endif%}
+					</a>
+					<a href="" class="btn btn-xs btn-block btn-default" ng-click="scrollTo('comentarios')" role="button">Comentar</a>
+				</div>
+
+				<div class="col-sm-10">
+
+					<h2 style="margin-top:0;">{{proyecto.nombre_proyecto}} 
+				  		<small><span class="label label-primary pull-right">{{proyecto.pk}}</span></small>
+				  	</h2>
+
+				  	<h5>{{comunidad.nombre}} {{comunidad.region}}</h5>
+				  	
+				  	
+				  	{% for key, etp in list_etapas %}
+				  		{% if key == proyecto.etapa_actual %}
+				  		<span data-toggle="tooltip" data-placement="top" title="etapa: {{etp}}">
+				  			<i class="fa fa-{{key|etapa_to_icon}} text-danger"></i>
+				  		</span> &nbsp;
+				  		{% else %}
+				  		<span data-toggle="tooltip" data-placement="top" title="etapa: {{etp}}" style="color:#999;">
+				  			<i class="fa fa-{{key|etapa_to_icon}}"></i>
+				  		</span> &nbsp;
+				  		{% endif %}				  		
+				  	{% endfor %}
+				    </br>
+				  	<span class="label label-info">{{proyecto.get_etapa_actual_display}}</span></br>
+
+			  	</div>
+
+		  	</div>
+		  	
+		</div>
+
+
+
+	
 
 		{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
 
-	</br></br>
+		</br></br>
 
 		<tabset>
 			<tab heading="Edificacion">
@@ -141,7 +172,7 @@
 
 	</div>  <!-- col-sm-8   -->
 
-	<div class="col-sm-4">
+	<div class="col-md-4">
 
 		<div class="page-header" style="margin-top:0;">
 		  <h4>Autorizaciones</h4>
@@ -322,6 +353,9 @@
 		    </div>
 		    {% endif %}
 		</div>
+
+
+
 
 
 	</div> <!-- col-sm-4   -->

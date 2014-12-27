@@ -2,7 +2,7 @@ from db.models import Etapa, Edificacion
 from usuarios.models import Usuario
 
 def etapa(request):
-	return {'Etapa': Etapa}
+	return {'list_etapas': Etapa.ETAPA_ACTUAL}
 
 def notificaciones(request):
 	etapas = {}

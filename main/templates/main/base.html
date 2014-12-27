@@ -68,6 +68,9 @@
 	
 	<script>
 		//$("select").select2({dropdownCssClass: 'dropdown-inverse'});
+		$(function () {
+		  $('[data-toggle="tooltip"]').tooltip()
+		})
 	</script>
 
 	{% include 'session_security/all.html' %}
