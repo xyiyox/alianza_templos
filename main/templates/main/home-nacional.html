@@ -30,10 +30,14 @@
 		<div class="col-sm-4">
 
 			<div class="panel panel-default">
-			  <div class="panel-heading">{{proyecto.nombre_proyecto}}</div>
+			  <div class="panel-heading">
+			  	  <a href="{% url 'proyecto' proyecto.pk %}">{{proyecto.nombre_proyecto}}</a>
+			  	  <a href="{% url 'proyecto' proyecto.pk %}" class="pull-right" data-toggle="tooltip" data-placement="left" title="en etapa: {{proyecto.get_etapa_actual_display}}">
+			  	  	  <i class="fa fa-{{proyecto.etapa_actual|etapa_to_icon}}"></i>
+			  	  </a>
+			  </div>
 			  <div class="panel-body">
 			  	{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
-			    <a href="{% url 'proyecto' proyecto.pk %}" class="btn btn-primary  btn-block " role="button">Ver</a>
 			  </div>
 			</div>
 			

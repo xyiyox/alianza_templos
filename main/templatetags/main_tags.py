@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.utils.timesince import timesince
+from db.models import Etapa
+
 
 register = template.Library()
 
@@ -13,13 +15,27 @@ def percent_to_color(percent):
 	else:
 		return 'danger'
 
+
 @register.filter
 def percent_to_msg(percent, plazo):
-	print(plazo)
 	if percent <= 100:
 		return '%s%s' %(percent, '%')
 	else:
 		return 'plazo vencido hace %s' %timesince(plazo)
 
 
+@register.filter
+def etapa_to_icon(etapa):
 	
+	icons = ['edit', 'check', 'users', 'area-chart', 'anchor', 'dollar', 'thumbs-o-up', 'globe']
+
+	for key, value in Etapa.ETAPA_ACTUAL:
+		if etapa == key:
+			return icons[key-1]
+	
+	return "home"
+
+
+@register.filter
+def etapa_to_general_progress(etapa):
+	return (etapa * 100) / len(Etapa.ETAPA_ACTUAL)
