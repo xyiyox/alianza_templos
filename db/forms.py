@@ -180,14 +180,21 @@ class AprobacionRegionalForm(ModelFormBase):
         model = Edificacion
         fields = ['aprobacion_regional'] 
 
+def validate_planos(value):
+    print('Aqui estoy')
+    if value != None:
+        raise ValidationError(u'Debe subir planos para poder aprobar')
+
 class PlanosArquitectoForm(ModelFormBase):
     """Aqui se subiran los planos del arquitecto antes de que de su autorizacion"""
+    planos_arquitecto = forms.FileField('Planos', validators=[validate_planos])
+
     class Meta:
         model = Adjuntos
         fields = ['planos_arquitecto']
-        
+
+
 class AprobacionArquitectoForm(ModelFormBase):
-    #planos = forms.FileField(label='Subir Planos')
     class Meta:
         model = Edificacion
         fields = ['aprobacion_arquitecto']

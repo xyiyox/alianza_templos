@@ -4,13 +4,12 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils import timezone
-
 from datetime import datetime, timedelta
 
+from sorl.thumbnail import ImageField
 
 from .datos import *
 from map_field import fields as map_fields
-
 
 
 class Etapa(models.Model):

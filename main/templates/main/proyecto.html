@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 {% load crispy_forms_tags %}
 {% load main_tags %}
+{% load thumbnail %}
 
 {% block title %} Proyecto {% endblock %}
 {% block css %} 
@@ -86,6 +87,9 @@
 					<leaflet defaults="defaults" markers="markers" center="proyectCenter"  height="200px"></leaflet>
 				</div>
 				
+				{% thumbnail proyecto.adjuntos_set.get.foto_congregacion "100x100" crop="center" as im %}
+					<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+				{% endthumbnail %}
 				
 				<div class="row">
 					<div class="col-sm-12">

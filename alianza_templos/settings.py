@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'session_security',
     'debug_toolbar',
     'map_field',
+    'sorl.thumbnail',
 
     'usuarios',
     'main',
@@ -83,7 +84,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'public/static')
 STATIC_URL = '/static/'
 
 # Configuracion de la ruta para los archivos e imagenes
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media')
 MEDIA_URL = '/media/'
 
