@@ -232,7 +232,30 @@ class Aplicacion(SessionWizardView):
         edificacion = form_dict['0'].instance
         return redirect('done', pk=edificacion.id )
 
-    
+    def get(self, request, *args, **kwargs):
+        """
+        This method handles GET requests.
+
+        If a GET request reaches this point, the wizard assumes that the user
+        just starts at the first step or wants to restart the process.
+        The data of the wizard will be resetted before rendering the first step.
+        """
+        self.storage.reset()
+
+        # reset the current step to the first step.
+        self.storage.current_step = self.steps.first
+        
+        # Se mira cuantos proyectos tiene creados el usuario actual
+        cant_proyectos = Edificacion.objects.filter(usuario=request.user).count()
+        # Se obtiene la pk para saber si se va a editar un proyecto o no
+        pk = self.kwargs.get('pk', None)
+        
+        # Si el usuario ya tiene 2 proyectos creados se lo redirige al home
+        if cant_proyectos == 2 and not pk:
+            return redirect('home')
+        else:
+            return self.render(self.get_form())
+
     def get_form_instance(self, step):
         
         # Recibo el pk argument que llega por el request url
