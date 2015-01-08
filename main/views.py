@@ -19,6 +19,8 @@ from db.forms import *
 from db.models import Edificacion, Comunidad, Comentario, Etapa
 from usuarios.models import Usuario
 
+from django.contrib.formtools.wizard.forms import ManagementForm
+from collections import OrderedDict
 
 def home(request):
 
@@ -230,6 +232,7 @@ class Aplicacion(SessionWizardView):
    
     def done(self, form_list, form_dict, **kwargs):
         edificacion = form_dict['0'].instance
+        print('Paso nro 1...', edificacion)
         return redirect('done', pk=edificacion.id )
 
     def get(self, request, *args, **kwargs):
@@ -255,6 +258,32 @@ class Aplicacion(SessionWizardView):
             return redirect('home')
         else:
             return self.render(self.get_form())
+
+    def render_done(self, form, **kwargs):
+        """
+        This method gets called when all forms passed. The method should also
+        re-validate all steps to prevent manipulation. If any form fails to
+        validate, `render_revalidation_failure` should get called.
+        If everything is fine call `done`.
+        """
+        final_forms = OrderedDict()
+        # walk through the form list and try to validate the data again.
+        for form_key in self.get_form_list():
+            form_obj = self.get_form(step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=self.storage.get_step_files(form_key))
+            # Quitamos la re validacion de los form debido a que no es necesaria
+            # y da conflictos para redirigir al metodo done
+            # if not form_obj.is_valid():
+            #     return self.render_revalidation_failure(form_key, form_obj, **kwargs)
+            final_forms[form_key] = form_obj
+
+        # render the done view and reset the wizard before returning the
+        # response. This is needed to prevent from rendering done with the
+        # same data twice.
+        done_response = self.done(final_forms.values(), form_dict=final_forms, **kwargs)
+        self.storage.reset()
+        return done_response
 
     def get_form_instance(self, step):
         
@@ -376,11 +405,16 @@ class Aplicacion(SessionWizardView):
         This method gets called when the current step has to be changed.
         `goto_step` contains the requested step to go to.
         """
+        # Resetear el storage garantiza que se puedan observar 
+        # los cambios hechos en los archivos adjuntos
         self.storage.reset()
+        print('render_goto_step y resetie el storage')
         self.storage.current_step = goto_step        
         form = self.get_form(
             data=self.storage.get_step_data(self.steps.current),
             files=self.storage.get_step_files(self.steps.current))
+        print('form data=', form.data)
+        print('form files=', form.files)
         return self.render(form)
 
 def hacer_login(request):
@@ -421,6 +455,7 @@ def done(request, pk):
         raise Http404 
     
     ctx = {'proyecto': proyecto}
+    print('Paso nro 2...')
     return render(request, 'main/done.html', ctx)
 
 
