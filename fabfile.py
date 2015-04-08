@@ -92,3 +92,11 @@ def verificar_status_repo():
 
 def commit():
 	local('git add . && git commit -a')
+
+FFMPEG_EXE = '~/bin/ffmpeg'
+
+def gource():
+	local('gource  --title "Alianza Templos" --logo main/static/main/img/logo.png --key -s 1')
+
+def gource_record():
+	local('gource --title "Alianza Templos" --logo main/static/main/img/logo.png --key --seconds-per-day 1 -640x360 -o - | %s -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 gource.mp4' %FFMPEG_EXE) 

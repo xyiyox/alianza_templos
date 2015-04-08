@@ -114,6 +114,11 @@ def home_otros(request):
 def proyecto(request, pk):
     # validamos que el proyecto exista
     proyecto  =  get_object_or_404(Edificacion, pk=pk)
+
+    #try:
+        #pass
+    #except Exception, e:
+        #raise e
     comunidad =  Comunidad.objects.get(edificacion=proyecto)
     # validamos que el usuario tenga permiso de ver el proyecto
     if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
