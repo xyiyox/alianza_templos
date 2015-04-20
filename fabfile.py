@@ -67,7 +67,7 @@ def reiniciar_servidor():
 
 def consolidar_local():
 	consolidar_requirements()
-	update_default_data()
+	#update_default_data()
 	verificar_status_repo()
 	commit()
 
