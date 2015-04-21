@@ -375,6 +375,8 @@ class Aplicacion(SessionWizardView):
                 model_instance              = form.save(commit=False)
                 model_instance.estado       = step_current
                 model_instance.usuario      = self.request.user
+                model_instance.etapa_actual = Etapa.DILIGENCIAMIENTO   
+                model_instance.save()
                 self.instance_dict['0'] = model_instance
                 # Registramos la etapa de Diligenciamiento
                 registrar_etapa(model_instance, Etapa.DILIGENCIAMIENTO)
