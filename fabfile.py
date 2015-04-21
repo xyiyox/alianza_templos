@@ -28,7 +28,7 @@ def deploy():
 	actualizar_requerimientos()
 	colectar_estaticos()
 	sincronizar_bd()
-	actualizar_default_data
+	#actualizar_default_data
 	reiniciar_servidor()
 
 def update_code():
