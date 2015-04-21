@@ -114,12 +114,7 @@ def home_otros(request):
 def proyecto(request, pk):
     # validamos que el proyecto exista
     proyecto  =  get_object_or_404(Edificacion, pk=pk)
-
-    #try:
-        #pass
-    #except Exception, e:
-        #raise e
-    comunidad =  Comunidad.objects.get(edificacion=proyecto)
+    
     # validamos que el usuario tenga permiso de ver el proyecto
     if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
         raise Http404 
@@ -140,7 +135,13 @@ def proyecto(request, pk):
     comentarioForm         = ComentarioForm()
     comentarioForm.helper.form_action = proyecto.get_absolute_url()
 
-    ctx = {'proyecto': proyecto, 'comunidad': comunidad, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
+    ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
+
+    try:
+        comunidad =  Comunidad.objects.get(edificacion=proyecto)
+        ctx['comunidad'] = comunidad
+    except Comunidad.DoesNotExist:
+        pass
 
     if request.user.tipo == Usuario.REGIONAL:
         ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)  

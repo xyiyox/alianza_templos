@@ -49,7 +49,7 @@
 				  		<small><span class="label label-primary pull-right">{{proyecto.pk}}</span></small>
 				  	</h2>
 
-				  	<h5>{{comunidad.nombre}} {{comunidad.region}}</h5>
+				  	<h5>{{comunidad.nombre|default:"Falta información"}} {{comunidad.region}}</h5>
 				  	
 				  	
 				  	{% for key, etp in list_etapas %}
