@@ -149,6 +149,17 @@
                     </ul> <!-- /.nav-second-level -->
                             
                 </li>
+                <li>
+                    <a href="#"><i class="fa fa-tasks fa-fw"></i> Regiones<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        {% for key,value in list_regions %}
+                            <li>
+                                <a href="{% url 'home_nacional_region' region=key %}">{{value}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul> <!-- /.nav-second-level -->
+                            
+                </li>
                 {% endif %}
 
             </ul>  <!-- nav  -->

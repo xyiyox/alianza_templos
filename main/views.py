@@ -68,6 +68,27 @@ def home_nacional(request, etapa=None):
     return render(request, 'main/home-nacional.html', ctx)
 
 
+
+@login_required
+def home_nacional_region(request, region=None):
+    
+    # validamos que el usuario tenga permiso de ver esta vista
+    if request.user.tipo != Usuario.NACIONAL:
+        raise PermissionDenied 
+    
+    proyectos = None
+    ctx = {}
+    
+    if region:
+        proyectos = Edificacion.objects.filter(congregacion__region=region)       
+        ctx['region_actual'] = int(region) 
+    else:
+        proyectos = Edificacion.objects.all()
+    
+    
+    ctx['proyectos'] = proyectos
+    return render(request, 'main/home-nacional.html', ctx)
+
 @login_required
 def home_regional(request):
 

@@ -1,8 +1,11 @@
-from db.models import Etapa, Edificacion
+from db.models import Etapa, Edificacion,Congregacion
 from usuarios.models import Usuario
 
 def etapa(request):
 	return {'list_etapas': Etapa.ETAPA_ACTUAL}
+
+def region(request):
+	return {'list_regions': Congregacion.REGION_CHOICES}	
 
 def notificaciones(request):
 	etapas = {}

@@ -20,9 +20,15 @@
 				{{value}}
 				{% endif %}
 			{% endfor %}
+		{% elif region_actual >= 0 %}	
+			{% for key,value in list_regions %}
+				{% if region_actual == key %}
+				{{value}}
+				{% endif %}
+			{% endfor %}
 		{% else %}
 			Todos los proyectos
-		{% endif %}
+		{% endif %}		
 		</h1>
 	</div>
 

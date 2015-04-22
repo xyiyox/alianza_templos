@@ -13,6 +13,8 @@ from .datos import EDIFICACION_COORDENADAS
 from map_field import widgets as map_widgets
 from map_field import fields as map_fields
 from usuarios.models import Usuario
+from django.core.exceptions import ValidationError 
+
 
 class ModelFormBase(forms.ModelForm):
             
@@ -182,7 +184,7 @@ class AprobacionRegionalForm(ModelFormBase):
 
 def validate_planos(value):
     print('Aqui estoy')
-    if value != None:
+    if value != None:       
         raise ValidationError(u'Debe subir planos para poder aprobar')
 
 class PlanosArquitectoForm(ModelFormBase):

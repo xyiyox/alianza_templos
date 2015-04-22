@@ -11,11 +11,9 @@
 	  <li class="active">Inicio</li>
 	</ol>
 	
-	<h1 class="page-header clearfix">Dashboard
-		<a class="btn btn-primary" href="{% url 'proyecto_new' %}" role="button">Aplicacion</a>
+	<h1 class="page-header clearfix">Tablero de Proyectos
+		<a class="btn btn-primary" href="{% url 'proyecto_new' %}" role="button">Iniciar Nuevo Proyecto</a>
 	</h1>
-
-	<p>Prueba 2</p>
 
 	<div class="row">
 		{% for proyecto in proyectos %}

@@ -103,6 +103,7 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     'django.core.context_processors.request',
     'main.context_processors.notificaciones',
     'main.context_processors.etapa',
+    'main.context_processors.region',
 )
 
 SUIT_CONFIG = {

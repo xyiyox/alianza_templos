@@ -12,6 +12,9 @@ urlpatterns = patterns('main.views',
     
     url(r'^home-nacional$', 'home_nacional', name='home_nacional'),
     url(r'^home-nacional/etapa/(?P<etapa>\d+)/$', 'home_nacional', name='home_nacional_etapa'),
+    url(r'^home-nacional/region/(?P<region>\d+)/$', 'home_nacional_region', name='home_nacional_region'),
+    
+
     url(r'^home-regional$', 'home_regional', name='home_regional'),
     url(r'^home-local$',    'home_local',    name='home_local'),
     url(r'^home-otros$',    'home_otros',    name='home_otros'),
