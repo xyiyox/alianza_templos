@@ -7,6 +7,9 @@ def etapa(request):
 def region(request):
 	return {'list_regions': Congregacion.REGION_CHOICES}	
 
+def civil(request):
+	return {'list_civil': Congregacion.ESTADO_CIVIL_CHOICES}		
+
 def notificaciones(request):
 	etapas = {}
 	if request.user.is_authenticated():

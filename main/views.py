@@ -135,8 +135,9 @@ def home_otros(request):
 @login_required
 def proyecto(request, pk):
     # validamos que el proyecto exista
+    #[EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
     proyecto  =  get_object_or_404(Edificacion, pk=pk)
-    
+   
     # validamos que el usuario tenga permiso de ver el proyecto
     if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
         raise Http404 
@@ -164,6 +165,24 @@ def proyecto(request, pk):
         ctx['comunidad'] = comunidad
     except Comunidad.DoesNotExist:
         pass
+
+    try:
+        congregacion =  Congregacion.objects.get(edificacion=proyecto)
+        ctx['congregacion'] = congregacion
+    except Congregacion.DoesNotExist:
+        pass
+        
+    try:
+        adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
+        ctx['adjuntos'] = adjuntos
+    except Adjuntos.DoesNotExist:
+        pass   
+
+    try:
+        financiera =  InformacionFinanciera.objects.get(edificacion=proyecto)
+        ctx['financiera'] = financiera
+    except InformacionFinanciera.DoesNotExist:
+        pass          
 
     if request.user.tipo == Usuario.REGIONAL:
         ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)  
@@ -370,6 +389,11 @@ class Aplicacion(SessionWizardView):
         just starts at the first step or wants to restart the process.
         The data of the wizard will be resetted before rendering the first step.
         """
+        #Solo el local tiene acceso al form wizzard ningun otro
+        if request.user.tipo != Usuario.LOCAL:
+            raise Http404 
+
+
         self.storage.reset()
 
         # reset the current step to the first step.

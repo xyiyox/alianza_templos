@@ -31,15 +31,11 @@
 				<div class="col-sm-2 text-center">
 					<i class="fa fa-fw fa-{{proyecto.etapa_actual|etapa_to_icon}} fa-3x"
 					   data-toggle="tooltip" data-placement="top" title="etapa: {{proyecto.get_etapa_actual_display}}"></i></br></br>
-					<a class="btn btn-xs btn-block btn-default" href="{% url "proyecto_edit" pk=proyecto.pk %}">
-						{% if user.tipo == user.LOCAL %}
-							Editar
-						{% elif user.tipo == user.REGIONAL or user.tipo == user.NACIONAL %}
-							Revisar
-						{% else %}
-							Ver en detalle
-						{% endif%}
+					{% if user.tipo == user.LOCAL %}<a class="btn btn-xs btn-block btn-default" href="{% url "proyecto_edit" pk=proyecto.pk %}">						
+							Editar	
 					</a>
+
+					{% endif%}
 					<a href="" class="btn btn-xs btn-block btn-default" ng-click="scrollTo('comentarios')" role="button">Comentar</a>
 				</div>
 
@@ -115,11 +111,201 @@
 
 			</tab>
 			
-			<tab heading="Finanzas">Static content</tab>
-			<tab heading="Comunidad">Static content</tab>
-			<tab heading="Congregación">Static content</tab>
-			<tab heading="Adjuntos">Static content</tab>
-			<tab heading="Condiciones">Static content</tab>
+			<tab heading="Finanzas">
+			
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>	
+								<tr> <th>Dinero Efectivo: </th>       <td>{{ financiera.dinero_efectivo}}</td> </tr>		
+								<tr> <th>Valor del Terreno: </th>       <td>{{ financiera.valor_terreno}}</td> </tr>		
+								<tr> <th>Numero de Voluntarios: </th>       <td>{{ financiera.num_voluntarios}}</td> </tr>	
+								<tr> <th>Descripcion: </th>       <td>{{ financiera.desc_voluntarios}}</td> </tr>		
+								<tr> <th>Costo Total: </th>       <td>{{ financiera.costo_total}}</td> </tr>	
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+
+			</tab>			
+			<tab heading="Comunidad">
+
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>	
+								<tr> <th>Ciudad: </th>
+								     <td>{{ comunidad.nombre}}</td> 
+								 </tr>		
+								<tr> <th>Poblacion: </th>       
+									 <td>{{ comunidad.poblacion_comunidad}}</td> 
+								</tr>		
+								<tr> <th>Departamento: </th>       
+									<td>{{ comunidad.region}}</td>
+								</tr>	
+								<tr> <th>Capital Departamento: </th>       
+									<td>{{ comunidad.capital_depto}}</td> 
+								</tr>		
+								<tr> <th>Distancia a la Capital: </th>       
+									<td>{{ comunidad.distancia_capital}}</td> 
+								</tr>	
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+
+			</tab>
+			<tab heading="Congregación">
+
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>	
+								<tr> <th>Nombre: </th>
+								     <td>{{ congregacion.nombre}}</td> 
+								 </tr>		
+								<tr> <th>Fecha Fundacion: </th>       
+									 <td>{{ congregacion.fecha_fundacion}}</td> 
+								</tr>		
+								<tr> <th>Lengua Materna: </th>       
+									<td>{{ congregacion.lengua_primaria}}</td>
+								</tr>	
+								<tr> <th>Region: </th>       
+									<td>{% for key,value in list_regions %}
+						     				{% if congregacion.region == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}
+					    			</td> 
+								</tr>		
+								<tr> <th>Asistencia General: </th>       
+									<td>{{ congregacion.asistencia_general}}</td> 
+								</tr>
+								<tr> <th>Asistencia Niños: </th>       
+									<td>{{ congregacion.asistencia_ninos}}</td> 
+								</tr>
+
+								<tr> <th>Miembros Adultos: </th>       
+									<td>{{ congregacion.miembros_adultos}}</td> 
+								</tr>
+								<tr> <th>Miembros Niños: </th>       
+									<td>{{ congregacion.miembros_ninos}}</td> 
+								</tr>	
+
+								
+								<tr> <th>Ingresos Mensuales: </th>       
+									<td>{{ congregacion.ingreso_mensual}}</td> 
+								</tr>
+
+								
+								<tr> <th>Nombre Pastor: </th>       
+									<td>{{ congregacion.nombre_pastor}}</td> 
+								</tr>
+								
+								<tr> <th>Estado Civil: </th>       
+									<td>{% for key,value in list_civil %}
+						     				{% if congregacion.estado_civil == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> 
+								</tr>
+								
+								<tr> <th>Cantidad de Hijos: </th>       
+									<td>{{ congregacion.cant_hijos}}</td> 
+								</tr>
+								
+								<tr> <th>Entrenamiento Biblico: </th>       
+									<td>{{ congregacion.entrenamiento_biblico}}</td> 
+								</tr>
+								
+								<tr> <th>Titulos Obtenidos: </th>       
+									<td>{{ congregacion.titulos_obtenidos}}</td> 
+								</tr>
+								
+								<tr> <th>Años al servicio de la Iglesia: </th>       
+									<td>{{ congregacion.anios_iglesia}}</td> 
+								</tr>
+
+								<tr> <th>Años al servicio en el Ministerio: </th>       
+									<td>{{ congregacion.anios_ministerio}}</td> 
+								</tr>
+								
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+
+			</tab>
+			<tab heading="Adjuntos">
+
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>	
+								{% if adjuntos.foto_construccion %}
+								<tr> <th>Foto Construccion: </th>
+								     <td>							     	
+								     	<a href="/media/{{ adjuntos.foto_construccion}}" download>Descargar</a>
+								     	</td> 
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.foto_congregacion %}
+								<tr> <th>Foto Congregacion: </th>
+								     <td><a href="/media/{{ adjuntos.foto_congregacion}}" download>Descargar</a></td> 
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.foto_pastor %}
+								<tr> <th>Foto Pastor: </th>
+								     <td><a href="/media/{{ adjuntos.foto_pastor}}" download>Descargar</a></td> 
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.permiso_construccion %}
+								<tr> <th>Foto Permiso Construccion: </th>
+								     <td><a href="/media/{{ adjuntos.permiso_construccion}}" download>Descargar</a></td>
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.escritura_terreno %}
+								<tr> <th>Foto Terreno: </th>
+								     <td><a href="/media/{{ adjuntos.escritura_terreno}}" download>Descargar</a></td> 
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.manzana_catastral %}
+								<tr> <th>Manzana Catastral: </th>
+								     <td><a href="/media/{{ adjuntos.manzana_catastral}}" download>Descargar</a></td> 
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.plan_construccion %}
+								<tr> <th>Plan de Construccion: </th>
+								     <td><a href="/media/{{ adjuntos.plan_construccion}}" download>Descargar</a></td> 
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.historia_congregacion %}
+								<tr> <th>Historia Congregacion: </th>
+								     <td><a href="/media/{{ adjuntos.historia_congregacion}}" download>Descargar</a></td>
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.testimonio_pastor %}
+								<tr> <th>Testimonio Pastor: </th>
+								     <td><a href="/media/{{ adjuntos.testimonio_pastor}}" download>Descargar</a></td> 
+								 </tr>	
+								{% endif %}	
+								{% if adjuntos.planos_arquitecto %}	
+								<tr> <th>Planos Arquitecto: </th>
+								     <td><a href="/media/{{ adjuntos.planos_arquitecto}}" download>Descargar</a></td> 
+								 </tr>
+								 {% endif %}	
+								
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+
+			</tab>
+			<!--<tab heading="Condiciones">Static content</tab>-->
 			
 		</tabset>
 
