@@ -3,6 +3,7 @@ import os
 
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
+from django.http import HttpResponseRedirect  
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -140,7 +141,7 @@ def proyecto(request, pk):
     if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
         raise Http404 
    
-    if request.method == 'POST':
+    if request.method == 'POST':        
         form = ComentarioForm(request.POST)
         if form.is_valid():
             new_coment = form.save(commit=False)
@@ -183,6 +184,8 @@ def proyecto(request, pk):
         asignarUsuariosForm = AsignarUsuariosForm(instance=proyecto)
         asignarUsuariosForm.helper.form_action = reverse('asignaciones', args=[proyecto.pk])
         ctx['asignarUsuariosForm'] = asignarUsuariosForm
+        #Por si el Nacional lo aprueba sin requerir el arquitecto
+        ctx['aprobacionArquitectoForm'] = AprobacionArquitectoForm(instance=proyecto)
     
     return render(request, 'main/proyecto.html', ctx)
 
@@ -191,40 +194,125 @@ def registrar_etapa(edificacion, etapa):
     _etapa = Etapa(edificacion=edificacion, etapa=etapa)
     _etapa.save()
 
-
 @login_required
 def autorizaciones(request, pk):
 
     if request.method == 'POST':
-        proyecto  =  get_object_or_404(Edificacion, pk=pk)
-       
+        proyecto  =  get_object_or_404(Edificacion, pk=pk)   
+
         if request.user.tipo == Usuario.REGIONAL:
             
             proyecto.aprobacion_regional = request.POST.get('aprobacion_regional', False) 
-            proyecto.save(update_fields=['aprobacion_regional'])
-            
-            registrar_etapa(proyecto, Etapa.ASIGN_USUARIOS)  
-            mail_change_etapa(proyecto, request.user)      
-        
-        if request.user.tipo == Usuario.ARQUITECTO:
-            form = AprobacionArquitectoForm(request.POST, request.FILES, instance=proyecto)
-            adj = proyecto.adjuntos_set.get()
-            form_plano = PlanosArquitectoForm(request.POST, request.FILES, instance=adj)
-            if form.is_valid() and form_plano.is_valid():
-                print('Somos Validos')
-                form.save()
-                form_plano.save()
+            if proyecto.aprobacion_regional:
+                if proyecto.etapa_actual == 2:
+                   registrar_etapa(proyecto, Etapa.ASIGN_USUARIOS)  
+                   mail_change_etapa(proyecto, request.user)
+                   proyecto.save(update_fields=['aprobacion_regional'])  
             else:
-                print('No Somos Validos', form.errors, form_plano.errors)
-
+               if proyecto.etapa_actual == 3:     
+                  registrar_etapa(proyecto, Etapa.APROB_REGIONAL)  
+                  mail_change_etapa(proyecto, request.user)
+                  proyecto.save(update_fields=['aprobacion_regional'])
+               else:
+                  ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
+                  return render(request, 'main/error.html',ctx)     
+         
+        if request.user.tipo == Usuario.ARQUITECTO:
+            #form = AprobacionArquitectoForm(request.POST, request.FILES, instance=proyecto)
+          
+            proyecto.aprobacion_arquitecto = request.POST.get('aprobacion_arquitecto', False)           
+            if proyecto.aprobacion_arquitecto:   
+                if proyecto.etapa_actual == 4:                
+                    adj = proyecto.adjuntos_set.get()
+                    form_plano = PlanosArquitectoForm(request.POST, request.FILES, instance=adj)
+                    if form.is_valid() and form_plano.is_valid():
+                        print('Somos Validos')
+                        form.save()
+                        form_plano.save()    
+                        proyecto.save(update_fields=['aprobacion_arquitecto'])    
+                        registrar_etapa(proyecto, Etapa.APROB_INGENIERO)  
+                        mail_change_etapa(proyecto, request.user)                     
+                    else:
+                        print('No Somos Validos', form.errors, form_plano.errors)               
+            else:
+                if proyecto.etapa_actual == 5: 
+                    registrar_etapa(proyecto, Etapa.PLANOS)  
+                    mail_change_etapa(proyecto, request.user) 
+                    proyecto.save(update_fields=['aprobacion_arquitecto'])          
+                else:
+                    ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
+                    return render(request, 'main/error.html',ctx)         
         if request.user.tipo == Usuario.INGENIERO:
-            form = AprobacionIngenieroForm(request.POST, instance=proyecto)
+            #form = AprobacionIngenieroForm(request.POST, instance=proyecto)            
+            if not proyecto.aprobacion_arquitecto:                               
+                ctx={'proyecto':proyecto,'er':'el arquitecto debe autorizar el proyecto'}                                         
+                return render(request, 'main/error.html',ctx) 
+            else:                
+                proyecto.aprobacion_ingeniero = request.POST.get('aprobacion_ingeniero', False)           
+                if proyecto.aprobacion_ingeniero:
+                    if proyecto.etapa_actual == 5:
+                        registrar_etapa(proyecto, Etapa.APROB_TESORERO)  
+                        mail_change_etapa(proyecto, request.user) 
+                        proyecto.save(update_fields=['aprobacion_ingeniero']) 
+                else: 
+                    if proyecto.etapa_actual == 6:
+                        registrar_etapa(proyecto, Etapa.APROB_INGENIERO)  
+                        mail_change_etapa(proyecto, request.user) 
+                        proyecto.save(update_fields=['aprobacion_ingeniero']) 
+                    else:
+                        ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
+                        return render(request, 'main/error.html',ctx)                 
 
-        if request.user.tipo == Usuario.TESORERO:
-            form = AprobacionTesoreroForm(request.POST, instance=proyecto)
-
+        if request.user.tipo == Usuario.TESORERO:   
+            #form = AprobacionTesoreroForm(request.POST, instance=proyecto)
+            #el maestro de obra no la a aprobado
+            if not proyecto.aprobacion_ingeniero:               
+                ctx={'proyecto':proyecto,'er':'el director de obra debe autorizar el proyecto'}                                         
+                return render(request, 'main/error.html',ctx)                   
+            else:
+                proyecto.aprobacion_tesorero = request.POST.get('aprobacion_tesorero', False)           
+                if proyecto.aprobacion_tesorero:
+                    if proyecto.etapa_actual == 6:
+                        registrar_etapa(proyecto, Etapa.APROB_NACIONAL)  
+                        mail_change_etapa(proyecto, request.user) 
+                        proyecto.save(update_fields=['aprobacion_tesorero']) 
+                else:
+                    if proyecto.etapa_actual == 7:
+                        registrar_etapa(proyecto, Etapa.APROB_TESORERO)  
+                        mail_change_etapa(proyecto, request.user)                    
+                        proyecto.save(update_fields=['aprobacion_tesorero'])    
+                    else:
+                        ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
+                        return render(request, 'main/error.html',ctx)     
         if request.user.tipo == Usuario.NACIONAL:
-            form = AprobacionNacionalForm(request.POST, instance=proyecto)
+            #form = AprobacionNacionalForm(request.POST, instance=proyecto)
+            #print (request.POST.get('aprobacion_nacional', False))   
+            if 'fromN' in request.POST:               
+                if not proyecto.aprobacion_tesorero:                    
+                    ctx={'proyecto':proyecto,'er':'el tesorero debe autorizar el proyecto'}                                         
+                    return render(request, 'main/error.html',ctx)                   
+                else:
+                    proyecto.aprobacion_nacional = request.POST.get('aprobacion_nacional', False)           
+                    if proyecto.aprobacion_nacional:
+                        registrar_etapa(proyecto, Etapa.APROB_INTERNACIONAL)  
+                        mail_change_etapa(proyecto, request.user) 
+                        proyecto.save(update_fields=['aprobacion_nacional'])
+                    else:   
+                        if proyecto.etapa_actual == 8:  
+                            registrar_etapa(proyecto, Etapa.APROB_NACIONAL)  
+                            mail_change_etapa(proyecto, request.user) 
+                            proyecto.save(update_fields=['aprobacion_nacional'])                  
+                        else:
+                            ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
+                            return render(request, 'main/error.html',ctx)     
+            else:                
+                proyecto.aprobacion_arquitecto = request.POST.get('aprobacion_arquitecto', False)           
+                if proyecto.aprobacion_arquitecto :
+                    var=False 
+                else:
+                    var=True
+                proyecto.requiere_arquitecto   = var   
+                proyecto.save(update_fields=['aprobacion_arquitecto','requiere_arquitecto'])
 
         return redirect(proyecto)
 
@@ -239,10 +327,22 @@ def asignaciones(request, pk):
     """
     if request.method == 'POST':
         proyecto  =  get_object_or_404(Edificacion, pk=pk)
+
+        if not proyecto.aprobacion_regional:                    
+            ctx={'proyecto':proyecto,'er':'el regional debe autorizar el proyecto'}                                         
+            return render(request, 'main/error.html',ctx)                   
+      
+
         form = AsignarUsuariosForm(request.POST, instance=proyecto)
         form.save()
         if proyecto.arquitecto and proyecto.ingeniero and proyecto.tesorero:
             registrar_etapa(proyecto, Etapa.PLANOS)
+            mail_change_etapa(proyecto, request.user) 
+        #El siguiente if es en el caso de que el nacional
+        #Diga que no se requiere arquitecto, el metodo
+        #Por defecto aprueba el paso
+        if proyecto.aprobacion_arquitecto and proyecto.ingeniero and proyecto.tesorero:
+            registrar_etapa(proyecto, Etapa.APROB_INGENIERO)
             mail_change_etapa(proyecto, request.user) 
         return redirect(proyecto)
 

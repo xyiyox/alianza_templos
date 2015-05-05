@@ -27,7 +27,7 @@ class EdificacionForm(ModelFormBase):
         model = Edificacion
         exclude = ['estado', 'usuario', 'etapa_actual', 'ingeniero', 'arquitecto', 'tesorero',
                     'aprobacion_regional', 'aprobacion_arquitecto', 
-                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero', 'created', 'updated']
+                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero', 'created', 'updated','metodo_construccion','requiere_arquitecto']
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)
@@ -50,7 +50,7 @@ class InformacionFinancieraForm(ModelFormBase):
     
     class Meta:
         model = InformacionFinanciera
-        exclude = ['edificacion', 'mano_obra', 'valor_materiales']
+        exclude = ['edificacion', 'mano_obra', 'valor_materiales','dias_donados','valor_solicitado']
 
     def __init__(self, *args, **kwargs):
         super(InformacionFinancieraForm, self).__init__(*args, **kwargs)        
@@ -91,22 +91,24 @@ class CongregacionForm(ModelFormBase):
         self.helper = FormHelper(self)
 
         self.fields['fecha_fundacion'].widget = SelectDateWidget(years=( range(1900, date.today().year + 1) ) )
-        
+       
         self.helper.form_tag = False
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-9'
 
+        self.fields['titulos_obtenidos'].widget = forms.TextInput(attrs={'placeholder': 'Tecnico en Biblia, Master en Biblia'})
+      
         self.helper.all().wrap(Field, css_class='input-sm')
         self.helper.filter_by_widget(forms.Textarea).wrap(Field, css_class="input-xlarge", rows="2") 
         self.helper.filter_by_widget(SelectDateWidget).wrap(Field, css_class="input-sm", style="width:110px; float:left; margin-right:5px;") 
         self.helper.filter_by_widget(forms.Select).wrap(InlineRadios)
-
+        #self.fields['titulos_obtenidos'].widget = FilteredSelectMultiple("verbose name", is_stacked=False)
 
 class CondicionesForm(ModelFormBase):
     
     class Meta:
         model = Condiciones
-        exclude = ['edificacion']
+        exclude = ['edificacion','found_payment']
 
     def __init__(self, *args, **kwargs):
         super(CondicionesForm, self).__init__(*args, **kwargs)
@@ -244,7 +246,7 @@ class AsignarUsuariosForm(ModelFormBase):
 
         self.helper.layout = Layout(
             PrependedAppendedText('arquitecto', "<i class='fa fa-user fa-fw'></i>", "arquitecto <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
-            PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "ingeniero <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
+            PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "director O. <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
             PrependedAppendedText('tesorero', "<i class='fa fa-user fa-fw'></i>", "tesorero <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
             StrictButton('Guardar cambios', type="Submit", css_class="btn-info btn-block btn-sm"),
         )

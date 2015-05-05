@@ -9,29 +9,20 @@ EDIFICACION_COORDENADAS       = """Navegue acercando el mapa con el botón
 								y arrastrando el mouse hasta el lugar mas exacto posible donde se realizará el proyecto y ubique ahi el marcador."""
 
 
-CONDICIONES_CONSTRUCCION      = """Proveeremos fotos y reportes del progres de la construcción con cada solicitud de pago y seguiremos los lineamientos 
-								explicados en el manual Church Growth Partnership."""
-CONDICIONES_MANTENIMIENTO     = 'Lorem ipsum Enim dolore nisi reprehenderit sunt ea non elit ad ex ad qui consequat esse.'
-CONDICIONES_ACTIVIDADES       = """Lorem ipsum Duis do ut ut commodo anim nostrud dolor ex velit mollit in deserunt reprehenderit quis dolor nulla Ut 
-								laborum Duis nulla laborum et dolor consectetur eiusmod adipisicing ea veniam."""
-CONDICIONES_DISCIPULADO       = 'Lorem ipsum Est in Ut id aliqua aliqua et deserunt sunt adipisicing.'
-CONDICIONES_ALCANCE           = """Lorem ipsum Adipisicing eu laboris dolore dolor deserunt adipisicing laborum mollit dolore exercitation occaecat 
-								reprehenderit anim qui velit in."""
+CONDICIONES_CONSTRUCCION      = """Proporcionare fotos/imagines e informes del progreso de la construcción con cada solicitud de pago y seguiré las instrucciones como se explica en el Manual de Asociación de Iglesia en Crecimiento."""
+CONDICIONES_MANTENIMIENTO     = """El edificio y los jardines se deben mantener bien de forma que atestigüen la grandeza de Dios a la comunidad y como se explica en el Manual de Asociación de Crecimiento de la Iglesia."""
+CONDICIONES_ACTIVIDADES       = """Por un periodo de tres (3) años, después de que el proyecto es dedicado, proporcionaremos seis (6) informes del crecimiento y las actividades del proyecto según lo dispuesto en el Manual de Asociación de Crecimiento de la Iglesia. Estos seis (6) informes de actividades serán entregadas cada seis (6) meses (calendario vigente) en enero y julio."""
+CONDICIONES_DISCIPULADO       = """Estoy de acuerdo en nutrir a los creyentes en la iglesia en virtud de un plana cordado por ICM, y seguir los pasos correspondientes y descritos en el Manual de Asociación de Crecimiento de la Iglesia."""
+CONDICIONES_ALCANCE           = """Somos llamados por la Gran Comisión de Cristo para compartir de nuestra fe. Con la ayuda de Cristo, nos comprometemos a plantar al menos cinco (5) iglesias hermanas durante los tres (3) primeros años después/siguientes de la fecha de consagración del proyecto."""
 
-CONDICIONES_FOUND_TRUST       = 'We will accept funds from ICM as a trust from the Lord.'
-CONDICIONES_FOUND_COMMITMENT  = """We understand that we have our Church building because others have shared with us. As a way to give to others what 
-								others have given to us, we will contribute to the Covenant Fund account maintained by our Church organization. 
-								Our commitment to do this is in realization of God’s goodness to our Congregation and of the many Congregations still 
-								waiting for an opportunity to build. Our monthly contribution amount will be agreed upon by our Church organization 
-								and reviewed annually. The monthly contribution will be a reflection of how God has prospered our Church organization."""
+CONDICIONES_FOUND_TRUST       = """Fondo/inversión Trust: Acepto los fondos de ICM en reverencia y confianza al Señor Jesús."""
+CONDICIONES_FOUND_COMMITMENT  = """Compromiso de la Inversión: Entendemos que tenemos el edificio de la iglesia debido a que otros nos han ayudado. Como una manera de dar a los demás de lo que otros nos han dado, vamos a contribuir a la cuenta de Pacto de Inversión (13%) que se tiene por la organización de nuestra Iglesia. El compromiso de hacer esto es ver la realización de la bondad de Dios en nuestra congregación y de las muchas congregaciones que siguen en la espera de una oportunidad para construir."""
 CONDICIONES_FOUND_PAYMENT     = """Fund Payment: The monthly contribution to the Covenant Fund, will begin the month following the dedication of the 
 								building. This contribution will be either a fixed amount each month or a fixed percentage of the congregation's monthly 
 								offerings"""
 
-CONDICIONES_PRESUPUESTO       = """We will, with God's help, complete the building of this project within the stated budget and we understand that any 
-								additional costs must be covered by the congregation."""
-CONDICIONES_TERMINACION       = """We will, with God’s help, complete the building of this project on schedule. ICM is to be notified by the Partner of 
-								any changes to planned Dedication Date."""
+CONDICIONES_PRESUPUESTO       = """Nosotros, con la ayuda de Dios, terminaremos la construcción del edificio estipulada en el presupuesto establecido en el proyecto y entendemos que los costos adicionales deben ser cubiertos por la congregación."""
+CONDICIONES_TERMINACION       = """Nosotros, con la ayuda de Dios, terminaremos la construcción del edificio en la fecha prevista en proyecto. ICM ha de ser notificada por el socio de cualquier cambio planeado en la fecha de Dedicacion."""
 CONDICIONES_COMENTARIOS       = "Comentarios adiccionanles (OPCIONAL) (Provea cualquier otra información que ayudará a ICM a procesar esta aplicación)."
 
 CONDICIONES_ACEPTACION        = u"""Al aceptar usted reconoce que es responsable de la información suministrada en cada uno de los pasos anteriores

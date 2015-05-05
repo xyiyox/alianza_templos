@@ -39,11 +39,11 @@ class Etapa(models.Model):
 		(DILIGENCIAMIENTO, u'Diligenciamiento'),
 		# 1 semana para revisar por usuario regional
 		(APROB_REGIONAL, u'Aprobación Regional'),
-		(ASIGN_USUARIOS, u'Asignación de Arquitecto/Ingeniero/Tesorero'),
+		(ASIGN_USUARIOS, u'Asignación de Arquitecto/Director de Obra/Tesorero'),
 		# 5 dias para subir planos del proyecto de construcción
 		(PLANOS, u'Creación de Planos'),
 		# 3 dias para ser aprobado por un ingeniero
-		(APROB_INGENIERO, u'Aprobación Ingeniero'),
+		(APROB_INGENIERO, u'Aprobación Director de Obra'),
 		(APROB_TESORERO, u'Aprobación Tesorero'),
 		(APROB_NACIONAL, u'Aprobación Nacional'),
 		# 2 semanas para recibir aprobación internacional
@@ -123,14 +123,21 @@ class Edificacion(models.Model):
 	)
 
 	TIPO_CONSTRUCCION_CHOICES = (
-		(0, 'Iglesia',),
-		(1, 'Guarderia'),
-		(2, 'Iglesia/Guarderia'),
+		(0, 'Templo',),
+		(1, 'Obra Social'),
+		(2, 'Templo/Obra Social'),
 	)
 
 	METODO_CONSTRUCCION_CHOICES = (
 		(0, 'Nueva Edificacion'),
 		(1, 'Otro'),
+	)
+
+	TT = True
+	FF = False
+	REQUIERE_CHOICES = (		 
+		(TT, 'Si'),
+		(FF, 'No'),
 	)
 
 	ESTADO_FORMULARIO = (
@@ -145,8 +152,8 @@ class Edificacion(models.Model):
 	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
 	direccion 		= models.TextField(verbose_name='Dirección')
 	coordenadas 	= map_fields.GeoLocationField(max_length=100, help_text=EDIFICACION_COORDENADAS) 	
-	owner_lote 		= models.SmallIntegerField('Dueño del Lote', choices=TIPO_OWNER_LOTE_CHOICES)
-	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES)
+	owner_lote 		= models.SmallIntegerField('Dueño del Lote', choices=TIPO_OWNER_LOTE_CHOICES , default=0)
+	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES , default=0)
 
 	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30, help_text=
 		"Ingrese Ancho x Largo en Metros")
@@ -156,9 +163,10 @@ class Edificacion(models.Model):
 		"valores entonces se asume que la congregación aporta el excedente del dinero")
 
 	num_pisos 			= models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
-	tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES)
-	metodo_construccion = models.SmallIntegerField('Método de Construcción',choices=METODO_CONSTRUCCION_CHOICES)
-	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?', default=False)
+	tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES, default=0)
+	metodo_construccion = models.SmallIntegerField('Método de Construcción',choices=METODO_CONSTRUCCION_CHOICES, default=0)
+	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?',choices=REQUIERE_CHOICES, default=True)
+	#requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?', default=False)
 	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 	
 	estado 			= models.SmallIntegerField(choices=ESTADO_FORMULARIO)
@@ -166,7 +174,7 @@ class Edificacion(models.Model):
 
 	usuario 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable', 
 					related_name='usuario')
-	ingeniero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Ingeniero Asignado', 
+	ingeniero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Maestro de Obra Asignado', 
 					null=True, blank=True, related_name='ingeniero')
 	arquitecto 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Arquitecto Asignado', 
 					null=True, blank=True, related_name='arquitecto')
@@ -178,6 +186,8 @@ class Edificacion(models.Model):
 	aprobacion_ingeniero 	= models.BooleanField(default=False)
 	aprobacion_nacional 	= models.BooleanField(default=False)
 	aprobacion_tesorero 	= models.BooleanField(default=False)
+
+	requiere_arquitecto     = models.BooleanField(default=True)
 
 	created     = models.DateField(auto_now_add =True)
 	updated     = models.DateField(auto_now = True)
@@ -216,22 +226,23 @@ class InformacionFinanciera(models.Model):
 	mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
 	valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
 	dinero_efectivo 	= models.PositiveIntegerField('Dinero Ahorrado', 
-							help_text='Ingrese el valor en Dolares (Estados Unidos). <br>Puede usar '
-							'<a href="http://www.colombia.com/cambio_moneda/" target="_blank">este enlace</a> '
-							'como convertidor de moneda.')
+							help_text='Ingrese el valor en Pesos Colombianos (COP), El total con el que cuenta Fisicamente')
+							#. <br>Puede usar '
+							#'<a href="http://www.colombia.com/cambio_moneda/" target="_blank">este enlace</a> '
+							#'como convertidor de moneda.')
 	valor_terreno 		= models.PositiveIntegerField('Valor del Terreno', 
-							help_text='Ingrese el valor en Dolares (Estados Unidos)')
-	valor_solicitado 	= models.PositiveIntegerField('Dinero Solicitado', choices= VALOR_SOLICITADO_CHOICES, 
-							help_text='Recuerde que este dinero esta expresado en Dolares (Estados Unidos)')
+							help_text='Ingrese el valor en Pesos Colombianos (COP)')
+	#valor_solicitado 	= models.PositiveIntegerField('Dinero Solicitado', choices= VALOR_SOLICITADO_CHOICES, 
+	#						help_text='Recuerde que este dinero esta expresado en Dolares (Estados Unidos)')
 	num_voluntarios		= models.PositiveSmallIntegerField('Cantidad de Voluntarios', 
 							help_text='¿Cuantas personas tiene disponibles para ayudar fisicamente en la construcción?')
 	desc_voluntarios 	= models.TextField('Descripción', 
 							help_text='Describa que trabajos pueden hacer los Voluntarios y cuantas horas semanales pueden donar')
-	dias_donados 		= models.PositiveSmallIntegerField('Dias Donados', 
-							help_text='¿Cuantos dias de trabajo donaran aquellos que no pueden ayudar fisicamente a la obra?', 
-							null=True, blank=True)
+	#dias_donados 		= models.PositiveSmallIntegerField('Dias Donados', 
+	#						help_text='¿Cuantos dias de trabajo donaran aquellos que no pueden ayudar fisicamente a la obra?', 
+	#						null=True, blank=True)
 	costo_total 		= models.PositiveIntegerField('Costo total del proyecto', 
-							help_text='Ingrese el valor en Dolares (Estados Unidos)')
+							help_text='Ingrese el valor en Pesos Colombianos (COP)')
 	# Relacion 1 a 1 entre la edificacion y la informacion financiera
 	edificacion 		= models.OneToOneField('Edificacion')
 
@@ -246,10 +257,10 @@ class Comunidad(models.Model):
 		verbose_name_plural = "ciudades"
 
 	nombre 				= models.CharField('Nombre', max_length=50)
-	poblacion_comunidad = models.CharField('Cantidad de población', max_length=40)
+	poblacion_comunidad = models.CharField('Población', max_length=40)
 	region 				= models.CharField('Departamento', max_length=30) 
 	capital_depto 		= models.CharField('Capital del Departamento', max_length=30)
-	distancia_capital	= models.PositiveSmallIntegerField('Distancia a la capital', 
+	distancia_capital	= models.PositiveSmallIntegerField('Distancia del Proyecto a la capital', 
 							help_text="Por favor ingrese el valor en Kilometros (Km)")
 	# Relacion 1 a 1 entre la edificacion y la comunidad
 	edificacion 		= models.OneToOneField('Edificacion')
@@ -270,6 +281,7 @@ class Congregacion(models.Model):
 		(3, 'Pacífico'),
 		(4, 'Sur'),
 		(5, 'Valle'),
+		(6, 'Guanbianos'),
 	)
 
 	ESTADO_CIVIL_CHOICES = (
@@ -280,9 +292,9 @@ class Congregacion(models.Model):
 	)
 
 	nombre 				= models.CharField(max_length=30)
-	fecha_fundacion 	= models.DateField('Fecha de Fundación')
-	lengua_primaria 	= models.CharField('Lengua primaria hablada', max_length=20)
-	region 				= models.SmallIntegerField('Región', choices=REGION_CHOICES, 
+	fecha_fundacion 	= models.DateField('Fecha de Fundación de la Congregacion')
+	lengua_primaria 	= models.CharField('Lengua Materna', max_length=20)
+	region 				= models.SmallIntegerField('Región', choices=REGION_CHOICES,default=0, 
 							help_text='La Región a la que pertenece la Iglesia')
 	asistencia_general 	= models.SmallIntegerField('Asistencia general promedio')
 	asistencia_ninos 	= models.SmallIntegerField('Asistencia general promedio de niños')
@@ -296,18 +308,18 @@ class Congregacion(models.Model):
 	"""
 	nombre_pastor 			= models.CharField('Nombre del pastor', max_length=50)
 
-	estado_civil 			= models.SmallIntegerField('Estado civil', choices=ESTADO_CIVIL_CHOICES)
+	estado_civil 			= models.SmallIntegerField('Estado civil', choices=ESTADO_CIVIL_CHOICES , default=0)
 	cant_hijos 				= models.PositiveSmallIntegerField('Cantidad de hijos')
 	entrenamiento_biblico 	= models.PositiveSmallIntegerField('Años de entrenamiento Biblico')
-	titulos_obtenidos 		= models.CharField('Titulos obtenidos', max_length=70)
+	titulos_obtenidos 		= models.CharField('Titulos obtenidos', max_length=50)
 	anios_iglesia 			= models.PositiveSmallIntegerField('Años de servicio en la congregación actual')
 	anios_ministerio 		= models.PositiveSmallIntegerField('Años de servicio en el ministerio')
 
-	hay_material 			= models.BooleanField('¿El pastor conoce el material del Instituto Biblico del Aire?', default=False)
-	q1_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
-	usa_material			= models.BooleanField('¿El pastor ha acordado usar este material para crecimiento de la iglesia?', default=False) 
-	q2_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
-	q2_how_do 				= models.TextField('¿Como lo hace?', blank=True, null=True)
+	#hay_material 			= models.BooleanField('¿El pastor conoce el material del Instituto Biblico del Aire?', default=False)
+	#q1_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
+	#usa_material			= models.BooleanField('¿El pastor ha acordado usar este material para crecimiento de la iglesia?', default=False) 
+	#q2_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
+	#q2_how_do 				= models.TextField('¿Como lo hace?', blank=True, null=True)
 	# Relacion 1 a 1 entre la edificacion y la congregacion
 	edificacion 			= models.OneToOneField('Edificacion')
 
@@ -376,7 +388,7 @@ class Adjuntos(models.Model):
 								help_text='Si se requiere, debe agregarlo')
 	escritura_terreno 		= models.FileField('Escritura del terreno', upload_to=calcular_ruta,
 								help_text='Mostrando la prueba de propiedad')
-	plan_terreno 			= models.FileField('Plan de Terreno', upload_to=calcular_ruta, 
+	manzana_catastral 		= models.FileField('Manzana Catastral', upload_to=calcular_ruta, null=True, blank=True, 
 								help_text='Mostrando las dimensiones de la propiedad y la ubicación de la tierra')
 	plan_construccion 		= models.FileField('Plan de construcción', upload_to=calcular_ruta, null=True, blank=True,
 								help_text='Obligatorio para todos los planes que no hacen parte de los aprobados por ICM')

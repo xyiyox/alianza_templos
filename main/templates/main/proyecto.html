@@ -213,9 +213,9 @@
 		    </div>
 		    {% endif %}
 		</div>
-
-		<!-- ARQUITECTO -->
-		
+ 	
+		<!-- ARQUITECTO No a sido cambiado por el nacional -->
+		{% if proyecto.requiere_arquitecto %} 
 		<div {% if user.tipo == user.ARQUITECTO or user.tipo == user.NACIONAL %} ng-mouseenter="showAutorizacionForm($event, '{{user.tipo}}')" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
 			class="panel {% if proyecto.aprobacion_arquitecto %} panel-green {% else %} panel-red {% endif %}" id="panel-arquitecto">
 		    <div class="panel-heading">
@@ -227,7 +227,7 @@
 		            <div class="col-md-6 text-right">
 		                <i class="fa fa-user fa-fw"></i>  
 		                {{proyecto.arquitecto|default_if_none:"<mark>no asignado</mark>"}}
-		            </div>
+		            </div>		           
 		        </div>
 		    </div>
 			{% if user.tipo == user.ARQUITECTO %} <!-- Le mostramos formluario de autenticacion -->
@@ -249,9 +249,22 @@
 		    	<p>Asignar usuario</p>
 		    	{% crispy asignarUsuariosForm %}
 		    </div>
+		    <div class="panel-body" style="text-align:center;" ng-show="verFormAsignacionArquitecto">
+		    	¿Requiere Arquitecto?
+		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post" id='formArquitec'>{% csrf_token %}
+					{{ aprobacionArquitectoForm.aprobacion_arquitecto }}&nbsp;&nbsp;&nbsp;
+					{% if proyecto.aprobacion_arquitecto %} 
+						<button id='confirm' type='button' onclick='return click_event()' class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> Si</button>
+					{% else %} 
+						<button id='confirm' type='button' onclick='return click_event()' class="btn btn-success btn-xs"><i class="fa fa-check"></i> No</button> 
+					{% endif %}
+					 
+				</form>
+				<div id='dialog-confirm' style='display:none'>Si acepta esto no tendra vuelta atras, esta seguro?</div>
+		    </div>		
 		    {% endif %}
 		</div>
-		
+		{% endif %}
 
 		<!-- INGENIERO -->
 		
@@ -261,7 +274,7 @@
 		        <div class="row">
 		            <div class="col-md-6">
 		                <i class="fa {% if proyecto.aprobacion_ingeniero %} fa-check {% else %} fa-lock {% endif %}  fa-lg fa-fw"></i>
-		                INGENIERO
+		               DIRECTOR DE OBRA
 		            </div>
 		            <div class="col-md-6 text-right">
 		                <i class="fa fa-user fa-fw"></i>  
@@ -347,6 +360,7 @@
 			{% if user.tipo == user.NACIONAL %}
 		    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
 		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
+		    		<input type='hidden' name='fromN' value='1'/>
 					{{ aprobacionNacionalForm.aprobacion_nacional }}&nbsp;&nbsp;&nbsp;
 					{% if proyecto.aprobacion_nacional %} 
 						<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>

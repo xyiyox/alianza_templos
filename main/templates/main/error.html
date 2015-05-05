@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+
+{% block title %} Terminado {% endblock %}
+
+{% block css %} 
+
+{% endblock %}
+
+
+
+
+
+{% block content %}
+<div class="page-header">
+	<h1> <i class="fa fa-frown-o text-danger"></i> Error {{ er }}
+	 <a href="{% url 'proyecto' proyecto.pk %}">Volver</a></h1>		
+</div>
+
+
+{% endblock content %}

@@ -71,6 +71,12 @@
 		$(function () {
 		  $('[data-toggle="tooltip"]').tooltip()
 		})
+
+		function click_event(){							    	
+	    	if(window.confirm("Esta seguro de realizar esta accion?, no tendra vuelta atras.")){
+	    		document.getElementById("formArquitec").submit();
+	    	}
+	    }
 	</script>
 
 	{% include 'session_security/all.html' %}

@@ -52,7 +52,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         (REGIONAL,  "Regional"),
         (LOCAL,     "Local"),
 
-        (INGENIERO, "Ingeniero"),
+        (INGENIERO, "Director de Obra"),
         (ARQUITECTO, "Arquitecto"),
         (TESORERO,  "Tesorero"),
     )
