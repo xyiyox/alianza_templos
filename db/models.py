@@ -48,12 +48,12 @@ class Etapa(models.Model):
 		(APROB_NACIONAL, u'Aprobación Nacional'),
 		# 2 semanas para recibir aprobación internacional
 		(APROB_INTERNACIONAL, u'Aprobación Internacional'),
-		(ESPERANDO_CUPO, u'En Espera de Cupo'),
+		#(ESPERANDO_CUPO, u'En Espera de Cupo'),
 		(ESPERANDO_RECURSOS, u'En Espera de Recursos'),
 		# Tiene 3 etapas (3 pagos)
-		(EN_CONSTRUCCION, u'En Construcción'),
-		(CORRECIONES, u'Esperando Correcciones'),
-		(FINALIZACION, u'Finalización'),
+		#(EN_CONSTRUCCION, u'En Construcción'),
+		#(CORRECIONES, u'Esperando Correcciones'),
+		#(FINALIZACION, u'Finalización'),
 	)
 
 	edificacion = models.ForeignKey('Edificacion')
@@ -186,6 +186,7 @@ class Edificacion(models.Model):
 	aprobacion_ingeniero 	= models.BooleanField(default=False)
 	aprobacion_nacional 	= models.BooleanField(default=False)
 	aprobacion_tesorero 	= models.BooleanField(default=False)
+	aprobacion_internacional= models.BooleanField(default=False)
 
 	requiere_arquitecto     = models.BooleanField(default=True)
 
