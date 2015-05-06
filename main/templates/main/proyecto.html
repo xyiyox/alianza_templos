@@ -418,8 +418,16 @@
 		    </div>
 			{% if user.tipo == user.ARQUITECTO %} <!-- Le mostramos formluario de autenticacion -->
 		    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
-		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post" enctype="multipart/form-data">{% csrf_token %}
-		    		{{ planosArquitectoForm.as_p }}
+
+		    	<div class="well well-sm">
+		    		<h4>Subir Plano</h4>
+			    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post" enctype="multipart/form-data">{% csrf_token %}
+						{{ planosArquitectoForm.planos_arquitecto }} </br>
+						<button class="btn btn-primary btn-xs">guardar</button>
+					</form>
+				</div>
+
+		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
 					{{ aprobacionArquitectoForm.aprobacion_arquitecto }}&nbsp;&nbsp;&nbsp;
 					{% if proyecto.aprobacion_arquitectof %} 
 						<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
