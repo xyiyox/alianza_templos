@@ -50,7 +50,11 @@ class InformacionFinancieraForm(ModelFormBase):
     
     class Meta:
         model = InformacionFinanciera
-        exclude = ['edificacion', 'mano_obra', 'valor_materiales','dias_donados','valor_solicitado']
+        exclude = ['edificacion', 
+                    'mano_obra', 
+                    'valor_materiales'                  
+                    ]
+                    
 
     def __init__(self, *args, **kwargs):
         super(InformacionFinancieraForm, self).__init__(*args, **kwargs)        
