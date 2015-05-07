@@ -182,7 +182,13 @@ def proyecto(request, pk):
         financiera =  InformacionFinanciera.objects.get(edificacion=proyecto)
         ctx['financiera'] = financiera
     except InformacionFinanciera.DoesNotExist:
-        pass          
+        pass    
+
+    try:
+        condiciones =  Condiciones.objects.get(edificacion=proyecto)
+        ctx['condiciones'] = condiciones
+    except Condiciones.DoesNotExist:
+        pass       
 
     if request.user.tipo == Usuario.REGIONAL:
         ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)  
@@ -500,8 +506,8 @@ class Aplicacion(SessionWizardView):
             # si no existe le envio -1 
             context.update({'estado': -1})
 
-        if self.steps.current == '1':
-            context.update({'fuentes': FuentesFinanciacionForm()})
+        #if self.steps.current == '1':
+        #    context.update({'fuentes': FuentesFinanciacionForm()})
         return context
 
     

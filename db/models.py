@@ -224,8 +224,8 @@ class InformacionFinanciera(models.Model):
 	)
 
 	# Contribuciones estimadas de la congregacion
-	mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
-	valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
+	#mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
+	#valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
 	dinero_efectivo 	= models.PositiveIntegerField('Dinero Ahorrado', 
 							help_text='Ingrese el valor en Pesos Colombianos (COP), El total con el que cuenta Fisicamente')
 							#. <br>Puede usar '
@@ -244,6 +244,8 @@ class InformacionFinanciera(models.Model):
 	#						null=True, blank=True)
 	costo_total 		= models.PositiveIntegerField('Costo total del proyecto', 
 							help_text='Ingrese el valor en Pesos Colombianos (COP)')
+	
+	numero_cuenta 		= models.CharField(max_length=40, verbose_name='Numero de Cuenta',help_text='Ingrese el Numero de Cuenta,(Necesario si se aprueba el proyecto para hacer las consignaciones)',default='00-00000-00')
 	# Relacion 1 a 1 entre la edificacion y la informacion financiera
 	edificacion 		= models.OneToOneField('Edificacion')
 
@@ -327,14 +329,14 @@ class Congregacion(models.Model):
 	def __str__(self):
 		return "%s" %"Congregación"
 	
-class FuentesFinanciacion(models.Model):
-	""" 
-	Tabla que almacenara posibles entradas economicas dinstintas a ICM que tenga el proyecto
-	"""
-	nombre 			= models.CharField(max_length=30)
-	valor 			= models.DecimalField('Valor', max_digits=15, decimal_places=3)
-	
-	info_financiera = models.ForeignKey('InformacionFinanciera')
+#class FuentesFinanciacion(models.Model):
+#	""" 
+#	Tabla que almacenara posibles entradas economicas dinstintas a ICM que tenga el proyecto
+#	"""
+#	nombre 			= models.CharField(max_length=30)
+#	valor 			= models.DecimalField('Valor', max_digits=15, decimal_places=3)
+#	
+#	info_financiera = models.ForeignKey('InformacionFinanciera')
 
 def validate_terminos(value):
 	if value != True:
@@ -354,7 +356,7 @@ class Condiciones(models.Model):
 	alcance           = models.BooleanField(CONDICIONES_ALCANCE, choices=BOOL_CHOICES, default=False)
 	
 	found_trust       = models.BooleanField(CONDICIONES_FOUND_TRUST, choices=BOOL_CHOICES, default=False)
-	found_commitment  = models.BooleanField(CONDICIONES_FOUND_COMMITMENT, choices=BOOL_CHOICES, default=False)
+	found_commitment  = models.BooleanField('¿Esta al dia con el 13%?', choices=BOOL_CHOICES, default=False)
 	found_payment     = models.CharField(CONDICIONES_FOUND_PAYMENT, max_length=20, help_text='Cantidad o Porcentaje')
 
 	presupuesto       = models.BooleanField(CONDICIONES_PRESUPUESTO, choices=BOOL_CHOICES, default=False)
@@ -382,15 +384,14 @@ class Adjuntos(models.Model):
 								help_text='Mostrando claramente el área donde se va a construir la iglesia')
 	foto_congregacion 		= models.ImageField('Foto de la congregación', upload_to=calcular_ruta, 
 								help_text='Mostrando el lugar donde se reunen actualmente')
-	foto_pastor 			= models.FileField('Foto del Pastor', upload_to=calcular_ruta, null=True, blank=True,
+	foto_pastor 			= models.FileField('Foto del Pastor', upload_to=calcular_ruta,
 								help_text='Incluya una foto del pastor en caso de no aparecer en la foto de la congregación')
 
 	permiso_construccion 	= models.FileField('Permiso de construcción', upload_to=calcular_ruta, null=True, blank=True,
 								help_text='Si se requiere, debe agregarlo')
 	escritura_terreno 		= models.FileField('Escritura del terreno', upload_to=calcular_ruta,
 								help_text='Mostrando la prueba de propiedad')
-	manzana_catastral 		= models.FileField('Manzana Catastral', upload_to=calcular_ruta, null=True, blank=True, 
-								help_text='Mostrando las dimensiones de la propiedad y la ubicación de la tierra')
+	manzana_catastral 		= models.FileField('Manzana Catastral', upload_to=calcular_ruta, help_text='Mostrando las dimensiones de la propiedad y la ubicación de la tierra, Si el instituto Augustin Codaci no le proporciona este documento, puede adjuntar un dibujo de la localizacion(mapa pequeño) de el lugar donde se construira el templo')
 	plan_construccion 		= models.FileField('Plan de construcción', upload_to=calcular_ruta, null=True, blank=True,
 								help_text='Obligatorio para todos los planes que no hacen parte de los aprobados por ICM')
 	historia_congregacion 	= models.FileField('Historia de la congregación', upload_to=calcular_ruta,

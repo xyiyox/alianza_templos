@@ -8,7 +8,11 @@ def region(request):
 	return {'list_regions': Congregacion.REGION_CHOICES}	
 
 def civil(request):
-	return {'list_civil': Congregacion.ESTADO_CIVIL_CHOICES}		
+	return {'list_civil': Congregacion.ESTADO_CIVIL_CHOICES}	
+
+def choices(request):
+	BOOL_CHOICES = ((True, 'Yes'), (False, 'No'))
+	return {'list_status':BOOL_CHOICES}		
 
 def notificaciones(request):
 	etapas = {}

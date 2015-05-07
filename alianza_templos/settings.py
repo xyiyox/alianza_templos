@@ -105,6 +105,7 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     'main.context_processors.etapa',
     'main.context_processors.region',
     'main.context_processors.civil',
+    'main.context_processors.choices',
 )
 
 SUIT_CONFIG = {

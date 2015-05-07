@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons, UneditableField, InlineRadios, InlineCheckboxes, PrependedAppendedText
 
-from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, FuentesFinanciacion, Comentario
+from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, Comentario
 from .datos import EDIFICACION_COORDENADAS
 
 from map_field import widgets as map_widgets
@@ -50,10 +50,7 @@ class InformacionFinancieraForm(ModelFormBase):
     
     class Meta:
         model = InformacionFinanciera
-        exclude = ['edificacion', 
-                    'mano_obra', 
-                    'valor_materiales'                  
-                    ]
+        exclude = ['edificacion']
                     
 
     def __init__(self, *args, **kwargs):
@@ -112,7 +109,7 @@ class CondicionesForm(ModelFormBase):
     
     class Meta:
         model = Condiciones
-        exclude = ['edificacion','found_payment']
+        exclude = ['edificacion','found_payment','found_trust']
 
     def __init__(self, *args, **kwargs):
         super(CondicionesForm, self).__init__(*args, **kwargs)
@@ -141,19 +138,19 @@ class AdjuntosForm(ModelFormBase):
         self.helper.field_class  = 'col-sm-9'
 
 
-class FuentesFinanciacionForm(forms.ModelForm):
+#class FuentesFinanciacionForm(forms.ModelForm):
     
-    class Meta:
-        model = FuentesFinanciacion
-        exclude = ['info_financiera']
+#    class Meta:
+#        model = FuentesFinanciacion
+#        exclude = ['info_financiera']
 
-    def __init__(self, *args, **kwargs):
-        super(FuentesFinanciacionForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
+#    def __init__(self, *args, **kwargs):
+#        super(FuentesFinanciacionForm, self).__init__(*args, **kwargs)
+#        self.helper = FormHelper(self)
         
-        self.helper.form_tag = False
-        self.helper.label_class = 'col-sm-3'
-        self.helper.field_class = 'col-sm-9'
+#        self.helper.form_tag = False
+#        self.helper.label_class = 'col-sm-3'
+#        self.helper.field_class = 'col-sm-9'
 
     
 class ComentarioForm(forms.ModelForm):

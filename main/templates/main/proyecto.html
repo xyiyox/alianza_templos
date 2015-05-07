@@ -305,7 +305,79 @@
 				</div>
 
 			</tab>
-			<!--<tab heading="Condiciones">Static content</tab>-->
+			<tab heading="Condiciones">
+
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>									
+								<tr> <th>Condiciones de Construccion</th>       <td>
+									{% for key,value in list_status %}
+						     				{% if condiciones.construccion == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>Mantenimiento del Templo/Obra Social: </th>       <td>{% for key,value in list_status %}
+						     				{% if condiciones.mantenimiento == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>Actividades Estipuladas: </th>       <td>{% for key,value in list_status %}
+						     				{% if condiciones.actividades == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>Discipulado: </th>       <td>{% for key,value in list_status %}
+						     				{% if condiciones.discipulado == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>Cumplimiento con el Alcance: </th>       <td>{% for key,value in list_status %}
+						     				{% if condiciones.alcance == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>¿Aldia con el 13%?: </th>       <td>{% for key,value in list_status %}
+						     				{% if condiciones.found_commitment == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>Cumplimiento con el Presupuesto: </th>       <td>{% for key,value in list_status %}
+						     				{% if condiciones.presupuesto == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>Completar la Obra: </th>       <td>{% for key,value in list_status %}
+						     				{% if condiciones.terminacion == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>Comentarios: </th>       <td>
+						     				{{ condiciones.comentarios }} </td> </tr>	
+								
+								<tr> <th>¿Acepta los Terminos?: </th>       <td>{% for key,value in list_status %}
+						     				{% if condiciones.aceptacion == key %}
+						    					{{value}}
+						    				{% endif %}	
+						    			{% endfor %}</td> </tr>	
+								
+								<tr> <th>Nombre del Aplicante: </th>       <td>{{condiciones.nombre_completo}}</td> </tr>		
+								
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+
+			</tab>
 			
 		</tabset>
 
