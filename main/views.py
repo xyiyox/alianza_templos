@@ -540,7 +540,7 @@ class Aplicacion(SessionWizardView):
             else:
                 # Se almacena con commit False el formulario actual
                 instance    = form.save(commit=False)    
-                edificacion = self.instance_dict.get('0', False)
+                edificacion = self.instance_dict['0']   
                 # Se almacena la instancia del formulario actual con el id de la edificacion
                 instance.edificacion = edificacion
                 instance.save()
