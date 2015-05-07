@@ -19,6 +19,16 @@ env.hosts = [private.HOST1]
 PROD_PATH = private.PROD_PATH
 ENV = 'alianza_templos'
 
+POSTGRESQL_PATH  = private.POSTGRESQL_PATH
+DB_BACKUP_PATH   = private.DB_BACKUP_PATH
+DB_BACKUP_FILE   = private.DB_BACKUP_FILE
+DB_PROD_USER     = private.DB_PROD_USER
+DB_PROD_NAME     = private.DB_PROD_NAME
+DB_DEV_USER      = private.DB_DEV_USER
+DB_DEV_NAME      = private.DB_DEV_NAME
+
+
+
 #####################################################################
 ########				SERVIDOR DE PRODUCCION				#########
 #####################################################################
@@ -70,6 +80,21 @@ def consolidar_local():
 	#update_default_data()
 	verificar_status_repo()
 	commit()
+
+def actualizar_db_local():
+	if not confirm(yellow("ANTES ELIMINE TODAS LAS TABLAS EN LOCAL, SI YA LO HIZO CONTINUE")):
+		abort('Abortado por el usuario')
+	print 'Adelante ...'
+
+	with cd(DB_BACKUP_PATH):
+		run('rm -f %s' % DB_BACKUP_FILE)		
+		run('%s/pg_dump -Fp -b -U %s %s > %s/%s' %(POSTGRESQL_PATH, DB_PROD_USER, DB_PROD_NAME, DB_BACKUP_PATH, DB_BACKUP_FILE) )  # -Fp: formato plane text, -b: include large objects
+		local('rm -f %s' % DB_BACKUP_FILE)
+		local('scp %s:%s/%s %s' %(env.hosts[0], DB_BACKUP_PATH, DB_BACKUP_FILE, DB_BACKUP_FILE))
+		run('rm -f %s' % DB_BACKUP_FILE)
+
+	local('psql -U %s -d %s -f %s' %(DB_DEV_USER, DB_DEV_NAME, DB_BACKUP_FILE))
+
 
 def git_log():
 	local('git log --oneline --graph --decorate')
