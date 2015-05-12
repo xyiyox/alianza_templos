@@ -497,7 +497,7 @@ class Aplicacion(SessionWizardView):
         context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
        
         context.update({'form_list': self.form_list})
-        
+
         model_1 = self.instance_dict.get('0', False) 
         if model_1:
             # paso el valor del campo estado en el form 1
@@ -509,6 +509,19 @@ class Aplicacion(SessionWizardView):
         #if self.steps.current == '1':
         #    context.update({'fuentes': FuentesFinanciacionForm()})
         return context
+
+    def render_next_step(self, form, **kwargs):
+        """ Redireccionamos el form para usarlo en modo edit"""
+        
+        if not self.kwargs.get('pk', None):  # verificamos que estemos en modo creacion
+
+            if self.steps.current == '0':    # actuamos solo si es el paso 1
+                model_1 = self.instance_dict.get('0', False) # obtenemos el pk del modelo que acabamos de crear
+                self.storage.reset()
+                return redirect(reverse('proyecto_edit', args=[model_1.pk]))  # redirecionamos al mismo objeto pero en edicion
+        
+        # en los otros paso, que la aplicacion funcione por defecto
+        return super(Aplicacion, self).render_next_step(form, **kwargs)
 
     
     def process_step(self, form):
