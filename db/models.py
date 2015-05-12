@@ -128,10 +128,6 @@ class Edificacion(models.Model):
 		(2, 'Templo/Obra Social'),
 	)
 
-	METODO_CONSTRUCCION_CHOICES = (
-		(0, 'Nueva Edificacion'),
-		(1, 'Otro'),
-	)
 
 	TT = True
 	FF = False
@@ -164,7 +160,6 @@ class Edificacion(models.Model):
 
 	num_pisos 			= models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
 	tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES, default=0)
-	metodo_construccion = models.SmallIntegerField('Método de Construcción',choices=METODO_CONSTRUCCION_CHOICES, default=0)
 	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?',choices=REQUIERE_CHOICES, default=True)
 	#requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?', default=False)
 	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
