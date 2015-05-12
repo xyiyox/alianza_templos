@@ -161,12 +161,15 @@ class Edificacion(models.Model):
 	num_pisos 			= models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
 	tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES, default=0)
 	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?',choices=REQUIERE_CHOICES, default=True)
-	#requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?', default=False)
 	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 	
+
+	# control de estado y etapa
 	estado 			= models.SmallIntegerField(choices=ESTADO_FORMULARIO)
 	etapa_actual 	= models.PositiveSmallIntegerField(choices=Etapa.ETAPA_ACTUAL)
 
+
+	# usuarios involucrados, el nacional y el regional se asignan por defecto
 	usuario 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable', 
 					related_name='usuario')
 	ingeniero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Maestro de Obra Asignado', 
@@ -176,18 +179,23 @@ class Edificacion(models.Model):
 	tesorero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Tesorero Asignado', 
 					null=True, blank=True, related_name='tesorero')
 
+	# aprobaciones para cambiar de etapa, estan en orden temporal
 	aprobacion_regional 	= models.BooleanField(default=False)
-	aprobacion_arquitecto 	= models.BooleanField('¿Desea Aprobar?',default=False)
-	aprobacion_ingeniero 	= models.BooleanField(default=False)
-	aprobacion_nacional 	= models.BooleanField(default=False)
+	usuarios_asignados      = models.BooleanField(default=False)
+	planos_creados          = models.BooleanField(default=False)
 	aprobacion_tesorero 	= models.BooleanField(default=False)
+	aprobacion_nacional 	= models.BooleanField(default=False)
 	aprobacion_internacional= models.BooleanField(default=False)
 
+	# descartando
+	aprobacion_arquitecto 	= models.BooleanField('¿Desea Aprobar?',default=False)
+	aprobacion_ingeniero 	= models.BooleanField(default=False)
 	requiere_arquitecto     = models.BooleanField(default=True)
 
 	created     = models.DateField(auto_now_add =True)
 	updated     = models.DateField(auto_now = True)
 
+	
 	def __unicode__(self):
 		return "%s" %u"Edificación"
 

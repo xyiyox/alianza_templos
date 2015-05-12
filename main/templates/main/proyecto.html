@@ -441,6 +441,39 @@
 		  <h4>Autorizaciones</h4>
 		</div>
 		
+
+		<!-- NACIONAL -->
+
+		<div {% if user.tipo == user.NACIONAL %} ng-mouseenter="showAutorizacionForm($event)" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
+			 class="panel {% if proyecto.aprobacion_nacional %} panel-green {% else %} panel-red {% endif %}">
+		    <div class="panel-heading">
+		        <div class="row">
+		            <div class="col-md-6">
+		                <i class="fa {% if proyecto.aprobacion_nacional %} fa-check {% else %} fa-lock {% endif %}  fa-lg fa-fw"></i>
+		                NACIONAL
+		            </div>
+		            <div class="col-md-6 text-right">
+		                <i class="fa fa-user fa-fw"></i>  
+		                {{proyecto.usuario.user_padre.user_padre}}
+		            </div>
+		        </div>
+		    </div>
+			{% if user.tipo == user.NACIONAL %}
+		    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
+		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
+		    		<input type='hidden' name='fromN' value='1'/>
+					{{ aprobacionNacionalForm.aprobacion_nacional }}&nbsp;&nbsp;&nbsp;
+					{% if proyecto.aprobacion_nacional %} 
+						<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
+					{% else %} 
+						<button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button> 
+					{% endif %}
+					 
+				</form>
+		    </div>
+		    {% endif %}
+		</div>
+		
 		<!-- REGIONAL -->
 
 		<div {% if user.tipo == user.REGIONAL %} ng-mouseenter="showAutorizacionForm($event)" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
@@ -471,7 +504,8 @@
 		    </div>
 		    {% endif %}
 		</div>
- 	
+ 		
+ 		
 		<!-- ARQUITECTO No a sido cambiado por el nacional -->
 		{% if proyecto.requiere_arquitecto %} 
 		<div {% if user.tipo == user.ARQUITECTO or user.tipo == user.NACIONAL %} ng-mouseenter="showAutorizacionForm($event, '{{user.tipo}}')" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
@@ -607,37 +641,9 @@
 		    {% endif %}
 		</div>
 		
-		<!-- NACIONAL -->
+		
       
-		<div {% if user.tipo == user.NACIONAL %} ng-mouseenter="showAutorizacionForm($event)" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
-			 class="panel {% if proyecto.aprobacion_nacional %} panel-green {% else %} panel-red {% endif %}">
-		    <div class="panel-heading">
-		        <div class="row">
-		            <div class="col-md-6">
-		                <i class="fa {% if proyecto.aprobacion_nacional %} fa-check {% else %} fa-lock {% endif %}  fa-lg fa-fw"></i>
-		                NACIONAL
-		            </div>
-		            <div class="col-md-6 text-right">
-		                <i class="fa fa-user fa-fw"></i>  
-		                {{proyecto.usuario.user_padre.user_padre}}
-		            </div>
-		        </div>
-		    </div>
-			{% if user.tipo == user.NACIONAL %}
-		    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
-		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
-		    		<input type='hidden' name='fromN' value='1'/>
-					{{ aprobacionNacionalForm.aprobacion_nacional }}&nbsp;&nbsp;&nbsp;
-					{% if proyecto.aprobacion_nacional %} 
-						<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
-					{% else %} 
-						<button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button> 
-					{% endif %}
-					 
-				</form>
-		    </div>
-		    {% endif %}
-		</div>
+		
 
 
 
