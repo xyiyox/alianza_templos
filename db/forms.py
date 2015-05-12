@@ -27,7 +27,7 @@ class EdificacionForm(ModelFormBase):
         model = Edificacion
         exclude = ['estado', 'usuario', 'etapa_actual', 'ingeniero', 'arquitecto', 'tesorero',
                     'aprobacion_regional', 'aprobacion_arquitecto', 
-                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero', 'created', 'updated','metodo_construccion','requiere_arquitecto','aprobacion_internacional']
+                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero', 'created', 'updated', 'requiere_arquitecto','aprobacion_internacional']
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)
@@ -109,7 +109,7 @@ class CondicionesForm(ModelFormBase):
     
     class Meta:
         model = Condiciones
-        exclude = ['edificacion','found_payment','found_trust']
+        exclude = ['edificacion']
 
     def __init__(self, *args, **kwargs):
         super(CondicionesForm, self).__init__(*args, **kwargs)
