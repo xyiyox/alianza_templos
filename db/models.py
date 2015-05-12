@@ -155,7 +155,7 @@ class Edificacion(models.Model):
 		"Ingrese Ancho x Largo en Metros")
 	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30, help_text=
 		"Ingrese las medidas en Metros. Para construcción de templos las médidas autorizadas "
-		"son 200 mt cuadrados y para guarderias 150 mt cuadrados. Si las médidas superan estos "
+		"son 200 mt cuadrados y para obra social 150 mt cuadrados. Si las médidas superan estos "
 		"valores entonces se asume que la congregación aporta el excedente del dinero")
 
 	num_pisos 			= models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
@@ -213,6 +213,12 @@ class InformacionFinanciera(models.Model):
 		(2, 39000),
 	)
 
+
+	TIPO_CUENTA = (
+		(0, 'Ahorros'),
+		(1, 'Corriente'),	
+	)
+
 	TIPO_PAGO_FONDO = (
 		(0, 'Cuota Fija Mensual'),
 		(1, 'Porcentaje Mensual de Ofrendas'),
@@ -240,7 +246,11 @@ class InformacionFinanciera(models.Model):
 	costo_total 		= models.PositiveIntegerField('Costo total del proyecto', 
 							help_text='Ingrese el valor en Pesos Colombianos (COP)')
 	
+	tipo_cuenta         = models.SmallIntegerField('Tipo de Cuenta', choices=TIPO_CUENTA,default=0)
+	titular_cuenta      = models.CharField('Titular', max_length=100,help_text="Debe ser una cuenta de la Alianza",default="")
+	banco				= models.CharField('Nombre del Banco', max_length=100,default="")	
 	numero_cuenta 		= models.CharField(max_length=40, verbose_name='Numero de Cuenta',help_text='Ingrese el Numero de Cuenta,(Necesario si se aprueba el proyecto para hacer las consignaciones)',default='00-00000-00')
+	
 	# Relacion 1 a 1 entre la edificacion y la informacion financiera
 	edificacion 		= models.OneToOneField('Edificacion')
 
