@@ -414,6 +414,8 @@ class Aplicacion(SessionWizardView):
         if cant_proyectos == 2 and not pk:
             return redirect('home')
         else:
+            if 'redireccion' in self.kwargs:
+                self.storage.current_step = '1'
             return self.render(self.get_form())
 
     def render_done(self, form, **kwargs):
@@ -518,7 +520,8 @@ class Aplicacion(SessionWizardView):
             if self.steps.current == '0':    # actuamos solo si es el paso 1
                 model_1 = self.instance_dict.get('0', False) # obtenemos el pk del modelo que acabamos de crear
                 self.storage.reset()
-                return redirect(reverse('proyecto_edit', args=[model_1.pk]))  # redirecionamos al mismo objeto pero en edicion
+                # redirecionamos al mismo objeto pero en edicion, trabaja con ayuda de get()
+                return redirect(reverse('proyecto_edit_redirect', kwargs={'pk': model_1.pk, 'redireccion':1} ))  
         
         # en los otros paso, que la aplicacion funcione por defecto
         return super(Aplicacion, self).render_next_step(form, **kwargs)
