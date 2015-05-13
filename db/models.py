@@ -23,7 +23,7 @@ class Etapa(models.Model):
 	ASIGN_USUARIOS 		= 3
 	# el arquitecto sube planos y che
 	PLANOS 				= 4
-	APROB_INGENIERO 	= 5
+	#APROB_INGENIERO 	= 5
 	APROB_TESORERO 		= 6
 	APROB_NACIONAL 		= 7
 	APROB_INTERNACIONAL = 8
@@ -39,11 +39,9 @@ class Etapa(models.Model):
 		(DILIGENCIAMIENTO, u'Diligenciamiento'),
 		# 1 semana para revisar por usuario regional
 		(APROB_REGIONAL, u'Aprobación Regional'),
-		(ASIGN_USUARIOS, u'Asignación de Arquitecto/Director de Obra/Tesorero'),
-		# 5 dias para subir planos del proyecto de construcción
+		(ASIGN_USUARIOS, u'Asignación de Usuarios'),
+		# 8 dias para subir planos del proyecto de construcción
 		(PLANOS, u'Creación de Planos'),
-		# 3 dias para ser aprobado por un ingeniero
-		(APROB_INGENIERO, u'Aprobación Director de Obra'),
 		(APROB_TESORERO, u'Aprobación Tesorero'),
 		(APROB_NACIONAL, u'Aprobación Nacional'),
 		# 2 semanas para recibir aprobación internacional
