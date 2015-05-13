@@ -51,9 +51,10 @@ def mail_change_etapa(proyecto, request_user):
     for user in Usuario.objects.filter(tipo=Usuario.NACIONAL):
         recipient_list.append(user.email)   
     # esto porque el user_padre puede ser tambien en Nacional
-    if proyecto.usuario.user_padre.tipo != Usuario.NACIONAL:
-        #regional
-        recipient_list.append(proyecto.usuario.user_padre.email)
+    if proyecto.usuario.user_padre:
+        if proyecto.usuario.user_padre.tipo != Usuario.NACIONAL:
+            #regional
+            recipient_list.append(proyecto.usuario.user_padre.email)
 
     if request_user.email in recipient_list:
         recipient_list.remove(request_user.email)
