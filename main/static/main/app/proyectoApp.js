@@ -86,7 +86,7 @@ angular
 
 	    }
 
-	    /* -----------------------------------------*/ 
+	    /* ------------------  VISIBILIDAD DE ELEMENTOS DEL SIDEBAR  -----------------------*/ 
 	    $scope.verAprobacionRegional       = false;
 
 	    $scope.verFormAutorizacion          = false;
@@ -94,13 +94,10 @@ angular
 	    $scope.verFormAsignacionIngeniero   = false;
 	    $scope.verFormAsignacionTesorero    = false;
 
-	    $scope.showAutorizacionRegionalForm = function(event) {
-	    	
-    		var modal  = angular.element('#modalRegional').hasClass( "in" );
-    		
+	    $scope.showAutorizacionRegionalForm = function(event) {    		
     		if(event.type == 'mouseenter') {
     			$scope.verAprobacionRegional = true;
-    		} else if (!modal){
+    		} else {
 	    		$scope.verAprobacionRegional = false;
 	    	}
 	    }
@@ -111,6 +108,15 @@ angular
 	    	$scope.verFormAsignacionArquitecto   =   user == 'nacional' && event.currentTarget.id == 'panel-arquitecto' ? true : false;
 	    	$scope.verFormAsignacionIngeniero   =   user == 'nacional' && event.currentTarget.id == 'panel-ingeniero' ? true : false;
 	    	$scope.verFormAsignacionTesorero     =   user == 'nacional' && event.currentTarget.id == 'panel-tesorero' ? true : false;
+	    }
+
+	    /* ------------------  AUTORIZACIONES  -----------------------*/ 
+
+
+
+	    $scope.alClickAprobacion = function() {
+	    	angular.element('#submit-aprobacion-btn').button('loading');
+	    	angular.element('#revisar-aprobacion-btn').attr('disabled', 'disabled');
 	    }
 		
 	}]);

@@ -493,7 +493,9 @@
 			{% if user.tipo == user.REGIONAL %}
 		    <div class="panel-body" ng-show="verAprobacionRegional">
 				
-				{% if not proyecto.aprobacion_regional %}
+				{% if proyecto.etapa_actual < Etapa.APROB_REGIONAL %}
+				<i class="fa fa-thumbs-o-up fa-1x"></i> Espere que el proyecto cambie a aprobación regional
+				{% elif proyecto.etapa_actual == Etapa.APROB_REGIONAL %}
 				<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
 					Aprobar
 				</button>
@@ -646,11 +648,11 @@
 
 
 		<!-- Modal Aprobacion-->
-		<div class="modal fade" id="modalAprobacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		{% if user.tipo == user.REGIONAL %}
+		<div class="modal fade" id="modalAprobacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="myModalLabel">Dar Aprobación</h4>
 					</div>
 					<div class="modal-body">
@@ -676,6 +678,7 @@
 				</div>
 			</div>
 		</div>
+		{% endif %}
 		
 		
       

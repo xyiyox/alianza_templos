@@ -192,8 +192,9 @@ class AprobacionForm(forms.Form):
         self.helper.layout = Layout(
             Field('aprobar', type='hidden'),
             FormActions(
-                StrictButton('Revisar de nuevo', type="button", css_class="btn btn-default", data_dismiss="modal"),
-                StrictButton('Estoy seguro', type="Submit", css_class="btn btn-primary", data_loading_text="Procesando..."),
+                StrictButton('Revisar de nuevo', id="revisar-aprobacion-btn", type="button", css_class="btn btn-default", data_dismiss="modal"),
+                StrictButton('Estoy seguro', id="submit-aprobacion-btn", type="Submit", css_class="btn btn-primary", 
+                    data_loading_text="<i class='fa fa-spinner fa-spin'></i> Procesando...", ng_click="alClickAprobacion()"),
             )
         )
 

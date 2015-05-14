@@ -158,7 +158,7 @@ def proyecto(request, pk):
     comentarioForm         = ComentarioForm()
     comentarioForm.helper.form_action = proyecto.get_absolute_url()
 
-    ctx = {'proyecto': proyecto, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
+    ctx = {'proyecto': proyecto, 'Etapa': Etapa, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
 
     try:
         comunidad =  Comunidad.objects.get(edificacion=proyecto)
@@ -229,7 +229,7 @@ def autorizaciones(request, pk):
 
             if proyecto.etapa_actual == Etapa.APROB_REGIONAL and 'aprobar' in request.POST:   # validar y validar tanto aqui como en plantilla
                 proyecto.aprobacion_regional = request.POST['aprobar']
-                proyecto.save(update_fields=['aprobacion_regional'])  
+                proyecto.save(update_fields=['aprobacion_regional'])    # el campo etapa_actual se actualiza en el modelo Etapa
                 registrar_etapa(proyecto, Etapa.ASIGN_USUARIOS)  
                 mail_change_etapa(proyecto, request.user)
              
@@ -540,8 +540,7 @@ class Aplicacion(SessionWizardView):
                 self.instance_dict['0'] = model_instance
                 # Registramos la etapa de Diligenciamiento
                 registrar_etapa(model_instance, Etapa.DILIGENCIAMIENTO)
-                #etapa = Etapa(edificacion=model_instance, etapa=Etapa.DILIGENCIAMIENTO)
-                #etapa.save()
+
         else:
             if self.instance_dict.get(step_current, False): 
                 form.save()
