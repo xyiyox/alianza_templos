@@ -57,6 +57,7 @@ def mail_change_etapa(proyecto, request_user):
             recipient_list.append(proyecto.usuario.user_padre.email)
 
     if request_user.email in recipient_list:
+        # sacamos de la lista de envio al usuario que esta logueado
         recipient_list.remove(request_user.email)
 
     return send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list, fail_silently=True)

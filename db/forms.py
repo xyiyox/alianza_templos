@@ -180,10 +180,23 @@ class ComentarioForm(forms.ModelForm):
 
 """ FORMULARIOS AUTORIZACION """
 
-class AprobacionRegionalForm(ModelFormBase):  
-    class Meta:
-        model = Edificacion
-        fields = ['aprobacion_regional'] 
+class AprobacionForm(forms.Form):  
+    aprobar = forms.CharField(initial='True')
+
+    def __init__(self, *args, **kwargs):
+        super(AprobacionForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag  = False
+        self.helper.form_show_labels =False
+
+        self.helper.layout = Layout(
+            Field('aprobar', type='hidden'),
+            FormActions(
+                StrictButton('Revisar de nuevo', type="button", css_class="btn btn-default", data_dismiss="modal"),
+                StrictButton('Estoy seguro', type="Submit", css_class="btn btn-primary", data_loading_text="Procesando..."),
+            )
+        )
+
 
 class AprobacionInternacionalForm(ModelFormBase):  
     class Meta:

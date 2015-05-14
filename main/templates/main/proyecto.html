@@ -476,7 +476,7 @@
 		
 		<!-- REGIONAL -->
 
-		<div {% if user.tipo == user.REGIONAL %} ng-mouseenter="showAutorizacionForm($event)" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
+		<div {% if user.tipo == user.REGIONAL %} ng-mouseenter="showAutorizacionRegionalForm($event)" ng-mouseleave="showAutorizacionRegionalForm($event)"{% endif %}
 			 class="panel {% if proyecto.aprobacion_regional %} panel-green {% else %} panel-red {% endif %}">
 		    <div class="panel-heading">
 		        <div class="row">
@@ -491,16 +491,17 @@
 		        </div>
 		    </div>
 			{% if user.tipo == user.REGIONAL %}
-		    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
-		    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
-					{{ aprobacionRegionalForm.aprobacion_regional }}&nbsp;&nbsp;&nbsp;
-					{% if proyecto.aprobacion_regional %} 
-						<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
-					{% else %} 
-						<button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button> 
-					{% endif %}
-					 
-				</form>
+		    <div class="panel-body" ng-show="verAprobacionRegional">
+				
+				{% if not proyecto.aprobacion_regional %}
+				<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+					Aprobar
+				</button>
+				{% else %}
+				<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobado!
+				{% endif %}
+
+
 		    </div>
 		    {% endif %}
 		</div>
@@ -642,14 +643,42 @@
 			</div>
 
 		{% endif %}
+
+
+		<!-- Modal Aprobacion-->
+		<div class="modal fade" id="modalAprobacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Dar Aprobación</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-2">
+								<i class="fa fa-5x fa-warning text-danger"></i>
+							</div>
+							<div class="col-sm-10">
+								<h4>Esta seguro?</h4>
+								Antes de aprobar revise que los datos del proyecto sean correctos. 
+								<p class="bg-danger">Nota: Esta acción no se puede revertir</p>
+							</div>
+						</div>
+						
+					</div>
+
+					<div class="modal-footer">
+						<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">
+							{% crispy  aprobacionForm %} 
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
 		
 		
       
-		
-
-
-
-
 
 	</div> <!-- col-sm-4   -->
 

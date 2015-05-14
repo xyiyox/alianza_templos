@@ -86,11 +86,24 @@ angular
 
 	    }
 
-	    /* -----------------------------------------*/  
+	    /* -----------------------------------------*/ 
+	    $scope.verAprobacionRegional       = false;
+
 	    $scope.verFormAutorizacion          = false;
 	    $scope.verFormAsignacionArquitecto  = false;
 	    $scope.verFormAsignacionIngeniero   = false;
 	    $scope.verFormAsignacionTesorero    = false;
+
+	    $scope.showAutorizacionRegionalForm = function(event) {
+	    	
+    		var modal  = angular.element('#modalRegional').hasClass( "in" );
+    		
+    		if(event.type == 'mouseenter') {
+    			$scope.verAprobacionRegional = true;
+    		} else if (!modal){
+	    		$scope.verAprobacionRegional = false;
+	    	}
+	    }
 
 	    $scope.showAutorizacionForm = function(event, user) {
 	    	console.log(user);

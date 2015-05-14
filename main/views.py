@@ -191,7 +191,7 @@ def proyecto(request, pk):
         pass       
 
     if request.user.tipo == Usuario.REGIONAL:
-        ctx['aprobacionRegionalForm'] = AprobacionRegionalForm(instance=proyecto)  
+        ctx['aprobacionForm'] = AprobacionForm()  
         
     if request.user.tipo == Usuario.ARQUITECTO:
         ctx['aprobacionArquitectoForm'] = AprobacionArquitectoForm(instance=proyecto)
@@ -226,21 +226,13 @@ def autorizaciones(request, pk):
         proyecto  =  get_object_or_404(Edificacion, pk=pk)   
 
         if request.user.tipo == Usuario.REGIONAL:
-            
-            proyecto.aprobacion_regional = request.POST.get('aprobacion_regional', False) 
-            if proyecto.aprobacion_regional:
-                if proyecto.etapa_actual == 2:
-                   registrar_etapa(proyecto, Etapa.ASIGN_USUARIOS)  
-                   mail_change_etapa(proyecto, request.user)
-                   proyecto.save(update_fields=['aprobacion_regional'])  
-            else:
-               if proyecto.etapa_actual == 3:     
-                  registrar_etapa(proyecto, Etapa.APROB_REGIONAL)  
-                  mail_change_etapa(proyecto, request.user)
-                  proyecto.save(update_fields=['aprobacion_regional'])
-               else:
-                  ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
-                  return render(request, 'main/error.html',ctx)     
+
+            if proyecto.etapa_actual == Etapa.APROB_REGIONAL and 'aprobar' in request.POST:   # validar y validar tanto aqui como en plantilla
+                proyecto.aprobacion_regional = request.POST['aprobar']
+                proyecto.save(update_fields=['aprobacion_regional'])  
+                registrar_etapa(proyecto, Etapa.ASIGN_USUARIOS)  
+                mail_change_etapa(proyecto, request.user)
+             
          
         if request.user.tipo == Usuario.ARQUITECTO:
             #form = AprobacionArquitectoForm(request.POST, request.FILES, instance=proyecto)
