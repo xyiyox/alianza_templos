@@ -188,7 +188,6 @@ class Edificacion(models.Model):
 	# descartando
 	aprobacion_arquitecto 	= models.BooleanField('¿Desea Aprobar?',default=False)
 	aprobacion_ingeniero 	= models.BooleanField(default=False)
-	requiere_arquitecto     = models.BooleanField(default=True)
 
 	created     = models.DateField(auto_now_add =True)
 	updated     = models.DateField(auto_now = True)
