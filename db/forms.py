@@ -27,7 +27,8 @@ class EdificacionForm(ModelFormBase):
         model = Edificacion
         exclude = ['estado', 'usuario', 'etapa_actual', 'ingeniero', 'arquitecto', 'tesorero',
                     'aprobacion_regional', 'aprobacion_arquitecto', 
-                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero', 'created', 'updated', 'requiere_arquitecto','aprobacion_internacional']
+                    'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero', 'created', 'updated', 
+                    'requiere_arquitecto','aprobacion_internacional', 'usuarios_asignados', 'planos_creados']
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)
@@ -266,9 +267,9 @@ class AsignarUsuariosForm(ModelFormBase):
 
         self.helper.layout = Layout(
             PrependedAppendedText('arquitecto', "<i class='fa fa-user fa-fw'></i>", "arquitecto <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
-            PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "director O. <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
+            PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "dir. obra <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
             PrependedAppendedText('tesorero', "<i class='fa fa-user fa-fw'></i>", "tesorero <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
-            StrictButton('Guardar cambios', type="Submit", css_class="btn-info btn-block btn-sm"),
+            StrictButton('Guardar usuarios', type="Submit", css_class="btn-info btn-sm"),
         )
 
     class Meta:

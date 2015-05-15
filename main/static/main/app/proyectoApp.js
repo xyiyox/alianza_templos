@@ -87,36 +87,26 @@ angular
 	    }
 
 	    /* ------------------  VISIBILIDAD DE ELEMENTOS DEL SIDEBAR  -----------------------*/ 
-	    $scope.verAprobacionRegional       = false;
+	    $scope.verAprobacion       = false;
+	    $scope.verFormAutorizacion = false;
+	    $scope.verAsignacionForm   = false;
 
-	    $scope.verFormAutorizacion          = false;
-	    $scope.verFormAsignacionArquitecto  = false;
-	    $scope.verFormAsignacionIngeniero   = false;
-	    $scope.verFormAsignacionTesorero    = false;
 
-	    $scope.showAutorizacionRegionalForm = function(event) {    		
-    		if(event.type == 'mouseenter') {
-    			$scope.verAprobacionRegional = true;
-    		} else {
-	    		$scope.verAprobacionRegional = false;
-	    	}
+	    $scope.openPanel = function(event) {    		 		
+    		$scope.verAprobacion = event.type == 'mouseenter';
 	    }
 
-	    $scope.showAutorizacionForm = function(event, user) {
-	    	console.log(user);
-	    	$scope.verFormAutorizacion = event.type == 'mouseenter' && user != 'nacional' ? true : false;
-	    	$scope.verFormAsignacionArquitecto   =   user == 'nacional' && event.currentTarget.id == 'panel-arquitecto' ? true : false;
-	    	$scope.verFormAsignacionIngeniero   =   user == 'nacional' && event.currentTarget.id == 'panel-ingeniero' ? true : false;
-	    	$scope.verFormAsignacionTesorero     =   user == 'nacional' && event.currentTarget.id == 'panel-tesorero' ? true : false;
-	    }
 
 	    /* ------------------  AUTORIZACIONES  -----------------------*/ 
-
-
 
 	    $scope.alClickAprobacion = function() {
 	    	angular.element('#submit-aprobacion-btn').button('loading');
 	    	angular.element('#revisar-aprobacion-btn').attr('disabled', 'disabled');
+	    }
+
+	    $scope.alClickAprobarUsuarios = function() {
+			angular.element('#msg-default').addClass('hidden');
+			angular.element('#msg-usuarios').removeClass('hidden').addClass('show');
 	    }
 		
 	}]);
