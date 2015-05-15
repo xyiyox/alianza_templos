@@ -88,12 +88,20 @@ angular
 
 	    /* ------------------  VISIBILIDAD DE ELEMENTOS DEL SIDEBAR  -----------------------*/ 
 	    $scope.verAprobacion       = false;
+	    $scope.verAquitectoEditForm     = false;
+	    $scope.verIngenieroEditForm     = false;
+	    $scope.verTesoreroEditForm     = false;
 	    $scope.verFormAutorizacion = false;
-	    $scope.verAsignacionForm   = false;
 
 
 	    $scope.openPanel = function(event) {    		 		
     		$scope.verAprobacion = event.type == 'mouseenter';
+	    }
+
+	    $scope.openOtherPanel = function(event) {    		 		
+    		$scope.verAquitectoEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-arquitecto' ? true : false;
+    		$scope.verIngenieroEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-ingeniero' ? true : false;
+    		$scope.verTesoreroEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-tesorero' ? true : false;
 	    }
 
 

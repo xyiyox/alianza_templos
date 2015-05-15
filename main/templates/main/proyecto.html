@@ -529,7 +529,11 @@
 
 			<!-- ARQUITECTO -->
 			{% if proyecto.arquitecto %} 
-			<div {% if user.tipo == user.ARQUITECTO or user.tipo == user.NACIONAL %} ng-mouseenter="showAutorizacionForm($event, '{{user.tipo}}')" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
+			<div {% if user.tipo == user.ARQUITECTO %} 
+				ng-mouseenter="openPanel($event)" ng-mouseleave="openPanel($event)"
+				{% elif user.tipo == user.NACIONAL %}
+				ng-mouseenter="openOtherPanel($event)" ng-mouseleave="openOtherPanel($event)"
+				{% endif %}
 				class="panel {% if proyecto.aprobacion_arquitecto %} panel-green {% else %} panel-red {% endif %}" id="panel-arquitecto">
 			    <div class="panel-heading">
 			        <div class="row">
@@ -544,7 +548,7 @@
 			        </div>
 			    </div>
 				{% if user.tipo == user.ARQUITECTO %} <!-- Le mostramos formluario de autenticacion -->
-			    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
+			    <div class="panel-body" style="text-align:center;" ng-show="verAprobacion">
 
 			    	<div class="well well-sm">
 			    		<h4>Subir Plano</h4>
@@ -565,33 +569,27 @@
 					</form>
 			    </div>
 			    {% endif %}
+			    
 			    {% if user.tipo == user.NACIONAL %} <!-- Le mostramos formulario de asignacion -->
-			    <div class="panel-body" ng-show="verFormAsignacionArquitecto">
-			    	<p>Asignar usuario</p>
-			    	{% crispy asignarUsuariosForm %}
-			    </div>
-			    <div class="panel-body" style="text-align:center;" ng-show="verFormAsignacionArquitecto">
-			    	¿Requiere Arquitecto?
-			    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post" id='formArquitec'>{% csrf_token %}
-						{{ aprobacionArquitectoForm.aprobacion_arquitecto }}&nbsp;&nbsp;&nbsp;
-						{% if proyecto.aprobacion_arquitecto %} 
-							<button id='confirm' type='button' onclick='return click_event()' class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> Si</button>
-						{% else %} 
-							<button id='confirm' type='button' onclick='return click_event()' class="btn btn-success btn-xs"><i class="fa fa-check"></i> No</button> 
-						{% endif %}
-						 
-					</form>
-					<div id='dialog-confirm' style='display:none'>Si acepta esto no tendra vuelta atras, esta seguro?</div>
-			    </div>		
+				    <div class="panel-body" ng-show="verAquitectoEditForm">
+				    	<p>Cambiar Arquitecto</p>
+				    	{% crispy arquitectoEditForm %}
+				    </div>
 			    {% endif %}
+
 			</div>
+
 			{% endif %} <!-- ARQUITECTO -->
 
 
 
 			<!-- INGENIERO -->
 			{% if proyecto.ingeniero %}
-			<div {% if user.tipo == user.INGENIERO or user.tipo == user.NACIONAL %} ng-mouseenter="showAutorizacionForm($event, '{{user.tipo}}')" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
+			<div {% if user.tipo == user.INGENIERO %} 
+				ng-mouseenter="openPanel($event)" ng-mouseleave="openPanel($event)"
+				{% elif user.tipo == user.NACIONAL %}
+				ng-mouseenter="openOtherPanel($event)" ng-mouseleave="openOtherPanel($event)"
+				{% endif %}
 				class="panel {% if proyecto.aprobacion_ingeniero %} panel-green {% else %} panel-red {% endif %}" id="panel-ingeniero">
 			    <div class="panel-heading">
 			        <div class="row">
@@ -606,7 +604,7 @@
 			        </div>
 			    </div>
 				{% if user.tipo == user.INGENIERO %} <!-- Le mostramos formluario de autenticacion -->
-			    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
+			    <div class="panel-body" style="text-align:center;" ng-show="verAprobacion">
 			    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
 						{{ aprobacionIngenieroForm.aprobacion_ingeniero }}&nbsp;&nbsp;&nbsp;
 						{% if proyecto.aprobacion_ingeniero %} 
@@ -619,9 +617,9 @@
 			    </div>
 			    {% endif %}
 			    {% if user.tipo == user.NACIONAL %} <!-- Le mostramos formulario de asignacion -->
-			    <div class="panel-body" ng-show="verFormAsignacionIngeniero">
-			    	<p>Asignar usuario</p>
-			    	{% crispy asignarUsuariosForm %}
+			    <div class="panel-body" ng-show="verIngenieroEditForm">
+			    	<p>Cambiar Ingeniero</p>
+			    	{% crispy ingenieroEditForm %}
 			    </div>
 			    {% endif %}
 			</div>
@@ -633,7 +631,11 @@
 			
 			{% if proyecto.tesorero %}
 
-			<div {% if user.tipo == user.TESORERO or user.tipo == user.NACIONAL %} ng-mouseenter="showAutorizacionForm($event, '{{user.tipo}}')" ng-mouseleave="showAutorizacionForm($event)"{% endif %}
+			<div {% if user.tipo == user.TESORERO %} 
+				ng-mouseenter="openPanel($event)" ng-mouseleave="openPanel($event)"
+				{% elif user.tipo == user.NACIONAL %}
+				ng-mouseenter="openOtherPanel($event)" ng-mouseleave="openOtherPanel($event)"
+				{% endif %}
 				class="panel {% if proyecto.aprobacion_tesorero %} panel-green {% else %} panel-red {% endif %}" id="panel-tesorero">
 			    <div class="panel-heading">
 			        <div class="row">
@@ -661,9 +663,9 @@
 			    </div>
 			    {% endif %}
 			    {% if user.tipo == user.NACIONAL %} <!-- Le mostramos formulario de asignacion -->
-			    <div class="panel-body" ng-show="verFormAsignacionTesorero">
-			    	<p>Asignar usuario</p>
-			    	{% crispy asignarUsuariosForm %}
+			    <div class="panel-body" ng-show="verTesoreroEditForm">
+			    	<p>Cambiar Tesorero</p>
+			    	{% crispy tesoreroEditForm %}
 			    </div>
 			    {% endif %}
 			</div>

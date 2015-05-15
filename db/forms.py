@@ -250,7 +250,7 @@ class AprobacionNacionalForm(ModelFormBase):
         fields = ['aprobacion_nacional']
 
 
-""" FORMULARIOS ASIGNACION USUARIOS A PROYECTOS """
+""" FORMULARIOS ASIGNACION Y EDICCION DE USUARIOS """
 
 class AsignarUsuariosForm(ModelFormBase):
 
@@ -275,3 +275,65 @@ class AsignarUsuariosForm(ModelFormBase):
     class Meta:
         model  = Edificacion
         fields = ['arquitecto', 'ingeniero', 'tesorero']
+
+
+class ArquitectoEditForm(ModelFormBase):
+
+    def __init__(self, *args, **kwargs):
+        super(ArquitectoEditForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+        self.helper.form_action = "home"  # es reemplazado en la vista
+
+        self.fields['arquitecto'].queryset = Usuario.objects.filter(tipo=Usuario.ARQUITECTO)
+
+        self.helper.layout = Layout(
+            PrependedAppendedText('arquitecto', "<i class='fa fa-user fa-fw'></i>", "arquitecto <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
+            StrictButton('Cambiar arquitecto', type="Submit", css_class="btn-info btn-sm"),
+        )
+
+    class Meta:
+        model  = Edificacion
+        fields = ['arquitecto']
+
+class IngenieroEditForm(ModelFormBase):
+
+    def __init__(self, *args, **kwargs):
+        super(IngenieroEditForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+        self.helper.form_action = "home"  # es reemplazado en la vista
+
+        self.fields['ingeniero'].queryset = Usuario.objects.filter(tipo=Usuario.INGENIERO)
+
+        self.helper.layout = Layout(
+            PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "dir. obra <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
+            StrictButton('Cambiar ingeniero', type="Submit", css_class="btn-info btn-sm"),
+        )
+
+    class Meta:
+        model  = Edificacion
+        fields = ['ingeniero']
+
+
+class TesoreroEditForm(ModelFormBase):
+
+    def __init__(self, *args, **kwargs):
+        super(TesoreroEditForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+        self.helper.form_action = "home"  # es reemplazado en la vista
+
+        self.fields['tesorero'].queryset = Usuario.objects.filter(tipo=Usuario.TESORERO)
+
+        self.helper.layout = Layout(
+            PrependedAppendedText('tesorero', "<i class='fa fa-user fa-fw'></i>", "tesorero <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
+            StrictButton('Cambiar tesorero', type="Submit", css_class="btn-info btn-sm"),
+        )
+
+    class Meta:
+        model  = Edificacion
+        fields = ['tesorero']
