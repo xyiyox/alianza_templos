@@ -287,6 +287,7 @@ class ArquitectoEditForm(ModelFormBase):
         self.helper.form_action = "home"  # es reemplazado en la vista
 
         self.fields['arquitecto'].queryset = Usuario.objects.filter(tipo=Usuario.ARQUITECTO)
+        self.fields['arquitecto'].empty_label = None
 
         self.helper.layout = Layout(
             PrependedAppendedText('arquitecto', "<i class='fa fa-user fa-fw'></i>", "arquitecto <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
@@ -307,10 +308,11 @@ class IngenieroEditForm(ModelFormBase):
         self.helper.form_action = "home"  # es reemplazado en la vista
 
         self.fields['ingeniero'].queryset = Usuario.objects.filter(tipo=Usuario.INGENIERO)
+        self.fields['ingeniero'].empty_label = None
 
         self.helper.layout = Layout(
             PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "dir. obra <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
-            StrictButton('Cambiar ingeniero', type="Submit", css_class="btn-info btn-sm"),
+            StrictButton('Cambiar dir. de obra', type="Submit", css_class="btn-info btn-sm"),
         )
 
     class Meta:
@@ -328,6 +330,7 @@ class TesoreroEditForm(ModelFormBase):
         self.helper.form_action = "home"  # es reemplazado en la vista
 
         self.fields['tesorero'].queryset = Usuario.objects.filter(tipo=Usuario.TESORERO)
+        self.fields['tesorero'].empty_label = None
 
         self.helper.layout = Layout(
             PrependedAppendedText('tesorero', "<i class='fa fa-user fa-fw'></i>", "tesorero <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
