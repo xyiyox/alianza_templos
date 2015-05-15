@@ -255,51 +255,43 @@ def autorizaciones(request, pk):
                 mail_change_etapa(proyecto, request.user)
 
          
-        if request.user.tipo == Usuario.ARQUITECTO:
-            #form = AprobacionArquitectoForm(request.POST, request.FILES, instance=proyecto)
-          
-            proyecto.aprobacion_arquitecto = request.POST.get('aprobacion_arquitecto', False)           
-            if proyecto.aprobacion_arquitecto:   
-                if proyecto.etapa_actual == 4:                
-                    adj = proyecto.adjuntos_set.get()
-                    form_plano = PlanosArquitectoForm(request.POST, request.FILES, instance=adj)
-                    if form.is_valid() and form_plano.is_valid():
-                        print('Somos Validos')
-                        form.save()
-                        form_plano.save()    
-                        proyecto.save(update_fields=['aprobacion_arquitecto'])    
-                        registrar_etapa(proyecto, Etapa.APROB_INGENIERO)  
-                        mail_change_etapa(proyecto, request.user)                     
-                    else:
-                        print('No Somos Validos', form.errors, form_plano.errors)               
-            else:
-                if proyecto.etapa_actual == 5: 
-                    registrar_etapa(proyecto, Etapa.PLANOS)  
-                    mail_change_etapa(proyecto, request.user) 
-                    proyecto.save(update_fields=['aprobacion_arquitecto'])          
-                else:
-                    ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
-                    return render(request, 'main/error.html',ctx)         
-        if request.user.tipo == Usuario.INGENIERO:
-            #form = AprobacionIngenieroForm(request.POST, instance=proyecto)            
-            if not proyecto.aprobacion_arquitecto:                               
-                ctx={'proyecto':proyecto,'er':'el arquitecto debe autorizar el proyecto'}                                         
-                return render(request, 'main/error.html',ctx) 
-            else:                
-                proyecto.aprobacion_ingeniero = request.POST.get('aprobacion_ingeniero', False)           
-                if proyecto.aprobacion_ingeniero:
-                    if proyecto.etapa_actual == 5:
-                        registrar_etapa(proyecto, Etapa.APROB_TESORERO)  
-                        mail_change_etapa(proyecto, request.user) 
-                        proyecto.save(update_fields=['aprobacion_ingeniero']) 
-                else: 
-                    if proyecto.etapa_actual == 6:
-                        registrar_etapa(proyecto, Etapa.APROB_INGENIERO)  
-                        mail_change_etapa(proyecto, request.user) 
-                        proyecto.save(update_fields=['aprobacion_ingeniero']) 
-                    else:
-                        ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
-                        return render(request, 'main/error.html',ctx)                 
+        if request.user.tipo == Usuario.ARQUITECTO or request.user.tipo == Usuario.INGENIERO:
+            
+            if proyecto.etapa_actual == Etapa.PLANOS and 'aprobar' in request.POST:
+                
+                if request.user.tipo == Usuario.ARQUITECTO:
+                    proyecto.aprobacion_arquitecto = request.POST['aprobar']
+                    proyecto.save(update_fields=['aprobacion_arquitecto'])
+
+                if request.user.tipo == Usuario.INGENIERO:
+                    proyecto.aprobacion_ingeniero = request.POST['aprobar']
+                    proyecto.save(update_fields=['aprobacion_ingeniero'])
+
+                if proyecto.arquitecto and proyecto.ingeniero: # si existen los dos usuarios
+                    if proyecto.aprobacion_arquitecto and proyecto.aprobacion_ingeniero: # y solo si los dos han aprobado
+                        if proyecto.tesorero:
+                            registrar_etapa(proyecto, Etapa.APROB_TESORERO) # si hay tesorero vamos a esa etapa
+                        else:
+                            registrar_etapa(proyecto, Etapa.APROB_NACIONAL) # sino hay tesorero saltamos a la siguiente
+                    
+                        mail_change_etapa(proyecto, request.user)  # notificamos por email
+
+                elif proyecto.arquitecto:
+                    if proyecto.aprobacion_arquitecto and proyecto.tesorero:
+                        registrar_etapa(proyecto, Etapa.APROB_TESORERO)
+                    elif proyecto.aprobacion_arquitecto and not proyecto.tesorero:
+                        registrar_etapa(proyecto, Etapa.APROB_NACIONAL)
+
+                    mail_change_etapa(proyecto, request.user)  # notificamos por email
+
+                elif proyecto.ingeniero:
+                    if proyecto.aprobacion_ingeniero and proyecto.tesorero:
+                        registrar_etapa(proyecto, Etapa.APROB_TESORERO)
+                    elif proyecto.aprobacion_ingeniero and not proyecto.tesorero:
+                        registrar_etapa(proyecto, Etapa.APROB_NACIONAL)
+
+                    mail_change_etapa(proyecto, request.user)  # notificamos por email
+           
 
         if request.user.tipo == Usuario.TESORERO:   
             #form = AprobacionTesoreroForm(request.POST, instance=proyecto)
@@ -369,7 +361,7 @@ def planos(request, pk):
         if request.POST['planos'] == Usuario.ARQUITECTO:
             form = PlanosArquitectoForm(request.POST, request.FILES, instance=adjuntos)
             form.save()
-            
+
         if request.POST['planos'] == Usuario.INGENIERO:
             form = PlanosIngenieroForm(request.POST, request.FILES, instance=adjuntos)
             form.save()

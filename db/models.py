@@ -180,14 +180,16 @@ class Edificacion(models.Model):
 	# aprobaciones para cambiar de etapa, estan en orden temporal
 	aprobacion_regional 	= models.BooleanField(default=False)
 	usuarios_asignados      = models.BooleanField(default=False)
+
+	aprobacion_arquitecto 	= models.BooleanField(default=False)
+	aprobacion_ingeniero 	= models.BooleanField(default=False)
+	
 	planos_creados          = models.BooleanField(default=False)
 	aprobacion_tesorero 	= models.BooleanField(default=False)
 	aprobacion_nacional 	= models.BooleanField(default=False)
 	aprobacion_internacional= models.BooleanField(default=False)
 
-	# descartando
-	aprobacion_arquitecto 	= models.BooleanField('¿Desea Aprobar?',default=False)
-	aprobacion_ingeniero 	= models.BooleanField(default=False)
+	
 
 	created     = models.DateField(auto_now_add =True)
 	updated     = models.DateField(auto_now = True)
