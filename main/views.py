@@ -293,27 +293,15 @@ def autorizaciones(request, pk):
                     mail_change_etapa(proyecto, request.user)  # notificamos por email
            
 
-        if request.user.tipo == Usuario.TESORERO:   
-            #form = AprobacionTesoreroForm(request.POST, instance=proyecto)
-            #el maestro de obra no la a aprobado
-            if not proyecto.aprobacion_ingeniero:               
-                ctx={'proyecto':proyecto,'er':'el director de obra debe autorizar el proyecto'}                                         
-                return render(request, 'main/error.html',ctx)                   
-            else:
-                proyecto.aprobacion_tesorero = request.POST.get('aprobacion_tesorero', False)           
-                if proyecto.aprobacion_tesorero:
-                    if proyecto.etapa_actual == 6:
-                        registrar_etapa(proyecto, Etapa.APROB_NACIONAL)  
-                        mail_change_etapa(proyecto, request.user) 
-                        proyecto.save(update_fields=['aprobacion_tesorero']) 
-                else:
-                    if proyecto.etapa_actual == 7:
-                        registrar_etapa(proyecto, Etapa.APROB_TESORERO)  
-                        mail_change_etapa(proyecto, request.user)                    
-                        proyecto.save(update_fields=['aprobacion_tesorero'])    
-                    else:
-                        ctx={'proyecto':proyecto,'er':'No puede Desautorizar el proyecto despues de avanzar en etapas'}                                         
-                        return render(request, 'main/error.html',ctx)     
+        if request.user.tipo == Usuario.TESORERO:
+
+            if proyecto.etapa_actual == Etapa.APROB_TESORERO and 'aprobar' in request.POST:   # validar y validar tanto aqui como en plantilla
+                proyecto.aprobacion_tesorero = request.POST['aprobar']
+                proyecto.save(update_fields=['aprobacion_tesorero'])    # el campo etapa_actual se actualiza en el modelo Etapa
+                
+                registrar_etapa(proyecto, Etapa.APROB_NACIONAL)  
+                mail_change_etapa(proyecto, request.user) 
+              
         
 
         return redirect(proyecto)

@@ -463,11 +463,9 @@
 		    	<p>Asignar usuarios</p>
 		    	{% crispy asignarUsuariosForm %}
 				
-				<div class="page-header" ></div>
+				<div class="page-header" style="margin-top:0;"></div>
 		    	{% endif %}
 		    	
-		    	Aprobar esta etapa
-		    	<p></p>
 		    	
 		    	{% if proyecto.etapa_actual < Etapa.ASIGN_USUARIOS %}
 				<i class="fa fa-warning fa-1x"></i> para aprobar esta estapa espere que el proyecto cambie a asignación de usuarios
@@ -481,7 +479,8 @@
 				</button>
 
 				{% else %}
-				<i class="fa fa-thumbs-o-up fa-1x"></i> Usuarios asignados!
+				<i class="fa fa-thumbs-o-up fa-1x"></i> Usuarios asignados!</br>
+				Espere etapa aprobación nacional
 				{% endif %}
 				<!-- aqui preparamos la aprobacion final de nacional -->
 		    </div>
@@ -670,16 +669,19 @@
 			        </div>
 			    </div>
 				{% if user.tipo == user.TESORERO %} <!-- Le mostramos formluario de autenticacion -->
-			    <div class="panel-body" style="text-align:center;" ng-show="verFormAutorizacion">
-			    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
-						{{ aprobacionTesoreroForm.aprobacion_tesorero }}&nbsp;&nbsp;&nbsp;
-						{% if proyecto.aprobacion_tesorero %} 
-							<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
-						{% else %} 
-							<button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button> 
-						{% endif %}
-						 
-					</form>
+			    <div class="panel-body" style="text-align:center;" ng-show="verAprobacion">
+			    	
+			    	{% if proyecto.etapa_actual < Etapa.APROB_TESORERO %}
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Espere que el proyecto cambie a aprobación de tesorero
+					{% elif proyecto.etapa_actual == Etapa.APROB_TESORERO %}
+					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+						Aprobar
+					</button>
+					{% else %}
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobado!
+					{% endif %}
+					
+
 			    </div>
 			    {% endif %}
 			    {% if user.tipo == user.NACIONAL %} <!-- Le mostramos formulario de asignacion -->
