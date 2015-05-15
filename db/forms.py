@@ -290,6 +290,7 @@ class ArquitectoEditForm(ModelFormBase):
         self.fields['arquitecto'].empty_label = None
 
         self.helper.layout = Layout(
+            Hidden('editar', Usuario.ARQUITECTO),
             PrependedAppendedText('arquitecto', "<i class='fa fa-user fa-fw'></i>", "arquitecto <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
             StrictButton('Cambiar arquitecto', type="Submit", css_class="btn-info btn-sm"),
         )
@@ -311,6 +312,7 @@ class IngenieroEditForm(ModelFormBase):
         self.fields['ingeniero'].empty_label = None
 
         self.helper.layout = Layout(
+            Hidden('editar', Usuario.INGENIERO),
             PrependedAppendedText('ingeniero', "<i class='fa fa-user fa-fw'></i>", "dir. obra <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
             StrictButton('Cambiar dir. de obra', type="Submit", css_class="btn-info btn-sm"),
         )
@@ -333,6 +335,7 @@ class TesoreroEditForm(ModelFormBase):
         self.fields['tesorero'].empty_label = None
 
         self.helper.layout = Layout(
+            Hidden('editar', Usuario.TESORERO),
             PrependedAppendedText('tesorero', "<i class='fa fa-user fa-fw'></i>", "tesorero <a href='/admin/usuarios/usuario/add/'><i class='fa fa-plus'></i></a>", css_class="input-sm"),
             StrictButton('Cambiar tesorero', type="Submit", css_class="btn-info btn-sm"),
         )

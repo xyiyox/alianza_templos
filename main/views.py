@@ -336,11 +336,25 @@ def asignaciones(request, pk):
     Arquitecto, Ingeniero y Tesorero en un proyecto
     """
     if request.method == 'POST':
+
         proyecto  =  get_object_or_404(Edificacion, pk=pk)
 
-        form = AsignarUsuariosForm(request.POST, instance=proyecto)
-        form.save()
- 
+        if not 'editar' in request.POST:
+            form = AsignarUsuariosForm(request.POST, instance=proyecto)
+            form.save()
+        
+        elif request.POST['editar'] == Usuario.ARQUITECTO:
+            form = ArquitectoEditForm(request.POST, instance=proyecto)
+            form.save()
+
+        elif request.POST['editar'] == Usuario.INGENIERO:
+            form = IngenieroEditForm(request.POST, instance=proyecto)
+            form.save()
+
+        elif request.POST['editar'] == Usuario.TESORERO:
+            form = TesoreroEditForm(request.POST, instance=proyecto)
+            form.save()
+
         return redirect(proyecto)
 
     raise Http404
