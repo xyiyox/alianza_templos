@@ -406,7 +406,9 @@ class Adjuntos(models.Model):
 								help_text='Incluya una breve historia de la congregación')
 	testimonio_pastor 		= models.FileField('Testimonio del pastor', upload_to=calcular_ruta,
 								help_text='Incluya el testimonio del pastor de la congregación')	
-	planos_arquitecto = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
+	
+	planos_arquitecto       = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
+	planos_ingeniero        = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
 
 	def __str__(self):
 		return "%s" %"Adjuntos"

@@ -603,19 +603,27 @@
 			            </div>
 			        </div>
 			    </div>
+				
 				{% if user.tipo == user.INGENIERO %} <!-- Le mostramos formluario de autenticacion -->
 			    <div class="panel-body" style="text-align:center;" ng-show="verAprobacion">
-			    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
-						{{ aprobacionIngenieroForm.aprobacion_ingeniero }}&nbsp;&nbsp;&nbsp;
-						{% if proyecto.aprobacion_ingeniero %} 
-							<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
-						{% else %} 
-							<button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button> 
-						{% endif %}
-						 
-					</form>
+			    	
+			    	{% if proyecto.etapa_actual == Etapa.ASIG_USUARIOS %}
+					<span class="label label-success">antes de aprobar suba los planos</span>
+					
+					{% elif proyecto.etapa_actual == Etapa.PLANOS %}
+					<button type="button" id="aprobar-asignacion-btn" class="btn btn-success  btn-block" data-toggle="modal" data-target="#modalAprobacion" ng-click="alClickAprobarIngeniero($event)">
+						aprobar
+					</button>
+
+					{% else %}
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobación dada!
+					{% endif %}
+
+
+
 			    </div>
 			    {% endif %}
+			   
 			    {% if user.tipo == user.NACIONAL %} <!-- Le mostramos formulario de asignacion -->
 			    <div class="panel-body" ng-show="verIngenieroEditForm">
 			    	<p>Cambiar Ingeniero</p>
@@ -674,7 +682,7 @@
 
 
 		<!-- Modal Aprobacion regional-->
-		{% if user.tipo == user.REGIONAL or user.tipo == user.NACIONAL %}
+		{% if user.tipo != user.LOCAL %}
 		<div class="modal fade" id="modalAprobacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 			<div class="modal-dialog">
 				<div class="modal-content">

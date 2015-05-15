@@ -128,7 +128,7 @@ class AdjuntosForm(ModelFormBase):
     
     class Meta:
         model = Adjuntos
-        exclude = ['edificacion', 'planos_arquitecto']
+        exclude = ['edificacion', 'planos_arquitecto', 'planos_ingeniero']
 
     def __init__(self, *args, **kwargs):
         super(AdjuntosForm, self).__init__(*args, **kwargs)
@@ -210,29 +210,22 @@ def validate_planos(value):
     if value != None:       
         raise ValidationError(u'Debe subir planos para poder aprobar')
 
-class PlanosArquitectoForm(ModelFormBase):
-    """Aqui se subiran los planos del arquitecto antes de que de su autorizacion"""
-    planos_arquitecto = forms.FileField('Planos', validators=[validate_planos])
 
+class PlanosArquitectoForm(ModelFormBase):
     class Meta:
         model = Adjuntos
         fields = ['planos_arquitecto']
+
+class PlanosIngenieroForm(ModelFormBase):
+    class Meta:
+        model = Adjuntos
+        fields = ['planos_ingeniero']
 
 
 class AprobacionArquitectoForm(ModelFormBase):
     class Meta:
         model = Edificacion
         fields = ['aprobacion_arquitecto']
-
-    # def save(self, planos, commit=True):
-    #     print('Datos', self.fields['planos'])
-    #     instance = super(AprobacionArquitectoForm, self).save(commit=False)
-    #     adj = Adjuntos.objects.get(edificacion=instance)
-    #     adj.planos_arquitecto = planos
-    #     adj.save()
-    #     if commit:
-    #         instance.save()
-    #     return instance
   
 class AprobacionIngenieroForm(ModelFormBase):  
     class Meta:
