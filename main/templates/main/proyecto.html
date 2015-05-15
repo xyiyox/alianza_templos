@@ -547,26 +547,31 @@
 			            </div>		           
 			        </div>
 			    </div>
+				
 				{% if user.tipo == user.ARQUITECTO %} <!-- Le mostramos formluario de autenticacion -->
-			    <div class="panel-body" style="text-align:center;" ng-show="verAprobacion">
-
-			    	<div class="well well-sm">
+			    <div class="panel-body" ng-show="verAprobacion">
+					
+					<div class="well well-sm">
 			    		<h4>Subir Plano</h4>
-				    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post" enctype="multipart/form-data">{% csrf_token %}
-							{{ planosArquitectoForm.planos_arquitecto }} </br>
-							<button class="btn btn-primary btn-xs">guardar</button>
-						</form>
-					</div>
+			    		<form action="/proyecto/{{proyecto.id}}/planos/" method="post" enctype="multipart/form-data">
+			    			{% crispy planosArquitectoForm %}
+			    		</form>
+			    	</div>
 
-			    	<form action="/proyecto/{{proyecto.id}}/autorizaciones/" method="post">{% csrf_token %}
-						{{ aprobacionArquitectoForm.aprobacion_arquitecto }}&nbsp;&nbsp;&nbsp;
-						{% if proyecto.aprobacion_arquitectof %} 
-							<button class="btn btn-danger btn-xs"><i class="fa fa-square-o"></i> desautorizar</button>
-						{% else %} 
-							<button class="btn btn-success btn-xs"><i class="fa fa-check"></i> autorizar</button> 
-						{% endif %}
-						 
-					</form>
+			    	
+			    	{% if not adjuntos.planos_arquitecto %}
+					<span class="label label-success">antes de poder aprobar suba los planos</span>
+					
+					{% elif proyecto.etapa_actual == Etapa.PLANOS %}
+					<button type="button" id="aprobar-asignacion-btn" class="btn btn-success  btn-block" data-toggle="modal" data-target="#modalAprobacion" ng-click="alClickAprobarArquitecto($event)">
+						aprobar
+					</button>
+
+					{% else %}
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobación dada!
+					{% endif %}
+			    	
+			    	
 			    </div>
 			    {% endif %}
 			    
@@ -605,9 +610,16 @@
 			    </div>
 				
 				{% if user.tipo == user.INGENIERO %} <!-- Le mostramos formluario de autenticacion -->
-			    <div class="panel-body" style="text-align:center;" ng-show="verAprobacion">
+			    <div class="panel-body"  ng-show="verAprobacion">
+					<div class="well well-sm">
+			    		<h4>Subir Plano</h4>
+			    		<form action="/proyecto/{{proyecto.id}}/planos/" method="post" enctype="multipart/form-data">
+			    			{% crispy planosIngenieroForm %}
+			    		</form>
+			    	</div>
+
 			    	
-			    	{% if proyecto.etapa_actual == Etapa.ASIG_USUARIOS %}
+			    	{% if not adjuntos.planos_ingeniero %}
 					<span class="label label-success">antes de aprobar suba los planos</span>
 					
 					{% elif proyecto.etapa_actual == Etapa.PLANOS %}

@@ -25,6 +25,7 @@ urlpatterns = patterns('main.views',
     url(r'^proyecto/(?P<pk>\d+)/editar/(?P<redireccion>[1-1]{1})/$', login_required(Aplicacion.as_view()), name='proyecto_edit_redirect'),  # esta url la usamos cuando redireccionamos de crecion a edit
     url(r'^proyecto/(?P<pk>\d+)/done/$', 'done', name='done'), 
     url(r'^proyecto/(?P<pk>\d+)/autorizaciones/$', 'autorizaciones', name='autorizaciones'),
-    url(r'^proyecto/(?P<pk>\d+)/asignaciones/$', 'asignaciones', name='asignaciones')  
+    url(r'^proyecto/(?P<pk>\d+)/asignaciones/$', 'asignaciones', name='asignaciones'),
+    url(r'^proyecto/(?P<pk>\d+)/planos/$', 'planos', name='planos')
 )
 

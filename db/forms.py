@@ -139,20 +139,6 @@ class AdjuntosForm(ModelFormBase):
         self.helper.field_class  = 'col-sm-9'
 
 
-#class FuentesFinanciacionForm(forms.ModelForm):
-    
-#    class Meta:
-#        model = FuentesFinanciacion
-#        exclude = ['info_financiera']
-
-#    def __init__(self, *args, **kwargs):
-#        super(FuentesFinanciacionForm, self).__init__(*args, **kwargs)
-#        self.helper = FormHelper(self)
-        
-#        self.helper.form_tag = False
-#        self.helper.label_class = 'col-sm-3'
-#        self.helper.field_class = 'col-sm-9'
-
     
 class ComentarioForm(forms.ModelForm):
     """Formulario para crear un comentario"""
@@ -216,21 +202,40 @@ class PlanosArquitectoForm(ModelFormBase):
         model = Adjuntos
         fields = ['planos_arquitecto']
 
+    def __init__(self, *args, **kwargs):
+        super(PlanosArquitectoForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag  = False
+        self.helper.form_show_labels =False
+
+        self.helper.layout = Layout(
+            Hidden('planos', Usuario.ARQUITECTO),
+            Field('planos_arquitecto'),
+            FormActions(
+                StrictButton('Subir', type="Submit", css_class="btn btn-primary btn-xs"),
+            )
+        )
+
 class PlanosIngenieroForm(ModelFormBase):
     class Meta:
         model = Adjuntos
         fields = ['planos_ingeniero']
 
+    def __init__(self, *args, **kwargs):
+        super(PlanosIngenieroForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag  = False
+        self.helper.form_show_labels =False
 
-class AprobacionArquitectoForm(ModelFormBase):
-    class Meta:
-        model = Edificacion
-        fields = ['aprobacion_arquitecto']
+        self.helper.layout = Layout(
+            Hidden('planos', Usuario.INGENIERO),
+            Field('planos_ingeniero'),
+            FormActions(
+                StrictButton('Subir', type="Submit", css_class="btn btn-primary btn-xs"),
+            )
+        )
+
   
-class AprobacionIngenieroForm(ModelFormBase):  
-    class Meta:
-        model = Edificacion
-        fields = ['aprobacion_ingeniero']
 
 class AprobacionTesoreroForm(ModelFormBase):  
     class Meta:

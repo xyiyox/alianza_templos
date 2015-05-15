@@ -191,12 +191,12 @@ def proyecto(request, pk):
         pass       
         
     if request.user.tipo == Usuario.ARQUITECTO:
-        ctx['aprobacionArquitectoForm'] = AprobacionArquitectoForm(instance=proyecto)
         adj = proyecto.adjuntos_set.get()
         ctx['planosArquitectoForm'] = PlanosArquitectoForm(instance=adj)
 
-    if request.user.tipo == Usuario.INGENIERO:
-        ctx['aprobacionIngenieroForm'] = AprobacionIngenieroForm(instance=proyecto) 
+    if request.user.tipo == Usuario.INGENIERO: 
+        adj = proyecto.adjuntos_set.get()
+        ctx['planosIngenieroForm'] = PlanosIngenieroForm(instance=adj) 
 
     if request.user.tipo == Usuario.TESORERO:
         ctx['aprobacionTesoreroForm'] = AprobacionTesoreroForm(instance=proyecto) 
@@ -358,6 +358,25 @@ def asignaciones(request, pk):
         return redirect(proyecto)
 
     raise Http404
+
+
+@login_required
+def planos(request, pk):
+    if request.method == 'POST':
+        proyecto  =  get_object_or_404(Edificacion, pk=pk)
+        adjuntos  = proyecto.adjuntos_set.get()
+
+        if request.POST['planos'] == Usuario.ARQUITECTO:
+            form = PlanosArquitectoForm(request.POST, request.FILES, instance=adjuntos)
+            form.save()
+            
+        if request.POST['planos'] == Usuario.INGENIERO:
+            form = PlanosIngenieroForm(request.POST, request.FILES, instance=adjuntos)
+            form.save()
+
+        return redirect(proyecto)
+    raise Http404  
+
 
 
 class Aplicacion(SessionWizardView):
