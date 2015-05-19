@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from sorl.thumbnail import ImageField
 
 from .datos import *
+from .choices import DEPTOS, CAPITALES
 from map_field import fields as map_fields
 
 
@@ -273,8 +274,8 @@ class Comunidad(models.Model):
 
 	nombre 				= models.CharField('Nombre', max_length=50)
 	poblacion_comunidad = models.CharField('Población', max_length=40)
-	region 				= models.CharField('Departamento', max_length=30) 
-	capital_depto 		= models.CharField('Capital del Departamento', max_length=30)
+	region 				= models.CharField('Departamento', max_length=30, choices=DEPTOS) 
+	capital_depto 		= models.CharField('Capital del Departamento', max_length=30, choices=CAPITALES)
 	distancia_capital	= models.PositiveSmallIntegerField('Distancia del Proyecto a la capital', 
 							help_text="Por favor ingrese el valor en Kilometros (Km)")
 	# Relacion 1 a 1 entre la edificacion y la comunidad
