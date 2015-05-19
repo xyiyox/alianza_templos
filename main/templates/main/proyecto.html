@@ -98,7 +98,6 @@
 								<tr> <th>Edificio: </th> 	    <td>{{ proyecto.dimensiones_edificio }}</td> </tr>
 								<tr> <th>No. pisos: </th> 	    <td>{{ proyecto.num_pisos }}</td> </tr>
 								<tr> <th>Tipo: </th> 	        <td>{{ proyecto.get_tipo_construccion_display }}</td> </tr>
-								<tr> <th>Metodo: </th> 	        <td>{{ proyecto.get_metodo_construccion_display }}</td> </tr>
 								<tr> <th>Requiere permiso: </th>  <td>{{ proyecto.requiere_permiso|yesno:"Si,No,No sabemos" }}</td> </tr>
 								<tr> <th>Tiempo límite: </th>     <td>{{ proyecto.tiempo_limite }} meses</td> </tr>			
 							</tbody>
