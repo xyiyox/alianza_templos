@@ -254,6 +254,14 @@ def autorizaciones(request, pk):
                 registrar_etapa(proyecto, Etapa.PLANOS)
                 mail_change_etapa(proyecto, request.user)
 
+            if proyecto.etapa_actual == Etapa.APROB_NACIONAL and 'aprobar' in request.POST:
+                proyecto.aprobacion_nacional = request.POST['aprobar']
+                proyecto.save(update_fields=['aprobacion_nacional'])
+
+                registrar_etapa(proyecto, Etapa.APROB_INTERNACIONAL)
+                mail_change_etapa(proyecto, request.user)
+
+
          
         if request.user.tipo == Usuario.ARQUITECTO or request.user.tipo == Usuario.INGENIERO:
             

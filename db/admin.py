@@ -80,7 +80,7 @@ class AdjuntosAdmin(admin.ModelAdmin):
 class ComentarioAdmin(admin.ModelAdmin):
     list_display = ('id', 'edificacion', 'commenter', 'descripcion')
 
-# admin.site.register(Edificacion, EdificacionAdmin)#LeafletGeoAdmin)
+admin.site.register(Edificacion) #, EdificacionAdmin)#LeafletGeoAdmin)
 # admin.site.register(InformacionFinanciera, InformacionFinancieraAdmin)
 # admin.site.register(Comunidad, ComunidadAdmin)
 # admin.site.register(Congregacion, CongregacionAdmin)

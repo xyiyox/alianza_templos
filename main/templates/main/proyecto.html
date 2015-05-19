@@ -475,12 +475,23 @@
 				
 				{% elif proyecto.etapa_actual == Etapa.ASIGN_USUARIOS %}
 				<button type="button" id="aprobar-asignacion-btn" class="btn btn-success  btn-block" data-toggle="modal" data-target="#modalAprobacion" ng-click="alClickAprobarUsuarios($event)">
-					aprobar
+					Dar Aprobabación de usuarios
 				</button>
 
-				{% else %}
+				{% elif proyecto.etapa_actual < Etapa.APROB_NACIONAL %}
 				<i class="fa fa-thumbs-o-up fa-1x"></i> Usuarios asignados!</br>
 				Espere etapa aprobación nacional
+				
+				{% elif proyecto.etapa_actual == Etapa.APROB_NACIONAL %}
+					
+					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+					Dar Aprobabación nacional
+					</button>
+
+				{% else %}
+				<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobación dada!</br>
+				Espere otras aprobaciones
+
 				{% endif %}
 				<!-- aqui preparamos la aprobacion final de nacional -->
 		    </div>
