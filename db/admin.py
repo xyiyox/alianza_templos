@@ -4,11 +4,22 @@ from django.db import models
 from django.forms import RadioSelect
 
 from .models import *
+from usuarios.models import Usuario
 
 class EdificacionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre_proyecto', 'direccion', 'coordenadas', 'owner_lote', 
-        'tipo_adquisicion', 'dimensiones_terreno', 'dimensiones_edificio', 'num_pisos', 'tipo_construccion',
-        'metodo_construccion', 'requiere_permiso', 'tiempo_limite', 'estado', 'usuario')
+    list_display = ('id', 'nombre_proyecto',)
+
+    # Solo superuser puede ver modelos edificacion en el admin
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False
+    # Solo superuser puede ver modelos edificacion en el admin
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
 
 class InformacionFinancieraAdmin(admin.ModelAdmin):
     list_display = ('edificacion', 'dinero_efectivo', 'valor_terreno', 'valor_solicitado', 
@@ -80,7 +91,7 @@ class AdjuntosAdmin(admin.ModelAdmin):
 class ComentarioAdmin(admin.ModelAdmin):
     list_display = ('id', 'edificacion', 'commenter', 'descripcion')
 
-admin.site.register(Edificacion) #, EdificacionAdmin)#LeafletGeoAdmin)
+admin.site.register(Edificacion, EdificacionAdmin)
 # admin.site.register(InformacionFinanciera, InformacionFinancieraAdmin)
 # admin.site.register(Comunidad, ComunidadAdmin)
 # admin.site.register(Congregacion, CongregacionAdmin)
