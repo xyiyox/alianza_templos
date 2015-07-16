@@ -93,7 +93,7 @@ def actualizar_db_local():
 		local('scp %s:%s/%s %s' %(env.hosts[0], DB_BACKUP_PATH, DB_BACKUP_FILE, DB_BACKUP_FILE))
 		run('rm -f %s' % DB_BACKUP_FILE)
 
-	local('psql -U %s -d %s -f %s' %(DB_DEV_USER, DB_DEV_NAME, DB_BACKUP_FILE))
+	local('psql -h localhost -U %s -d %s -f %s' %(DB_DEV_USER, DB_DEV_NAME, DB_BACKUP_FILE))
 
 
 def git_log():

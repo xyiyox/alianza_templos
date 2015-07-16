@@ -30,9 +30,7 @@ class Etapa(models.Model):
 	APROB_INTERNACIONAL = 8
 	ESPERANDO_CUPO 		= 9
 	ESPERANDO_RECURSOS 	= 10
-	EN_CONSTRUCCION 	= 11
-	CORRECIONES 		= 12
-	FINALIZACION 		= 13
+
 
 	ICONS = ['edit', 'check', 'users', 'area-chart', 'anchor', 'dollar', 'thumbs-o-up', 'globe', 'clock-o', 'cogs', 'home', 'home', 'home']
 
@@ -47,12 +45,7 @@ class Etapa(models.Model):
 		(APROB_NACIONAL, u'Aprobación Nacional'),
 		# 2 semanas para recibir aprobación internacional
 		(APROB_INTERNACIONAL, u'Aprobación Internacional'),
-		#(ESPERANDO_CUPO, u'En Espera de Cupo'),
 		(ESPERANDO_RECURSOS, u'En Espera de Recursos'),
-		# Tiene 3 etapas (3 pagos)
-		#(EN_CONSTRUCCION, u'En Construcción'),
-		#(CORRECIONES, u'Esperando Correcciones'),
-		#(FINALIZACION, u'Finalización'),
 	)
 
 	edificacion = models.ForeignKey('Edificacion')
@@ -100,6 +93,23 @@ class Etapa(models.Model):
 
 	def __unicode__(self):
 		return "%s" % self.id
+
+
+
+class Plazo(models.Model):
+	""" esta clase le permite abstraer los plazos de cada etapa para 
+	ser cambiados a voluntad segun evoluciona al app """
+
+	etapa = models.PositiveSmallIntegerField(unique=True, max_length=2, choices=Etapa.ETAPA_ACTUAL)
+	plazo = models.PositiveSmallIntegerField(max_length=4, help_text='plazo en días')
+
+	peso    = models.IntegerField(max_length=2, unique=True)
+	updated = models.DateField(auto_now = True)
+
+	def __unicode__(self):
+		return "%s  %s dias" %(self.get_etapa_display(), self.plazo)
+
+
 
 
 class Edificacion(models.Model):

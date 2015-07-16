@@ -6,6 +6,7 @@ from django.forms import RadioSelect
 from .models import *
 from usuarios.models import Usuario
 
+
 class EdificacionAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre_proyecto',)
 
@@ -19,7 +20,12 @@ class EdificacionAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         return False
-  
+ 
+class PlazoAdmin(admin.ModelAdmin):
+    list_display = ('etapa', 'plazo', 'updated',) 
+
+    ordering = ['id']
 
 admin.site.register(Edificacion, EdificacionAdmin)
+admin.site.register(Plazo, PlazoAdmin)
 
