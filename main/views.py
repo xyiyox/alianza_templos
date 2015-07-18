@@ -210,7 +210,9 @@ def proyecto_edit(request, pk, form_index):
     if request.user.tipo != Usuario.LOCAL or request.user.pk != proyecto.usuario.pk:    #restriccion vertical, solo locales entran aqui
         raise PermissionDenied                                                          #restirccion horizontal, no puede ver el proyecto de otro 
 
-    # OJO VALIDAR QUE EN CREACION NO SE PUEDA SALTAR EL ORDEN ESTRICTO DE FORMULARIOS
+    if int(form_index) > proyecto.estado + 1: # validamos que el usuario cree los formularios en orden
+        raise PermissionDenied 
+
 
     """ preparamos el form a enviar o a guardar """
 
@@ -229,7 +231,6 @@ def proyecto_edit(request, pk, form_index):
 
 
     """ manejamos el envio del formulario """
-    #print form.instance
     
     if request.method == 'POST':
         
@@ -248,7 +249,7 @@ def proyecto_edit(request, pk, form_index):
                 if int(form_index) == (len(form_list) - 1):
                     
                     registrar_etapa(proyecto, Etapa.APROB_REGIONAL)
-                    #mail_change_etapa(proyecto, self.request.user)
+                    mail_change_etapa(proyecto, self.request.user)
 
                     return redirect(reverse('done', args=[proyecto.pk])) # redireccionamos al done 
 
