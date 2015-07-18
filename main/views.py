@@ -132,6 +132,106 @@ def home_otros(request):
     return render(request, 'main/home-otros.html', ctx)
 
 
+
+form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
+
+@login_required
+def proyecto_nuevo(request):
+
+    #restriccion vertical
+    if request.user.tipo != Usuario.LOCAL:
+        raise PermissionDenied
+ 
+    form = EdificacionForm(request.POST or None)
+
+    if request.method == 'POST':
+
+        if form.is_valid():
+            edificacion = form.save(commit=False)
+            edificacion.usuario = request.user
+
+            edificacion.estado       = form_list.index(form.__class__) # obtenemos un valor compatible con los elementos de la lista
+            edificacion.usuario      = request.user
+            edificacion.etapa_actual = Etapa.DILIGENCIAMIENTO   
+            edificacion.save()
+            
+            #Registramos la etapa de Diligenciamiento
+            registrar_etapa(edificacion, Etapa.DILIGENCIAMIENTO)
+
+            return redirect(reverse('proyecto_edit', args=[edificacion.pk, 1]))  # redireccionamos al segundo formulario en modo edit
+     
+    ctx = {'form': form, 'form_list': form_list, 'paso':1}
+
+    return render(request, 'main/proyecto-forms.html', ctx)
+
+
+@login_required
+def proyecto_edit(request, pk, form_index):
+
+    proyecto  =  get_object_or_404(Edificacion, pk=pk)
+
+    """ validaciones """
+    
+    if request.user.tipo != Usuario.LOCAL or request.user.pk != proyecto.usuario.pk:    #restriccion vertical, solo locales entran aqui
+        raise PermissionDenied                                                          #restirccion horizontal, no puede ver el proyecto de otro 
+
+    # OJO VALIDAR QUE EN CREACION NO SE PUEDA SALTAR EL ORDEN ESTRICTO DE FORMULARIOS
+
+    """ preparamos el form a enviar o a guardar """
+
+    form_class = form_list[int(form_index)]
+
+    if int(form_index) == 0:   # si es el primer formulario siempre habra un modelo porque lo validamos arriba
+        instance = proyecto or None
+           
+    else:
+        try:
+            instance = form_class.Meta.model.objects.get(edificacion=pk)   # verificamos en la db si el objeto existe para pasarlo como instancia
+        except form_class.Meta.model.DoesNotExist:
+            instance = None
+
+    form = form_class(request.POST or None, request.FILES or None, instance=instance)
+
+
+    """ manejamos el envio del formulario """
+    #print form.instance
+    
+    if request.method == 'POST':
+        
+        if form.is_valid():
+
+            model_obj = form.save(commit=False)
+            
+            if model_obj.pk is None: # si es nuevo hacemos operaciones adicionales
+                model_obj.edificacion = proyecto
+                model_obj.save()
+
+                proyecto.estado = int(form_index)
+                proyecto.save(update_fields=['estado'])
+
+                # aqui verifico que sea el ultimo que hace cambiar de etapa y envia la aplicion completa redirecionando al done
+                if int(form_index) == (len(form_list) - 1):
+                    
+                    registrar_etapa(proyecto, Etapa.APROB_REGIONAL)
+                    #mail_change_etapa(proyecto, self.request.user)
+
+                    return redirect(reverse('done', args=[proyecto.pk])) # redireccionamos al done 
+
+
+            elif model_obj.pk:   # explicito para mayor seguridad al leer
+                model_obj.save() # si no es nuevo simplemente los guardamos
+                if int(form_index) == (len(form_list) - 1):
+                    return redirect(proyecto) # redireccionamos a vista detalle
+
+                
+            return redirect(reverse('proyecto_edit', args=[proyecto.pk, int(form_index)+1]))  # redirigimos al siguiente si no es el ultimo
+
+
+    ctx = {'form': form, 'form_list': form_list, 'proyecto':proyecto, 'paso':int(form_index)+1}
+
+    return render(request, 'main/proyecto-forms.html', ctx)
+
+
 @login_required
 def proyecto(request, pk):
     # validamos que el proyecto exista
@@ -140,7 +240,7 @@ def proyecto(request, pk):
    
     # validamos que el usuario tenga permiso de ver el proyecto
     if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
-        raise Http404 
+        raise PermissionDenied 
    
     if request.method == 'POST':        
         form = ComentarioForm(request.POST)
@@ -367,223 +467,6 @@ def planos(request, pk):
 
 
 
-class Aplicacion(SessionWizardView):
-
-    template_name = "main/aplicacion.html"
-    
-    form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
-
-    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
-   
-    def done(self, form_list, form_dict, **kwargs):
-        edificacion = form_dict['0'].instance
-        print('Paso nro 1...', edificacion)
-        return redirect('done', pk=edificacion.id )
-
-    def get(self, request, *args, **kwargs):
-        """
-        This method handles GET requests.
-
-        If a GET request reaches this point, the wizard assumes that the user
-        just starts at the first step or wants to restart the process.
-        The data of the wizard will be resetted before rendering the first step.
-        """
-        #Solo el local tiene acceso al form wizzard ningun otro
-        if request.user.tipo != Usuario.LOCAL:
-            raise Http404 
-
-
-        self.storage.reset()
-
-        # reset the current step to the first step.
-        self.storage.current_step = self.steps.first
-        
-        # Se mira cuantos proyectos tiene creados el usuario actual
-        cant_proyectos = Edificacion.objects.filter(usuario=request.user).count()
-        # Se obtiene la pk para saber si se va a editar un proyecto o no
-        pk = self.kwargs.get('pk', None)
-        
-        # Si el usuario ya tiene 2 proyectos creados se lo redirige al home
-        if cant_proyectos == 2 and not pk:
-            return redirect('home')
-        else:
-            if 'redireccion' in self.kwargs:
-                self.storage.current_step = '1'
-            return self.render(self.get_form())
-
-    def render_done(self, form, **kwargs):
-        """
-        This method gets called when all forms passed. The method should also
-        re-validate all steps to prevent manipulation. If any form fails to
-        validate, `render_revalidation_failure` should get called.
-        If everything is fine call `done`.
-        """
-        final_forms = OrderedDict()
-        # walk through the form list and try to validate the data again.
-        for form_key in self.get_form_list():
-            form_obj = self.get_form(step=form_key,
-                data=self.storage.get_step_data(form_key),
-                files=self.storage.get_step_files(form_key))
-            # Quitamos la re validacion de los form debido a que no es necesaria
-            # y da conflictos para redirigir al metodo done
-            # if not form_obj.is_valid():
-            #     return self.render_revalidation_failure(form_key, form_obj, **kwargs)
-            final_forms[form_key] = form_obj
-
-        # render the done view and reset the wizard before returning the
-        # response. This is needed to prevent from rendering done with the
-        # same data twice.
-        done_response = self.done(final_forms.values(), form_dict=final_forms, **kwargs)
-        self.storage.reset()
-        return done_response
-
-    def get_form_instance(self, step):
-        
-        # Recibo el pk argument que llega por el request url
-        pk = self.kwargs.get('pk', None)
-        
-        # cargamos las instancias solo si estamos en modo edicion
-        if pk:
-            # pedimos el primer modelo
-            model_0 = Edificacion.objects.get(pk=pk)   
-            # Resetea el diccionario de instancias
-            self.instance_dict.clear()
-            self.instance_dict['0'] = model_0
-            
-            try:
-                # pedimos el segundo modelo
-                model_1 = InformacionFinanciera.objects.get(edificacion=pk)
-                self.instance_dict['1'] = model_1
-            except InformacionFinanciera.DoesNotExist:
-                print("No existe InformacionFinanciera")
-            
-            try:
-                # pedimos el segundo modelo
-                model_2 = Comunidad.objects.get(edificacion=pk)
-                self.instance_dict['2'] = model_2
-            except Comunidad.DoesNotExist:
-                print("No existe Comunidad")
-
-            try:
-                # pedimos el segundo modelo
-                model_3 = Congregacion.objects.get(edificacion=pk)
-                self.instance_dict['3'] = model_3
-            except Congregacion.DoesNotExist:
-                print("No existe Congregacion")
-
-            try:
-                # pedimos el segundo modelo
-                model_4 = Adjuntos.objects.get(edificacion=pk)
-                self.instance_dict['4'] = model_4
-            except Adjuntos.DoesNotExist:
-                print("No existe Adjuntos")
-
-            try:
-                # pedimos el segundo modelo
-                model_5 = Condiciones.objects.get(edificacion=pk)
-                self.instance_dict['5'] = model_5
-            except Condiciones.DoesNotExist:
-                print("No existe Condiciones")
-        return self.instance_dict.get(step, None)
-        
-    
-    def get_context_data(self, form, **kwargs):
-
-        context = super(Aplicacion, self).get_context_data(form=form, **kwargs)
-       
-        context.update({'form_list': self.form_list})
-
-        model_1 = self.instance_dict.get('0', False) 
-        if model_1:
-            # paso el valor del campo estado en el form 1
-            context.update({"proyecto": model_1, 'estado': model_1.estado})
-        else:
-            # si no existe le envio -1 
-            context.update({'estado': -1})
-
-        #if self.steps.current == '1':
-        #    context.update({'fuentes': FuentesFinanciacionForm()})
-        return context
-
-    def render_next_step(self, form, **kwargs):
-        """ Redireccionamos el form para usarlo en modo edit"""
-        
-        if not self.kwargs.get('pk', None):  # verificamos que estemos en modo creacion
-
-            if self.steps.current == '0':    # actuamos solo si es el paso 1
-                model_1 = self.instance_dict.get('0', False) # obtenemos el pk del modelo que acabamos de crear
-                self.storage.reset()
-                # redirecionamos al mismo objeto pero en edicion, trabaja con ayuda de get()
-                return redirect(reverse('proyecto_edit_redirect', kwargs={'pk': model_1.pk, 'redireccion':1} ))  
-        
-        # en los otros paso, que la aplicacion funcione por defecto
-        return super(Aplicacion, self).render_next_step(form, **kwargs)
-
-    
-    def process_step(self, form):
-        """ 
-        Metodo que procesa cada formulario al momento de ser enviado (submit)
-        """
-        step_current = self.steps.current
-
-
-        if step_current == '0':
-            
-            if self.instance_dict.get('0', False):
-                # Esto sucede cuando se esta editanto el primer formulario
-                form.save()
-            else: 
-                model_instance              = form.save(commit=False)
-                model_instance.estado       = step_current
-                model_instance.usuario      = self.request.user
-                model_instance.etapa_actual = Etapa.DILIGENCIAMIENTO   
-                model_instance.save()
-                self.instance_dict['0'] = model_instance
-                # Registramos la etapa de Diligenciamiento
-                registrar_etapa(model_instance, Etapa.DILIGENCIAMIENTO)
-
-        else:
-            if self.instance_dict.get(step_current, False): 
-                form.save()
-            else:
-                # Se almacena con commit False el formulario actual
-                instance    = form.save(commit=False)    
-                edificacion = self.instance_dict['0']   
-                # Se almacena la instancia del formulario actual con el id de la edificacion
-                instance.edificacion = edificacion
-                instance.save()
-                self.instance_dict[step_current] = instance
-                # Fijar el estado del formulario en el modelo edificacion
-                edificacion.estado = step_current
-                edificacion.save(update_fields=['estado'])
-
-                # Notificar el cambio de etapa al enviar el ultimo formulario
-                if step_current == self.steps.last:
-                    registrar_etapa(edificacion, Etapa.APROB_REGIONAL)
-                    #etapa = Etapa(edificacion=edificacion, etapa=Etapa.APROB_REGIONAL)
-                    #etapa.save()
-                    # send email notification
-                    mail_change_etapa(edificacion, self.request.user)
-
-        return self.get_form_step_data(form)
-    
-    def render_goto_step(self, goto_step, **kwargs):
-        """
-        This method gets called when the current step has to be changed.
-        `goto_step` contains the requested step to go to.
-        """
-        # Resetear el storage garantiza que se puedan observar 
-        # los cambios hechos en los archivos adjuntos
-        self.storage.reset()
-        print('render_goto_step y resetie el storage')
-        self.storage.current_step = goto_step        
-        form = self.get_form(
-            data=self.storage.get_step_data(self.steps.current),
-            files=self.storage.get_step_files(self.steps.current))
-        print('form data=', form.data)
-        print('form files=', form.files)
-        return self.render(form)
-
 def hacer_login(request):
 
     NEXT = request.GET.get('next', "")
@@ -617,12 +500,13 @@ def hacer_login(request):
 def done(request, pk):
 
     proyecto  =  get_object_or_404(Edificacion, pk=pk)
+
     # validamos que el usuario tenga permiso de ver el proyecto
-    if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
-        raise Http404 
-    
+    if request.user.tipo != Usuario.LOCAL or request.user.pk != proyecto.usuario.pk:    #restriccion vertical y horizontal
+        raise PermissionDenied
+  
+  
     ctx = {'proyecto': proyecto}
-    print('Paso nro 2...')
     return render(request, 'main/done.html', ctx)
 
 

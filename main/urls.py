@@ -1,8 +1,5 @@
 from django.conf.urls import patterns, url
 
-from main.views import Aplicacion
-from django.contrib.auth.decorators import login_required
-
 
 urlpatterns = patterns('main.views',
 
@@ -20,10 +17,10 @@ urlpatterns = patterns('main.views',
     url(r'^home-otros$',    'home_otros',    name='home_otros'),
     
     url(r'^proyecto/(\d+)/$', 'proyecto', name='proyecto'),
-    url(r'^proyecto/nuevo/$', login_required(Aplicacion.as_view()), name='proyecto_new'),
-    url(r'^proyecto/(?P<pk>\d+)/editar/$', login_required(Aplicacion.as_view()), name='proyecto_edit'),
-    url(r'^proyecto/(?P<pk>\d+)/editar/(?P<redireccion>[1-1]{1})/$', login_required(Aplicacion.as_view()), name='proyecto_edit_redirect'),  # esta url la usamos cuando redireccionamos de crecion a edit
+    url(r'^proyecto/nuevo/$', 'proyecto_nuevo', name='proyecto_new'),
+    url(r'^proyecto/(?P<pk>\d+)/editar/(?P<form_index>[0-9]{1})/$', 'proyecto_edit', name='proyecto_edit'), #si necesitamos mas de dos digitos cambiar {1}
     url(r'^proyecto/(?P<pk>\d+)/done/$', 'done', name='done'), 
+
     url(r'^proyecto/(?P<pk>\d+)/autorizaciones/$', 'autorizaciones', name='autorizaciones'),
     url(r'^proyecto/(?P<pk>\d+)/asignaciones/$', 'asignaciones', name='asignaciones'),
     url(r'^proyecto/(?P<pk>\d+)/planos/$', 'planos', name='planos')

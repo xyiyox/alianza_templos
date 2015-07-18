@@ -33,14 +33,14 @@ class EdificacionForm(ModelFormBase):
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-
+        
         self.helper.form_class       = 'form-horizontal'
         self.helper.form_tag         = False
         self.helper.label_class      = 'col-sm-3'
         self.helper.field_class      = 'col-sm-9'
         self.fields['coordenadas'].widget = map_widgets.MapsGeoPointhWidget()
-
-        # Esta es una manera mas sencilla de agregar atributos a los campos
+        
+        #Esta es una manera mas sencilla de agregar atributos a los campos
         self.helper.all().wrap(Field, css_class='input-sm') 
         self.helper['direccion'].wrap(Field, css_class="input-xlarge", rows="2")
         self.helper['coordenadas'].wrap(Field, css_class="geolocation_field")
