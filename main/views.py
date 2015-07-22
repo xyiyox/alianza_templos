@@ -27,6 +27,7 @@ import StringIO
 import zipfile
 
 from django.http import HttpResponse
+import reportlab
 
 
 def home(request):
@@ -251,14 +252,31 @@ def proyecto_zip(request, pk):
     # OJO VALIDAR QUE EN CREACION NO SE PUEDA SALTAR EL ORDEN ESTRICTO DE FORMULARIOS
     adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
     filenames = []
-    filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_construccion.url]
-    filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_congregacion.url]
-    filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_pastor.url]
+    if adjuntos.foto_construccion:
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_construccion.url]
+    if adjuntos.foto_congregacion:
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_congregacion.url]
+    if adjuntos.foto_pastor:
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_pastor.url]
+    if adjuntos.permiso_construccion: 
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.permiso_construccion.url]
+    if adjuntos.escritura_terreno:   
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.escritura_terreno.url]
+    if adjuntos.manzana_catastral:    
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.manzana_catastral.url]
+    if adjuntos.plan_construccion:    
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.plan_construccion.url]    
+    if adjuntos.historia_congregacion:    
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.historia_congregacion.url]    
+    if adjuntos.testimonio_pastor:    
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.testimonio_pastor.url]    
+    if adjuntos.planos_arquitecto:    
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.planos_arquitecto.url]                
 
     # Folder name in ZIP archive which contains the above files
     # E.g [thearchive.zip]/somefiles/file2.txt
     # FIXME: Set this to something better
-    zip_subdir = "somefiles"
+    zip_subdir = "Comprimido"
     zip_filename = "%s.zip" % zip_subdir
 
     # Open StringIO to grab in-memory ZIP contents
@@ -329,39 +347,7 @@ def proyecto(request, pk):
         
     try:
         adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
-        ctx['adjuntos'] = adjuntos
-        #Zip
-        # Files (local path) to put in the .zip
-        # FIXME: Change this (get paths from DB etc)   
-        print (os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_construccion.url)  
-        filenames = []
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_construccion.url]
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_congregacion.url]
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_pastor.url]
-
-        # Folder name in ZIP archive which contains the above files
-        # E.g [thearchive.zip]/somefiles/file2.txt
-        # FIXME: Set this to something better
-        zip_subdir = os.path.dirname(os.path.abspath(__file__))+"/../public/media/prueba"
-        zip_filename = "%s.zip" % zip_subdir
-
-        # Open StringIO to grab in-memory ZIP contents
-        s = StringIO.StringIO()
-
-        # The zip compressor
-        zf = zipfile.ZipFile(s, "w")
-
-        for fpath in filenames:
-            # Calculate path for file in zip
-            fdir, fname = os.path.split(fpath)
-            zip_path = os.path.join(zip_subdir, fname)
-
-            # Add file, at correct path
-            zf.write(fpath, zip_path)
-
-        # Must close zip for all contents to be written
-        zf.close() 
-        ctx['zip'] = s.getvalue()
+        ctx['adjuntos'] = adjuntos        
     except Adjuntos.DoesNotExist:
         pass   
 
