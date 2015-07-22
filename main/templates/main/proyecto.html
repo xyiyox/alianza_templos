@@ -73,7 +73,7 @@
 		{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
 
 		</br></br>
-
+	
 		<tabset>
 			<tab heading="Edificacion">
 							
@@ -82,9 +82,9 @@
 					<leaflet defaults="defaults" markers="markers" center="proyectCenter"  height="200px"></leaflet>
 				</div>
 				
-				{% thumbnail proyecto.adjuntos_set.get.foto_congregacion "100x100" crop="center" as im %}
+				<!--{% thumbnail proyecto.adjuntos_set.get.foto_congregacion "100x100" crop="center" as im %}
 					<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-				{% endthumbnail %}
+				{% endthumbnail %}-->
 				
 				<div class="row">
 					<div class="col-sm-12">
@@ -244,57 +244,144 @@
 							<tbody>	
 								{% if adjuntos.foto_construccion %}
 								<tr> <th>Foto Construccion: </th>
-								     <td>							     	
-								     	<a href="/media/{{ adjuntos.foto_construccion}}" download>Descargar</a>
-								     	</td> 
+								     <td>
+								     <a href="/media/{{ adjuntos.foto_construccion}}" download>	
+								     {% thumbnail adjuntos.foto_construccion "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>		
+									 </td> 
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.foto_congregacion %}
 								<tr> <th>Foto Congregacion: </th>
-								     <td><a href="/media/{{ adjuntos.foto_congregacion}}" download>Descargar</a></td> 
+								     <td>
+								     <a href="/media/{{ adjuntos.foto_congregacion}}" download>	
+								     {% thumbnail adjuntos.foto_congregacion "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+								     </td> 
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.foto_pastor %}
 								<tr> <th>Foto Pastor: </th>
-								     <td><a href="/media/{{ adjuntos.foto_pastor}}" download>Descargar</a></td> 
+								     <td>
+								     <a href="/media/{{ adjuntos.foto_pastor}}" download>	
+								     {% thumbnail adjuntos.foto_pastor "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+
+								     </td> 
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.permiso_construccion %}
 								<tr> <th>Foto Permiso Construccion: </th>
-								     <td><a href="/media/{{ adjuntos.permiso_construccion}}" download>Descargar</a></td>
+								     <td>
+								     <a href="/media/{{ adjuntos.permiso_construccion}}" download>	
+								     {% thumbnail adjuntos.permiso_construccion "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+								     </td>
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.escritura_terreno %}
 								<tr> <th>Foto Terreno: </th>
-								     <td><a href="/media/{{ adjuntos.escritura_terreno}}" download>Descargar</a></td> 
+								     <td>
+								     <a href="/media/{{ adjuntos.escritura_terreno}}" download>	
+								     {% thumbnail adjuntos.escritura_terreno "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+								     </td> 
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.manzana_catastral %}
 								<tr> <th>Manzana Catastral: </th>
-								     <td><a href="/media/{{ adjuntos.manzana_catastral}}" download>Descargar</a></td> 
+								     <td>
+								     	<a href="/media/{{ adjuntos.manzana_catastral}}" download>	
+								     {% thumbnail adjuntos.manzana_catastral "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+
+								     </td> 
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.plan_construccion %}
 								<tr> <th>Plan de Construccion: </th>
-								     <td><a href="/media/{{ adjuntos.plan_construccion}}" download>Descargar</a></td> 
+								     <td>
+								     <a href="/media/{{ adjuntos.plan_construccion}}" download>	
+								     {% thumbnail adjuntos.plan_construccion "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+
+								     </td> 
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.historia_congregacion %}
 								<tr> <th>Historia Congregacion: </th>
-								     <td><a href="/media/{{ adjuntos.historia_congregacion}}" download>Descargar</a></td>
+								     <td>
+								      <a href="/media/{{ adjuntos.historia_congregacion}}" download>	
+								     {% thumbnail adjuntos.historia_congregacion "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+
+								     </td>
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.testimonio_pastor %}
 								<tr> <th>Testimonio Pastor: </th>
-								     <td><a href="/media/{{ adjuntos.testimonio_pastor}}" download>Descargar</a></td> 
+								     <td>
+								     	<a href="/media/{{ adjuntos.testimonio_pastor}}" download>	
+								     {% thumbnail adjuntos.testimonio_pastor "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+
+								     </td> 
 								 </tr>	
 								{% endif %}	
 								{% if adjuntos.planos_arquitecto %}	
 								<tr> <th>Planos Arquitecto: </th>
-								     <td><a href="/media/{{ adjuntos.planos_arquitecto}}" download>Descargar</a></td> 
-								 </tr>
+								     <td>
+								     	<a href="/media/{{ adjuntos.planos_arquitecto}}" download>	
+								     {% thumbnail adjuntos.planos_arquitecto "100x100" crop="center" as im %}
+									   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+									 {% empty %}
+									    Descargar						     	
+									 {% endthumbnail %}	
+									 </a>	
+
+								     </td> 
+								 </tr>								
 								 {% endif %}	
-								
+								  <tr>
+								 	<th></th>
+								 	<td><a href="{% url "proyecto_zip" pk=proyecto.pk %}" target='_blank'>Descargar Todo Como Zip</a></td>
+								 </tr>									
 							</tbody>
 							
 						</table>

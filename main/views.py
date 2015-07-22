@@ -23,6 +23,12 @@ from usuarios.models import Usuario
 from django.contrib.formtools.wizard.forms import ManagementForm
 from collections import OrderedDict
 
+import StringIO
+import zipfile
+
+from django.http import HttpResponse
+
+
 def home(request):
 
     if request.user.is_authenticated():
@@ -233,6 +239,55 @@ def proyecto_edit(request, pk, form_index):
 
 
 @login_required
+def proyecto_zip(request, pk):
+
+    proyecto  =  get_object_or_404(Edificacion, pk=pk)
+
+    """ validaciones """
+    
+    if request.user.tipo != Usuario.LOCAL or request.user.pk != proyecto.usuario.pk:    #restriccion vertical, solo locales entran aqui
+        raise PermissionDenied                                                          #restirccion horizontal, no puede ver el proyecto de otro 
+
+    # OJO VALIDAR QUE EN CREACION NO SE PUEDA SALTAR EL ORDEN ESTRICTO DE FORMULARIOS
+    adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
+    filenames = []
+    filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_construccion.url]
+    filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_congregacion.url]
+    filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_pastor.url]
+
+    # Folder name in ZIP archive which contains the above files
+    # E.g [thearchive.zip]/somefiles/file2.txt
+    # FIXME: Set this to something better
+    zip_subdir = "somefiles"
+    zip_filename = "%s.zip" % zip_subdir
+
+    # Open StringIO to grab in-memory ZIP contents
+    s = StringIO.StringIO()
+
+    # The zip compressor
+    zf = zipfile.ZipFile(s, "w")
+
+    for fpath in filenames:
+        # Calculate path for file in zip
+        fdir, fname = os.path.split(fpath)
+        zip_path = os.path.join(zip_subdir, fname)
+
+        # Add file, at correct path
+        zf.write(fpath, zip_path)
+
+    # Must close zip for all contents to be written
+    zf.close()
+
+    # Grab ZIP file from in-memory, make response with correct MIME-type
+    resp = HttpResponse(s.getvalue(), content_type = "application/zip")
+    # ..and correct content-disposition
+    resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
+
+    return resp
+
+
+
+@login_required
 def proyecto(request, pk):
     # validamos que el proyecto exista
     #[EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
@@ -275,6 +330,38 @@ def proyecto(request, pk):
     try:
         adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
         ctx['adjuntos'] = adjuntos
+        #Zip
+        # Files (local path) to put in the .zip
+        # FIXME: Change this (get paths from DB etc)   
+        print (os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_construccion.url)  
+        filenames = []
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_construccion.url]
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_congregacion.url]
+        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_pastor.url]
+
+        # Folder name in ZIP archive which contains the above files
+        # E.g [thearchive.zip]/somefiles/file2.txt
+        # FIXME: Set this to something better
+        zip_subdir = os.path.dirname(os.path.abspath(__file__))+"/../public/media/prueba"
+        zip_filename = "%s.zip" % zip_subdir
+
+        # Open StringIO to grab in-memory ZIP contents
+        s = StringIO.StringIO()
+
+        # The zip compressor
+        zf = zipfile.ZipFile(s, "w")
+
+        for fpath in filenames:
+            # Calculate path for file in zip
+            fdir, fname = os.path.split(fpath)
+            zip_path = os.path.join(zip_subdir, fname)
+
+            # Add file, at correct path
+            zf.write(fpath, zip_path)
+
+        # Must close zip for all contents to be written
+        zf.close() 
+        ctx['zip'] = s.getvalue()
     except Adjuntos.DoesNotExist:
         pass   
 
@@ -319,7 +406,6 @@ def proyecto(request, pk):
         tesoreroEditForm = TesoreroEditForm(instance=proyecto)
         tesoreroEditForm.helper.form_action = reverse('asignaciones', args=[proyecto.pk])
         ctx['tesoreroEditForm'] = tesoreroEditForm
-
         
     
     return render(request, 'main/proyecto.html', ctx)
