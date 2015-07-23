@@ -19,8 +19,9 @@ urlpatterns = patterns('main.views',
     url(r'^proyecto/(\d+)/$', 'proyecto', name='proyecto'),
     url(r'^proyecto/nuevo/$', 'proyecto_nuevo', name='proyecto_new'),
     url(r'^proyecto/(?P<pk>\d+)/editar/(?P<form_index>[0-9]{1})/$', 'proyecto_edit', name='proyecto_edit'), #si necesitamos mas de dos digitos cambiar {1}
-    url(r'^proyecto/(?P<pk>\d+)/zip/$', 'proyecto_zip', name='proyecto_zip'), 
-    url(r'^proyecto/(?P<pk>\d+)/done/$', 'done', name='done'), 
+    url(r'^proyecto/(?P<pk>\d+)/zip/$', 'proyecto_zip', name='proyecto_zip'),
+    url(r'^proyecto/(?P<pk>\d+)/pdf/$', 'proyecto_pdf', name='proyecto_pdf'), 
+    url(r'^proyecto/(?P<pk>\d+)/done/$', 'done', name='done'),     
 
     url(r'^proyecto/(?P<pk>\d+)/autorizaciones/$', 'autorizaciones', name='autorizaciones'),
     url(r'^proyecto/(?P<pk>\d+)/asignaciones/$', 'asignaciones', name='asignaciones'),

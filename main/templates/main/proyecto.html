@@ -37,6 +37,7 @@
 
 					{% endif%}
 					<a href="" class="btn btn-xs btn-block btn-default" ng-click="scrollTo('comentarios')" role="button">Comentar</a>
+					<a href="{% url "proyecto_pdf" pk=proyecto.pk %}" target='_blank' class="btn btn-xs btn-block btn-default" role="button">Descargar Pdf</a>
 				</div>
 
 				<div class="col-sm-10">
@@ -73,6 +74,8 @@
 		{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
 
 		</br></br>
+
+		<!--<a href="{% url "proyecto_pdf" pk=proyecto.pk %}" target='_blank'>Descargar Informacion como PDF</a>-->
 	
 		<tabset>
 			<tab heading="Edificacion">

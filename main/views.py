@@ -26,9 +26,11 @@ from collections import OrderedDict
 import StringIO
 import zipfile
 
-from django.http import HttpResponse
-import reportlab
-
+import ho.pisa as pisa
+import cStringIO as StringIO
+import cgi
+from django.template import RequestContext
+from django.template.loader import render_to_string
 
 def home(request):
 
@@ -303,6 +305,59 @@ def proyecto_zip(request, pk):
 
     return resp
 
+
+def generar_pdf(html):
+    # Función para generar el archivo PDF y devolverlo mediante HttpResponse 
+    links    = lambda uri, rel: os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ''))
+    result = StringIO.StringIO()
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result,link_callback=links)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return HttpResponse('Error al generar el PDF: %s' % cgi.escape(html))
+
+@login_required
+def proyecto_pdf(request, pk):
+
+    proyecto  =  get_object_or_404(Edificacion, pk=pk)
+    comentarios  = Comentario.objects.filter(edificacion=proyecto).order_by('-created')
+
+    if request.user.tipo != Usuario.LOCAL or request.user.pk != proyecto.usuario.pk:   
+       raise PermissionDenied
+
+    ctx = {'pagesize':'A4' , 'proyecto': proyecto , 'comentarios': comentarios }        
+
+    try:
+        comunidad =  Comunidad.objects.get(edificacion=proyecto)
+        ctx['comunidad'] = comunidad
+    except Comunidad.DoesNotExist:
+        pass
+
+    try:
+        congregacion =  Congregacion.objects.get(edificacion=proyecto)
+        ctx['congregacion'] = congregacion
+    except Congregacion.DoesNotExist:
+        pass
+        
+    try:
+        adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
+        ctx['adjuntos'] = adjuntos        
+    except Adjuntos.DoesNotExist:
+        pass   
+
+    try:
+        financiera =  InformacionFinanciera.objects.get(edificacion=proyecto)
+        ctx['financiera'] = financiera
+    except InformacionFinanciera.DoesNotExist:
+        pass    
+
+    try:
+        condiciones =  Condiciones.objects.get(edificacion=proyecto)
+        ctx['condiciones'] = condiciones
+    except Condiciones.DoesNotExist:
+        pass   
+       
+    html = render_to_string('main/pdf.html',ctx, context_instance=RequestContext(request))
+    return generar_pdf(html)
 
 
 @login_required
