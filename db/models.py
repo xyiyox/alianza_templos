@@ -31,8 +31,15 @@ class Etapa(models.Model):
 	ESPERANDO_CUPO 		= 9
 	ESPERANDO_RECURSOS 	= 10
 
+	CONS_P1 = 11 # FIJA
+	CONS_P2 = 12 # FIJA
+	CONS_P3 = 13 # FIJA
+	CONS_P4 = 14 # SOLO TEMPLO OBRA/SOCIAL
+	DEDICACION = 15 #FIJA
 
-	ICONS = ['edit', 'check', 'users', 'area-chart', 'anchor', 'dollar', 'thumbs-o-up', 'globe', 'clock-o', 'cogs', 'home', 'home', 'home']
+
+
+	ICONS = ['edit', 'check', 'users', 'area-chart', 'anchor', 'dollar', 'thumbs-o-up', 'globe', 'clock-o', 'cogs', 'home', 'home', 'home', 'home', 'heart']
 
 	ETAPA_ACTUAL = (
 		(DILIGENCIAMIENTO, u'Diligenciamiento'),
@@ -46,6 +53,11 @@ class Etapa(models.Model):
 		# 2 semanas para recibir aprobación internacional
 		(APROB_INTERNACIONAL, u'Aprobación Internacional'),
 		(ESPERANDO_RECURSOS, u'En Espera de Recursos'),
+		(CONS_P1, u'Primera Fase de Construccion'),
+		(CONS_P2, u'Segunda Fase de Construccion'),
+		(CONS_P3, u'Tercera Fase de Construccion'),
+		(CONS_P4, u'Cuarta Fase de Construccion'),
+		(DEDICACION, u'Dedicacion'),
 	)
 
 	edificacion = models.ForeignKey('Edificacion')
@@ -134,7 +146,9 @@ class Edificacion(models.Model):
 	TIPO_CONSTRUCCION_CHOICES = (
 		(0, 'Templo',),
 		(1, 'Obra Social'),
-		(2, 'Templo/Obra Social'),
+		(2, 'Templo/Obra Social (Arriba)'),
+		(3, 'Templo/Obra Social (Lateral)'),
+		(4, 'Templo/Obra Social (Atras)'),
 	)
 
 
@@ -168,7 +182,9 @@ class Edificacion(models.Model):
 		"valores entonces se asume que la congregación aporta el excedente del dinero")
 
 	num_pisos 			= models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
-	tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES, default=0)
+	tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES, default=0,help_text=
+		"Seleccione el tipo de Construccion, Tenga encuenta para el caso de Templo/Obra Social"
+		" de identificar como se va construir esta instalacion, esta informacion es importante y debe ser precisa")
 	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?',choices=REQUIERE_CHOICES, default=True)
 	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
 	
@@ -198,14 +214,15 @@ class Edificacion(models.Model):
 	planos_creados          = models.BooleanField(default=False)
 	aprobacion_tesorero 	= models.BooleanField(default=False)
 	aprobacion_nacional 	= models.BooleanField(default=False)
-	aprobacion_internacional= models.BooleanField(default=False)
+	aprobacion_internacional= models.BooleanField(default=False)	
 
-	
+	aprobacion_fotos = models.BooleanField(default=False)# Campo Generico de aprobacion de fotos
+	envio_icm        = models.BooleanField(default=False)# Campo Generico de envio de icm a a la alianza
+	envio_alianza    = models.BooleanField(default=False)# Campo Generico de envio alianza a la iglesia
 
 	created     = models.DateField(auto_now_add =True)
 	updated     = models.DateField(auto_now = True)
 
-	
 	def __unicode__(self):
 		return "%s" %u"Edificación"
 

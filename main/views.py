@@ -248,7 +248,7 @@ def proyecto_zip(request, pk):
 
     """ validaciones """
     
-    if request.user.tipo != Usuario.LOCAL or request.user.pk != proyecto.usuario.pk:    #restriccion vertical, solo locales entran aqui
+    if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:    #restriccion vertical, solo locales entran aqui
         raise PermissionDenied                                                          #restirccion horizontal, no puede ver el proyecto de otro 
 
     # OJO VALIDAR QUE EN CREACION NO SE PUEDA SALTAR EL ORDEN ESTRICTO DE FORMULARIOS
@@ -321,9 +321,9 @@ def proyecto_pdf(request, pk):
     proyecto  =  get_object_or_404(Edificacion, pk=pk)
     comentarios  = Comentario.objects.filter(edificacion=proyecto).order_by('-created')
 
-    if request.user.tipo != Usuario.LOCAL or request.user.pk != proyecto.usuario.pk:   
-       raise PermissionDenied
-
+    if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:    #restriccion vertical, solo locales entran aqui
+        raise PermissionDenied  
+    
     ctx = {'pagesize':'A4' , 'proyecto': proyecto , 'comentarios': comentarios }        
 
     try:
@@ -488,6 +488,17 @@ def autorizaciones(request, pk):
                 registrar_etapa(proyecto, Etapa.APROB_INTERNACIONAL)
                 mail_change_etapa(proyecto, request.user)
 
+            if proyecto.etapa_actual == Etapa.APROB_INTERNACIONAL and 'aprobar' in request.POST:
+                proyecto.aprobacion_internacional = request.POST['aprobar']
+                proyecto.save(update_fields=['aprobacion_internacional'])
+
+                registrar_etapa(proyecto, Etapa.ESPERANDO_RECURSOS)
+                mail_change_etapa(proyecto, request.user)    
+
+            if proyecto.etapa_actual == Etapa.ESPERANDO_RECURSOS and 'aprobar' in request.POST:                
+
+                registrar_etapa(proyecto, Etapa.CONS_P1)
+                mail_change_etapa(proyecto, request.user)   
 
          
         if request.user.tipo == Usuario.ARQUITECTO or request.user.tipo == Usuario.INGENIERO:

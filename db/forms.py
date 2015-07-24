@@ -28,7 +28,7 @@ class EdificacionForm(ModelFormBase):
         exclude = ['estado', 'usuario', 'etapa_actual', 'ingeniero', 'arquitecto', 'tesorero',
                     'aprobacion_regional', 'aprobacion_arquitecto', 
                     'aprobacion_ingeniero', 'aprobacion_nacional', 'aprobacion_tesorero', 'created', 'updated', 
-                    'requiere_arquitecto','aprobacion_internacional', 'usuarios_asignados', 'planos_creados']
+                    'requiere_arquitecto','aprobacion_internacional', 'usuarios_asignados', 'planos_creados','aprobacion_fotos','envio_icm','envio_alianza']
 
     def __init__(self, *args, **kwargs):
         super(EdificacionForm, self).__init__(*args, **kwargs)

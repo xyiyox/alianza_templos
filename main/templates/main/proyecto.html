@@ -47,19 +47,20 @@
 				  	</h2>
 
 				  	<h5>{{comunidad.nombre|default:"Falta información"}} {{comunidad.region}}</h5>
-				  	
-				  	
-				  	{% for key, etp in list_etapas %}
-				  		{% if key == proyecto.etapa_actual %}
-				  		<span data-toggle="tooltip" data-placement="top" title="etapa: {{etp}}">
-				  			<i class="fa fa-{{key|etapa_to_icon}} text-info"></i>
-				  		</span> &nbsp;
-				  		{% else %}
-				  		<span data-toggle="tooltip" data-placement="top" title="etapa: {{etp}}" style="color:#d1d1d1;">
-				  			<i class="fa fa-{{key|etapa_to_icon}}"></i>
-				  		</span> &nbsp;
-				  		{% endif %}				  		
-				  	{% endfor %}
+				 		  	
+				  	{% for key, etp in list_etapas %}		
+				  	   {% if proyecto.tipo_construccion >= 2 or  proyecto.tipo_construccion < 2 and key != 14 %}
+					  		{% if key == proyecto.etapa_actual %}
+					  		<span data-toggle="tooltip" data-placement="top" title="etapa: {{etp}}">
+					  			<i class="fa fa-{{key|etapa_to_icon}} text-info"></i>
+					  		</span> &nbsp;
+					  		{% else %}
+					  		<span data-toggle="tooltip" data-placement="top" title="etapa: {{etp}}" style="color:#d1d1d1;">
+					  			<i class="fa fa-{{key|etapa_to_icon}}"></i>
+					  		</span> &nbsp;
+					  		{% endif %}		
+			  		   {% endif %}						  				  		
+				  	{% endfor %}				  
 				    </br>
 				  	<span class="label label-info">{{proyecto.get_etapa_actual_display}}</span></br>
 
@@ -577,6 +578,18 @@
 					Dar Aprobabación nacional
 					</button>
 
+				{% elif proyecto.etapa_actual == Etapa.APROB_INTERNACIONAL %}	
+					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+					Proyecto Aprobado por ICM
+					</button>
+				{% elif proyecto.etapa_actual == Etapa.ESPERANDO_RECURSOS %}	
+					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+					Recursos Recibidos y Enviados a la Iglesia
+					</button>
+				{% elif proyecto.etapa_actual == Etapa.CONS_P1 or proyecto.etapa_actual == Etapa.CONS_P2 or proyecto.etapa_actual == Etapa.CONS_P3 or proyecto.etapa_actual == Etapa.CONS_P4%}	
+					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+					Aprobar Fotos de Etapa de Construccion
+					</button>	
 				{% else %}
 				<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobación dada!</br>
 				Espere otras aprobaciones
