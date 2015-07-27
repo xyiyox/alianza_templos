@@ -33,13 +33,13 @@ class Etapa(models.Model):
 
 	CONS_P1 = 11 # FIJA
 	CONS_P2 = 12 # FIJA
-	CONS_P3 = 13 # FIJA
-	CONS_P4 = 14 # SOLO TEMPLO OBRA/SOCIAL
-	DEDICACION = 15 #FIJA
+	CONS_P3 = 13 # SOLO TEMPLO OBRA/SOCIAL
+	#CONS_P4 = 14 
+	DEDICACION = 14 #FIJA
 
 
 
-	ICONS = ['edit', 'check', 'users', 'area-chart', 'anchor', 'dollar', 'thumbs-o-up', 'globe', 'clock-o', 'cogs', 'home', 'home', 'home', 'home', 'heart']
+	ICONS = ['edit', 'check', 'users', 'area-chart', 'anchor', 'dollar', 'thumbs-o-up', 'globe', 'clock-o', 'cogs', 'home', 'home', 'home', 'heart']
 
 	ETAPA_ACTUAL = (
 		(DILIGENCIAMIENTO, u'Diligenciamiento'),
@@ -56,7 +56,7 @@ class Etapa(models.Model):
 		(CONS_P1, u'Primera Fase de Construccion'),
 		(CONS_P2, u'Segunda Fase de Construccion'),
 		(CONS_P3, u'Tercera Fase de Construccion'),
-		(CONS_P4, u'Cuarta Fase de Construccion'),
+		#(CONS_P4, u'Cuarta Fase de Construccion'),
 		(DEDICACION, u'Dedicacion'),
 	)
 
@@ -216,7 +216,7 @@ class Edificacion(models.Model):
 	aprobacion_nacional 	= models.BooleanField(default=False)
 	aprobacion_internacional= models.BooleanField(default=False)	
 
-	aprobacion_fotos = models.BooleanField(default=False)# Campo Generico de aprobacion de fotos
+	aprobacion_fotos = models.PositiveSmallIntegerField(default=0)# Campo Generico de aprobacion de fotos
 	envio_icm        = models.BooleanField(default=False)# Campo Generico de envio de icm a a la alianza
 	envio_alianza    = models.BooleanField(default=False)# Campo Generico de envio alianza a la iglesia
 

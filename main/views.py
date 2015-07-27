@@ -495,7 +495,13 @@ def autorizaciones(request, pk):
                 registrar_etapa(proyecto, Etapa.ESPERANDO_RECURSOS)
                 mail_change_etapa(proyecto, request.user)    
 
-            if proyecto.etapa_actual == Etapa.ESPERANDO_RECURSOS and 'aprobar' in request.POST:                
+            if proyecto.etapa_actual == Etapa.ESPERANDO_RECURSOS and 'aprobar' in request.POST:       
+
+                proyecto.envio_icm = request.POST['aprobar']
+                proyecto.save(update_fields=['envio_icm'])
+
+                proyecto.envio_alianza = request.POST['aprobar']
+                proyecto.save(update_fields=['envio_alianza'])         
 
                 registrar_etapa(proyecto, Etapa.CONS_P1)
                 mail_change_etapa(proyecto, request.user)   

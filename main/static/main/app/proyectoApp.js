@@ -92,6 +92,8 @@ angular
 	    $scope.verIngenieroEditForm     = false;
 	    $scope.verTesoreroEditForm     = false;
 	    $scope.verFormAutorizacion = false;
+	    
+	    $scope.verFotosEtapa = false;
 
 
 	    $scope.openPanel = function(event) {    		 		
@@ -102,6 +104,7 @@ angular
     		$scope.verAquitectoEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-arquitecto' ? true : false;
     		$scope.verIngenieroEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-ingeniero' ? true : false;
     		$scope.verTesoreroEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-tesorero' ? true : false;
+    		$scope.verFotosEtapa = event.type == 'mouseenter' && event.currentTarget.id == 'panel-fotos' ? true : false;
 	    }
 
 

@@ -28,3 +28,4 @@ CONDICIONES_COMENTARIOS       = "Comentarios adiccionanles (OPCIONAL) (Provea cu
 CONDICIONES_ACEPTACION        = u"""Al aceptar usted reconoce que es responsable de la información suministrada en cada uno de los pasos anteriores
 								y se compromete el cumplimiento de las condiciones aqui expuestas."""
 CONDICIONES_FULL_NAME         = "(Nombre de la persona autorizada a presentar esta aplicación.)"
+

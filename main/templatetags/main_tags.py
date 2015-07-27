@@ -37,3 +37,12 @@ def etapa_to_icon(etapa):
 @register.filter
 def etapa_to_general_progress(etapa):
 	return (etapa * 100) / len(Etapa.ETAPA_ACTUAL)
+
+
+@register.filter
+def create_key(type,step):	
+	return 'CAD_{}{}'.format(type, step)
+
+@register.filter
+def key_print(list, key_name):
+    return list[key_name]	

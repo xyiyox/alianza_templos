@@ -49,7 +49,7 @@
 				  	<h5>{{comunidad.nombre|default:"Falta información"}} {{comunidad.region}}</h5>
 				 		  	
 				  	{% for key, etp in list_etapas %}		
-				  	   {% if proyecto.tipo_construccion >= 2 or  proyecto.tipo_construccion < 2 and key != 14 %}
+				  	   {% if proyecto.tipo_construccion >= 2 or  proyecto.tipo_construccion < 2 and key != 13 %}
 					  		{% if key == proyecto.etapa_actual %}
 					  		<span data-toggle="tooltip" data-placement="top" title="etapa: {{etp}}">
 					  			<i class="fa fa-{{key|etapa_to_icon}} text-info"></i>
@@ -75,6 +75,78 @@
 		{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
 
 		</br></br>
+		{% if proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS  %}
+		<h3>{{proyecto.get_etapa_actual_display}}</h3>
+		<div class="panel {% if proyecto.envio_icm %} panel-green {% else %} panel-red {% endif %}" id="panel-tesorero">
+			    <div class="panel-heading">
+			        <div class="row">
+			            <div class="col-md-6">
+			                <i class="{% if proyecto.envio_icm %} glyphicon glyphicon-ok {% else %} glyphicon glyphicon-time {% endif %}  fa-lg fa-fw"></i>
+			                Envio Fondos ICM a Alianza Nacional
+			            </div>			            
+			        </div>
+			    </div>				
+			</div>
+			<div class="panel {% if proyecto.envio_alianza %} panel-green {% else %} panel-red {% endif %}" id="panel-tesorero">
+			    <div class="panel-heading">
+			        <div class="row">
+			            <div class="col-md-6">
+			               <i class="{% if proyecto.envio_alianza %} glyphicon glyphicon-ok {% else %} glyphicon glyphicon-time {% endif %}  fa-lg fa-fw"></i>
+			                Envio Fondos Nacional a Proyecto Local
+			            </div>			            
+			        </div>
+			    </div>				
+			</div>
+		
+
+			<div {% if user.tipo == user.LOCAL %} 
+				ng-mouseenter="openPanel($event)" ng-mouseleave="openPanel($event)"		
+				{% elif user.tipo == user.NACIONAL %}
+				ng-mouseenter="openOtherPanel($event)" ng-mouseleave="openOtherPanel($event)"			
+				{% endif %}
+				class="panel {% if proyecto.aprobacion_fotos %} panel-green {% else %} panel-red {% endif %}" id="panel-fotos">
+			    <div class="panel-heading">
+			        <div class="row">
+			            <div class="col-md-6">
+			                 <i class="{% if proyecto.aprobacion_fotos %} glyphicon glyphicon-ok {% else %} glyphicon glyphicon-time {% endif %}  fa-lg fa-fw"></i>
+			                Fotos De la Etapa Actual
+			            </div>			           
+			        </div>
+			    </div>		
+			    {% if user.tipo == user.LOCAL %}	
+			    <div class="panel-body" style="text-align:center;" ng-show="verAprobacion">
+			    	
+			    	{% if proyecto.aprobacion_fotos == 0 %}			    
+			    	<h4>Adjunte las fotos de la etapa actual</h4><br>		
+			    	{% with key=proyecto.tipo_construccion|create_key:proyecto.etapa_actual %}			    	
+						<p>{{ list_fotos|key_print:key }}</p>
+					{% endwith %}			    	
+					<div class="well well-sm">
+			    		<h4>Subir Fotos</h4>
+			    		<form action="/proyecto/{{proyecto.id}}/planos/" method="post" enctype="multipart/form-data">
+			    			
+			    		</form>
+			    	</div>
+					<br>
+					{% elif proyecto.aprobacion_fotos == 1 %}
+					 Esperando Aprobacion Nacional
+					{% else %}
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobado!
+					{% endif %}					
+
+			    </div>	
+			     {% endif %}
+			     {% if user.tipo == user.NACIONAL %} <!-- Le mostramos formulario de asignacion -->
+			    <div class="panel-body" ng-show="verFotosEtapa">
+			    	<p>Revise las fotos para dar aprobacion</p>
+			    	
+			    </div>
+			    {% endif %}		    
+			</div>
+
+
+	    </br></br>
+	    {% endif %}
 
 		<!--<a href="{% url "proyecto_pdf" pk=proyecto.pk %}" target='_blank'>Descargar Informacion como PDF</a>-->
 	
