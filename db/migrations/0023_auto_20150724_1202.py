@@ -13,8 +13,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='edificacion',
-            name='aprobacion_fotos',
-            field=models.BooleanField(default=False),
+            name='aprobacion_fotos', 
+            field=models.PositiveSmallIntegerField(default=0),
             preserve_default=True,
         ),
         migrations.AddField(

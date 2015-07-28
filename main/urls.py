@@ -25,6 +25,8 @@ urlpatterns = patterns('main.views',
 
     url(r'^proyecto/(?P<pk>\d+)/autorizaciones/$', 'autorizaciones', name='autorizaciones'),
     url(r'^proyecto/(?P<pk>\d+)/asignaciones/$', 'asignaciones', name='asignaciones'),
-    url(r'^proyecto/(?P<pk>\d+)/planos/$', 'planos', name='planos')
+    url(r'^proyecto/(?P<pk>\d+)/planos/$', 'planos', name='planos'),
+    
+    url(r'^proyecto/(?P<pk>\d+)/fotos/$', 'fotos', name='fotos')
 )
 

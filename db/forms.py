@@ -128,7 +128,7 @@ class AdjuntosForm(ModelFormBase):
     
     class Meta:
         model = Adjuntos
-        exclude = ['edificacion', 'planos_arquitecto', 'planos_ingeniero']
+        exclude = ['edificacion', 'planos_arquitecto', 'planos_ingeniero','fotos_p1','fotos_p2','fotos_p3','dedicacion']
 
     def __init__(self, *args, **kwargs):
         super(AdjuntosForm, self).__init__(*args, **kwargs)
@@ -235,8 +235,78 @@ class PlanosIngenieroForm(ModelFormBase):
             )
         )
 
-  
 
+class FotosPAForm(ModelFormBase):
+    class Meta:
+        model = Adjuntos
+        fields = ['fotos_p1']
+
+    def __init__(self, *args, **kwargs):
+        super(FotosPAForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag  = False
+        self.helper.form_show_labels =False
+
+        self.helper.layout = Layout(    
+            Field('fotos_p1'),
+            FormActions(
+                StrictButton('Subir', type="Submit", css_class="btn btn-primary btn-xs"),
+            )
+        )
+
+class FotosPBForm(ModelFormBase):
+    class Meta:
+        model = Adjuntos
+        fields = ['fotos_p2']
+
+    def __init__(self, *args, **kwargs):
+        super(FotosPAForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag  = False
+        self.helper.form_show_labels =False
+
+        self.helper.layout = Layout(                    
+            Field('fotos_p2'),
+            FormActions(
+                StrictButton('Subir', type="Submit", css_class="btn btn-primary btn-xs"),
+            )
+        )  
+
+class FotosPCForm(ModelFormBase):
+    class Meta:
+        model = Adjuntos
+        fields = ['fotos_p3']
+
+    def __init__(self, *args, **kwargs):
+        super(FotosPAForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag  = False
+        self.helper.form_show_labels =False
+
+        self.helper.layout = Layout(                 
+            Field('fotos_p3'),
+            FormActions(
+                StrictButton('Subir', type="Submit", css_class="btn btn-primary btn-xs"),
+            )
+        )
+
+class DedicacionForm(ModelFormBase):
+    class Meta:
+        model = Adjuntos
+        fields = ['dedicacion']
+
+    def __init__(self, *args, **kwargs):
+        super(FotosPAForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag  = False
+        self.helper.form_show_labels =False
+
+        self.helper.layout = Layout(        
+            Field('dedicacion'),
+            FormActions(
+                StrictButton('Subir', type="Submit", css_class="btn btn-primary btn-xs"),
+            )
+        )
 class AprobacionTesoreroForm(ModelFormBase):  
     class Meta:
         model = Edificacion

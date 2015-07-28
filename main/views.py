@@ -388,6 +388,18 @@ def proyecto(request, pk):
 
     ctx = {'proyecto': proyecto, 'Etapa': Etapa, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
     ctx['aprobacionForm'] = AprobacionForm()  
+
+    adj = proyecto.adjuntos_set.get()
+
+    if proyecto.etapa_actual == Etapa.CONS_P1:            
+        ctx['FotosPAForm'] = FotosPAForm(instance=adj)
+    elif proyecto.etapa_actual == Etapa.CONS_P2: 
+       ctx['FotosPBForm'] = FotosPBForm(instance=adj)
+    elif proyecto.etapa_actual == Etapa.CONS_P3: 
+       ctx['FotosPCForm'] = FotosPCForm(instance=adj)
+    elif proyecto.etapa_actual == Etapa.DEDICACION: 
+       ctx['DedicacionForm'] = DedicacionForm(instance=adj)
+   
     try:
         comunidad =  Comunidad.objects.get(edificacion=proyecto)
         ctx['comunidad'] = comunidad
@@ -481,21 +493,21 @@ def autorizaciones(request, pk):
                 registrar_etapa(proyecto, Etapa.PLANOS)
                 mail_change_etapa(proyecto, request.user)
 
-            if proyecto.etapa_actual == Etapa.APROB_NACIONAL and 'aprobar' in request.POST:
+            elif proyecto.etapa_actual == Etapa.APROB_NACIONAL and 'aprobar' in request.POST:
                 proyecto.aprobacion_nacional = request.POST['aprobar']
                 proyecto.save(update_fields=['aprobacion_nacional'])
 
                 registrar_etapa(proyecto, Etapa.APROB_INTERNACIONAL)
                 mail_change_etapa(proyecto, request.user)
 
-            if proyecto.etapa_actual == Etapa.APROB_INTERNACIONAL and 'aprobar' in request.POST:
+            elif proyecto.etapa_actual == Etapa.APROB_INTERNACIONAL and 'aprobar' in request.POST:
                 proyecto.aprobacion_internacional = request.POST['aprobar']
                 proyecto.save(update_fields=['aprobacion_internacional'])
 
                 registrar_etapa(proyecto, Etapa.ESPERANDO_RECURSOS)
                 mail_change_etapa(proyecto, request.user)    
 
-            if proyecto.etapa_actual == Etapa.ESPERANDO_RECURSOS and 'aprobar' in request.POST:       
+            elif proyecto.etapa_actual == Etapa.ESPERANDO_RECURSOS and 'aprobar' in request.POST:       
 
                 proyecto.envio_icm = request.POST['aprobar']
                 proyecto.save(update_fields=['envio_icm'])
@@ -609,6 +621,44 @@ def planos(request, pk):
         return redirect(proyecto)
     raise Http404  
 
+@login_required
+def fotos(request, pk):
+    if request.method == 'POST':
+        proyecto  =  get_object_or_404(Edificacion, pk=pk)
+        adjuntos  = proyecto.adjuntos_set.get()
+
+        if proyecto.etapa_actual == Etapa.CONS_P1:            
+           form = FotosPAForm(request.POST, request.FILES, instance=adjuntos)
+           form.save()  
+
+           proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
+           proyecto.save(update_fields=['aprobacion_fotos'])
+           
+        elif proyecto.etapa_actual == Etapa.CONS_P2: 
+           form = FotosPBForm(request.POST, request.FILES, instance=adjuntos)
+           form.save()
+
+           proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
+           proyecto.save(update_fields=['aprobacion_fotos'])
+           
+        elif proyecto.etapa_actual == Etapa.CONS_P3: 
+           form = FotosPCForm(request.POST, request.FILES, instance=adjuntos)
+           form.save() 
+
+           proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
+           proyecto.save(update_fields=['aprobacion_fotos'])
+           
+        elif proyecto.etapa_actual == Etapa.DEDICACION: 
+           form = DedicacionForm(request.POST, request.FILES, instance=adjuntos)
+           form.save()    
+
+           proyecto.aprobacion_fotos = 2 #Aprobada por que son de Dedicacion tomadas por Comunaciones
+           proyecto.save(update_fields=['aprobacion_fotos'])    
+        
+        mail_change_foto(proyecto, request.user) ##Envio email con notificando que se adjuntaron fotos   
+
+        return redirect(proyecto)
+    raise Http404  
 
 
 def hacer_login(request):

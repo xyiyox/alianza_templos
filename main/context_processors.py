@@ -37,9 +37,9 @@ def fotos(request):
 	TEMPLO_P2 = """ Fotos nivel viga de amarre y techo, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
 
 	# OBRA SOCIAL/TEMPLO CON SEGUNDO PISO
-	OBRTMP_A_P1 = """ Fotos nivel ventanas, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)  """
-	OBRTMP_A_P2 = """ Fotos nivel viga de amarre y techo, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
-	OBRTMP_A_P3 = """ Fotos nivel viga de amarre y techo, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
+	OBRTMP_A_P1 = """ Fotos 4 paredes primer piso y plancha del 2do piso , Esto implica. 1 Foto para(Frente, lateral, atras, adentro)  """
+	OBRTMP_A_P2 = """ Fotos Anteriores y 2do piso paredes, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
+	OBRTMP_A_P3 = """ Fotos Anteriores y Techo, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
 
 	# OBRA SOCIAL/TEMPLO LATERAL
 	OBRTMP_B_P1 = """ Fotos nivel ventanas, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""

@@ -440,6 +440,11 @@ class Adjuntos(models.Model):
 	planos_arquitecto       = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
 	planos_ingeniero        = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
 
+	fotos_p1       			= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
+	fotos_p2        		= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
+	fotos_p3        		= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
+	dedicacion      		= models.FileField('Dedicacion Comprimido', upload_to=calcular_ruta, null=True, blank=False)
+
 	def __str__(self):
 		return "%s" %"Adjuntos"
 

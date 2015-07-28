@@ -104,32 +104,52 @@
 				{% elif user.tipo == user.NACIONAL %}
 				ng-mouseenter="openOtherPanel($event)" ng-mouseleave="openOtherPanel($event)"			
 				{% endif %}
-				class="panel {% if proyecto.aprobacion_fotos %} panel-green {% else %} panel-red {% endif %}" id="panel-fotos">
+				class="panel {% if proyecto.aprobacion_fotos == 2 %} panel-green {% elif proyecto.aprobacion_fotos == 1 %} panel-yellow  {% else %} panel-red {% endif %}" id="panel-fotos">
 			    <div class="panel-heading">
 			        <div class="row">
 			            <div class="col-md-6">
-			                 <i class="{% if proyecto.aprobacion_fotos %} glyphicon glyphicon-ok {% else %} glyphicon glyphicon-time {% endif %}  fa-lg fa-fw"></i>
+			                 <i class="{% if proyecto.aprobacion_fotos == 2 %} glyphicon glyphicon-ok {% else %} glyphicon glyphicon-time {% endif %}  fa-lg fa-fw"></i>
 			                Fotos De la Etapa Actual
 			            </div>			           
 			        </div>
 			    </div>		
 			    {% if user.tipo == user.LOCAL %}	
-			    <div class="panel-body" style="text-align:center;" ng-show="verAprobacion">
+			    <div class="panel-body" style="text-align:left;" ng-show="verAprobacion">
 			    	
 			    	{% if proyecto.aprobacion_fotos == 0 %}			    
 			    	<h4>Adjunte las fotos de la etapa actual</h4><br>		
 			    	{% with key=proyecto.tipo_construccion|create_key:proyecto.etapa_actual %}			    	
 						<p>{{ list_fotos|key_print:key }}</p>
 					{% endwith %}			    	
-					<div class="well well-sm">
-			    		<h4>Subir Fotos</h4>
-			    		<form action="/proyecto/{{proyecto.id}}/planos/" method="post" enctype="multipart/form-data">
-			    			
+					<div class="well well-sm">			    		
+			    		<form action="/proyecto/{{proyecto.id}}/fotos/" method="post" enctype="multipart/form-data">
+			    		  {% if proyecto.etapa_actual == Etapa.CONS_P1 %}
+			    			{% crispy FotosPAForm %}
+			    		  {% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
+ 							{% crispy FotosPBForm %}
+ 						  {% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
+ 							{% crispy FotosPCForm %}
+ 						  {% elif proyecto.etapa_actual == Etapa.DEDICACION %}
+ 							{% crispy DedicacionForm %}	
+			    		  {% endif %}	
 			    		</form>
 			    	</div>
 					<br>
 					{% elif proyecto.aprobacion_fotos == 1 %}
-					 Esperando Aprobacion Nacional
+					 <h4>Esperando aprobacion Nacional</h4><br>	
+					 <div class="well well-sm">			    		
+			    		<form action="/proyecto/{{proyecto.id}}/fotos/" method="post" enctype="multipart/form-data">
+			    		  {% if proyecto.etapa_actual == Etapa.CONS_P1 %}
+			    			{% crispy FotosPAForm %}
+			    		  {% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
+ 							{% crispy FotosPBForm %}
+ 						  {% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
+ 							{% crispy FotosPCForm %}
+ 						  {% elif proyecto.etapa_actual == Etapa.DEDICACION %}
+ 							{% crispy DedicacionForm %}	
+			    		  {% endif %}	
+			    		</form>
+			    	</div>
 					{% else %}
 					<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobado!
 					{% endif %}					
@@ -138,8 +158,15 @@
 			     {% endif %}
 			     {% if user.tipo == user.NACIONAL %} <!-- Le mostramos formulario de asignacion -->
 			    <div class="panel-body" ng-show="verFotosEtapa">
-			    	<p>Revise las fotos para dar aprobacion</p>
-			    	
+			    	<h4>Revise las fotos para dar aprobacion</h4>
+			    	{% if proyecto.etapa_actual == Etapa.CONS_P1 %}
+			    		<a href="/media/{{ adjuntos.fotos_p1}}" download>	
+		    		{% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
+						<a href="/media/{{ adjuntos.fotos_p2}}" download>	
+					{% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
+						<a href="/media/{{ adjuntos.fotos_p3}}" download>	
+		    		{% endif %}	
+		    			Descargar Fotos Adjuntas</a>
 			    </div>
 			    {% endif %}		    
 			</div>
