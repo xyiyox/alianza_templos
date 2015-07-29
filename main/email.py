@@ -84,3 +84,25 @@ def mail_change_foto(proyecto, request_user):
         recipient_list.remove(request_user.email)
 
     return send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list, fail_silently=True)    
+
+def mail_change_sub_etapa(proyecto, request_user, text):
+    # user es el usuario logueado 
+    subject        = u"Proyecto %s %s " %(proyecto.nombre_proyecto,text)
+    message        = subject
+    #local
+    recipient_list = [proyecto.usuario.email]
+    
+    # componer la lista de destinatarios
+    for user in Usuario.objects.filter(tipo=Usuario.NACIONAL):
+        recipient_list.append(user.email)   
+    # esto porque el user_padre puede ser tambien en Nacional
+    if proyecto.usuario.user_padre:
+        if proyecto.usuario.user_padre.tipo != Usuario.NACIONAL:
+            #regional
+            recipient_list.append(proyecto.usuario.user_padre.email)
+
+    if request_user.email in recipient_list:
+        # sacamos de la lista de envio al usuario que esta logueado
+        recipient_list.remove(request_user.email)
+
+    return send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list, fail_silently=True)    

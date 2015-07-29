@@ -77,7 +77,9 @@
 		</br></br>
 		{% if proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS  %}
 		<h3>{{proyecto.get_etapa_actual_display}}</h3>
-		<div class="panel {% if proyecto.envio_icm %} panel-green {% else %} panel-red {% endif %}" id="panel-tesorero">
+		<div {% if user.tipo == user.NACIONAL %} 
+				ng-mouseenter="openPanelConstruccion($event,1)" ng-mouseleave="openPanelConstruccion($event,1)" {% endif %} 		
+				 class="panel {% if proyecto.envio_icm %} panel-green {% else %} panel-red {% endif %}" >
 			    <div class="panel-heading">
 			        <div class="row">
 			            <div class="col-md-6">
@@ -85,9 +87,22 @@
 			                Envio Fondos ICM a Alianza Nacional
 			            </div>			            
 			        </div>
-			    </div>				
+			    </div>	
+
+			    <div class="panel-body" ng-show="verIcmAlianza">
+			    	{% if not proyecto.envio_icm %}	
+					 <button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+					  Notificar Transferencia de Dinero!
+					 </button>	
+					{% else %}
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Giro de Dinero Realizado!
+					{% endif %}	
+			    </div>
+
 			</div>
-			<div class="panel {% if proyecto.envio_alianza %} panel-green {% else %} panel-red {% endif %}" id="panel-tesorero">
+			<div {% if user.tipo == user.NACIONAL %} 
+				ng-mouseenter="openPanelConstruccion($event,2)" ng-mouseleave="openPanelConstruccion($event,2)"						
+				{% endif %} class="panel {% if proyecto.envio_alianza %} panel-green {% else %} panel-red {% endif %}" >
 			    <div class="panel-heading">
 			        <div class="row">
 			            <div class="col-md-6">
@@ -95,7 +110,20 @@
 			                Envio Fondos Nacional a Proyecto Local
 			            </div>			            
 			        </div>
-			    </div>				
+			    </div>	
+
+			     <div class="panel-body" ng-show="verAliTemplo">
+			    	{% if not proyecto.envio_alianza and proyecto.envio_icm %}	
+					 <button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+					  Notificar Transferencia de Dinero!
+					 </button>	
+					{% elif not proyecto.envio_icm  %} 
+						Antes de Seguir ICM debe enviar el Dinero a la Alianza
+					{% else %}
+					    <i class="fa fa-thumbs-o-up fa-1x"></i> Giro de Dinero Realizado!
+					{% endif %}	
+			    </div>
+
 			</div>
 		
 
@@ -109,64 +137,108 @@
 			        <div class="row">
 			            <div class="col-md-6">
 			                 <i class="{% if proyecto.aprobacion_fotos == 2 %} glyphicon glyphicon-ok {% else %} glyphicon glyphicon-time {% endif %}  fa-lg fa-fw"></i>
-			                Fotos De la Etapa Actual
-			            </div>			           
+			                {% if proyecto.etapa_actual == Etapa.DEDICACION %} 
+			                	Fotos De la Dedicacion 
+			                {% else %}
+			                  Fotos De la Etapa Actual
+			                {% endif %}	
+			            </div>	
+			             {% if proyecto.etapa_actual == Etapa.DEDICACION %} 
+				           <div class="col-md-6 text-right">
+			                <i class="glyphicon glyphicon-camera fa-fw"></i>  
+			                20/Marzo/2015
+			              </div>	
+			             {% endif %} 	           
 			        </div>
 			    </div>		
 			    {% if user.tipo == user.LOCAL %}	
 			    <div class="panel-body" style="text-align:left;" ng-show="verAprobacion">
-			    	
-			    	{% if proyecto.aprobacion_fotos == 0 %}			    
-			    	<h4>Adjunte las fotos de la etapa actual</h4><br>		
-			    	{% with key=proyecto.tipo_construccion|create_key:proyecto.etapa_actual %}			    	
-						<p>{{ list_fotos|key_print:key }}</p>
-					{% endwith %}			    	
-					<div class="well well-sm">			    		
-			    		<form action="/proyecto/{{proyecto.id}}/fotos/" method="post" enctype="multipart/form-data">
-			    		  {% if proyecto.etapa_actual == Etapa.CONS_P1 %}
-			    			{% crispy FotosPAForm %}
-			    		  {% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
- 							{% crispy FotosPBForm %}
- 						  {% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
- 							{% crispy FotosPCForm %}
- 						  {% elif proyecto.etapa_actual == Etapa.DEDICACION %}
- 							{% crispy DedicacionForm %}	
-			    		  {% endif %}	
-			    		</form>
-			    	</div>
-					<br>
-					{% elif proyecto.aprobacion_fotos == 1 %}
-					 <h4>Esperando aprobacion Nacional</h4><br>	
-					 <div class="well well-sm">			    		
-			    		<form action="/proyecto/{{proyecto.id}}/fotos/" method="post" enctype="multipart/form-data">
-			    		  {% if proyecto.etapa_actual == Etapa.CONS_P1 %}
-			    			{% crispy FotosPAForm %}
-			    		  {% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
- 							{% crispy FotosPBForm %}
- 						  {% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
- 							{% crispy FotosPCForm %}
- 						  {% elif proyecto.etapa_actual == Etapa.DEDICACION %}
- 							{% crispy DedicacionForm %}	
-			    		  {% endif %}	
-			    		</form>
-			    	</div>
+			    	{% if proyecto.envio_icm and proyecto.envio_alianza %}				    	
+				    	{% if proyecto.aprobacion_fotos == 0 %}			    
+				    	<h4>Adjunte las fotos de la etapa actual</h4><br>		
+				    	{% with key=proyecto.tipo_construccion|create_key:proyecto.etapa_actual %}			    	
+							<p>{{ list_fotos|key_print:key }}</p>
+						{% endwith %}			    	
+						<div class="well well-sm">			    		
+				    		<form action="/proyecto/{{proyecto.id}}/fotos/" method="post" enctype="multipart/form-data">
+				    		  {% if proyecto.etapa_actual == Etapa.CONS_P1 %}
+				    			{% crispy FotosPAForm %}
+				    		  {% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
+	 							{% crispy FotosPBForm %}
+	 						  {% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
+	 							{% crispy FotosPCForm %}
+	 						  {% elif proyecto.etapa_actual == Etapa.DEDICACION %}
+	 							{% crispy DedicacionForm %}	
+				    		  {% endif %}	
+				    		</form>
+				    	</div>
+						<br>
+						{% elif proyecto.aprobacion_fotos == 1 %}
+						 <h4>Esperando aprobacion Nacional</h4><br>	
+						 <div class="well well-sm">			    		
+				    		<form action="/proyecto/{{proyecto.id}}/fotos/" method="post" enctype="multipart/form-data">
+				    		  {% if proyecto.etapa_actual == Etapa.CONS_P1 %}
+				    			{% crispy FotosPAForm %}
+				    		  {% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
+	 							{% crispy FotosPBForm %}
+	 						  {% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
+	 							{% crispy FotosPCForm %}
+	 						  {% elif proyecto.etapa_actual == Etapa.DEDICACION %}
+	 							{% crispy DedicacionForm %}	
+				    		  {% endif %}	
+				    		</form>
+				    	</div>
+						{% else %}
+						<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobado!
+						{% endif %}								
 					{% else %}
-					<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobado!
-					{% endif %}					
+						Espere que se haga la transferencia de dinero para Adjuntar las Fotos.
+					{% endif %}				
 
 			    </div>	
 			     {% endif %}
 			     {% if user.tipo == user.NACIONAL %} <!-- Le mostramos formulario de asignacion -->
 			    <div class="panel-body" ng-show="verFotosEtapa">
-			    	<h4>Revise las fotos para dar aprobacion</h4>
-			    	{% if proyecto.etapa_actual == Etapa.CONS_P1 %}
-			    		<a href="/media/{{ adjuntos.fotos_p1}}" download>	
-		    		{% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
-						<a href="/media/{{ adjuntos.fotos_p2}}" download>	
-					{% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
-						<a href="/media/{{ adjuntos.fotos_p3}}" download>	
-		    		{% endif %}	
-		    			Descargar Fotos Adjuntas</a>
+			    	{% if proyecto.envio_icm and proyecto.envio_alianza %}		
+				    	{% if proyecto.aprobacion_fotos == 0 %}			    
+				    	<h4>Espere a que el usuario local adjunte las fotos de la etapa actual</h4><br>		
+				    	{% with key=proyecto.tipo_construccion|create_key:proyecto.etapa_actual %}			    	
+							<p>{{ list_fotos|key_print:key }}</p>
+						{% endwith %}	
+						<br>
+						{% elif proyecto.aprobacion_fotos == 1 %}					 
+							 <h4>Revise las fotos para dar aprobacion</h4>
+					    	{% if proyecto.etapa_actual == Etapa.CONS_P1 %}
+					    		<a href="/media/{{ adjuntos.fotos_p1}}" download>	
+				    		{% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
+								<a href="/media/{{ adjuntos.fotos_p2}}" download>	
+							{% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
+								<a href="/media/{{ adjuntos.fotos_p3}}" download>	
+							{% elif proyecto.etapa_actual == Etapa.DEDICACION %}
+								<a href="/media/{{ adjuntos.dedicacion}}" download>			
+				    		{% endif %}	
+			    			Descargar Fotos Adjuntas</a>
+
+			    		 <button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+						  Aprobar Fotos de Etapa de Construccion
+						 </button>	
+
+						{% else %}
+						<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobado! <br> 
+							{% if proyecto.etapa_actual == Etapa.CONS_P1 %}
+					    		<a href="/media/{{ adjuntos.fotos_p1}}" download>	
+				    		{% elif proyecto.etapa_actual == Etapa.CONS_P2 %}
+								<a href="/media/{{ adjuntos.fotos_p2}}" download>	
+							{% elif proyecto.etapa_actual == Etapa.CONS_P3 %}
+								<a href="/media/{{ adjuntos.fotos_p3}}" download>	
+							{% elif proyecto.etapa_actual == Etapa.DEDICACION %}
+								<a href="/media/{{ adjuntos.dedicacion}}" download>			
+				    		{% endif %}	
+				    		Descargar Fotos Adjuntas</a>
+						{% endif %}	
+					{% else %}
+						Primero se debe realizar la transferencia de Dinero, antes de evaluar las Fotos.	
+					{% endif %}		
 			    </div>
 			    {% endif %}		    
 			</div>
@@ -685,10 +757,12 @@
 					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
 					Recursos Recibidos y Enviados a la Iglesia
 					</button>
-				{% elif proyecto.etapa_actual == Etapa.CONS_P1 or proyecto.etapa_actual == Etapa.CONS_P2 or proyecto.etapa_actual == Etapa.CONS_P3 or proyecto.etapa_actual == Etapa.CONS_P4%}	
-					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
-					Aprobar Fotos de Etapa de Construccion
-					</button>	
+				{% elif proyecto.etapa_actual == Etapa.CONS_P1 or proyecto.etapa_actual == Etapa.CONS_P2 or proyecto.etapa_actual == Etapa.CONS_P3 %}	
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Revise Panel de Construccion</br>
+				{% elif proyecto.etapa_actual == Etapa.DEDICACION and proyecto.aprobacion_fotos < 2  %}	
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Etapa Final de Construccion</br>
+				{% elif proyecto.etapa_actual == Etapa.DEDICACION and proyecto.aprobacion_fotos == 2  %}	
+					<i class="fa fa-thumbs-o-up fa-1x"></i> El Proyecto Concluyo con Exito!</br>		
 				{% else %}
 				<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobación dada!</br>
 				Espere otras aprobaciones

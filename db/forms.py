@@ -260,7 +260,7 @@ class FotosPBForm(ModelFormBase):
         fields = ['fotos_p2']
 
     def __init__(self, *args, **kwargs):
-        super(FotosPAForm, self).__init__(*args, **kwargs)
+        super(FotosPBForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_tag  = False
         self.helper.form_show_labels =False
@@ -278,7 +278,7 @@ class FotosPCForm(ModelFormBase):
         fields = ['fotos_p3']
 
     def __init__(self, *args, **kwargs):
-        super(FotosPAForm, self).__init__(*args, **kwargs)
+        super(FotosPCForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_tag  = False
         self.helper.form_show_labels =False
@@ -296,7 +296,7 @@ class DedicacionForm(ModelFormBase):
         fields = ['dedicacion']
 
     def __init__(self, *args, **kwargs):
-        super(FotosPAForm, self).__init__(*args, **kwargs)
+        super(DedicacionForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_tag  = False
         self.helper.form_show_labels =False

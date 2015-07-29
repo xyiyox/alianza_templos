@@ -94,7 +94,18 @@ angular
 	    $scope.verFormAutorizacion = false;
 	    
 	    $scope.verFotosEtapa = false;
+	    $scope.verIcmAlianza = false;
+	    $scope.verAliTemplo = false;
 
+	    $scope.openPanelConstruccion = function (event,num){
+
+	    	if(num==1){
+	    		$scope.verIcmAlianza = event.type == 'mouseenter';
+	    	}else{
+	    		$scope.verAliTemplo = event.type == 'mouseenter';	
+	    	}
+
+	    }
 
 	    $scope.openPanel = function(event) {    		 		
     		$scope.verAprobacion = event.type == 'mouseenter';

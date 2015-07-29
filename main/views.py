@@ -518,7 +518,54 @@ def autorizaciones(request, pk):
                 registrar_etapa(proyecto, Etapa.CONS_P1)
                 mail_change_etapa(proyecto, request.user)   
 
-         
+            elif proyecto.etapa_actual == Etapa.CONS_P1 and 'aprobar' in request.POST:       
+
+                proyecto.envio_icm = False
+                proyecto.save(update_fields=['envio_icm'])
+
+                proyecto.envio_alianza = False
+                proyecto.save(update_fields=['envio_alianza']) 
+
+                proyecto.aprobacion_fotos = 0
+                proyecto.save(update_fields=['aprobacion_fotos'])         
+
+                registrar_etapa(proyecto, Etapa.CONS_P2)
+                mail_change_etapa(proyecto, request.user)     
+
+            elif proyecto.etapa_actual == Etapa.CONS_P2 or proyecto.etapa_actual == Etapa.CONS_P3 or proyecto.etapa_actual == Etapa.DEDICACION and 'aprobar' in request.POST:       
+                
+                if not proyecto.envio_icm:
+                    #GIRO DE ICM
+                    proyecto.envio_icm = request.POST['aprobar']
+                    proyecto.save(update_fields=['envio_icm'])                
+                    mail_change_sub_etapa(proyecto, request.user, "ICM envia fondos a la Alianza") 
+                elif not proyecto.envio_alianza:
+                    #GIRO ALIANZA
+                    proyecto.envio_alianza = request.POST['aprobar']
+                    proyecto.save(update_fields=['envio_alianza'])                  
+                    mail_change_sub_etapa(proyecto, request.user, "Alianza envia fondos a la Iglesia Local")          
+                elif proyecto.aprobacion_fotos == 1:
+                    #APROBACION DE FOTOS
+                    if proyecto.etapa_actual == Etapa.DEDICACION: #Fin de la etapa de Dedicacion
+                       proyecto.aprobacion_fotos = 2
+                       proyecto.save(update_fields=['aprobacion_fotos']) ##Aca seguiria a etapa de Infome 6 Mestral
+                    else:                        
+                        proyecto.envio_icm = False
+                        proyecto.save(update_fields=['envio_icm'])
+
+                        proyecto.envio_alianza = False
+                        proyecto.save(update_fields=['envio_alianza']) 
+
+                        proyecto.aprobacion_fotos = 0
+                        proyecto.save(update_fields=['aprobacion_fotos'])
+
+                        if proyecto.tipo_construccion >= 2 and proyecto.etapa_actual == Etapa.CONS_P2:
+                            registrar_etapa(proyecto, Etapa.CONS_P3)                   
+                        else:    
+                            registrar_etapa(proyecto, Etapa.DEDICACION)   
+
+                        mail_change_etapa(proyecto, request.user)     
+                    
         if request.user.tipo == Usuario.ARQUITECTO or request.user.tipo == Usuario.INGENIERO:
             
             if proyecto.etapa_actual == Etapa.PLANOS and 'aprobar' in request.POST:
@@ -652,7 +699,7 @@ def fotos(request, pk):
            form = DedicacionForm(request.POST, request.FILES, instance=adjuntos)
            form.save()    
 
-           proyecto.aprobacion_fotos = 2 #Aprobada por que son de Dedicacion tomadas por Comunaciones
+           proyecto.aprobacion_fotos = 1 #Aprobada por que son de Dedicacion tomadas por Comunaciones
            proyecto.save(update_fields=['aprobacion_fotos'])    
         
         mail_change_foto(proyecto, request.user) ##Envio email con notificando que se adjuntaron fotos   
