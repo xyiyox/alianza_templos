@@ -38,6 +38,9 @@
 					{% endif%}
 					<a href="" class="btn btn-xs btn-block btn-default" ng-click="scrollTo('comentarios')" role="button">Comentar</a>
 					<a href="{% url "proyecto_pdf" pk=proyecto.pk %}" target='_blank' class="btn btn-xs btn-block btn-default" role="button">Descargar Pdf</a>
+					{% if proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS and proyecto.etapa_actual <= Etapa.DEDICACION   %}
+					<a href="{% url "evento" pk=proyecto.pk %}" target='_blank' class="btn btn-xs btn-block btn-default" role="button">Calendario en Google</a>
+					{% endif %}
 				</div>
 
 				<div class="col-sm-10">

@@ -77,6 +77,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+SECRET_KEY = '_=9hq-$t_uv1ckf&s!y2$9g$1dm*6p1cl%*!^mg=7gr)!zj32d'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

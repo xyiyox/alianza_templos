@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import httplib2
 
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
@@ -31,6 +32,31 @@ import cStringIO as StringIO
 import cgi
 from django.template import RequestContext
 from django.template.loader import render_to_string
+
+
+import logging
+
+from apiclient.discovery import build
+from django.http import HttpResponseBadRequest
+
+from oauth2client import xsrfutil
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.django_orm import Storage
+
+from datetime import timedelta
+from datetime import datetime
+
+# CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
+# application, including client_id and client_secret, which are found
+# on the API Access tab on the Google APIs
+# Console <http://code.google.com/apis/console>
+CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), '..', 'client_secret_661085975402-3iiorol92djh7n2fgo8ic9lsmuf8iffn.apps.googleusercontent.com.json')
+
+FLOW = flow_from_clientsecrets(
+    CLIENT_SECRETS,
+    scope='https://www.googleapis.com/auth/calendar',
+    #redirect_uri='http://127.0.0.1:8000/oauth2callback')
+    redirect_uri='http://proyectos.laalianzacristiana.co/oauth2callback')
 
 def home(request):
 
@@ -754,3 +780,66 @@ def done(request, pk):
 def hacer_logout(request):
     logout(request)
     return redirect('hacer_login')
+
+
+
+def evento(request,pk):
+    # Refer to the Python quickstart on how to setup the environment:
+    # https://developers.google.com/google-apps/calendar/quickstart/python
+    # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
+    # stored credentials.
+    FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
+                                             request.user)
+    FLOW.params['pk'] = pk
+    authorize_url = FLOW.step1_get_authorize_url()
+    return HttpResponseRedirect(authorize_url)   
+   
+def auth_return(request): 
+
+      pk = FLOW.params['pk']
+      proyecto  =  get_object_or_404(Edificacion, pk=pk)
+      etapa_inical_cons =  Etapa.objects.get(edificacion=proyecto,etapa=Etapa.CONS_P1)
+ 
+      construction_initial = etapa_inical_cons.created
+      construction_final = construction_initial
+
+      credential = FLOW.step2_exchange(request.REQUEST) 
+      http = httplib2.Http()
+      http = credential.authorize(http)
+      service = build("calendar", "v3", http=http)    
+
+      for key,value in Etapa.ETAPA_ACTUAL:
+        if key > Etapa.ESPERANDO_RECURSOS and key <= Etapa.DEDICACION:
+            if proyecto.tipo_construccion >= 2 and key == Etapa.CONS_P1:
+                construction_final = construction_final+timedelta(days=60)
+            else:
+                construction_final = construction_final+timedelta(days=40)   
+
+            event = {
+              'summary': proyecto.nombre_proyecto+' '+value,
+              'location': proyecto.direccion,
+              'description': 'Proyecto {} creado en {}, Fecha de {}'.format(proyecto.nombre_proyecto, proyecto.created, value),
+              'start': {
+                'date': construction_initial.strftime('%Y-%m-%d'),
+                'timeZone': settings.TIME_ZONE,
+              },              
+              'end': {
+                'date': construction_final.strftime('%Y-%m-%d'),
+                'timeZone': settings.TIME_ZONE,
+              },                    
+              'reminders': {
+                'useDefault': False,
+                'overrides': [
+                  {'method': 'email', 'minutes': 24 * 60},                 
+                ],
+              },
+            }
+            construction_initial = construction_final  
+            event = service.events().insert(calendarId='primary', body=event).execute()
+            print 'Event created: %s' % (event.get('htmlLink'))         
+
+      ctx = {'hola':'chao'}
+      return render(request, 'main/calendar.html', ctx)
+
+ 
+

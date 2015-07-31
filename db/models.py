@@ -77,9 +77,14 @@ class Etapa(models.Model):
 
 
 	def _get_plazo_actual(self):
-		#if self.etapa_actual == APROB_REGIONAL:
-		return self.created + timedelta(days=8)
-
+		#if self.etapa_actual == APROB_REGIONAL:		
+		if self.edificacion.etapa_actual > self.ESPERANDO_RECURSOS and self.edificacion.etapa_actual <= self.DEDICACION:
+			if self.edificacion.tipo_construccion >= 2 and self.edificacion.etapa_actual == self.CONS_P1:
+				return self.created + timedelta(days=60)
+			else:
+				return self.created + timedelta(days=40)
+		else:	
+		    return self.created + timedelta(days=8)
 	
 	plazo = property(_get_plazo_actual)
 
@@ -88,8 +93,7 @@ class Etapa(models.Model):
 	def _get_porcentaje_plazo(self):
 		now = timezone.now()
 		if timezone.is_aware(now):
-			now = timezone.localtime(now)
-
+		   now = timezone.localtime(now)		
 		if now <= self.plazo:
 			# calculamos el cien por ciento
 			delta_rango = (self.plazo - self.created).total_seconds() 

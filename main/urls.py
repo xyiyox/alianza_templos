@@ -27,6 +27,8 @@ urlpatterns = patterns('main.views',
     url(r'^proyecto/(?P<pk>\d+)/asignaciones/$', 'asignaciones', name='asignaciones'),
     url(r'^proyecto/(?P<pk>\d+)/planos/$', 'planos', name='planos'),
     
-    url(r'^proyecto/(?P<pk>\d+)/fotos/$', 'fotos', name='fotos')
+    url(r'^proyecto/(?P<pk>\d+)/fotos/$', 'fotos', name='fotos'),
+    url(r'^proyecto/(?P<pk>\d+)/evento/$', 'evento', name='evento'),
+    url(r'^oauth2callback', 'auth_return', name='auth_return'),
 )
 
