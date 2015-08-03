@@ -224,6 +224,8 @@ class Edificacion(models.Model):
 	envio_icm        = models.BooleanField(default=False)# Campo Generico de envio de icm a a la alianza
 	envio_alianza    = models.BooleanField(default=False)# Campo Generico de envio alianza a la iglesia
 
+	fecha_aprox_dedicacion     = models.DateTimeField(null=True, blank=True) 
+
 	created     = models.DateField(auto_now_add =True)
 	updated     = models.DateField(auto_now = True)
 

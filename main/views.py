@@ -415,6 +415,9 @@ def proyecto(request, pk):
     ctx = {'proyecto': proyecto, 'Etapa': Etapa, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
     ctx['aprobacionForm'] = AprobacionForm()  
 
+    #PRUEBA DE EMAIL CON ESTILO
+    #mail_prueba()
+
     adj = proyecto.adjuntos_set.get()
 
     if proyecto.etapa_actual == Etapa.CONS_P1:            
@@ -541,8 +544,24 @@ def autorizaciones(request, pk):
                 proyecto.envio_alianza = request.POST['aprobar']
                 proyecto.save(update_fields=['envio_alianza'])         
 
-                registrar_etapa(proyecto, Etapa.CONS_P1)
-                mail_change_etapa(proyecto, request.user)   
+                registrar_etapa(proyecto, Etapa.CONS_P1)                
+
+                #Calculo la fecha de dedicacion aproximada para guardarla en la base de datos y notificar.
+                #fecha_aprox_dedicacion
+                etapa_inical_cons =  Etapa.objects.get(edificacion=proyecto,etapa=Etapa.CONS_P1)                 
+                construction_final = etapa_inical_cons.created
+                
+                for key,value in Etapa.ETAPA_ACTUAL:
+                  if key > Etapa.ESPERANDO_RECURSOS and key <= Etapa.DEDICACION:
+                     if proyecto.tipo_construccion >= 2 and key == Etapa.CONS_P1:
+                        construction_final = construction_final+timedelta(days=60)
+                     else:
+                        construction_final = construction_final+timedelta(days=40)                       
+
+                proyecto.fecha_aprox_dedicacion = construction_final
+                proyecto.save(update_fields=['fecha_aprox_dedicacion'])
+
+                mail_change_etapa(proyecto, request.user)                                             
 
             elif proyecto.etapa_actual == Etapa.CONS_P1 and 'aprobar' in request.POST:       
 

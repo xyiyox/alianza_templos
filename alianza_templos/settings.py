@@ -97,6 +97,9 @@ EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 EMAIL_PORT = EMAIL_PORT
 
+EMAIL_COMUNICACIONES = 'sandra.montanez@laalianzacristiana.co'
+EMAIL_DEVELOPER = 'felipe.valencia@laalianzacristiana.co'
+
 # configuracion de django suit
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
