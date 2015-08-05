@@ -55,22 +55,22 @@ def mail_comentario(coment, proyecto):
 
 def mail_change_etapa(proyecto, request_user):
     # user es el usuario logueado 
-    subject        = u"Proyecto %s cambió a %s" %(proyecto.nombre_proyecto, proyecto.get_etapa_actual_display())
-    message        = u"a cambiado a %s" %(proyecto.get_etapa_actual_display())
-    from_email     = settings.EMAIL_HOST_USER
-    recipient_list = [proyecto.usuario.email]
-    recipient_list.append(EMAIL_DEVELOPER)   
-    
+    subject        = u"Proyecto %s cambió a %s" %(proyecto.nombre_proyecto, proyecto.get_etapa_actual_display())    
+    from_email     = settings.EMAIL_HOST_USER    
+   
     if proyecto.etapa_actual == Etapa.CONS_P1: #Construccion Inicia dedicacion calculada
-       message        = u"a cambiado a %s y se Calcula la fecha de Dedicacion el %s, Como Departamento de Comunicaciones deben tener esta Fecha Presente para Agendar este Compromiso" %(proyecto.get_etapa_actual_display(),proyecto.fecha_aprox_dedicacion)
+       message        = u"cambió a etapa de %s y se Calcula la fecha de Dedicacion el %s, Como Departamento de Comunicaciones deben tener esta Fecha Presente para Agendar este Compromiso" %(proyecto.get_etapa_actual_display(),proyecto.fecha_aprox_dedicacion.strftime('%Y-%m-%d'))
        d = Context({ 'nombre_proyecto':proyecto.nombre_proyecto, 'text':message  })
        htmly = get_template('main/email_template.html')
        html_content = htmly.render(d)
 
-       msg = EmailMessage(subject, html_content, from_email, [settings.EMAIL_COMUNICACIONES])
+       msg = EmailMessage(subject, html_content, from_email, [settings.EMAIL_COMUNICACIONES,settings.EMAIL_DEVELOPER])
        msg.content_subtype = "html"  # Main content is now text/html
        msg.send()  
 
+    recipient_list = [proyecto.usuario.email]
+    recipient_list.append(settings.EMAIL_DEVELOPER)      
+    message = u"cambió a etapa de %s" %(proyecto.get_etapa_actual_display())   
     # componer la lista de destinatarios
     for user in Usuario.objects.filter(tipo=Usuario.NACIONAL):
         recipient_list.append(user.email)   
@@ -99,7 +99,7 @@ def mail_change_foto(proyecto, request_user):
     message        = u"a adjuntado fotos %s" %(proyecto.get_etapa_actual_display())
     from_email     = settings.EMAIL_HOST_USER
     recipient_list = [proyecto.usuario.email]
-    recipient_list.append(EMAIL_DEVELOPER)   
+    recipient_list.append(settings.EMAIL_DEVELOPER)   
 
     # componer la lista de destinatarios
     for user in Usuario.objects.filter(tipo=Usuario.NACIONAL):
@@ -130,7 +130,7 @@ def mail_change_sub_etapa(proyecto, request_user, text):
     message        = u"notifica que %s " %(text)
     from_email     = settings.EMAIL_HOST_USER
     recipient_list = [proyecto.usuario.email]
-    recipient_list.append(EMAIL_DEVELOPER)   
+    recipient_list.append(settings.EMAIL_DEVELOPER)   
     
     # componer la lista de destinatarios
     for user in Usuario.objects.filter(tipo=Usuario.NACIONAL):
