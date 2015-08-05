@@ -279,28 +279,27 @@ def proyecto_zip(request, pk):
 
     # OJO VALIDAR QUE EN CREACION NO SE PUEDA SALTAR EL ORDEN ESTRICTO DE FORMULARIOS
     adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
-    filenames = []
-    print (settings.MEDIA_ROOT)
-    if adjuntos.foto_construccion:
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.foto_construccion.url)]
+    filenames = []  
+    if adjuntos.foto_construccion:        
+        filenames += [adjuntos.foto_construccion.path]
     if adjuntos.foto_congregacion:
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.foto_congregacion.url)]
+        filenames += [adjuntos.foto_congregacion.path]
     if adjuntos.foto_pastor:
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.foto_pastor.url)]
+        filenames += [adjuntos.foto_pastor.path]
     if adjuntos.permiso_construccion: 
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.permiso_construccion.url)]
+        filenames += [adjuntos.permiso_construccion.path]
     if adjuntos.escritura_terreno:   
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.escritura_terreno.url)]
+        filenames += [adjuntos.escritura_terreno.path]
     if adjuntos.manzana_catastral:    
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.manzana_catastral.url)]
+        filenames += [adjuntos.manzana_catastral.path]
     if adjuntos.plan_construccion:    
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.plan_construccion.url)]    
+        filenames += [adjuntos.plan_construccion.path]    
     if adjuntos.historia_congregacion:    
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.historia_congregacion.url)]    
+        filenames += [adjuntos.historia_congregacion.path]    
     if adjuntos.testimonio_pastor:    
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.testimonio_pastor.url)]    
+        filenames += [adjuntos.testimonio_pastor.path]    
     if adjuntos.planos_arquitecto:    
-        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.planos_arquitecto.url)]                
+        filenames += [adjuntos.planos_arquitecto.path]                
 
     # Folder name in ZIP archive which contains the above files
     # E.g [thearchive.zip]/somefiles/file2.txt

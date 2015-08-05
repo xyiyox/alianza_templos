@@ -2,7 +2,7 @@
 from django import template
 from django.utils.timesince import timesince
 from db.models import Etapa
-
+import os
 
 register = template.Library()
 
@@ -47,3 +47,11 @@ def create_key(type,step):
 @register.filter
 def key_print(list, key_name):
     return list[key_name]	
+
+@register.filter
+def extencion(name):	
+	ext = os.path.splitext(name)[1]	
+	if ext == '.jpg' or ext == '.png' or ext == '.jpeg':
+		return True
+	else:
+		return False
