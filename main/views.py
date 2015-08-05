@@ -280,26 +280,27 @@ def proyecto_zip(request, pk):
     # OJO VALIDAR QUE EN CREACION NO SE PUEDA SALTAR EL ORDEN ESTRICTO DE FORMULARIOS
     adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
     filenames = []
+    print (settings.MEDIA_ROOT)
     if adjuntos.foto_construccion:
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_construccion.url]
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.foto_construccion.url)]
     if adjuntos.foto_congregacion:
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_congregacion.url]
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.foto_congregacion.url)]
     if adjuntos.foto_pastor:
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.foto_pastor.url]
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.foto_pastor.url)]
     if adjuntos.permiso_construccion: 
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.permiso_construccion.url]
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.permiso_construccion.url)]
     if adjuntos.escritura_terreno:   
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.escritura_terreno.url]
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.escritura_terreno.url)]
     if adjuntos.manzana_catastral:    
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.manzana_catastral.url]
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.manzana_catastral.url)]
     if adjuntos.plan_construccion:    
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.plan_construccion.url]    
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.plan_construccion.url)]    
     if adjuntos.historia_congregacion:    
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.historia_congregacion.url]    
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.historia_congregacion.url)]    
     if adjuntos.testimonio_pastor:    
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.testimonio_pastor.url]    
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.testimonio_pastor.url)]    
     if adjuntos.planos_arquitecto:    
-        filenames += [os.path.dirname(os.path.abspath(__file__))+"/../public"+adjuntos.planos_arquitecto.url]                
+        filenames += [os.path.join(settings.BASE_DIR, 'public'+adjuntos.planos_arquitecto.url)]                
 
     # Folder name in ZIP archive which contains the above files
     # E.g [thearchive.zip]/somefiles/file2.txt
