@@ -78,7 +78,7 @@
 		{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
 
 		</br></br>
-		{% if proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS  %}
+		{% if proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS and proyecto.etapa_actual <= Etapa.DEDICACION  %}
 		<h3>{{proyecto.get_etapa_actual_display}}</h3>
 		<div {% if user.tipo == user.NACIONAL %} 
 				ng-mouseenter="openPanelConstruccion($event,1)" ng-mouseleave="openPanelConstruccion($event,1)" {% endif %} 		
@@ -103,7 +103,7 @@
 			    </div>
 
 			</div>
-			<div {% if user.tipo == user.NACIONAL %} 
+			<div {% if user.tipo == user.TESORERO %} 
 				ng-mouseenter="openPanelConstruccion($event,2)" ng-mouseleave="openPanelConstruccion($event,2)"						
 				{% endif %} class="panel {% if proyecto.envio_alianza %} panel-green {% else %} panel-red {% endif %}" >
 			    <div class="panel-heading">
@@ -126,9 +126,7 @@
 					    <i class="fa fa-thumbs-o-up fa-1x"></i> Giro de Dinero Realizado!
 					{% endif %}	
 			    </div>
-
-			</div>
-		
+			</div>		
 
 			<div {% if user.tipo == user.LOCAL %} 
 				ng-mouseenter="openPanel($event)" ng-mouseleave="openPanel($event)"		
@@ -243,11 +241,20 @@
 						Primero se debe realizar la transferencia de Dinero, antes de evaluar las Fotos.	
 					{% endif %}		
 			    </div>
-			    {% endif %}		    
+			    {% endif %}	  
+
 			</div>
 
 
 	    </br></br>
+	    {% endif %}
+
+	    <!-- Etapa de los 6 Meses de ICM  -->
+	    {% if proyecto.etapa_actual >= Etapa.DEDICACION %}
+
+	    	
+
+
 	    {% endif %}
 
 		<!--<a href="{% url "proyecto_pdf" pk=proyecto.pk %}" target='_blank'>Descargar Informacion como PDF</a>-->
@@ -799,11 +806,19 @@
 				{% elif proyecto.etapa_actual == Etapa.ESPERANDO_RECURSOS %}	
 					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
 					Recursos Recibidos y Enviados a la Iglesia
-					</button>
-				{% elif proyecto.etapa_actual == Etapa.CONS_P1 or proyecto.etapa_actual == Etapa.CONS_P2 or proyecto.etapa_actual == Etapa.CONS_P3 %}	
-					<i class="fa fa-thumbs-o-up fa-1x"></i> Revise Panel de Construccion</br>
-				{% elif proyecto.etapa_actual == Etapa.DEDICACION and proyecto.aprobacion_fotos < 2  %}	
-					<i class="fa fa-thumbs-o-up fa-1x"></i> Etapa Final de Construccion</br>
+					</button>	
+				{% elif proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS and proyecto.etapa_actual <= Etapa.DEDICACION  %}						
+					<form action="/proyecto/{{proyecto.id}}/dedicacion/"  method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="input-group">
+						  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></span>
+						  <input type="text" class="form-control" placeholder="YYYY-MM-DD" aria-describedby="basic-addon1" name='fecha'>
+						</div>
+						<br>
+						 <button type="submit" class="btn btn-success btn-xs btn-block">
+					 		 Cambiar Fecha de Dedicacion
+						 </button>	
+					</form>
 				{% elif proyecto.etapa_actual == Etapa.DEDICACION and proyecto.aprobacion_fotos == 2  %}	
 					<i class="fa fa-thumbs-o-up fa-1x"></i> El Proyecto Concluyo con Exito!</br>		
 				{% else %}

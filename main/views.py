@@ -4,7 +4,7 @@ import httplib2
 
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
-from django.http import HttpResponseRedirect  
+from django.http import HttpResponseRedirect,HttpResponseServerError  
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -46,11 +46,12 @@ from oauth2client.django_orm import Storage
 from datetime import timedelta
 from datetime import datetime
 
+
 # CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
 # application, including client_id and client_secret, which are found
 # on the API Access tab on the Google APIs
 # Console <http://code.google.com/apis/console>
-CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), '..', 'client_secret_661085975402-3iiorol92djh7n2fgo8ic9lsmuf8iffn.apps.googleusercontent.com.json')
+CLIENT_SECRETS = os.path.join(settings.BASE_DIR,'client_secret_661085975402-3iiorol92djh7n2fgo8ic9lsmuf8iffn.apps.googleusercontent.com.json')
 
 FLOW = flow_from_clientsecrets(
     CLIENT_SECRETS,
@@ -542,7 +543,7 @@ def autorizaciones(request, pk):
                 proyecto.envio_icm = request.POST['aprobar']
                 proyecto.save(update_fields=['envio_icm'])
 
-                proyecto.envio_alianza = request.POST['aprobar']
+                proyecto.envio_alianza = False
                 proyecto.save(update_fields=['envio_alianza'])         
 
                 registrar_etapa(proyecto, Etapa.CONS_P1)                
@@ -554,42 +555,24 @@ def autorizaciones(request, pk):
                 
                 for key,value in Etapa.ETAPA_ACTUAL:
                   if key > Etapa.ESPERANDO_RECURSOS and key <= Etapa.DEDICACION:
-                     if proyecto.tipo_construccion >= 2 and key == Etapa.CONS_P1:
-                        construction_final = construction_final+timedelta(days=60)
+                     if proyecto.tipo_construccion >= 2 and key == Etapa.CONS_P1: #Le añado 8 dias aprox del giro Alianza Iglesia
+                        construction_final = construction_final+timedelta(days=68)
                      else:
-                        construction_final = construction_final+timedelta(days=40)                       
+                        construction_final = construction_final+timedelta(days=48)                       
 
                 proyecto.fecha_aprox_dedicacion = construction_final
                 proyecto.save(update_fields=['fecha_aprox_dedicacion'])
 
                 mail_change_etapa(proyecto, request.user)                                             
+                
 
-            elif proyecto.etapa_actual == Etapa.CONS_P1 and 'aprobar' in request.POST:       
-
-                proyecto.envio_icm = False
-                proyecto.save(update_fields=['envio_icm'])
-
-                proyecto.envio_alianza = False
-                proyecto.save(update_fields=['envio_alianza']) 
-
-                proyecto.aprobacion_fotos = 0
-                proyecto.save(update_fields=['aprobacion_fotos'])         
-
-                registrar_etapa(proyecto, Etapa.CONS_P2)
-                mail_change_etapa(proyecto, request.user)     
-
-            elif proyecto.etapa_actual == Etapa.CONS_P2 or proyecto.etapa_actual == Etapa.CONS_P3 or proyecto.etapa_actual == Etapa.DEDICACION and 'aprobar' in request.POST:       
+            elif proyecto.etapa_actual == Etapa.CONS_P1 or proyecto.etapa_actual == Etapa.CONS_P2 or proyecto.etapa_actual == Etapa.CONS_P3 or proyecto.etapa_actual == Etapa.DEDICACION and 'aprobar' in request.POST:       
                 
                 if not proyecto.envio_icm:
                     #GIRO DE ICM
                     proyecto.envio_icm = request.POST['aprobar']
                     proyecto.save(update_fields=['envio_icm'])                
-                    mail_change_sub_etapa(proyecto, request.user, "ICM envia fondos a la Alianza") 
-                elif not proyecto.envio_alianza:
-                    #GIRO ALIANZA
-                    proyecto.envio_alianza = request.POST['aprobar']
-                    proyecto.save(update_fields=['envio_alianza'])                  
-                    mail_change_sub_etapa(proyecto, request.user, "Alianza envia fondos a la Iglesia Local")          
+                    mail_change_sub_etapa(proyecto, request.user, "ICM envia fondos a la Alianza")                          
                 elif proyecto.aprobacion_fotos == 1:
                     #APROBACION DE FOTOS
                     if proyecto.etapa_actual == Etapa.DEDICACION: #Fin de la etapa de Dedicacion
@@ -605,10 +588,13 @@ def autorizaciones(request, pk):
                         proyecto.aprobacion_fotos = 0
                         proyecto.save(update_fields=['aprobacion_fotos'])
 
-                        if proyecto.tipo_construccion >= 2 and proyecto.etapa_actual == Etapa.CONS_P2:
-                            registrar_etapa(proyecto, Etapa.CONS_P3)                   
-                        else:    
-                            registrar_etapa(proyecto, Etapa.DEDICACION)   
+                        if proyecto.etapa_actual == Etapa.CONS_P1:
+                            registrar_etapa(proyecto, Etapa.CONS_P2)
+                        else:                            
+                            if proyecto.tipo_construccion >= 2 and proyecto.etapa_actual == Etapa.CONS_P2:
+                                registrar_etapa(proyecto, Etapa.CONS_P3)                   
+                            else:    
+                                registrar_etapa(proyecto, Etapa.DEDICACION)   
 
                         mail_change_etapa(proyecto, request.user)     
                     
@@ -657,9 +643,14 @@ def autorizaciones(request, pk):
                 proyecto.save(update_fields=['aprobacion_tesorero'])    # el campo etapa_actual se actualiza en el modelo Etapa
                 
                 registrar_etapa(proyecto, Etapa.APROB_NACIONAL)  
-                mail_change_etapa(proyecto, request.user) 
-              
-        
+                mail_change_etapa(proyecto, request.user)
+
+            elif proyecto.etapa_actual == Etapa.CONS_P1 or proyecto.etapa_actual == Etapa.CONS_P2 or proyecto.etapa_actual == Etapa.CONS_P3 or proyecto.etapa_actual == Etapa.DEDICACION and 'aprobar' in request.POST:    
+                if not proyecto.envio_alianza:
+                    #GIRO ALIANZA
+                    proyecto.envio_alianza = request.POST['aprobar']
+                    proyecto.save(update_fields=['envio_alianza'])                  
+                    mail_change_sub_etapa(proyecto, request.user, "Alianza envia fondos a la Iglesia Local")         
 
         return redirect(proyecto)
 
@@ -715,42 +706,60 @@ def planos(request, pk):
     raise Http404  
 
 @login_required
+def dedicacion(request, pk):
+    if request.method == 'POST':
+        if request.user.tipo != Usuario.NACIONAL:
+            raise PermissionDenied 
+        proyecto  =  get_object_or_404(Edificacion, pk=pk)        
+        proyecto.fecha_aprox_dedicacion = datetime.strptime(request.POST['fecha'], "%Y-%m-%d") #Careful fecha string 
+        proyecto.save(update_fields=['fecha_aprox_dedicacion'])
+        return redirect(proyecto)
+    raise Http404  
+
+@login_required
 def fotos(request, pk):
     if request.method == 'POST':
         proyecto  =  get_object_or_404(Edificacion, pk=pk)
         adjuntos  = proyecto.adjuntos_set.get()
-
-        if proyecto.etapa_actual == Etapa.CONS_P1:            
-           form = FotosPAForm(request.POST, request.FILES, instance=adjuntos)
-           form.save()  
-
-           proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
-           proyecto.save(update_fields=['aprobacion_fotos'])
-           
-        elif proyecto.etapa_actual == Etapa.CONS_P2: 
-           form = FotosPBForm(request.POST, request.FILES, instance=adjuntos)
-           form.save()
-
-           proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
-           proyecto.save(update_fields=['aprobacion_fotos'])
-           
-        elif proyecto.etapa_actual == Etapa.CONS_P3: 
-           form = FotosPCForm(request.POST, request.FILES, instance=adjuntos)
-           form.save() 
-
-           proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
-           proyecto.save(update_fields=['aprobacion_fotos'])
-           
-        elif proyecto.etapa_actual == Etapa.DEDICACION: 
-           form = DedicacionForm(request.POST, request.FILES, instance=adjuntos)
-           form.save()    
-
-           proyecto.aprobacion_fotos = 1 #Aprobada por que son de Dedicacion tomadas por Comunaciones
-           proyecto.save(update_fields=['aprobacion_fotos'])    
         
+        if proyecto.etapa_actual == Etapa.CONS_P1:  
+            if request.FILES['fotos_p1'].name.split('.')[-1] == "zip" or request.FILES['fotos_p1'].name.split('.')[-1] == "rar":   
+                form = FotosPAForm(request.POST, request.FILES, instance=adjuntos)  
+                form.save()  
+                proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
+                proyecto.save(update_fields=['aprobacion_fotos'])
+            else:
+                ctx = {'er': 'Recuerde que solo puede adjuntar archivos comprimidos Zip o Rar, el archivo debe contener las fotos de la Etapa actual de construccion para ser Revisadas por la Oficina Nacional', 'proyecto':proyecto}
+                return render(request, 'main/error.html', ctx)            
+        elif proyecto.etapa_actual == Etapa.CONS_P2:
+            if request.FILES['fotos_p2'].name.split('.')[-1] == "zip" or request.FILES['fotos_p2'].name.split('.')[-1] == "rar":   
+                form = FotosPBForm(request.POST, request.FILES, instance=adjuntos)
+                form.save()                
+                proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
+                proyecto.save(update_fields=['aprobacion_fotos'])
+            else:
+                ctx = {'er': 'Recuerde que solo puede adjuntar archivos comprimidos Zip o Rar, el archivo debe contener las fotos de la Etapa actual de construccion para ser Revisadas por la Oficina Nacional', 'proyecto':proyecto}
+                return render(request, 'main/error.html', ctx)            
+        elif proyecto.etapa_actual == Etapa.CONS_P3:
+            if request.FILES['fotos_p3'].name.split('.')[-1] == "zip" or request.FILES['fotos_p3'].name.split('.')[-1] == "rar":   
+                form = FotosPCForm(request.POST, request.FILES, instance=adjuntos)
+                form.save() 
+                proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
+                proyecto.save(update_fields=['aprobacion_fotos'])
+            else:
+                ctx = {'er': 'Recuerde que solo puede adjuntar archivos comprimidos Zip o Rar, el archivo debe contener las fotos de la Etapa actual de construccion para ser Revisadas por la Oficina Nacional', 'proyecto':proyecto}
+                return render(request, 'main/error.html', ctx)             
+        elif proyecto.etapa_actual == Etapa.DEDICACION:
+            if request.FILES['dedicacion'].name.split('.')[-1] == "zip" or request.FILES['dedicacion'].name.split('.')[-1] == "rar":   
+                form = DedicacionForm(request.POST, request.FILES, instance=adjuntos)
+                form.save()
+                proyecto.aprobacion_fotos = 1 #Mean que esta en espera de aprobacion las fotos
+                proyecto.save(update_fields=['aprobacion_fotos'])
+            else:
+                ctx = {'er': 'Recuerde que solo puede adjuntar archivos comprimidos Zip o Rar, el archivo debe contener las fotos de la Etapa actual de construccion para ser Revisadas por la Oficina Nacional', 'proyecto':proyecto}
+                return render(request, 'main/error.html', ctx) 
         mail_change_foto(proyecto, request.user) ##Envio email con notificando que se adjuntaron fotos   
-
-        return redirect(proyecto)
+        return redirect(proyecto)         
     raise Http404  
 
 
@@ -816,7 +825,7 @@ def evento(request,pk):
    
 def auth_return(request): 
 
-      pk = FLOW.params['pk']
+      pk = FLOW.params['pk']      
       proyecto  =  get_object_or_404(Edificacion, pk=pk)
       etapa_inical_cons =  Etapa.objects.get(edificacion=proyecto,etapa=Etapa.CONS_P1)
  
