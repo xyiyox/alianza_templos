@@ -417,18 +417,7 @@ def proyecto(request, pk):
 
     #PRUEBA DE EMAIL CON ESTILO
     #mail_prueba()
-
-    adj = proyecto.adjuntos_set.get()
-
-    if proyecto.etapa_actual == Etapa.CONS_P1:            
-        ctx['FotosPAForm'] = FotosPAForm(instance=adj)
-    elif proyecto.etapa_actual == Etapa.CONS_P2: 
-       ctx['FotosPBForm'] = FotosPBForm(instance=adj)
-    elif proyecto.etapa_actual == Etapa.CONS_P3: 
-       ctx['FotosPCForm'] = FotosPCForm(instance=adj)
-    elif proyecto.etapa_actual == Etapa.DEDICACION: 
-       ctx['DedicacionForm'] = DedicacionForm(instance=adj)
-   
+  
     try:
         comunidad =  Comunidad.objects.get(edificacion=proyecto)
         ctx['comunidad'] = comunidad
@@ -443,7 +432,18 @@ def proyecto(request, pk):
         
     try:
         adjuntos =  Adjuntos.objects.get(edificacion=proyecto)
-        ctx['adjuntos'] = adjuntos        
+        ctx['adjuntos'] = adjuntos     
+
+        adj = proyecto.adjuntos_set.get()
+        if proyecto.etapa_actual == Etapa.CONS_P1:            
+            ctx['FotosPAForm'] = FotosPAForm(instance=adj)
+        elif proyecto.etapa_actual == Etapa.CONS_P2: 
+           ctx['FotosPBForm'] = FotosPBForm(instance=adj)
+        elif proyecto.etapa_actual == Etapa.CONS_P3: 
+           ctx['FotosPCForm'] = FotosPCForm(instance=adj)
+        elif proyecto.etapa_actual == Etapa.DEDICACION: 
+           ctx['DedicacionForm'] = DedicacionForm(instance=adj)
+
     except Adjuntos.DoesNotExist:
         pass   
 
