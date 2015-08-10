@@ -870,5 +870,24 @@ def auth_return(request):
       ctx = {'hola':'chao'}
       return render(request, 'main/calendar.html', ctx)
 
- 
 
+
+def alert(request):
+
+    edificaciones =  Edificacion.objects.filter(etapa_actual__gt=Etapa.ESPERANDO_RECURSOS,etapa_actual__lte=Etapa.DEDICACION)        
+    var = []
+    for proyecto in edificaciones:
+        etapa_actual =  Etapa.objects.get(edificacion=proyecto,etapa=proyecto.etapa_actual)
+        creacion_etapa_actual = etapa_actual.created
+        percent = etapa_actual.percent                 
+        if percent >= 90:#Si percent >= 90 notifico 
+            if proyecto.aprobacion_fotos == 0: #0 -> Significa que no a subido fotos
+                mail_recordatorio(proyecto)
+                var.append({'proyecto':proyecto.nombre_proyecto , 'percent':percent , 'text':'Notificado'})         
+            else:
+                var.append({'proyecto':proyecto.nombre_proyecto , 'percent':percent , 'text':'Fotos Adjuntadas'})         
+        else:
+            var.append({'proyecto':proyecto.nombre_proyecto , 'percent':percent , 'text':'Aun No Cumple el Plazo'})   
+
+    ctx = {'report':var}
+    return render(request, 'main/cron_summary.html', ctx)

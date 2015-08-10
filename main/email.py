@@ -151,7 +151,24 @@ def mail_change_sub_etapa(proyecto, request_user, text):
 
     msg = EmailMessage(subject, html_content, from_email, recipient_list)
     msg.content_subtype = "html"  # Main content is now text/html
-    return msg.send()    
+    return msg.send()
+
+def mail_recordatorio(proyecto):
+    
+    subject        = u"Proyecto %s recordatorio de Etapa" %(proyecto.nombre_proyecto)
+    message        = u"esta proximo a concluir su Etapa de Construccion y no se han adjuntado las fotos correspondientes a esta etapa"
+    from_email     = settings.EMAIL_HOST_USER
+
+    recipient_list = [proyecto.usuario.email]
+    recipient_list.append(settings.EMAIL_DEVELOPER)   
+    
+    d = Context({ 'nombre_proyecto':proyecto.nombre_proyecto, 'text':message })
+    htmly = get_template('main/email_template.html')
+    html_content = htmly.render(d)
+
+    msg = EmailMessage(subject, html_content, from_email, recipient_list)
+    msg.content_subtype = "html"  # Main content is now text/html
+    return msg.send()       
 
 
 def mail_prueba(): 

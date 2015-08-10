@@ -30,6 +30,7 @@ urlpatterns = patterns('main.views',
     url(r'^proyecto/(?P<pk>\d+)/fotos/$', 'fotos', name='fotos'),
     url(r'^proyecto/(?P<pk>\d+)/evento/$', 'evento', name='evento'),
     url(r'^proyecto/(?P<pk>\d+)/dedicacion/$', 'dedicacion', name='dedicacion'),
+    url(r'^cron/alert/$', 'alert', name='alert'),
     url(r'^oauth2callback', 'auth_return', name='auth_return'),
 )
 

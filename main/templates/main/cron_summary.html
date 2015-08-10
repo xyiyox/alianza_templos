@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es_ES">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="robots" content="noindex,nofollow,noarchive,noodp,nosnippet">
+	<title> Alianza Templos</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- <link rel="icon" type="image/png" href="{{STATIC_URL}}main/fav128.png" sizes="128x128"> -->
+	<link rel="stylesheet" href="{{STATIC_URL}}main/sb-admin-2/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" href="{{STATIC_URL}}main/flat-ui/css/flat-ui.min.css"> -->
+	<link rel="stylesheet" href="{{STATIC_URL}}main/sb-admin-2/css/plugins/metisMenu/metisMenu.min.css" >
+	<link rel="stylesheet" href="{{STATIC_URL}}main/sb-admin-2/css/sb-admin-2.css" >
+	<link rel="stylesheet" href="{{STATIC_URL}}main/font-awesome/css/font-awesome.min.css">
+
+	<style>	
+		/*body { padding-top: 50px; }	*/
+		.navbar-brand {padding: 0 15px !important;}	
+		.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+		.jumbotron{
+			width: 800px;
+			height: 520px;
+			margin: 200px auto;
+		}
+	</style>
+
+    {% block css %}{% endblock %}
+    {% block js_head %}{% endblock %}
+
+	 <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body {% block ngApp %}{% endblock %} >
+
+	<div class="container theme-showcase" role="main">
+	<div class="jumbotron">
+        <h3>!Notificaciones Etapa Actual</h3><br>
+        <table class="table">
+        <thead>
+          <tr>            
+            <th>Proyecto</th>
+            <th>Porcentaje</th>
+            <th>Descripcion</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>          
+        {% for row in report %}
+           <tr> 		
+	  	    <td>{{row.proyecto}}</td>
+            <td>{{row.percent}}</td>
+            <td>{{row.text}}</td>	  
+            <td>{% if row.text == 'Notificado' %} 
+            	<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            	{% elif row.text == 'Fotos Adjuntadas' %} 
+            	<span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+            	{% elif row.text == 'Aun No Cumple el Plazo' %} 
+            	<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+            	{% endif %}</td>
+           </tr> 	   					  				  		
+	  	{% endfor %}			     
+	  	</tbody>
+      </table>
+      </div>
+     </div> 
+	
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{STATIC_URL}}main/js/jquery.js"><\/script>')</script>
+	
+	<script src="{{STATIC_URL}}main/sb-admin-2/js/bootstrap.min.js"></script>
+	<script src="{{STATIC_URL}}main/sb-admin-2/js/plugins/metisMenu/metisMenu.min.js"></script>
+    <script src="{{STATIC_URL}}main/sb-admin-2/js/sb-admin-2.js"></script>
+
+	<script src="{{STATIC_URL}}main/js/angular.min.js"></script>
+	<script src="{{STATIC_URL}}main/js/angular-animate.min.js"></script>
+	<script src="{{STATIC_URL}}main/js/ui-bootstrap-tpls.min.js"></script>	
+	
+	{% block js_body %} {% endblock %}
+	
+	<script>
+		//$("select").select2({dropdownCssClass: 'dropdown-inverse'});
+		$(function () {
+		  $('[data-toggle="tooltip"]').tooltip()
+		})
+
+		function click_event(){							    	
+	    	if(window.confirm("Esta seguro de realizar esta accion?, no tendra vuelta atras.")){
+	    		document.getElementById("formArquitec").submit();
+	    	}
+	    }
+	</script>
+	
+</body>
+</html>
