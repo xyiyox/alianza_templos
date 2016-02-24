@@ -74,6 +74,15 @@ def mail_change_etapa(proyecto, request_user):
     # componer la lista de destinatarios
     for user in Usuario.objects.filter(tipo=Usuario.NACIONAL):
         recipient_list.append(user.email)   
+
+    if proyecto.etapa_actual == Etapa.CONS_P1 or proyecto.etapa_actual == Etapa.APROB_TESORERO:
+       for user in Usuario.objects.filter(tipo=Usuario.TESORERO):
+            recipient_list.append(user.email)        
+
+    if proyecto.etapa_actual == Etapa.PLANOS:
+       for user in Usuario.objects.filter(tipo=Usuario.INGENIERO):
+            recipient_list.append(user.email)   
+                    
     # esto porque el user_padre puede ser tambien en Nacional
     if proyecto.usuario.user_padre:
         if proyecto.usuario.user_padre.tipo != Usuario.NACIONAL:
@@ -135,6 +144,9 @@ def mail_change_sub_etapa(proyecto, request_user, text):
     # componer la lista de destinatarios
     for user in Usuario.objects.filter(tipo=Usuario.NACIONAL):
         recipient_list.append(user.email)   
+        
+    for user in Usuario.objects.filter(tipo=Usuario.TESORERO):
+            recipient_list.append(user.email)         
     # esto porque el user_padre puede ser tambien en Nacional
     if proyecto.usuario.user_padre:
         if proyecto.usuario.user_padre.tipo != Usuario.NACIONAL:

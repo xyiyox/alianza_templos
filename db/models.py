@@ -151,8 +151,9 @@ class Edificacion(models.Model):
 		(0, 'Templo',),
 		(1, 'Obra Social'),
 		(2, 'Templo/Obra Social (Arriba)'),
-		(3, 'Templo/Obra Social (Lateral)'),
+		(3, 'Templo/Obra Social (Lateral Izq)'),
 		(4, 'Templo/Obra Social (Atras)'),
+		(5, 'Templo/Obra Social (Lateral Der)'),
 	)
 
 
@@ -161,6 +162,37 @@ class Edificacion(models.Model):
 	REQUIERE_CHOICES = (		 
 		(TT, 'Si'),
 		(FF, 'No'),
+	)
+
+
+	TIPO_TERRENO_CHOICES = (
+		(0, 'Plano'),
+		(1, 'Desnivel'),		
+	)
+
+	LOCALIDAD_TERRENO = (
+		(0, 'Rural'),
+		(1, 'Urbano'),
+		(2, 'Veredal'),
+	)
+
+	VECINOS_TERRENO = (
+		(0, 'Izquierda'),
+		(1, 'Derecha'),		
+		(2, 'Atras'),	
+		(3, 'Der/Izq'),
+	)
+
+	UBICACION = (
+		(0, 'Esquina Derecha'),
+		(1, 'Esquina Izquierda'),		
+		(2, 'En la Mitad')
+	)
+
+	TIPO_DE_PERMISO = (
+		(0, 'Curaduria'),
+		(1, 'Planeacion'),		
+		(2, 'No')
 	)
 
 	ESTADO_FORMULARIO = (
@@ -178,6 +210,13 @@ class Edificacion(models.Model):
 	owner_lote 		= models.SmallIntegerField('Dueño del Lote', choices=TIPO_OWNER_LOTE_CHOICES , default=0)
 	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES , default=0)
 
+	tipo_terreno = models.SmallIntegerField('Estado del Terreno', choices=TIPO_TERRENO_CHOICES , default=0)
+	localidad_terreno = models.SmallIntegerField('Localidad del Terreno', choices=LOCALIDAD_TERRENO , default=0)
+	vecinos_terreno = models.SmallIntegerField('Vecinos del Terreno', choices=VECINOS_TERRENO , default=0)
+	ubucacion_construccion = models.SmallIntegerField('Ubicacion de la Construccion', choices=UBICACION , default=0)
+	informacion_adicional = models.TextField('Datos adicionales del Terreno', 
+						help_text='Ingrese informacion adicional sobre el tereno, como desniveles, tipo de lugar, datos adionales que permitan agilizar el proceso de la creacion de los planos.',null=True, blank=True)
+
 	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30, help_text=
 		"Ingrese Ancho x Largo en Metros")
 	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30, help_text=
@@ -190,7 +229,8 @@ class Edificacion(models.Model):
 		"Seleccione el tipo de Construccion, Tenga encuenta para el caso de Templo/Obra Social"
 		" de identificar como se va construir esta instalacion, esta informacion es importante y debe ser precisa")
 	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?',choices=REQUIERE_CHOICES, default=True)
-	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses)')
+	tipo_permiso 		= models.SmallIntegerField('Tipo de Permiso',choices=TIPO_DE_PERMISO, default=0)
+	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses), Templo 6 Max Meses, Templo/Obra Max 8 Meses.')
 	
 
 	# control de estado y etapa
@@ -311,6 +351,8 @@ class Comunidad(models.Model):
 	capital_depto 		= models.CharField('Capital del Departamento', max_length=30, choices=CAPITALES)
 	distancia_capital	= models.PositiveSmallIntegerField('Distancia del Proyecto a la capital', 
 							help_text="Por favor ingrese el valor en Kilometros (Km)")
+	vereda 				= models.CharField('Vereda', max_length=50,help_text='Ingrese el la Vereda donde se va realizar la construccion, si aplica.',null=True, blank=True) 
+	corregimiento 		= models.CharField('Corregimiento', max_length=50,help_text='Ingrese el Corregimiento donde se va realizar la construccion, si aplica.',null=True, blank=True) 
 	# Relacion 1 a 1 entre la edificacion y la comunidad
 	edificacion 		= models.OneToOneField('Edificacion')
 
@@ -357,6 +399,10 @@ class Congregacion(models.Model):
 	"""
 	nombre_pastor 			= models.CharField('Nombre del pastor', max_length=50)
 
+	telefono_pastor 		= models.CharField('Telefono del pastor', max_length=20,null=True, blank=True)
+	celular_pastor 			= models.CharField('Celular del pastor', max_length=20,null=True, blank=True)
+	email_pastor 			= models.CharField('Email del pastor', max_length=80,null=True, blank=True)
+
 	estado_civil 			= models.SmallIntegerField('Estado civil', choices=ESTADO_CIVIL_CHOICES , default=0)
 	cant_hijos 				= models.PositiveSmallIntegerField('Cantidad de hijos')
 	entrenamiento_biblico 	= models.PositiveSmallIntegerField('Años de entrenamiento Biblico')
@@ -401,7 +447,7 @@ class Condiciones(models.Model):
 	discipulado       = models.BooleanField(CONDICIONES_DISCIPULADO, choices=BOOL_CHOICES, default=False)
 	alcance           = models.BooleanField(CONDICIONES_ALCANCE, choices=BOOL_CHOICES, default=False)
 	
-	found_commitment  = models.BooleanField('¿Esta al dia con el 13%?', choices=BOOL_CHOICES, default=False)
+	found_commitment  = models.BooleanField('Estoy al dia con el 13%, y me comprometo a mantenerlo durante y despues de la construccion.', choices=BOOL_CHOICES, default=False)
 
 	presupuesto       = models.BooleanField(CONDICIONES_PRESUPUESTO, choices=BOOL_CHOICES, default=False)
 	terminacion       = models.BooleanField(CONDICIONES_TERMINACION, choices=BOOL_CHOICES, default=False)
@@ -424,18 +470,18 @@ class Adjuntos(models.Model):
 
 	edificacion   			= models.ForeignKey('Edificacion')
 
-	foto_construccion 		= models.ImageField('Foto del sitio de construcción', upload_to=calcular_ruta,
-								help_text='Mostrando claramente el área donde se va a construir la iglesia')
+	foto_construccion 		= models.ImageField('Foto del Terreno', upload_to=calcular_ruta,
+								help_text='Mostrando claramente el terreno donde se va a construir la iglesia, jpg o png, minimo 600 x 480 pixeles, Tamaño maximo 2MB')
 	foto_congregacion 		= models.ImageField('Foto de la congregación', upload_to=calcular_ruta, 
 								help_text='Mostrando el lugar donde se reunen actualmente')
 	foto_pastor 			= models.FileField('Foto del Pastor', upload_to=calcular_ruta,
 								help_text='Incluya una foto del pastor en caso de no aparecer en la foto de la congregación')
 
-	permiso_construccion 	= models.FileField('Permiso de construcción', upload_to=calcular_ruta, null=True, blank=True,
-								help_text='Si se requiere, debe agregarlo')
-	escritura_terreno 		= models.FileField('Escritura del terreno', upload_to=calcular_ruta,
+	permiso_construccion 	= models.FileField('Permiso de construcción o Certificado de que no necesita Oermiso', upload_to=calcular_ruta,
+								help_text='Debe agregar el permiso de construccion, si no necesida debe agregar la prueba de que no necesita permiso.',null=True, blank=True)
+	escritura_terreno 		= models.FileField('Escritura del terreno Autenticada, o Promesa de Compra', upload_to=calcular_ruta,
 								help_text='Mostrando la prueba de propiedad')
-	manzana_catastral 		= models.FileField('Manzana Catastral', upload_to=calcular_ruta, help_text='Mostrando las dimensiones de la propiedad y la ubicación de la tierra, Si el instituto Augustin Codaci no le proporciona este documento, puede adjuntar un dibujo de la localizacion(mapa pequeño) de el lugar donde se construira el templo')
+	manzana_catastral 		= models.FileField('Manzana Catastral o Croquis dibujado a Mano', upload_to=calcular_ruta, help_text='Mostrando las dimensiones de la propiedad y la ubicación de la tierra, Si el instituto Augustin Codaci no le proporciona este documento, puede adjuntar un dibujo de la localizacion(mapa pequeño) de el lugar donde se construira el templo')
 	plan_construccion 		= models.FileField('Plan de construcción', upload_to=calcular_ruta, null=True, blank=True,
 								help_text='Obligatorio para todos los planes que no hacen parte de los aprobados por ICM')
 	historia_congregacion 	= models.FileField('Historia de la congregación', upload_to=calcular_ruta,

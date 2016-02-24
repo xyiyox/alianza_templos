@@ -29,12 +29,12 @@ def fotos(request):
 	  #	(3, 'Templo/Obra Social (Lateral)'),
 	  #	(4, 'Templo/Obra Social (Atras)'),
 
-	OBRA_SOCIAL_P1 = """ Fotos nivel ventanas, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
+	OBRA_SOCIAL_P1 = """ Fotos nivel ventanas, Esto implica. 1 Foto para (Frente, lateral, atras, adentro)"""
 	OBRA_SOCIAL_P2 = """ Fotos nivel viga de amarre y techo, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
 
 	# VERIFICAR SI SI CAMBIO PARA TEMPLO
-	TEMPLO_P1 = """ Fotos nivel ventanas, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
-	TEMPLO_P2 = """ Fotos nivel viga de amarre y techo, Esto implica. 1 Foto para(Frente, lateral, atras, adentro)"""
+	TEMPLO_P1 = """ La fotografia muestra claramente la finalizacion de la construccion hasta la altura de las ventanas. Ademas, debera ser tomada a una distancia suficiente como para mostrar los lados de la construccion y lo suficientemente cerca como para que se vean los detalles. Esto implica. 1 Foto para (Frente, lateral, atras, adentro)"""
+	TEMPLO_P2 = """ La fotografia debera mostrar claramente la finalizacion de la construccion hasta el nivel del techo (estructura lista para soportar el techo). Ademas, debera ser tomada a una distancia suficiente como para mostrar los lados de la construccion y lo suficientemente cerca como para que se vean los detalles. Fotos nivel viga de amarre y techo, Esto implica. 1 Foto para (Frente, lateral, atras, adentro)"""
 
 	# OBRA SOCIAL/TEMPLO CON SEGUNDO PISO
 	OBRTMP_A_P1 = """ Fotos 4 paredes primer piso y plancha del 2do piso , Esto implica. 1 Foto para(Frente, lateral, atras, adentro)  """
@@ -91,7 +91,12 @@ def fotos(request):
 		'CAD_411': OBRTMP_C_P1,
 		'CAD_412': OBRTMP_C_P2,
 		'CAD_413': OBRTMP_C_P3,
-		'CAD_414': DEDICACION
+		'CAD_414': DEDICACION,
+
+		'CAD_511': OBRTMP_C_P1,
+		'CAD_512': OBRTMP_C_P2,
+		'CAD_513': OBRTMP_C_P3,
+		'CAD_514': DEDICACION
 	}
 
 	return {'list_fotos':LISTADO}		

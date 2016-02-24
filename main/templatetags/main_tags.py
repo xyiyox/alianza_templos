@@ -55,3 +55,78 @@ def extencion(name):
 		return True
 	else:
 		return False
+
+@register.filter
+def extencion(name):	
+	ext = os.path.splitext(name)[1]	
+	if ext == '.jpg' or ext == '.png' or ext == '.jpeg':
+		return True
+	else:
+		return False
+
+@register.filter
+def terreno(name):		
+	if name == 0 :
+		return 'Plano'
+	else:
+		return 'Desnivel'
+
+@register.filter
+def localidad(name):		
+	if name == 0 :
+		return 'Rural'
+	elif name == 1:
+		return 'Urbano'
+	else:
+		return 'Veredal'
+
+@register.filter
+def vecinos(name):		
+	if name == 0 :
+		return 'Izquierda'
+	elif name == 1:
+		return 'Derecha'
+	elif name == 2:
+		return 'Atras'	
+	else:
+		return 'Der/Izq'
+
+@register.filter
+def ubicacion(name):		
+	if name == 0 :
+		return 'Esquina Derecha'
+	elif name == 1:
+		return 'Esquina Izquierda'
+	else:
+		return 'En la Mitad'
+
+@register.filter
+def cuenta(name):		
+	if name == 0 :
+		return 'Ahorros'
+	else:
+		return 'Corriente'
+
+@register.filter
+def construccion(name):		
+	if name == 0 :
+		return 'Templo'
+	elif name == 1:
+		return 'Obra Social'
+	elif name == 2:
+		return 'Templo/Obra Social (Arriba)'	
+	elif name == 3:
+		return 'Templo/Obra Social (Lateral Izq)'	
+	elif name == 4:
+		return 'Templo/Obra Social (Atras)'	
+	else:
+		return 'Templo/Obra Social (Lateral Der)'
+
+@register.filter
+def permiso(name):		
+	if name == 0 :
+		return 'Curaduria'
+	elif name == 1:
+		return 'Planeacion'
+	else:
+		return 'No'

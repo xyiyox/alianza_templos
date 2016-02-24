@@ -1,3 +1,4 @@
+{% load main_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -50,6 +51,11 @@ img{
         <tr> <th>Tipo: </th>          <td>{{ proyecto.get_tipo_construccion_display }}</td> </tr>
         <tr> <th>Requiere permiso: </th>  <td>{{ proyecto.requiere_permiso|yesno:"Si,No,No sabemos" }}</td> </tr>
         <tr> <th>Tiempo límite: </th>     <td>{{ proyecto.tiempo_limite }} meses</td> </tr>     
+        <tr> <th>Tipo de Terreno: </th>  <td>{{ proyecto.tipo_terreno|terreno }}</td> </tr>                 
+        <tr> <th>Localidad del Terreno: </th>  <td>{{ proyecto.localidad_terreno|localidad }}</td> </tr>
+        <tr> <th>Vecinos del Terreno: </th>  <td>{{ proyecto.vecinos_terreno|vecinos }}</td> </tr>
+        <tr> <th>Ubicacion de Terreno: </th>  <td>{{ proyecto.ubucacion_construccion|ubicacion }}</td> </tr>
+        <tr> <th>Informacion Adicional: </th>  <td>{{ proyecto.informacion_adicional }}</td> </tr>
       </tbody>              
     </table>  
     <table class="table table-bordered table-striped">
@@ -60,6 +66,10 @@ img{
           <tr> <th>Numero de Voluntarios: </th>       <td>{{ financiera.num_voluntarios}}</td> </tr>  
           <tr> <th>Descripcion: </th>       <td>{{ financiera.desc_voluntarios}}</td> </tr>   
           <tr> <th>Costo Total: </th>       <td>{{ financiera.costo_total}}</td> </tr>  
+          <tr> <th>Tipo de Cuenta: </th>       <td>{{ financiera.tipo_cuenta|cuenta}}</td> </tr>                
+          <tr> <th>Titular: </th>       <td>{{ financiera.titular_cuenta}}</td> </tr> 
+          <tr> <th>Banco: </th>       <td>{{ financiera.banco}}</td> </tr>  
+          <tr> <th>No. Cuenta: </th>       <td>{{ financiera.numero_cuenta}}</td> </tr> 
         </tbody>              
       </table>   
       <table class="table table-bordered table-striped">
@@ -80,6 +90,12 @@ img{
             <tr> <th>Distancia a la Capital: </th>       
               <td>{{ comunidad.distancia_capital}}</td> 
             </tr> 
+              <tr> <th>Vereda: </th>       
+                  <td>{{ comunidad.vereda}}</td> 
+                </tr>
+                <tr> <th>Corregimiento: </th>       
+                  <td>{{ comunidad.corregimiento}}</td> 
+                </tr>
           </tbody>              
       </table>     
       <table class="table table-bordered table-striped">
@@ -125,6 +141,16 @@ img{
           <tr> <th>Nombre Pastor: </th>       
             <td>{{ congregacion.nombre_pastor}}</td> 
           </tr>
+
+          <tr> <th>Telefono Pastor: </th>       
+                  <td>{{ congregacion.telefono_pastor}}</td> 
+                </tr>
+                <tr> <th>Celular Pastor: </th>       
+                  <td>{{ congregacion.celular_pastor}}</td> 
+                </tr>
+                <tr> <th>Email Pastor: </th>       
+                  <td>{{ congregacion.email_pastor}}</td> 
+                </tr> 
           
           <tr> <th>Estado Civil: </th>       
             <td>{% for key,value in list_civil %}

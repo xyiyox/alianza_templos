@@ -152,22 +152,62 @@ def home_local(request):
 
 
 @login_required
-def home_otros(request):
+def home_otros(request, etapa=None):
     # validamos que el usuario tenga permiso de ver esta vista
     users = [Usuario.LOCAL, Usuario.REGIONAL, Usuario.NACIONAL]
     if request.user.tipo in users:
         raise PermissionDenied 
-    if request.user.tipo == Usuario.ARQUITECTO: 
-        proyectos = Edificacion.objects.filter(arquitecto__exact=request.user.pk)
-    if request.user.tipo == Usuario.INGENIERO:
-        proyectos = Edificacion.objects.filter(ingeniero__exact=request.user.pk)
-    if request.user.tipo == Usuario.TESORERO:
-        proyectos = Edificacion.objects.filter(tesorero__exact=request.user.pk)
 
-    ctx = {'proyectos': proyectos}
+    ctx = {}          
+    proyectos = None   
+ 
+    if etapa:       
+        if request.user.tipo == Usuario.ARQUITECTO: 
+            proyectos = Edificacion.objects.filter(arquitecto__exact=request.user.pk,etapa_actual=etapa)
+        if request.user.tipo == Usuario.INGENIERO:
+            proyectos = Edificacion.objects.filter(ingeniero__exact=request.user.pk,etapa_actual=etapa)
+        if request.user.tipo == Usuario.TESORERO:
+            proyectos = Edificacion.objects.filter(tesorero__exact=request.user.pk,etapa_actual=etapa) 
+        ctx['etapa_actual'] = int(etapa) 
+    else:   
+        if request.user.tipo == Usuario.ARQUITECTO: 
+            proyectos = Edificacion.objects.filter(arquitecto__exact=request.user.pk)
+        if request.user.tipo == Usuario.INGENIERO:
+            proyectos = Edificacion.objects.filter(ingeniero__exact=request.user.pk)
+        if request.user.tipo == Usuario.TESORERO:
+            proyectos = Edificacion.objects.filter(tesorero__exact=request.user.pk)
+
+    ctx['proyectos'] = proyectos
     return render(request, 'main/home-otros.html', ctx)
 
+@login_required
+def home_otros_region(request, region=None):
+    
+    # validamos que el usuario tenga permiso de ver esta vista
+    if request.user.tipo != Usuario.ARQUITECTO and request.user.tipo != Usuario.TESORERO and request.user.tipo != Usuario.INGENIERO:
+        raise PermissionDenied 
 
+    proyectos = None
+    ctx = {}
+
+    if region:       
+        if request.user.tipo == Usuario.ARQUITECTO: 
+            proyectos = Edificacion.objects.filter(arquitecto__exact=request.user.pk,congregacion__region=region)
+        if request.user.tipo == Usuario.INGENIERO:
+            proyectos = Edificacion.objects.filter(ingeniero__exact=request.user.pk,congregacion__region=region)
+        if request.user.tipo == Usuario.TESORERO:
+            proyectos = Edificacion.objects.filter(tesorero__exact=request.user.pk,congregacion__region=region) 
+        ctx['region_actual'] = int(region) 
+    else:
+        if request.user.tipo == Usuario.ARQUITECTO: 
+            proyectos = Edificacion.objects.filter(arquitecto__exact=request.user.pk)
+        if request.user.tipo == Usuario.INGENIERO:
+            proyectos = Edificacion.objects.filter(ingeniero__exact=request.user.pk)
+        if request.user.tipo == Usuario.TESORERO:
+            proyectos = Edificacion.objects.filter(tesorero__exact=request.user.pk) 
+        
+    ctx['proyectos'] = proyectos
+    return render(request, 'main/home-otros.html', ctx)
 
 form_list = [EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
 
@@ -710,10 +750,13 @@ def dedicacion(request, pk):
     if request.method == 'POST':
         if request.user.tipo != Usuario.NACIONAL:
             raise PermissionDenied 
-        proyecto  =  get_object_or_404(Edificacion, pk=pk)        
-        proyecto.fecha_aprox_dedicacion = datetime.strptime(request.POST['fecha'], "%Y-%m-%d") #Careful fecha string 
-        proyecto.save(update_fields=['fecha_aprox_dedicacion'])
-        return redirect(proyecto)
+        proyecto  =  get_object_or_404(Edificacion, pk=pk)       
+        try:
+            proyecto.fecha_aprox_dedicacion = datetime.strptime(request.POST['fecha'], "%Y-%m-%d") #Careful fecha string 
+            proyecto.save(update_fields=['fecha_aprox_dedicacion'])
+            return redirect(proyecto)
+        except:            
+            raise PermissionDenied  
     raise Http404  
 
 @login_required
