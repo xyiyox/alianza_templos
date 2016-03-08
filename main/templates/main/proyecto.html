@@ -73,11 +73,41 @@
 		  	
 		</div>
 
-	
+		{% if proyecto.etapa_actual != Etapa.INFORMES %}
 
-		{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
+			{% include "main/widgets/progress-bar.html" with proyect=proyecto %}
 
-		</br></br>
+		{% endif %}
+
+		   <!-- Etapa de los 6 Meses de ICM  -->
+	    {% if proyecto.etapa_actual == Etapa.INFORMES %}
+
+	    	<h3>Informes Semestrales ICM</h3>
+
+	    		<div class="panel {% if informes_status == 2 %} panel-green {% elif informes_status == 1 %} panel-yellow {% else %} panel-red {% endif %}" >
+				    <div class="panel-heading" {% if user.tipo == user.LOCAL and informes_status == 0 %} 
+					 ng-click="verInforme = !verInforme"  style="cursor:pointer" {% endif %} >
+				        <div class="row">
+				            <div class="col-md-6">				                
+				                {% if informes_status == 2 %} 
+				                <i class="glyphicon glyphicon-ok "></i>
+				                Gracias por Enviar los Informes
+				                {% else %}
+				                <i class="glyphicon glyphicon-time"></i>
+				                {{informes_texto}} {% if informes_status == 1 %} **Espere**{% endif %}
+				                {% endif %}
+				            </div>			            
+				        </div>
+				    </div>	
+				    <div class="panel-body" ng-show="verInforme">
+				    	{% crispy informeForm %}
+				    	<!--<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalInforme">
+						  Enviar Informe
+						</button>-->		
+				    </div>
+				</div>
+
+	    {% endif %}
 		{% if proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS and proyecto.etapa_actual <= Etapa.DEDICACION  %}
 		<h3>{{proyecto.get_etapa_actual_display}}</h3>
 		<div {% if user.tipo == user.NACIONAL %} 
@@ -283,16 +313,7 @@
 
 			</div>
 
-
 	    </br></br>
-	    {% endif %}
-
-	    <!-- Etapa de los 6 Meses de ICM  -->
-	    {% if proyecto.etapa_actual >= Etapa.DEDICACION %}
-
-	    	
-
-
 	    {% endif %}
 
 		<!--<a href="{% url "proyecto_pdf" pk=proyecto.pk %}" target='_blank'>Descargar Informacion como PDF</a>-->
@@ -763,6 +784,54 @@
 				</div>
 
 			</tab>
+
+			{% if user.tipo == user.NACIONAL and proyecto.etapa_actual > Etapa.CONS_P1 %}
+			<tab heading="Construcción">
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>									
+									<tr> <th>Construccion Fase 1</th>   <td><a href="/media/{{ adjuntos.fotos_p1}}" download>Descargar</a></td>
+									</tr>								
+					    		{% if proyecto.etapa_actual > Etapa.CONS_P2 %}									
+									<tr> <th>Construccion Fase 2</th>   <td><a href="/media/{{ adjuntos.fotos_p2}}" download>Descargar</a></td>
+									</tr>		
+								{% endif %}
+								{% if proyecto.etapa_actual > Etapa.CONS_P3 and adjuntos.fotos_p3 != None %}									
+									<tr> <th>Construccion Fase 3</th>   <td><a href="/media/{{ adjuntos.fotos_p3}}" download>Descargar</a></td>
+									</tr>	
+								{% endif %}
+								{% if proyecto.etapa_actual > Etapa.DEDICACION %}									
+									<tr> <th>Dedicacion</th>   <td><a href="/media/{{ adjuntos.dedicacion}}" download>Descargar</a></td>
+									</tr>											
+					    		{% endif %}	
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</tab>
+			{% endif %}
+
+			{% if user.tipo == user.NACIONAL and proyecto.etapa_actual == Etapa.INFORMES %}
+			<tab heading="Informes">
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>	
+								{% if informes != None %}		
+									{% for infor in informes %}
+					     				<tr> <th>Informe de {{infor.fecha_elaboracion}}</th> 
+					     				<td><a href="{% url "informe_pdf" pk=proyecto.pk index=infor.informe %}" target='_blank'>PDF</a>		     				
+					     				</td>
+										</tr>		
+					    			{% endfor %}	
+					    		{% endif %}														
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</tab>
+			{% endif %}
 			
 		</tabset>
 
@@ -883,7 +952,7 @@
 					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
 					Recursos Recibidos y Enviados a la Iglesia
 					</button>	
-				{% elif proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS and proyecto.etapa_actual <= Etapa.DEDICACION  %}						
+				{% elif proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS and proyecto.etapa_actual <= Etapa.DEDICACION and proyecto.aprobacion_fotos < 2 %}						
 					<form action="/proyecto/{{proyecto.id}}/dedicacion/"  method="post" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="input-group">
@@ -891,16 +960,21 @@
 						  <input type="text" class="form-control" placeholder="YYYY-MM-DD" aria-describedby="basic-addon1" name='fecha'>
 						</div>
 						<br>
-						 <button type="submit" class="btn btn-success btn-xs btn-block">
+						<button type="submit" class="btn btn-success btn-xs btn-block">
 					 		 Cambiar Fecha de Dedicacion
-						 </button>	
+						</button>	
 					</form>
-				{% elif proyecto.etapa_actual == Etapa.DEDICACION and proyecto.aprobacion_fotos == 2  %}	
-					<i class="fa fa-thumbs-o-up fa-1x"></i> El Proyecto Concluyo con Exito!</br>		
+				{% elif proyecto.etapa_actual == Etapa.DEDICACION and proyecto.aprobacion_fotos == 2 %}		
+					<i class="fa fa-thumbs-o-up fa-1x"></i> El Proyecto Concluyo con Exito!</br>	
+					<br>
+					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
+					Iniciar Etapa de Reportes Semestrales
+					</button>					
+				{% elif proyecto.etapa_actual == Etapa.INFORMES %}						
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Revise los informes Semestrales!</br>	
 				{% else %}
 				<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobación dada!</br>
 				Espere otras aprobaciones
-
 				{% endif %}
 				<!-- aqui preparamos la aprobacion final de nacional -->
 		    </div>
@@ -1155,6 +1229,40 @@
 			</div>
 		</div>
 		{% endif %}
+
+	 {% if user.tipo == user.LOCAL and proyecto.etapa_actual >= Etapa.DEDICACION %}
+	 	<div class="modal fade" id="modalInforme" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel">Enviar Informe</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-2">
+								<i class="fa fa-5x fa-warning text-danger"></i>
+							</div>
+							<div class="col-sm-10">
+								<h4>Esta seguro?</h4>								
+								<p id='msg-default'>
+								Antes de enviar el informe revise que la informacion este completa.								
+								</p>								
+								<p class="bg-danger">Nota: Una vez enviado el informe <b>NO SE PODRA MODIFICAR.</b></p>
+							</div>
+						</div>
+						
+					</div>
+
+					<div class="modal-footer">
+						<form action="/proyecto/{{proyecto.id}}/informe/" method="post">
+							{% crispy  aprobacionForm %} 
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	 {% endif %}
 				
       
 

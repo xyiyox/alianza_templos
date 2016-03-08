@@ -95,7 +95,7 @@ angular
 	    
 	    $scope.verFotosEtapa = false;
 	    $scope.verIcmAlianza = false;
-	    $scope.verAliTemplo = false;
+	    $scope.verAliTemplo = false;	   
 
 	    $scope.openPanelConstruccion = function (event,num){
 
@@ -117,8 +117,7 @@ angular
     		$scope.verTesoreroEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-tesorero' ? true : false;
     		$scope.verFotosEtapa = event.type == 'mouseenter' && event.currentTarget.id == 'panel-fotos' ? true : false;
 	    }
-
-
+	    
 	    /* ------------------  AUTORIZACIONES  -----------------------*/ 
 
 	    $scope.alClickAprobacion = function() {
@@ -130,6 +129,13 @@ angular
 			angular.element('#msg-default').addClass('hidden');
 			angular.element('#msg-usuarios').removeClass('hidden').addClass('show');
 	    }
+
+	    /* -------------- Informe Functionality ----------------------------*/
+
+	     $scope.verInforme = false;
+	     
+	     
+
 		
 	}]);
 

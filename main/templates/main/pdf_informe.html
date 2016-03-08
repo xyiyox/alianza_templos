@@ -1,0 +1,57 @@
+{% load main_tags %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<style>
+  table {
+    border-collapse: collapse;  
+}
+
+table, th, td {
+    border: 1px solid black;
+    vertical-align: middle;
+    padding: 5px;  
+}
+th {
+    text-align: left;
+    width: 20%;
+    padding: 5px;
+} 
+.hh{
+
+  background-color:#b10e10;
+  color: white;
+  font-size: 15px; 
+}
+
+td, th{
+  font-size: 14px;
+}
+img{
+  text-align: center;
+}
+
+
+</style>
+</head>    
+<body>    
+  <img src="header.jpg">
+    <table class="table table-bordered table-striped">
+      <tbody> 
+        <tr> <th colspan='2' class='hh'>Informe {{informe.informe}}</th></tr> 
+        <tr> <th> Fecha de Elaboración </th><td>{{ informe.fecha_elaboracion}}</td> </tr>
+        <tr> <th> Miembros Actuales </th><td>{{ informe.miembros_actuales}}</td> </tr>
+        <tr> <th> Nuevos Miembros </th><td>{{ informe.nuevos_miembros}}</td> </tr>
+        <tr> <th> Bautismos </th><td>{{ informe.bautismos_nuevos}}</td> </tr>
+        <tr> <th> Asistencia General </th><td>{{ informe.asistencia_general}}</td> </tr>
+        <tr> <th> Grupos de Vida </th><td>{{ informe.grupos_vida}}</td> </tr>
+        <tr> <th> Plantacion de Iglesias </th><td>{{ informe.plantacion}}</td> </tr>
+        <tr> <th> Peticiones de Oración </th><td>{{ informe.peticiones_oracion}}</td> </tr>
+        <tr> <th> Testimonios </th><td>{{ informe.testimonios}}</td> </tr> 
+        <tr> <th> Ministerio de Niños </th><td>{{ informe.ministerio_ninos}}</td> </tr> 
+        <tr> <th> Uso local de la Iglesia </th><td>{{ informe.uso_local}}</td> </tr> 
+      </tbody>              
+    </table>            
+  </body>
+</html>

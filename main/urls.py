@@ -26,9 +26,13 @@ urlpatterns = patterns('main.views',
     url(r'^proyecto/(?P<pk>\d+)/pdf/$', 'proyecto_pdf', name='proyecto_pdf'), 
     url(r'^proyecto/(?P<pk>\d+)/done/$', 'done', name='done'),     
 
+    url(r'^proyecto/(?P<pk>\d+)/informe/(?P<index>[0-9]{1})/$', 'informe_pdf', name='informe_pdf'), 
+
     url(r'^proyecto/(?P<pk>\d+)/autorizaciones/$', 'autorizaciones', name='autorizaciones'),
     url(r'^proyecto/(?P<pk>\d+)/asignaciones/$', 'asignaciones', name='asignaciones'),
     url(r'^proyecto/(?P<pk>\d+)/planos/$', 'planos', name='planos'),
+
+    #url(r'^proyecto/(?P<pk>\d+)/informe/$', 'informe', name='informe'),
     
     url(r'^proyecto/(?P<pk>\d+)/fotos/$', 'fotos', name='fotos'),
     url(r'^proyecto/(?P<pk>\d+)/evento/$', 'evento', name='evento'),

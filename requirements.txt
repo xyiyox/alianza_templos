@@ -16,7 +16,7 @@ pyOpenSSL==0.13
 pyPdf==1.13
 pyasn1==0.1.8
 pyasn1-modules==0.0.6
-reportlab==2.7
+reportlab==2.4
 rsa==3.2
 simplejson==3.8.0
 six==1.9.0
