@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons, UneditableField, InlineRadios, InlineCheckboxes, PrependedAppendedText
 
-from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, Comentario
+from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, Comentario, InformeSemestral
 from .datos import EDIFICACION_COORDENADAS
 
 from map_field import widgets as map_widgets
@@ -163,6 +163,44 @@ class ComentarioForm(forms.ModelForm):
                 StrictButton('Enviar', type="Submit", css_class="btn-info pull-right btn-xs", ng_show="verSubmit", ng_click="alClickComentario($event)", data_loading_text="Enviando...", autocomplete="off"),
             )
         )
+
+
+    
+class InformeSemestralForm(forms.ModelForm):
+    """Formulario para crear un comentario"""
+
+    class Meta:
+        model = InformeSemestral
+        exclude = ['edificacion','fecha_elaboracion','informe']
+
+    def __init__(self, *args, **kwargs):
+        super(InformeSemestralForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        
+        self.helper.form_show_labels = True
+        self.helper.form_class       = 'form-horizontal'
+        self.helper.label_class = 'col-sm-4'
+        self.helper.field_class = 'col-sm-8'
+        self.helper.form_action = "."
+
+        self.helper.all().wrap(Field, css_class='input-sm')       
+        self.helper.filter_by_widget(forms.Textarea).wrap(Field, css_class="input-xlarge", rows="4")
+
+        self.helper.layout = Layout(         
+            FormActions(      
+                Field('miembros_actuales'),
+                Field('nuevos_miembros'),
+                Field('bautismos_nuevos'),
+                Field('asistencia_general'),
+                Field('grupos_vida'),
+                Field('plantacion'),
+                Field('peticiones_oracion'),
+                Field('testimonios'),
+                Field('ministerio_ninos'),
+                Field('uso_local'),
+                StrictButton('Enviar Informe', type="Submit", css_class="btn btn-success pull-right btn-md", autocomplete="off"),
+            )
+        ) 
 
 
 """ FORMULARIOS AUTORIZACION """

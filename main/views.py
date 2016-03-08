@@ -18,7 +18,7 @@ from threading import Timer
 from main.forms import *
 from main.email import *
 from db.forms import *
-from db.models import Edificacion, Comunidad, Comentario, Etapa
+from db.models import Edificacion, Comunidad, Comentario, Etapa, InformeSemestral
 from usuarios.models import Usuario
 
 from django.contrib.formtools.wizard.forms import ManagementForm
@@ -45,7 +45,8 @@ from oauth2client.django_orm import Storage
 
 from datetime import timedelta
 from datetime import datetime
-
+import datetime
+import time
 
 # CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
 # application, including client_id and client_secret, which are found
@@ -429,6 +430,26 @@ def proyecto_pdf(request, pk):
 
 
 @login_required
+def informe_pdf(request, pk, index):
+
+    proyecto  =  get_object_or_404(Edificacion, pk=pk)    
+
+    if request.user.tipo != Usuario.NACIONAL :    #restriccion vertical, solo locales entran aqui
+        raise PermissionDenied  
+    
+    ctx = { 'pagesize':'A4' , 'proyecto': proyecto }      
+    print index
+    try:
+        informe = InformeSemestral.objects.filter(edificacion=pk,informe=index)
+        print informe[0]
+        ctx['informe'] = informe[0]
+    except InformeSemestral.DoesNotExist:
+        pass
+
+    html = render_to_string('main/pdf_informe.html',ctx, context_instance=RequestContext(request))
+    return generar_pdf(html)
+
+@login_required
 def proyecto(request, pk):
     # validamos que el proyecto exista
     #[EdificacionForm, InformacionFinancieraForm, ComunidadForm, CongregacionForm, AdjuntosForm, CondicionesForm]
@@ -438,17 +459,31 @@ def proyecto(request, pk):
     if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
         raise PermissionDenied 
    
-    if request.method == 'POST':        
-        form = ComentarioForm(request.POST)
-        if form.is_valid():
-            new_coment = form.save(commit=False)
-            new_coment.edificacion = proyecto
-            new_coment.commenter = request.user
-            new_coment.save()
+    if request.method == 'POST':  
+        if request.POST.get('miembros_actuales') == None:              
+            form = ComentarioForm(request.POST)
+            if form.is_valid():
+                new_coment = form.save(commit=False)
+                new_coment.edificacion = proyecto
+                new_coment.commenter = request.user
+                new_coment.save()
 
-            result_email = mail_comentario(new_coment, proyecto)
-            # redirect funciona con el objeto si en el existe el metodo get_absolute_url
-            return redirect(proyecto)
+                result_email = mail_comentario(new_coment, proyecto)
+                # redirect funciona con el objeto si en el existe el metodo get_absolute_url
+                return redirect(proyecto)
+        else:            
+            form = InformeSemestralForm(request.POST)       
+            if form.is_valid():
+                try:
+                    informes = InformeSemestral.objects.filter(edificacion=pk)       
+                    numero_inf = len(informes) + 1
+                except InformeSemestral.DoesNotExist:
+                    numero_inf = 1
+                informeObject = form.save(commit=False)     
+                informeObject.informe = numero_inf
+                informeObject.edificacion = proyecto
+                informeObject.save()                         
+                return redirect(proyecto)            
 
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
     comentarioForm         = ComentarioForm()
@@ -499,8 +534,48 @@ def proyecto(request, pk):
         condiciones =  Condiciones.objects.get(edificacion=proyecto)
         ctx['condiciones'] = condiciones
     except Condiciones.DoesNotExist:
-        pass       
-        
+        pass
+    
+    #Solo si esta despues de la dedicatione
+    if proyecto.etapa_actual >= Etapa.DEDICACION:        
+        try:        
+            #0 -> No lo  ha lleano, 1--> Amarilio - Espera que sea la fecha  2 --> Verde full
+            informes = InformeSemestral.objects.filter(edificacion=pk)                        
+            ctx['informes'] = informes
+            print informes
+            if len(informes) <= 6 and len(informes) > 0:
+                pre_inform = informes[len(informes)-1].fecha_elaboracion
+                if pre_inform.month <= 6:
+                   rango = 'Julio - Diciembre del '+str(pre_inform.year)
+                   fecha_ini = datetime.datetime.strptime("01 07 "+str(pre_inform.year), '%d %m %Y').date()
+                else:
+                   rango = 'Enero - Junio del '+str(pre_inform.year+1)
+                   fecha_ini = datetime.datetime.strptime("01 01 "+str(pre_inform.year+1), '%d %m %Y').date()
+
+                if date.today() > fecha_ini:
+                    ctx['informes_status'] = 0
+                else:
+                    ctx['informes_status'] = 1
+                 
+                ctx['informeForm'] = InformeSemestralForm()          
+                ctx['informes_texto'] = "Informe desde "+rango
+            elif len(informes) == 0:
+                raise InformeSemestral.DoesNotExist
+            else:  
+                ctx['informes_status'] = 2 
+                ctx['informeForm'] = InformeSemestralForm()            
+
+        except InformeSemestral.DoesNotExist:
+            ctx['informes_status'] = 0         
+            dedicatione = proyecto.fecha_aprox_dedicacion
+            if dedicatione.month <= 6:
+               rango = 'Julio - Diciembre del '+str(dedicatione.year)
+            else:
+               rango = 'Enero - Junio del '+str(dedicatione.year+1) 
+            ctx['informeForm'] = InformeSemestralForm()            
+            ctx['informes_texto'] = "Informe desde "+rango
+            pass
+
     if request.user.tipo == Usuario.ARQUITECTO:
         adj = proyecto.adjuntos_set.get()
         ctx['planosArquitectoForm'] = PlanosArquitectoForm(instance=adj)
@@ -557,6 +632,9 @@ def autorizaciones(request, pk):
 
         if request.user.tipo == Usuario.NACIONAL: 
             
+            ##registrar_etapa(proyecto, Etapa.INFORMES)
+            ##return redirect(proyecto)
+
             if proyecto.etapa_actual == Etapa.ASIGN_USUARIOS and 'aprobar' in request.POST:
                 proyecto.usuarios_asignados = request.POST['aprobar']
                 proyecto.save(update_fields=['usuarios_asignados'])
@@ -615,9 +693,10 @@ def autorizaciones(request, pk):
                     mail_change_sub_etapa(proyecto, request.user, "ICM envia fondos a la Alianza")                          
                 elif proyecto.aprobacion_fotos == 1:
                     #APROBACION DE FOTOS
-                    if proyecto.etapa_actual == Etapa.DEDICACION: #Fin de la etapa de Dedicacion
+                    if proyecto.etapa_actual == Etapa.DEDICACION and proyecto.aprobacion_fotos != 2: #Fin de la etapa de Dedicacion
                        proyecto.aprobacion_fotos = 2
                        proyecto.save(update_fields=['aprobacion_fotos']) ##Aca seguiria a etapa de Infome 6 Mestral
+                       #registrar_etapa(proyecto, Etapa.INFORMES) ##Pasamos a la etapada de Informes semestrales                                       
                     else:                        
                         proyecto.envio_icm = False
                         proyecto.save(update_fields=['envio_icm'])
@@ -636,7 +715,11 @@ def autorizaciones(request, pk):
                             else:    
                                 registrar_etapa(proyecto, Etapa.DEDICACION)   
 
-                        mail_change_etapa(proyecto, request.user)     
+                        mail_change_etapa(proyecto, request.user)
+
+                elif proyecto.etapa_actual == Etapa.DEDICACION and proyecto.aprobacion_fotos == 2:
+                    registrar_etapa(proyecto, Etapa.INFORMES)
+                    mail_change_etapa(proyecto, request.user)        
                     
         if request.user.tipo == Usuario.ARQUITECTO or request.user.tipo == Usuario.INGENIERO:
             
@@ -695,7 +778,6 @@ def autorizaciones(request, pk):
         return redirect(proyecto)
 
     raise Http404 
-
 
 @login_required
 def asignaciones(request, pk):
