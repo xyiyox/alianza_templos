@@ -350,6 +350,10 @@
 								<tr> <th>Vecinos del Terreno: </th>  <td>{{ proyecto.vecinos_terreno|vecinos }}</td> </tr>
 								<tr> <th>Ubicacion de Terreno: </th>  <td>{{ proyecto.ubucacion_construccion|ubicacion }}</td> </tr>
 								<tr> <th>Informacion Adicional: </th>  <td>{{ proyecto.informacion_adicional }}</td> </tr>
+								<tr> <th>Planos Arquitecto: </th>  <td>
+									 <a href="/media/{{ adjuntos.planos_ingeniero}}" download>Descargar Planos.</a>
+									</td> 
+								</tr>								
 							</tbody>							
 						</table>
 					</div>
@@ -812,6 +816,33 @@
 			</tab>
 			{% endif %}
 
+			{% if user.tipo == user.INGENIERO and proyecto.etapa_actual > Etapa.CONS_P1 %}
+			<tab heading="Construcción">
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-bordered table-striped">
+							<tbody>									
+									<tr> <th>Construccion Fase 1</th>   <td><a href="/media/{{ adjuntos.fotos_p1}}" download>Descargar</a></td>
+									</tr>								
+					    		{% if proyecto.etapa_actual > Etapa.CONS_P2 %}									
+									<tr> <th>Construccion Fase 2</th>   <td><a href="/media/{{ adjuntos.fotos_p2}}" download>Descargar</a></td>
+									</tr>		
+								{% endif %}
+								{% if proyecto.etapa_actual > Etapa.CONS_P3 and adjuntos.fotos_p3 != None %}									
+									<tr> <th>Construccion Fase 3</th>   <td><a href="/media/{{ adjuntos.fotos_p3}}" download>Descargar</a></td>
+									</tr>	
+								{% endif %}
+								{% if proyecto.etapa_actual > Etapa.DEDICACION %}									
+									<tr> <th>Dedicacion</th>   <td><a href="/media/{{ adjuntos.dedicacion}}" download>Descargar</a></td>
+									</tr>											
+					    		{% endif %}	
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</tab>
+			{% endif %}
+
 			{% if user.tipo == user.NACIONAL and proyecto.etapa_actual == Etapa.INFORMES %}
 			<tab heading="Informes">
 				<div class="row">
@@ -952,7 +983,10 @@
 					<button type="button" class="btn btn-success btn-xs btn-block" data-toggle="modal" data-target="#modalAprobacion">
 					Recursos Recibidos y Enviados a la Iglesia
 					</button>	
-				{% elif proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS and proyecto.etapa_actual <= Etapa.DEDICACION and proyecto.aprobacion_fotos < 2 %}						
+				{% elif proyecto.etapa_actual > Etapa.ESPERANDO_RECURSOS and proyecto.etapa_actual <= Etapa.DEDICACION and proyecto.aprobacion_fotos < 2 %}				{% if proyecto.fecha_aprox_dedicacion %}
+						  <i class="glyphicon glyphicon-camera fa-fw"></i> Dedicacion : {{proyecto.fecha_aprox_dedicacion}}</br>	
+						<br>
+					{% endif %}						
 					<form action="/proyecto/{{proyecto.id}}/dedicacion/"  method="post" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="input-group">
@@ -971,7 +1005,19 @@
 					Iniciar Etapa de Reportes Semestrales
 					</button>					
 				{% elif proyecto.etapa_actual == Etapa.INFORMES %}						
-					<i class="fa fa-thumbs-o-up fa-1x"></i> Revise los informes Semestrales!</br>	
+					<i class="fa fa-thumbs-o-up fa-1x"></i> Revise los informes Semestrales, o Cambie la Fecha de Dedicacion!</br>
+					<br>
+					<form action="/proyecto/{{proyecto.id}}/dedicacion/"  method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="input-group">
+						  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></span>
+						  <input type="text" class="form-control" placeholder="YYYY-MM-DD" aria-describedby="basic-addon1" name='fecha'>
+						</div>
+						<br>
+						<button type="submit" class="btn btn-success btn-xs btn-block">
+					 		 Cambiar Fecha de Dedicacion
+						</button>	
+					</form>	
 				{% else %}
 				<i class="fa fa-thumbs-o-up fa-1x"></i> Aprobación dada!</br>
 				Espere otras aprobaciones

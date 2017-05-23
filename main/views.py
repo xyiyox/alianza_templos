@@ -833,12 +833,12 @@ def dedicacion(request, pk):
         if request.user.tipo != Usuario.NACIONAL:
             raise PermissionDenied 
         proyecto  =  get_object_or_404(Edificacion, pk=pk)       
-        try:
-            proyecto.fecha_aprox_dedicacion = datetime.strptime(request.POST['fecha'], "%Y-%m-%d") #Careful fecha string 
+        try:                        
+            proyecto.fecha_aprox_dedicacion = datetime.datetime.strptime(request.POST['fecha'], "%Y-%m-%d") #Careful fecha string 
             proyecto.save(update_fields=['fecha_aprox_dedicacion'])
             return redirect(proyecto)
-        except:            
-            raise PermissionDenied  
+        except:  
+            raise Exception('Error procesando la fecha! '+request.POST['fecha'])  
     raise Http404  
 
 @login_required

@@ -375,6 +375,7 @@ class Congregacion(models.Model):
 		(4, 'Sur'),
 		(5, 'Valle'),
 		(6, 'Guanbianos'),
+		(7, 'Paez')
 	)
 
 	ESTADO_CIVIL_CHOICES = (
