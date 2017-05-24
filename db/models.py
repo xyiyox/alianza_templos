@@ -348,11 +348,13 @@ class Comunidad(models.Model):
 		verbose_name_plural = "ciudades"
 
 	nombre 				= models.CharField('Nombre', max_length=50)
-	poblacion_comunidad = models.CharField('Población', max_length=40)
+	poblacion_comunidad = models.CharField('Población', max_length=40, help_text="Cantidad de habitantes en número")
 	region 				= models.CharField('Departamento', max_length=30, choices=DEPTOS) 
 	capital_depto 		= models.CharField('Capital del Departamento', max_length=30, choices=CAPITALES)
 	distancia_capital	= models.PositiveSmallIntegerField('Distancia del Proyecto a la capital', 
 							help_text="Por favor ingrese el valor en Kilometros (Km)")
+	iglesia_cercana     = models.CharField('Iglesia más cercana', max_length=50)
+	distancia_iglesia   = models.PositiveSmallIntegerField('Distancia a la Iglesia', help_text="La iglesia más cercana debe estar minimo a 10 o 15 km. (ingrese valor en kilómetros)")
 	vereda 				= models.CharField('Vereda', max_length=50,help_text='Ingrese el la Vereda donde se va realizar la construccion, si aplica.',null=True, blank=True) 
 	corregimiento 		= models.CharField('Corregimiento', max_length=50,help_text='Ingrese el Corregimiento donde se va realizar la construccion, si aplica.',null=True, blank=True) 
 	# Relacion 1 a 1 entre la edificacion y la comunidad
