@@ -353,7 +353,7 @@ class Comunidad(models.Model):
 	capital_depto 		= models.CharField('Capital del Departamento', max_length=30, choices=CAPITALES)
 	distancia_capital	= models.PositiveSmallIntegerField('Distancia del Proyecto a la capital', 
 							help_text="Por favor ingrese el valor en Kilometros (Km)")
-	iglesia_cercana     = models.CharField('Iglesia más cercana', max_length=50)
+	iglesia_cercana     = models.CharField('Iglesia más cercana', max_length=50, help_text="Iglesia más cercana al proyecto.")
 	distancia_iglesia   = models.PositiveSmallIntegerField('Distancia a la Iglesia', help_text="La iglesia más cercana debe estar minimo a 10 o 15 km. (ingrese valor en kilómetros)")
 	vereda 				= models.CharField('Vereda', max_length=50,help_text='Ingrese el la Vereda donde se va realizar la construccion, si aplica.',null=True, blank=True) 
 	corregimiento 		= models.CharField('Corregimiento', max_length=50,help_text='Ingrese el Corregimiento donde se va realizar la construccion, si aplica.',null=True, blank=True) 
@@ -405,8 +405,8 @@ class Congregacion(models.Model):
 	nombre_pastor 			= models.CharField('Nombre del pastor', max_length=50)
 
 	telefono_pastor 		= models.CharField('Telefono del pastor', max_length=20,null=True, blank=True)
-	celular_pastor 			= models.CharField('Celular del pastor', max_length=20,null=True, blank=True)
-	email_pastor 			= models.CharField('Email del pastor', max_length=80,null=True, blank=True)
+	celular_pastor 			= models.CharField('Celular del pastor', max_length=20, help_text="Si no tiene celular, ponga un número de contacto.")
+	email_pastor 			= models.CharField('Email del pastor', max_length=80, help_text="Crear correo electrónico nuevo o poner el mismo de esta cuenta.")
 
 	estado_civil 			= models.SmallIntegerField('Estado civil', choices=ESTADO_CIVIL_CHOICES , default=0)
 	cant_hijos 				= models.PositiveSmallIntegerField('Cantidad de hijos')
