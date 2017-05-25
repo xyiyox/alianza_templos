@@ -392,7 +392,7 @@ class Congregacion(models.Model):
 	lengua_primaria 	= models.CharField('Lengua Materna', max_length=20)
 	region 				= models.SmallIntegerField('Región', choices=REGION_CHOICES,default=0, 
 							help_text='La Región a la que pertenece la Iglesia')
-	asistencia_general 	= models.SmallIntegerField('Asistencia general promedio')
+	asistencia_general 	= models.SmallIntegerField('Asistencia general promedio', help_text="Incluya adultos y niños.")
 	asistencia_ninos 	= models.SmallIntegerField('Asistencia general promedio de niños')
 	miembros_adultos 	= models.SmallIntegerField('Cantidad de miembros adultos', 
 							help_text='Recuerde que se considera como miembro a aquel que ha sido bautizado')
@@ -482,7 +482,7 @@ class Adjuntos(models.Model):
 	foto_pastor 			= models.FileField('Foto del Pastor', upload_to=calcular_ruta,
 								help_text='Incluya una foto del pastor en caso de no aparecer en la foto de la congregación')
 
-	permiso_construccion 	= models.FileField('Permiso de construcción o Certificado de que no necesita Oermiso', upload_to=calcular_ruta,
+	permiso_construccion 	= models.FileField('Permiso de construcción o Certificado de que no necesita Permiso', upload_to=calcular_ruta,
 								help_text='Debe agregar el permiso de construccion, si no necesida debe agregar la prueba de que no necesita permiso.',null=True, blank=True)
 	escritura_terreno 		= models.FileField('Escritura del terreno Autenticada, o Promesa de Compra', upload_to=calcular_ruta,
 								help_text='Mostrando la prueba de propiedad')
@@ -490,9 +490,9 @@ class Adjuntos(models.Model):
 	plan_construccion 		= models.FileField('Plan de construcción', upload_to=calcular_ruta, null=True, blank=True,
 								help_text='Obligatorio para todos los planes que no hacen parte de los aprobados por ICM')
 	historia_congregacion 	= models.FileField('Historia de la congregación', upload_to=calcular_ruta,
-								help_text='Incluya una breve historia de la congregación')
+								help_text='Incluya una breve historia de la congregación preferiblemente en formato WORD.')
 	testimonio_pastor 		= models.FileField('Testimonio del pastor', upload_to=calcular_ruta,
-								help_text='Incluya el testimonio del pastor de la congregación')	
+								help_text='Incluya el testimonio del pastor de la congregación preferiblemente en formato WORD.')	
 	
 	planos_arquitecto       = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
 	planos_ingeniero        = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
