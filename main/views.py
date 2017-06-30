@@ -458,7 +458,9 @@ def proyecto(request, pk):
     # validamos que el usuario tenga permiso de ver el proyecto
     if request.user.tipo == Usuario.LOCAL and request.user.pk != proyecto.usuario.pk:
         raise PermissionDenied 
-   
+    
+    form_informe_semestral = InformeSemestralForm()
+
     if request.method == 'POST':  
         if request.POST.get('miembros_actuales') == None:              
             form = ComentarioForm(request.POST)
@@ -472,19 +474,19 @@ def proyecto(request, pk):
                 # redirect funciona con el objeto si en el existe el metodo get_absolute_url
                 return redirect(proyecto)
         else:            
-            form = InformeSemestralForm(request.POST)       
-            if form.is_valid():
+            form_informe_semestral = InformeSemestralForm(request.POST)       
+            if form_informe_semestral.is_valid():
                 try:
                     informes = InformeSemestral.objects.filter(edificacion=pk)       
                     numero_inf = len(informes) + 1
                 except InformeSemestral.DoesNotExist:
                     numero_inf = 1
-                informeObject = form.save(commit=False)     
+                informeObject = form_informe_semestral.save(commit=False)     
                 informeObject.informe = numero_inf
                 informeObject.edificacion = proyecto
                 informeObject.save()                         
                 return redirect(proyecto)            
-
+            
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
     comentarioForm         = ComentarioForm()
     comentarioForm.helper.form_action = proyecto.get_absolute_url()
@@ -557,13 +559,13 @@ def proyecto(request, pk):
                 else:
                     ctx['informes_status'] = 1
                  
-                ctx['informeForm'] = InformeSemestralForm()          
+                ctx['informeForm'] = form_informe_semestral          
                 ctx['informes_texto'] = "Informe desde "+rango
             elif len(informes) == 0:
                 raise InformeSemestral.DoesNotExist
             else:  
                 ctx['informes_status'] = 2 
-                ctx['informeForm'] = InformeSemestralForm()            
+                ctx['informeForm'] = form_informe_semestral            
 
         except InformeSemestral.DoesNotExist:
             ctx['informes_status'] = 0         
@@ -572,7 +574,7 @@ def proyecto(request, pk):
                rango = 'Julio - Diciembre del '+str(dedicatione.year)
             else:
                rango = 'Enero - Junio del '+str(dedicatione.year+1) 
-            ctx['informeForm'] = InformeSemestralForm()            
+            ctx['informeForm'] = form_informe_semestral            
             ctx['informes_texto'] = "Informe desde "+rango
             pass
 

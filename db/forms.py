@@ -190,6 +190,7 @@ class InformeSemestralForm(forms.ModelForm):
             FormActions(      
                 Field('miembros_actuales'),
                 Field('nuevos_miembros'),
+                Field('conversiones'),
                 Field('bautismos_nuevos'),
                 Field('asistencia_general'),
                 Field('grupos_vida'),

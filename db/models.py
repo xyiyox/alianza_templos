@@ -518,47 +518,50 @@ class Comentario(models.Model):
 
 
 class InformeSemestral(models.Model):
-	""" Modelo para almacenar los comentarios de una edificacion """
-	class Meta:
-		verbose_name_plural = "informes"
+    """ Modelo para almacenar los comentarios de una edificacion """
+    class Meta:
+        verbose_name_plural = "informes"
 
-	edificacion 		= models.ForeignKey('Edificacion')
+    edificacion 		= models.ForeignKey('Edificacion')
 
-	#Representa el numero del informe 1 - 6.
-	informe 		    = models.PositiveIntegerField(null=True, blank=True) 
-	#Representa la fecha de elaborcion del informe.
-	fecha_elaboracion   = models.DateTimeField(auto_now_add = True) 
+    #Representa el numero del informe 1 - 6.
+    informe 		    = models.PositiveIntegerField(null=True, blank=True) 
+    #Representa la fecha de elaborcion del informe.
+    fecha_elaboracion   = models.DateTimeField(auto_now_add = True) 
 
-	#Nombre de la Iglesia (No creo que entre)
-	#Miembros Actuales (Bautizados)	
-	miembros_actuales   = models.PositiveIntegerField('Miembros Actuales', help_text='Bautizados',null=True, blank=True)
-	#Total miembros nuevos
-	nuevos_miembros     = models.PositiveIntegerField('Total Miembros Nuevos',null=True, blank=True)
-	#Total Bautismos 
-	bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos',null=True, blank=True)
-	#Total Asistencia general incluyendo niños y no bautizados
-	asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Incluyendo niños y no bautizados',null=True, blank=True)
-	#Numero de Grupos de vida o Celulas en Julio-Diciembre 2015
-	grupos_vida         = models.PositiveIntegerField('Numero de Grupos de vida o Celulas',null=True, blank=True)
-	#Plantacion de Iglesias: Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas entre Julio-Diciembre 2015
-	plantacion          = models.PositiveIntegerField('Plantacion de Iglesias: Cantidad', help_text='Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas',null=True, blank=True)
-	#Peticiones de oracion especificas, accion de gracias o preocupaciones
-	peticiones_oracion  = models.TextField('Peticiones de Oracion', 
-						help_text='Especificas, accion de gracias o preocupaciones',null=True, blank=True)
-	#Testimonios (liberaciones, conversiones, milagros, etc)
-	testimonios  		= models.TextField('Testimonios', 
-						help_text='liberaciones, conversiones, milagros, etc',null=True, blank=True)
-	#Ministerio de los niños (campamentos. alcances evangelisticos, escuela biblica, deportes,grupos de vida, etc.)
-	ministerio_ninos  	= models.TextField('Ministerio de los Niños', 
-						help_text='Campamentos. alcances evangelisticos, escuela biblica, deportes,grupos de vida, etc.',null=True, blank=True)
-	#Uso del local de la iglesia (Escuela de dia, entrenamiento vocacional, estudios biblicos, ministerio femenino, proyeccion de peliculas, etc.)
-	uso_local		  	= models.TextField('Uso del local de la iglesia', 
-						help_text='Escuela de dia, entrenamiento vocacional, estudios biblicos, ministerio de mujeres, proyeccion de peliculas, etc.',null=True, blank=True)
+    #Nombre de la Iglesia (No creo que entre)
+    #Miembros Actuales (Bautizados)	
+    miembros_actuales   = models.PositiveIntegerField('Miembros Actuales', help_text='Bautizados',null=True, blank=True)
+    #Total miembros nuevos
+    nuevos_miembros     = models.PositiveIntegerField('Total Miembros Nuevos',null=True, blank=True)
 
-	#Para mayor información o inquietudes comuníquese a:
-	#	Victor Rincon
-	#	Asistente Nacional
-	#	(300) 8952603
+    conversiones        = models.PositiveIntegerField('Conversiones', help_text='Total de personas que aceptaron a Cristo como su Señor y Salvador en el último semestre')
 
-	def __str__(self):
-		return "%s" %"Informe Semestral"
+    #Total Bautismos 
+    bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos',null=True, blank=True)
+    #Total Asistencia general incluyendo niños y no bautizados
+    asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Incluyendo niños y no bautizados',null=True, blank=True)
+    #Numero de Grupos de vida o Celulas en Julio-Diciembre 2015
+    grupos_vida         = models.PositiveIntegerField('Numero de Grupos de vida o Celulas',null=True, blank=True)
+    #Plantacion de Iglesias: Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas entre Julio-Diciembre 2015
+    plantacion          = models.PositiveIntegerField('Plantacion de Iglesias: Cantidad', help_text='Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas',null=True, blank=True)
+    #Peticiones de oracion especificas, accion de gracias o preocupaciones
+    peticiones_oracion  = models.TextField('Peticiones de Oracion', 
+                        help_text='Especificas, accion de gracias o preocupaciones',null=True, blank=True)
+    #Testimonios (liberaciones, conversiones, milagros, etc)
+    testimonios  		= models.TextField('Testimonios', 
+                        help_text='liberaciones, conversiones, milagros, etc',null=True, blank=True)
+    #Ministerio de los niños (campamentos. alcances evangelisticos, escuela biblica, deportes,grupos de vida, etc.)
+    ministerio_ninos  	= models.TextField('Ministerio de los Niños', 
+                        help_text='Campamentos. alcances evangelisticos, escuela biblica, deportes,grupos de vida, etc.',null=True, blank=True)
+    #Uso del local de la iglesia (Escuela de dia, entrenamiento vocacional, estudios biblicos, ministerio femenino, proyeccion de peliculas, etc.)
+    uso_local		  	= models.TextField('Uso del local de la iglesia', 
+                        help_text='Escuela de dia, entrenamiento vocacional, estudios biblicos, ministerio de mujeres, proyeccion de peliculas, etc.',null=True, blank=True)
+
+    #Para mayor información o inquietudes comuníquese a:
+    #	Victor Rincon
+    #	Asistente Nacional
+    #	(300) 8952603
+
+    def __str__(self):
+        return "%s" %"Informe Semestral"
