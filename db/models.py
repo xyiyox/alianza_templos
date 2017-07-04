@@ -531,14 +531,14 @@ class InformeSemestral(models.Model):
 
     #Nombre de la Iglesia (No creo que entre)
     #Miembros Actuales (Bautizados)	
-    miembros_actuales   = models.PositiveIntegerField('Miembros Actuales', help_text='Bautizados',null=True, blank=True)
+    miembros_actuales   = models.PositiveIntegerField('Miembros Actuales', help_text='Bautizados')
     #Total miembros nuevos
     nuevos_miembros     = models.PositiveIntegerField('Total Miembros Nuevos',null=True, blank=True)
 
     conversiones        = models.PositiveIntegerField('Conversiones', help_text='Total de personas que aceptaron a Cristo como su Señor y Salvador en el último semestre')
-
-    #Total Bautismos 
+ 
     bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos',null=True, blank=True)
+    no_bautismos        = models.TextField('Si no hubo bautismos', help_text='Explique por que no hubo bautismos', null=True, blank=True)
     #Total Asistencia general incluyendo niños y no bautizados
     asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Incluyendo niños y no bautizados',null=True, blank=True)
     #Numero de Grupos de vida o Celulas en Julio-Diciembre 2015

@@ -96,7 +96,7 @@
                     {{informeForm.non_field_errors}}
                 </div>
                 {% endif %}
-                
+
 	    		<div class="panel {% if informes_status == 2 %} panel-green {% elif informes_status == 1 %} panel-yellow {% else %} panel-red {% endif %}" >
 				    <div class="panel-heading" {% if user.tipo == user.LOCAL and informes_status == 0 %} 
 					 ng-click="verInforme = !verInforme"  style="cursor:pointer" {% endif %} >
@@ -771,7 +771,7 @@
 						    				{% endif %}	
 						    			{% endfor %}</td> </tr>	
 								
-								<tr> <th>¿Aldia con el 13%?: </th>       <td>{% for key,value in list_status %}
+								<tr> <th>¿Al día con el 13%?: </th>       <td>{% for key,value in list_status %}
 						     				{% if condiciones.found_commitment == key %}
 						    					{{value}}
 						    				{% endif %}	
