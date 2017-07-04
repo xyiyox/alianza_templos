@@ -474,7 +474,7 @@ def proyecto(request, pk):
                 # redirect funciona con el objeto si en el existe el metodo get_absolute_url
                 return redirect(proyecto)
         else:            
-            form_informe_semestral = InformeSemestralForm(request.POST)       
+            form_informe_semestral = InformeSemestralForm(request.POST, request.FILES)       
             if form_informe_semestral.is_valid():
                 try:
                     informes = InformeSemestral.objects.filter(edificacion=pk)       

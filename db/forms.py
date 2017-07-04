@@ -194,14 +194,15 @@ class InformeSemestralForm(forms.ModelForm):
                 Field('bautismos_nuevos'),
                 Field('no_bautismos'),
                 Field('asistencia_general'),
-                Field('grupos_vida'),
                 Field('ofrendas'),
                 Field('plantacion'),
+                Field('grupos_vida'), 
                 Field('asistencia_grupos'),
                 Field('peticiones_oracion'),
                 Field('testimonios'),
                 Field('ministerio_ninos'),
                 Field('uso_local'),
+                Field('fotos'),
                 StrictButton('Enviar Informe', type="Submit", css_class="btn btn-success pull-right btn-md", autocomplete="off"),
             )
         ) 

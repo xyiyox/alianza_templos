@@ -517,6 +517,27 @@ class Comentario(models.Model):
 	created     		= models.DateTimeField(auto_now_add = True) 
 
 
+def ruta_fotos_informe_semestral(self, filename):
+	return 'adjuntos/%s/informes/%s' %(self.edificacion.pk, filename)
+
+def validate_comprimidos(value):
+    # El archivo no debe ser mayor a  50MB - 5242880 
+    import os
+    max_upload_size = 5242880
+    print "content type"
+    print value.file.content_type
+    print "size"
+    print value.file._size
+    
+    ext = os.path.splitext(value.name)[1]
+    valid_extensions = ['.rar','.zip']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError(u'Solo se aceptan archivos en formato comprimido .zip o .rar')
+
+    if value.file._size > max_upload_size:
+        raise ValidationError(u'El archivo no debe superar las 50 megas de peso')
+
+
 class InformeSemestral(models.Model):
     """ Modelo para almacenar los comentarios de una edificacion """
     class Meta:
@@ -533,14 +554,14 @@ class InformeSemestral(models.Model):
     #Miembros Actuales (Bautizados)	
     miembros_actuales   = models.PositiveIntegerField('Miembros Actuales', help_text='Bautizados')
     #Total miembros nuevos
-    nuevos_miembros     = models.PositiveIntegerField('Total Miembros Nuevos')
+    nuevos_miembros     = models.PositiveIntegerField('Total Miembros Nuevos', help_text='Total de miembros agregados a la membresía de la iglesia en los últimos 6 meses')
 
     conversiones        = models.PositiveIntegerField('Conversiones', help_text='Total de personas que aceptaron a Cristo como su Señor y Salvador en el último semestre')
  
     bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos')
     no_bautismos        = models.TextField('Si no hubo bautismos', help_text='Explique por que no hubo bautismos', null=True, blank=True)
     #Total Asistencia general incluyendo niños y no bautizados
-    asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Servicions dominicales y grupos de vida incluyendo niños y no bautizados')
+    asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Servicios dominicales y grupos de vida incluyendo niños y no bautizados')
     #Numero de Grupos de vida o Celulas en Julio-Diciembre 2015
     grupos_vida         = models.PositiveIntegerField('Grupos de vida o Celulas', help_text='Número actual de grupos de vida, grupos evangelísticos, casas de oración, grupos pequeños en casas etc..')
     #Plantacion de Iglesias: Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas entre Julio-Diciembre 2015
@@ -548,7 +569,7 @@ class InformeSemestral(models.Model):
     
     asistencia_grupos   = models.PositiveIntegerField('Asistencia grupos de vida', help_text='Asistencia promedio (por grupo no general) a los grupos de vida')
 
-    ofrendas            = models.PositiveIntegerField('Ofrendas y Diezmos', help_text='Total dinero recaudado en ofrendas y diezmos')
+    ofrendas            = models.PositiveIntegerField('Ofrendas y Diezmos', help_text='Total dinero recaudado en ofrendas y diezmos en el último semestre')
     #Peticiones de oracion especificas, accion de gracias o preocupaciones
     peticiones_oracion  = models.TextField('Peticiones de Oracion', 
                         help_text='Especificas, accion de gracias o preocupaciones, favor explicar o dar detalles de la petición')
@@ -561,6 +582,8 @@ class InformeSemestral(models.Model):
     #Uso del local de la iglesia (Escuela de dia, entrenamiento vocacional, estudios biblicos, ministerio femenino, proyeccion de peliculas, etc.)
     uso_local		  	= models.TextField('Uso del local de la iglesia', 
                         help_text='Como se uso el local en el último semestre. ej.: Escuela de día, entrenamiento vocacional, estudios bíblicos, ministerio de mujeres, proyección de películas etc.')
+    
+    fotos               = models.FileField('Fotos evidencia', upload_to=ruta_fotos_informe_semestral, validators=[validate_comprimidos], help_text='Suba un un archivo comprimido en .rar o .zip de fotos que evidencien los programas realizados en el templo' )
 
     #Para mayor información o inquietudes comuníquese a:
     #	Victor Rincon
