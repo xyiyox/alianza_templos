@@ -533,30 +533,34 @@ class InformeSemestral(models.Model):
     #Miembros Actuales (Bautizados)	
     miembros_actuales   = models.PositiveIntegerField('Miembros Actuales', help_text='Bautizados')
     #Total miembros nuevos
-    nuevos_miembros     = models.PositiveIntegerField('Total Miembros Nuevos',null=True, blank=True)
+    nuevos_miembros     = models.PositiveIntegerField('Total Miembros Nuevos')
 
     conversiones        = models.PositiveIntegerField('Conversiones', help_text='Total de personas que aceptaron a Cristo como su Señor y Salvador en el último semestre')
  
-    bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos',null=True, blank=True)
+    bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos')
     no_bautismos        = models.TextField('Si no hubo bautismos', help_text='Explique por que no hubo bautismos', null=True, blank=True)
     #Total Asistencia general incluyendo niños y no bautizados
-    asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Incluyendo niños y no bautizados',null=True, blank=True)
+    asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Servicions dominicales y grupos de vida incluyendo niños y no bautizados')
     #Numero de Grupos de vida o Celulas en Julio-Diciembre 2015
-    grupos_vida         = models.PositiveIntegerField('Numero de Grupos de vida o Celulas',null=True, blank=True)
+    grupos_vida         = models.PositiveIntegerField('Grupos de vida o Celulas', help_text='Número actual de grupos de vida, grupos evangelísticos, casas de oración, grupos pequeños en casas etc..')
     #Plantacion de Iglesias: Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas entre Julio-Diciembre 2015
-    plantacion          = models.PositiveIntegerField('Plantacion de Iglesias: Cantidad', help_text='Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas',null=True, blank=True)
+    plantacion          = models.PositiveIntegerField('Plantacion de Iglesias', help_text='Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas en el último semestre')
+    
+    asistencia_grupos   = models.PositiveIntegerField('Asistencia grupos de vida', help_text='Asistencia promedio (por grupo no general) a los grupos de vida')
+
+    ofrendas            = models.PositiveIntegerField('Ofrendas y Diezmos', help_text='Total dinero recaudado en ofrendas y diezmos')
     #Peticiones de oracion especificas, accion de gracias o preocupaciones
     peticiones_oracion  = models.TextField('Peticiones de Oracion', 
-                        help_text='Especificas, accion de gracias o preocupaciones',null=True, blank=True)
+                        help_text='Especificas, accion de gracias o preocupaciones, favor explicar o dar detalles de la petición')
     #Testimonios (liberaciones, conversiones, milagros, etc)
     testimonios  		= models.TextField('Testimonios', 
-                        help_text='liberaciones, conversiones, milagros, etc',null=True, blank=True)
+                        help_text='liberaciones, conversiones, milagros, etc. Favor relatar brevemente el testimonio detallando quien como y donde')
     #Ministerio de los niños (campamentos. alcances evangelisticos, escuela biblica, deportes,grupos de vida, etc.)
     ministerio_ninos  	= models.TextField('Ministerio de los Niños', 
-                        help_text='Campamentos. alcances evangelisticos, escuela biblica, deportes,grupos de vida, etc.',null=True, blank=True)
+                        help_text='Describa las últimas actividades con niños en el último semestre como: campamentos, alcances evangelisticos, escuela bíblica, deportes,grupos de vida, etc.')
     #Uso del local de la iglesia (Escuela de dia, entrenamiento vocacional, estudios biblicos, ministerio femenino, proyeccion de peliculas, etc.)
     uso_local		  	= models.TextField('Uso del local de la iglesia', 
-                        help_text='Escuela de dia, entrenamiento vocacional, estudios biblicos, ministerio de mujeres, proyeccion de peliculas, etc.',null=True, blank=True)
+                        help_text='Como se uso el local en el último semestre. ej.: Escuela de día, entrenamiento vocacional, estudios bíblicos, ministerio de mujeres, proyección de películas etc.')
 
     #Para mayor información o inquietudes comuníquese a:
     #	Victor Rincon
