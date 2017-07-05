@@ -6,6 +6,19 @@
 {% block title %} Proyecto {% endblock %}
 {% block css %} 
 <link rel="stylesheet" href="{{STATIC_URL}}main/leaflet/leaflet.css"> 
+<style>
+    .informe-semestral-plantacion .form-group {
+        width: 33%;
+        float: left;
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    .informe-semestral-plantacion .form-group .col-sm-8 {
+        width: 100%;
+        padding: 0;
+    }
+</style>
 {% endblock %}
 
 {% block ngApp %} ng-app="alianzaTemplosApp"{% endblock %}

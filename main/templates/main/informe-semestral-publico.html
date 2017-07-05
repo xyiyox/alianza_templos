@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load main_tags %}
+
+{% block title %} Informe Semestral {% endblock %}
+
+{% block css %} 
+<style>
+    .informe-semestral-plantacion .form-group {
+        width: 33%;
+        float: left;
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    .informe-semestral-plantacion .form-group .col-sm-8 {
+        width: 100%;
+        padding: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+	  	<h1>Informe Semestral</h1>
+	</div>
+
+    {% crispy form %}
+{% endblock %}

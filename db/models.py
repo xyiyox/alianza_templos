@@ -539,6 +539,13 @@ def validate_comprimidos(value):
 
 
 class InformeSemestral(models.Model):
+
+    TIPO_PLANTACION_CHOICES = (
+		('Grupo de vida', 'Grupo de vida'),
+		('Iglesia hija', 'Iglesia hija'),
+        ('Proyecto Misionero', 'Proyecto Misionero'),
+	)
+
     """ Modelo para almacenar los comentarios de una edificacion """
     class Meta:
         verbose_name_plural = "informes"
@@ -567,6 +574,18 @@ class InformeSemestral(models.Model):
     #Plantacion de Iglesias: Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas entre Julio-Diciembre 2015
     plantacion          = models.PositiveIntegerField('Plantacion de Iglesias', help_text='Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas en el último semestre')
     
+    plantacion_nombre_1 = models.CharField('', max_length=30)
+    plantacion_lugar_1  = models.CharField('', max_length=30)
+    plantacion_fecha_1  = models.CharField('', max_length=30)
+
+    plantacion_nombre_2 = models.CharField('', max_length=30)
+    plantacion_lugar_2  = models.CharField('', max_length=30)
+    plantacion_fecha_2  = models.CharField('', max_length=30)
+
+    plantacion_nombre_3 = models.CharField('', max_length=30)
+    plantacion_lugar_3  = models.CharField('', max_length=30)
+    plantacion_fecha_3  = models.CharField('', max_length=30)
+
     asistencia_grupos   = models.PositiveIntegerField('Asistencia grupos de vida', help_text='Asistencia promedio (por grupo no general) a los grupos de vida')
 
     ofrendas            = models.PositiveIntegerField('Ofrendas y Diezmos', help_text='Total dinero recaudado en ofrendas y diezmos en el último semestre')
@@ -592,3 +611,89 @@ class InformeSemestral(models.Model):
 
     def __str__(self):
         return "%s" %"Informe Semestral"
+
+
+def ruta_fotos_informe_publico(self, filename):
+	return 'informes/%s' %(filename)
+
+
+class InformeSemestralPublico(models.Model):
+    """ Este modelo es para eviar informes sin loguin """
+
+    class Meta:
+        verbose_name_plural = "informes públicos"
+
+    REGION_CHOICES = (
+		(0, 'Central'),
+		(1, 'Sur Oriental'),
+		(2, 'Mecusab'),
+		(3, 'Pacífico'),
+		(4, 'Sur'),
+		(5, 'Valle'),
+		(6, 'Guanbianos'),
+		(7, 'Paez')
+	)
+    
+    nombre_proyecto     = models.CharField('Nombre del Proyecto', max_length=40)
+    persona             = models.CharField('Encargado', max_length=40)
+    email               = models.EmailField(max_length=255)
+    telefono            = models.CharField('Encargado', max_length=40, help_text='Celular y/o teléfono, puede poner ambos separados por coma')
+    depto 				= models.CharField('Departamento', max_length=30, choices=DEPTOS)
+    direccion 		    = models.TextField('Dirección')
+    region 				= models.SmallIntegerField('Región', choices=REGION_CHOICES, help_text='La Región a la que pertenece la Iglesia')
+    
+
+    miembros_actuales   = models.PositiveIntegerField('Miembros Actuales', help_text='Bautizados')
+
+    nuevos_miembros     = models.PositiveIntegerField('Total Miembros Nuevos', help_text='Total de miembros agregados a la membresía de la iglesia en los últimos 6 meses')
+
+    conversiones        = models.PositiveIntegerField('Conversiones', help_text='Total de personas que aceptaron a Cristo como su Señor y Salvador en el último semestre')
+ 
+    bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos')
+    no_bautismos        = models.TextField('Si no hubo bautismos', help_text='Explique por que no hubo bautismos', null=True, blank=True)
+ 
+    asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Servicios dominicales y grupos de vida incluyendo niños y no bautizados')
+
+    grupos_vida         = models.PositiveIntegerField('Grupos de vida o Celulas', help_text='Número actual de grupos de vida, grupos evangelísticos, casas de oración, grupos pequeños en casas etc..')
+
+    plantacion          = models.PositiveIntegerField('Plantacion de Iglesias', help_text='Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas en el último semestre')
+    
+    plantacion_nombre_1 = models.CharField('', max_length=30)
+    plantacion_lugar_1  = models.CharField('', max_length=30)
+    plantacion_fecha_1  = models.CharField('', max_length=30)
+
+    plantacion_nombre_2 = models.CharField('', max_length=30)
+    plantacion_lugar_2  = models.CharField('', max_length=30)
+    plantacion_fecha_2  = models.CharField('', max_length=30)
+
+    plantacion_nombre_3 = models.CharField('', max_length=30)
+    plantacion_lugar_3  = models.CharField('', max_length=30)
+    plantacion_fecha_3  = models.CharField('', max_length=30)
+
+    asistencia_grupos   = models.PositiveIntegerField('Asistencia grupos de vida', help_text='Asistencia promedio (por grupo no general) a los grupos de vida')
+
+    ofrendas            = models.PositiveIntegerField('Ofrendas y Diezmos', help_text='Total dinero recaudado en ofrendas y diezmos en el último semestre')
+
+    peticiones_oracion  = models.TextField('Peticiones de Oracion', 
+                        help_text='Especificas, accion de gracias o preocupaciones, favor explicar o dar detalles de la petición')
+
+    testimonios  		= models.TextField('Testimonios', 
+                        help_text='liberaciones, conversiones, milagros, etc. Favor relatar brevemente el testimonio detallando quien como y donde')
+
+    ministerio_ninos  	= models.TextField('Ministerio de los Niños', 
+                        help_text='Describa las últimas actividades con niños en el último semestre como: campamentos, alcances evangelisticos, escuela bíblica, deportes,grupos de vida, etc.')
+
+    uso_local		  	= models.TextField('Uso del local de la iglesia', 
+                        help_text='Como se uso el local en el último semestre. ej.: Escuela de día, entrenamiento vocacional, estudios bíblicos, ministerio de mujeres, proyección de películas etc.')
+    
+    fotos               = models.FileField('Fotos evidencia', upload_to=ruta_fotos_informe_publico, validators=[validate_comprimidos], help_text='Suba un un archivo comprimido en .rar o .zip de fotos que evidencien los programas realizados en el templo' )
+
+
+    created     = models.DateTimeField(auto_now_add = True) 
+    updated     = models.DateField(auto_now = True) 
+
+    
+
+    def __unicode__(self):
+		return "%s" %u"Informe Público"
+

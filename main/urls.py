@@ -39,5 +39,7 @@ urlpatterns = patterns('main.views',
     url(r'^proyecto/(?P<pk>\d+)/dedicacion/$', 'dedicacion', name='dedicacion'),
     url(r'^cron/alert/$', 'alert', name='alert'),
     url(r'^oauth2callback', 'auth_return', name='auth_return'),
+
+    url(r'^informe-semestral/publico/783w5g95h0795g94h84u50', 'informe_semestral_publico', name='informe_semestral_publico' ),
 )
 

@@ -4,10 +4,10 @@ from django.forms.extras.widgets import SelectDateWidget
 from datetime import date
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden
+from crispy_forms.layout import Layout, Fieldset, Div, Submit, HTML, Button, Row, Field, Hidden, MultiField
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons, UneditableField, InlineRadios, InlineCheckboxes, PrependedAppendedText
 
-from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, Comentario, InformeSemestral
+from db.models import Edificacion, Comunidad, Congregacion, Adjuntos, Condiciones, InformacionFinanciera, Comentario, InformeSemestral, InformeSemestralPublico
 from .datos import EDIFICACION_COORDENADAS
 
 from map_field import widgets as map_widgets
@@ -184,25 +184,50 @@ class InformeSemestralForm(forms.ModelForm):
         self.helper.form_action = "."
 
         self.helper.all().wrap(Field, css_class='input-sm')       
-        self.helper.filter_by_widget(forms.Textarea).wrap(Field, css_class="input-xlarge", rows="4")
+        self.helper.filter_by_widget(forms.Textarea).wrap(Field, css_class="input-xlarge", rows="3")
 
-        self.helper.layout = Layout(         
+        self.helper.layout = Layout(  
+            
+            MultiField(
+                '<b>Plantación*</b>', 
+                Div(
+                    HTML('<p class="help-block">Cuantos proyectos misioneros o igleisas hijas fueron plantadas en el ultimo semestre</p>'),
+                    Field('plantacion_nombre_1', css_class='input-sm', placeholder="nombre"),  
+                    Field('plantacion_lugar_1', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_1', css_class='input-sm', placeholder="mes/año"),
+                    css_class = 'informe-semestral-plantacion clearfix',
+                ),
+                Div(
+                    Field('plantacion_nombre_2', css_class='input-sm', placeholder="nombre"),  
+                    Field('plantacion_lugar_2', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_2', css_class='input-sm', placeholder="mes/año"),
+                    css_class = 'informe-semestral-plantacion clearfix',
+                ),
+                Div(
+                    Field('plantacion_nombre_3', css_class='input-sm', placeholder="nombre"),  
+                    Field('plantacion_lugar_3', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_3', css_class='input-sm', placeholder="mes/año"),
+                    css_class = 'informe-semestral-plantacion clearfix',
+                )
+            ),
+
+            Field('miembros_actuales'),
+            Field('nuevos_miembros'),
+            Field('conversiones'),
+            Field('bautismos_nuevos'),
+            Field('no_bautismos'),
+            Field('asistencia_general'),
+            Field('ofrendas'),
+            Field('plantacion'),
+            Field('grupos_vida'), 
+            Field('asistencia_grupos'),
+            Field('peticiones_oracion'),
+            Field('testimonios'),
+            Field('ministerio_ninos'),
+            Field('uso_local'),
+            Field('fotos'),
             FormActions(      
-                Field('miembros_actuales'),
-                Field('nuevos_miembros'),
-                Field('conversiones'),
-                Field('bautismos_nuevos'),
-                Field('no_bautismos'),
-                Field('asistencia_general'),
-                Field('ofrendas'),
-                Field('plantacion'),
-                Field('grupos_vida'), 
-                Field('asistencia_grupos'),
-                Field('peticiones_oracion'),
-                Field('testimonios'),
-                Field('ministerio_ninos'),
-                Field('uso_local'),
-                Field('fotos'),
+                
                 StrictButton('Enviar Informe', type="Submit", css_class="btn btn-success pull-right btn-md", autocomplete="off"),
             )
         ) 
@@ -454,3 +479,18 @@ class TesoreroEditForm(ModelFormBase):
     class Meta:
         model  = Edificacion
         fields = ['tesorero']
+
+class InformeSemestralPublicoForm(forms.ModelForm):
+    """Formulario para informe semestral publico sin loguin"""
+
+    class Meta:
+        model = InformeSemestralPublico
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+        super(InformeSemestralPublicoForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_class       = 'form-horizontal'
+
+        self.helper.label_class      = 'col-sm-2'
+        self.helper.field_class      = 'col-sm-9'

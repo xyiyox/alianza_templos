@@ -1018,3 +1018,13 @@ def alert(request):
 
     ctx = {'report':var}
     return render(request, 'main/cron_summary.html', ctx)
+
+
+def informe_semestral_publico(request):
+
+    form = InformeSemestralPublicoForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid():
+        return redirect('informe_semestral_publico')
+
+    return render(request, 'main/informe-semestral-publico.html', {'form': form})
