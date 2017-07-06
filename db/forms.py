@@ -494,3 +494,65 @@ class InformeSemestralPublicoForm(forms.ModelForm):
 
         self.helper.label_class      = 'col-sm-2'
         self.helper.field_class      = 'col-sm-9'
+
+        self.helper.all().wrap(Field, css_class='input-sm')
+
+        self.helper.layout = Layout( 
+            Fieldset(
+                'Datos del Proyecto',
+                Field('nombre_proyecto', css_class='input-sm', placeholder='nombre del proyecto'),
+                Field('persona', css_class='input-sm', placeholder='persona encargada del proyecto'),
+                Field('email', css_class='input-sm'),
+                Field('telefono', css_class='input-sm'),
+                Field('depto', css_class='input-sm'),
+                Field('direccion', css_class="input-xlarge", rows="2", placeholder='dirección del proyecto'),
+                Field('region', css_class='input-sm'),
+            ),
+
+            Fieldset(
+                'Datos del Informe',
+                Field('miembros_actuales', css_class='input-sm', placeholder='miembros actuales'),
+                Field('nuevos_miembros', css_class='input-sm', placeholder='miembros nuevos'),
+                Field('conversiones', css_class='input-sm'),
+                Field('bautismos_nuevos', css_class='input-sm'),
+                Field('no_bautismos', css_class='input-xlarge', rows="2"),
+                Field('asistencia_general', css_class="input-sm",  placeholder='asistencia general'),
+                Field('grupos_vida', css_class='input-sm', placeholder='grupos de vida'),
+            ),
+
+            MultiField(
+                '<b>Plantación*</b>', 
+                Div(
+                    HTML(u'<p class="help-block">Cuantos proyectos misioneros o iglesias hijas fueron plantadas en el último semestre</p>'),
+                    Field('plantacion_nombre_1', css_class='input-sm', placeholder="nombre"),  
+                    Field('plantacion_lugar_1', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_1', css_class='input-sm', placeholder="mes/año"),
+                    css_class = 'col-sm-11 informe-semestral-plantacion clearfix',
+                ),
+                Div(
+                    Field('plantacion_nombre_2', css_class='input-sm', placeholder="nombre"),  
+                    Field('plantacion_lugar_2', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_2', css_class='input-sm', placeholder="mes/año"),
+                    css_class = 'col-sm-11 informe-semestral-plantacion clearfix',
+                ),
+                Div(
+                    Field('plantacion_nombre_3', css_class='input-sm', placeholder="nombre"),  
+                    Field('plantacion_lugar_3', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_3', css_class='input-sm', placeholder="mes/año"),
+                    css_class = 'col-sm-11 informe-semestral-plantacion clearfix',
+                )
+            ),
+
+            Field('asistencia_grupos', css_class='input-sm'),
+            Field('ofrendas', css_class='input-sm'),
+            Field('peticiones_oracion', css_class="input-xlarge", rows="3"),
+            Field('testimonios', css_class="input-xlarge", rows="3"),
+            Field('ministerio_ninos', css_class="input-xlarge", rows="3"),
+            Field('uso_local', css_class="input-xlarge", rows="3"),
+            Field('fotos'),
+            
+
+            FormActions(
+                StrictButton('Enviar Informe', type="Submit", css_class="btn-primary btn-block btn-lg"),
+            )
+        )

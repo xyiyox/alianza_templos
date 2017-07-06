@@ -634,10 +634,10 @@ class InformeSemestralPublico(models.Model):
 		(7, 'Paez')
 	)
     
-    nombre_proyecto     = models.CharField('Nombre del Proyecto', max_length=40)
+    nombre_proyecto     = models.CharField('Nombre', max_length=40)
     persona             = models.CharField('Encargado', max_length=40)
     email               = models.EmailField(max_length=255)
-    telefono            = models.CharField('Encargado', max_length=40, help_text='Celular y/o teléfono, puede poner ambos separados por coma')
+    telefono            = models.CharField('Teléfono', max_length=40, help_text='Celular y/o teléfono, puede poner ambos separados por coma')
     depto 				= models.CharField('Departamento', max_length=30, choices=DEPTOS)
     direccion 		    = models.TextField('Dirección')
     region 				= models.SmallIntegerField('Región', choices=REGION_CHOICES, help_text='La Región a la que pertenece la Iglesia')
@@ -654,10 +654,8 @@ class InformeSemestralPublico(models.Model):
  
     asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Servicios dominicales y grupos de vida incluyendo niños y no bautizados')
 
-    grupos_vida         = models.PositiveIntegerField('Grupos de vida o Celulas', help_text='Número actual de grupos de vida, grupos evangelísticos, casas de oración, grupos pequeños en casas etc..')
+    grupos_vida         = models.PositiveIntegerField('Grupos de vida o Células', help_text='Número actual de grupos de vida, grupos evangelísticos, casas de oración, grupos pequeños en casas etc..')
 
-    plantacion          = models.PositiveIntegerField('Plantacion de Iglesias', help_text='Cuantos grupos de vida, proyectos misioneros y/o iglesias fueron plantadas en el último semestre')
-    
     plantacion_nombre_1 = models.CharField('', max_length=30)
     plantacion_lugar_1  = models.CharField('', max_length=30)
     plantacion_fecha_1  = models.CharField('', max_length=30)

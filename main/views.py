@@ -1025,6 +1025,11 @@ def informe_semestral_publico(request):
     form = InformeSemestralPublicoForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
-        return redirect('informe_semestral_publico')
+        informe = form.save(commit=False)  
+        informe.save()
+        return redirect('informe_respuesta')
 
     return render(request, 'main/informe-semestral-publico.html', {'form': form})
+
+def informe_respuesta(request):
+    return render(request, 'main/informe-semestral-publico-respuesta.html')

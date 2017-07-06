@@ -41,5 +41,6 @@ urlpatterns = patterns('main.views',
     url(r'^oauth2callback', 'auth_return', name='auth_return'),
 
     url(r'^informe-semestral/publico/783w5g95h0795g94h84u50', 'informe_semestral_publico', name='informe_semestral_publico' ),
+    url(r'^informe-respuesta', 'informe_respuesta', name='informe_respuesta' ),
 )
 
