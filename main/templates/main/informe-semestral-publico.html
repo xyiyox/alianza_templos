@@ -21,6 +21,9 @@
 </style>
 {% endblock %}
 
+{% block ngApp %} ng-app="informePublicoApp"{% endblock %}
+{% block controller %} ng-controller="InformePublicoCtrl"{% endblock %}
+
 {% block content %}
 
     <div class="page-header">
@@ -47,7 +50,26 @@
     </div>
     {% endif %}
 
-    {% crispy form %}
+    <form novalidate action="/informe-semestral/publico/783w5g95h0795g94h84u50" 
+          enctype="multipart/form-data" class='form-horizontal' method="POST" >
+
+        {% crispy form %}
+        <div class="form-actions">
+            <input type="submit" 
+                class="btn btn btn-primary btn-block input-lg" value="Enviar Formulario"
+                ng-mouseup="alClickEnviar($event)" ng-show="!enviandoForm"/>
+            <div class="alert bg-primary text-center" role="alert" ng-show="enviandoForm">
+                <i class="fa fa-refresh fa-spin fa-fw" aria-hidden="true"></i> Enviando...
+            </div>
+        </div>
+    </form>
+
+
+
     <br>
     <br>
 {% endblock %}
+
+{% block js_body %} 
+	<script src="{{STATIC_URL}}main/app/informeSemestral.js?v=3"></script>
+{% endblock js_body %}

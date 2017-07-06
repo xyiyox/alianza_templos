@@ -495,7 +495,8 @@ class InformeSemestralPublicoForm(forms.ModelForm):
         self.helper.label_class      = 'col-sm-2'
         self.helper.field_class      = 'col-sm-9'
 
-        self.helper.all().wrap(Field, css_class='input-sm')
+        #self.helper.form_action = "/informe-semestral/publico/783w5g95h0795g94h84u50"
+        self.helper.form_tag         = False
 
         self.helper.layout = Layout( 
             Fieldset(
@@ -517,7 +518,6 @@ class InformeSemestralPublicoForm(forms.ModelForm):
                 Field('bautismos_nuevos', css_class='input-sm'),
                 Field('no_bautismos', css_class='input-xlarge', rows="2"),
                 Field('asistencia_general', css_class="input-sm",  placeholder='asistencia general'),
-                Field('grupos_vida', css_class='input-sm', placeholder='grupos de vida'),
             ),
 
             MultiField(
@@ -542,7 +542,7 @@ class InformeSemestralPublicoForm(forms.ModelForm):
                     css_class = 'col-sm-11 informe-semestral-plantacion clearfix',
                 )
             ),
-
+            Field('grupos_vida', css_class='input-sm', placeholder='grupos de vida'),
             Field('asistencia_grupos', css_class='input-sm'),
             Field('ofrendas', css_class='input-sm'),
             Field('peticiones_oracion', css_class="input-xlarge", rows="3"),
@@ -550,9 +550,5 @@ class InformeSemestralPublicoForm(forms.ModelForm):
             Field('ministerio_ninos', css_class="input-xlarge", rows="3"),
             Field('uso_local', css_class="input-xlarge", rows="3"),
             Field('fotos'),
-            
-
-            FormActions(
-                StrictButton('Enviar Informe', type="Submit", css_class="btn-primary btn-block btn-lg"),
-            )
+        
         )

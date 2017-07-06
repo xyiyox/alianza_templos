@@ -28,6 +28,12 @@ class PlazoAdmin(admin.ModelAdmin):
 
 class InformeSemestralPublicoAdmin(admin.ModelAdmin):
     list_display = ('nombre_proyecto','persona', 'email', )  
+ 
+    # Solo superuser y nacional puede editar modelos InformeSemestralPublico en el admin
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser or request.user.tipo == Usuario.NACIONAL:
+            return True
+        return False
 
 admin.site.register(Edificacion, EdificacionAdmin)
 admin.site.register(Plazo, PlazoAdmin)
