@@ -523,7 +523,7 @@ class InformeSemestralPublicoForm(forms.ModelForm):
             MultiField(
                 '<b>Plantación*</b>', 
                 Div(
-                    HTML(u'<p class="help-block">Cuantos proyectos misioneros o iglesias hijas fueron plantadas en el último semestre</p>'),
+                    HTML(u'<p class="help-block">Cuantos proyectos misioneros o iglesias hijas fueron plantadas desde el momento de la dedicación, si no hubo ponga <b>NINGUNO</b> en todos los campos</p>'),
                     Field('plantacion_nombre_1', css_class='input-sm', placeholder="nombre"),  
                     Field('plantacion_lugar_1', css_class='input-sm', placeholder="lugar"),
                     Field('plantacion_fecha_1', css_class='input-sm', placeholder="mes/año"),

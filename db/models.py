@@ -525,7 +525,7 @@ def validate_comprimidos(value):
     import os
     max_upload_size = 5242880
     print "content type"
-    print value.file.content_type
+    #print value.file.content_type da error cuando se guarda desde el admin
     print "size"
     print value.file._size
     
@@ -693,5 +693,5 @@ class InformeSemestralPublico(models.Model):
     
 
     def __unicode__(self):
-		return "%s" %u"Informe Público"
+		return "%s %s" %(self.id, u"Informe Público")
 

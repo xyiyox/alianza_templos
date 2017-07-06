@@ -26,6 +26,10 @@ class PlazoAdmin(admin.ModelAdmin):
 
     ordering = ['id']
 
+class InformeSemestralPublicoAdmin(admin.ModelAdmin):
+    list_display = ('nombre_proyecto','persona', 'email', )  
+
 admin.site.register(Edificacion, EdificacionAdmin)
 admin.site.register(Plazo, PlazoAdmin)
+admin.site.register(InformeSemestralPublico, InformeSemestralPublicoAdmin)
 
