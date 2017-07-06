@@ -12,8 +12,6 @@ angular
 
         $scope.alClickEnviar = function(e) {
             $scope.enviandoForm = true;
-            console.log('hola soy informe semestral');
-            console.log(e);
         };
 	     
 

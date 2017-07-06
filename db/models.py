@@ -639,9 +639,10 @@ class InformeSemestralPublico(models.Model):
     email               = models.EmailField(max_length=255)
     telefono            = models.CharField('Teléfono', max_length=40, help_text='Celular y/o teléfono, puede poner ambos separados por coma')
     depto 				= models.CharField('Departamento', max_length=30, choices=DEPTOS)
+    municipio           = models.CharField(max_length=30)
     direccion 		    = models.TextField('Dirección')
     region 				= models.SmallIntegerField('Región', choices=REGION_CHOICES, help_text='La Región a la que pertenece la Iglesia')
-    
+
 
     miembros_actuales   = models.PositiveIntegerField('Miembros Actuales', help_text='Bautizados')
 

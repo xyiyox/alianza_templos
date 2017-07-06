@@ -495,7 +495,6 @@ class InformeSemestralPublicoForm(forms.ModelForm):
         self.helper.label_class      = 'col-sm-2'
         self.helper.field_class      = 'col-sm-9'
 
-        #self.helper.form_action = "/informe-semestral/publico/783w5g95h0795g94h84u50"
         self.helper.form_tag         = False
 
         self.helper.layout = Layout( 
@@ -506,6 +505,7 @@ class InformeSemestralPublicoForm(forms.ModelForm):
                 Field('email', css_class='input-sm'),
                 Field('telefono', css_class='input-sm'),
                 Field('depto', css_class='input-sm'),
+                Field('municipio', css_class='input-sm'),
                 Field('direccion', css_class="input-xlarge", rows="2", placeholder='dirección del proyecto'),
                 Field('region', css_class='input-sm'),
             ),
