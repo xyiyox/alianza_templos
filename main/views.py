@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.formtools.wizard.views import SessionWizardView
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+import csv
 
 from django.core.urlresolvers import reverse
 from threading import Timer
@@ -1055,5 +1056,40 @@ def informe_semestral(request, pk):
         raise PermissionDenied
 
     informe  =  get_object_or_404(InformeSemestralPublico, pk=pk)
-
+    
     return render(request, 'main/informe-semestral.html', {'informe':informe})
+
+
+@login_required
+def informe_semestral_csv(request, pk):
+
+    if request.user.tipo not in [Usuario.NACIONAL, Usuario.SUPERADMIN]: 
+        raise PermissionDenied
+    
+    inf  =  get_object_or_404(InformeSemestralPublico, pk=pk)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="%s.csv"' %inf.nombre_proyecto
+
+    writer = csv.writer(response)
+    row1 = []
+    writer.writerow([
+        'Nombre del Proyecto', 'Persona Encargada', 'Email', 'Teléfono',  
+        'Región', 'Departamento', 'Municipio', 'Dirección',
+        'Miembros', 'Nuevos miembros', 'Conversiones', 'Bautismos', 'Si no Bautismos',
+        'Asistencia general', 'Grupos vida', 'Asistencia G.V.',
+        'Plantación nombre 1', 'Plantación lugar 1', 'Plantación fecha 1',
+        'Plantación nombre 2', 'Plantación lugar 2', 'Plantación fecha 2',
+        'Plantación nombre 3', 'Plantación lugar 3', 'Plantación fecha 3',
+        'Ofrendas', 'Peticiones', 'Testimonios', 'Actividades niños', 'Uso del local'])
+    writer.writerow([
+        inf.nombre_proyecto, inf.persona, inf.email, inf.telefono, 
+        inf.get_region_display(), inf.depto, inf.municipio, inf.direccion,
+        inf.miembros_actuales, inf.nuevos_miembros, inf.conversiones, inf.bautismos_nuevos, inf.no_bautismos,
+        inf.asistencia_general, inf.grupos_vida, inf.asistencia_grupos,
+        inf.plantacion_nombre_1, inf.plantacion_lugar_1, inf.plantacion_fecha_1,
+        inf.plantacion_nombre_2, inf.plantacion_lugar_2, inf.plantacion_fecha_2,
+        inf.plantacion_nombre_3, inf.plantacion_lugar_3, inf.plantacion_fecha_3,
+        inf.ofrendas, inf.peticiones_oracion, inf.testimonios, inf.ministerio_ninos, inf.uso_local])
+
+    return response

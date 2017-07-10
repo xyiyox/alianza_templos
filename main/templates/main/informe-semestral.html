@@ -17,7 +17,7 @@
     </ol>
 	
 	<div class="page-header">
-		<h1>Informe: {{informe.nombre_proyecto}}</h1>
+		<h1>Informe {{informe.nombre_proyecto}} <small>{{informe.created}}</small></h1>
 	</div>
 
 	<div class="row">
@@ -28,6 +28,7 @@
             <table  class="table table-striped table-hover table-condensed"  >
                 <tbody>
                     <tr><th>Proyecto:</th> <td>{{informe.nombre_proyecto}}</td></tr>
+                    <tr><th>Fecha:</th> <td>{{informe.created}}</td></tr>
                     <tr><th>Encargado:</th> <td>{{informe.persona}}</td></tr>
                     <tr><th>Email:</th> <td>{{informe.email}}</td></tr>
                     <tr><th>Teléfono:</th> <td>{{informe.telefono}}</td></tr>
@@ -84,16 +85,27 @@
                     <tr><th>Testimonios:</th> <td>{{informe.testimonios}}</td></tr>
                     <tr><th>Actividades con niños:</th> <td>{{informe.ministerio_ninos}}</td></tr>
                     <tr><th>Uso del local:</th> <td>{{informe.uso_local}}</td></tr>
-                    <tr><th>Fotos:</th> <td>  <a href="{{ MEDIA_URL }}{{informe.fotos}}" download class="btn btn-success">Descargar</a> </td></tr>
-
                 </tbody>
             </table>
 
 		</div>
 
+        <div class="col-sm-4">
+            <a class="btn btn-block btn-primary btn-lg" href="{% url 'informe_semestral_csv' informe.pk %}">
+                <i class="fa fa-fw fa-file-excel-o"></i> Descargar csv
+            </a>
+            <a href="{{ MEDIA_URL }}{{informe.fotos}}" download class="btn btn-primary btn-block btn-lg">
+               <i class="fa fa-fw fa-file-archive-o"></i> Descargar Fotos
+            </a>
+        </div>
+
 	
 
 	</div>
+
+    <br>
+    <br>
+    <br>
 
 {% endblock content %}
 

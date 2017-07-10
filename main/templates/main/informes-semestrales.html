@@ -33,7 +33,6 @@
                         <th>Email</th>
                         <th>Teléfono</th>
                         <th>Ver</th>
-                        <th>Descargar</th>
                     </thead>
                     <tfoot>
                         <th>Nombre</th>
@@ -42,10 +41,10 @@
                         <th>Email</th>
                         <th>Teléfono</th>
                         <th>Ver</th>
-                        <th>Descargar</th>
                     </tfoot>
                     <tbody>
                         {% for informe in informes %}
+                        
                         <tr>
                             <td>{{informe.nombre_proyecto}}</td>
                             <td>{{informe.created}}</td>
@@ -53,14 +52,8 @@
                             <td>{{informe.email}}</td>
                             <td>{{informe.telefono}}</td>
                             <td>
-                                <a class="btn btn-primary btn-xs" href="{% url 'informe_semestral' informe.pk %}">
+                                <a class="btn btn-primary btn-xs" href="{{informe.get_absolute_url}}">
                                     <i class="fa fa-location-arrow"></i> 
-                                </a>
-
-                            </td>
-                            <td>
-                                <a class="btn btn-success btn-xs" href="#">
-                                    <i class="fa fa-file-excel-o"></i> 
                                 </a>
 
                             </td>
