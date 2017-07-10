@@ -18,7 +18,7 @@ from threading import Timer
 from main.forms import *
 from main.email import *
 from db.forms import *
-from db.models import Edificacion, Comunidad, Comentario, Etapa, InformeSemestral
+from db.models import Edificacion, Comunidad, Comentario, Etapa, InformeSemestral, InformeSemestralPublico
 from usuarios.models import Usuario
 
 from django.contrib.formtools.wizard.forms import ManagementForm
@@ -126,6 +126,7 @@ def home_nacional_region(request, region=None):
     
     ctx['proyectos'] = proyectos
     return render(request, 'main/home-nacional.html', ctx)
+
 
 @login_required
 def home_regional(request):
@@ -1019,7 +1020,9 @@ def alert(request):
     ctx = {'report':var}
     return render(request, 'main/cron_summary.html', ctx)
 
-
+'''
+    INFORMES SEMESTRALES DESDE FORMULARIO PUBLICO
+'''
 def informe_semestral_publico(request):
 
     form = InformeSemestralPublicoForm(request.POST or None, request.FILES or None)
@@ -1033,3 +1036,24 @@ def informe_semestral_publico(request):
 
 def informe_respuesta(request):
     return render(request, 'main/informe-semestral-publico-respuesta.html')
+
+
+@login_required
+def informes_semestrales(request):
+
+    if request.user.tipo not in [Usuario.NACIONAL, Usuario.SUPERADMIN]: 
+        raise PermissionDenied
+
+    informes = InformeSemestralPublico.objects.all()
+
+    return render(request, 'main/informes-semestrales.html', {'informes': informes})
+
+@login_required
+def informe_semestral(request, pk):
+
+    if request.user.tipo not in [Usuario.NACIONAL, Usuario.SUPERADMIN]: 
+        raise PermissionDenied
+
+    informe  =  get_object_or_404(InformeSemestralPublico, pk=pk)
+
+    return render(request, 'main/informe-semestral.html', {'informe':informe})

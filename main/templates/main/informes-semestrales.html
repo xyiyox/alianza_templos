@@ -1,0 +1,94 @@
+{% extends 'main/base.html' %}
+{% load main_tags %}
+
+{% block title %} Informes Semestrales {% endblock %}
+
+
+{% block css %} 
+<link rel="stylesheet" href="{{STATIC_URL}}main/DataTables/datatables.min.css"> 
+{% endblock %}
+
+{% block content %}
+	
+	<ol class="breadcrumb" style="margin-top:20px;">
+        <li><a href="/">Inicio</a></li> 
+        <li class="active">Informes Semestrales</li>
+    </ol>
+	
+	<div class="page-header">
+		<h1>Todos los Informes</h1>
+	</div>
+
+	<div class="row">
+        
+            
+        <div class="col-sm-11">
+
+			<div class="table-responsive">
+                <table style="font-size: 12px;" class="table table-striped table-hover table-condensed" id="informes" >
+                    <thead>
+                        <th>Nombre</th>
+                        <th>Fecha</th>
+                        <th>Encargado</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Ver</th>
+                        <th>Descargar</th>
+                    </thead>
+                    <tfoot>
+                        <th>Nombre</th>
+                        <th>Fecha</th>
+                        <th>Encargado</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Ver</th>
+                        <th>Descargar</th>
+                    </tfoot>
+                    <tbody>
+                        {% for informe in informes %}
+                        <tr>
+                            <td>{{informe.nombre_proyecto}}</td>
+                            <td>{{informe.created}}</td>
+                            <td>{{informe.persona}}</td>
+                            <td>{{informe.email}}</td>
+                            <td>{{informe.telefono}}</td>
+                            <td>
+                                <a class="btn btn-primary btn-xs" href="{% url 'informe_semestral' informe.pk %}">
+                                    <i class="fa fa-location-arrow"></i> 
+                                </a>
+
+                            </td>
+                            <td>
+                                <a class="btn btn-success btn-xs" href="#">
+                                    <i class="fa fa-file-excel-o"></i> 
+                                </a>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+			</div>
+			
+
+		</div>
+
+	
+
+	</div>
+
+{% endblock content %}
+
+{% block js_body %} 
+	<script src="{{STATIC_URL}}main/DataTables/datatables.min.js"></script>
+
+    <script>
+		$(document).ready(function(){
+		    $('#informes').DataTable();
+		});
+		
+	</script>
+
+	
+{% endblock js_body %}
