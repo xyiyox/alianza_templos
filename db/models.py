@@ -524,18 +524,18 @@ def validate_comprimidos(value):
     # El archivo no debe ser mayor a  50MB - 5242880 
     import os
     max_upload_size = 5242880
-    print "content type"
+    #print "content type"
     #print value.file.content_type da error cuando se guarda desde el admin
-    print "size"
-    print value.file._size
+    #print "size"
+    #print value.file._size
     
     ext = os.path.splitext(value.name)[1]
     valid_extensions = ['.rar','.zip']
     if not ext.lower() in valid_extensions:
         raise ValidationError(u'Solo se aceptan archivos en formato comprimido .zip o .rar')
 
-    if value.file._size > max_upload_size:
-        raise ValidationError(u'El archivo no debe superar las 50 megas de peso')
+    # if value.file._size > max_upload_size:
+    #     raise ValidationError(u'El archivo no debe superar las 50 megas de peso')
 
 
 class InformeSemestral(models.Model):

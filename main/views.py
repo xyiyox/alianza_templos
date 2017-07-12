@@ -1035,6 +1035,24 @@ def informe_semestral_publico(request):
 
     return render(request, 'main/informe-semestral-publico.html', {'form': form})
 
+
+def informe_semestral_edit(request, pk):
+
+    if request.user.tipo not in [Usuario.NACIONAL, Usuario.SUPERADMIN]: 
+        raise PermissionDenied
+
+    informe  =  get_object_or_404(InformeSemestralPublico, pk=pk)
+
+    form = InformeSemestralPublicoForm(request.POST or None, request.FILES or None, instance=informe)
+
+    if form.is_valid():
+        informe = form.save(commit=False)  
+        informe.save()
+        return redirect(informe_semestral)
+
+    return render(request, 'main/informe-semestral-publico.html', {'form': form})
+
+
 def informe_respuesta(request):
     return render(request, 'main/informe-semestral-publico-respuesta.html')
 

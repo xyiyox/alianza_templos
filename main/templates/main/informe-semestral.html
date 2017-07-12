@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load main_tags %}
+{% load admin_urls %}
 
 {% block title %} Informes Semestrales {% endblock %}
 
@@ -91,10 +92,17 @@
 		</div>
 
         <div class="col-sm-4">
-            <a class="btn btn-block btn-primary btn-lg" href="{% url 'informe_semestral_csv' informe.pk %}">
+            <!--<a class="btn btn-block btn-success " href="{% url 'informe_semestral_edit' informe.pk %}">
+                <i class="fa fa-fw fa-pencil-square-o"></i> Editar
+            </a>-->
+            <a class="btn btn-block btn-success " href="{% url 'admin:db_informesemestralpublico_change' informe.pk %}">
+                <i class="fa fa-fw fa-pencil-square-o"></i> Editar
+            </a>
+            
+            <a class="btn btn-block btn-primary " href="{% url 'informe_semestral_csv' informe.pk %}">
                 <i class="fa fa-fw fa-file-excel-o"></i> Descargar csv
             </a>
-            <a href="{{ MEDIA_URL }}{{informe.fotos}}" download class="btn btn-primary btn-block btn-lg">
+            <a href="{{ MEDIA_URL }}{{informe.fotos}}" download class="btn btn-primary btn-block">
                <i class="fa fa-fw fa-file-archive-o"></i> Descargar Fotos
             </a>
         </div>

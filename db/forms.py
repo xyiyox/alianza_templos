@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.contrib.admin.widgets import AdminFileWidget
 from django.forms.extras.widgets import SelectDateWidget
 from datetime import date
 
@@ -497,6 +498,8 @@ class InformeSemestralPublicoForm(forms.ModelForm):
 
         self.helper.form_tag         = False
 
+        self.fields['fotos'].widget = AdminFileWidget()
+
         self.helper.layout = Layout( 
             Fieldset(
                 'Datos del Proyecto',
@@ -524,25 +527,25 @@ class InformeSemestralPublicoForm(forms.ModelForm):
                 '<b>Plantación*</b>', 
                 Div(
                     HTML(u'<p class="help-block">Cuantos proyectos misioneros o iglesias hijas fueron plantadas desde el momento de la dedicación, si no hubo, de click en  <i class="fa fa-times"></i></p>'),
-                    #Field('plantacion_nombre_1', css_class='input-sm', placeholder="nombre"),  
-                    PrependedText('plantacion_nombre_1', "<i id='ninguno-btn-1' class='fa fa-times ninguno-btn' ng-click='alClickNinguno($event)'></i>", 
-                                    ng_model='plantacionDefault1', css_class="input-sm plantacion-field", placeholder="nombre"),
-                    Field('plantacion_lugar_1', ng_model='plantacionDefault1', css_class='input-sm', placeholder="lugar"),
-                    Field('plantacion_fecha_1', ng_model='plantacionDefault1', css_class='input-sm', placeholder="mes/año"),
+
+                    PrependedText('plantacion_nombre_1', "<i class='fa fa-times ninguno-btn'></i>", 
+                                    css_class="input-sm plantacion-field", placeholder="nombre"),
+                    Field('plantacion_lugar_1', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_1', css_class='input-sm', placeholder="mes/año"),
                     css_class = 'col-sm-11 informe-semestral-plantacion clearfix',
                 ),
                 Div(
-                    PrependedText('plantacion_nombre_2', "<i id='ninguno-btn-2' class='fa fa-times ninguno-btn' ng-click='alClickNinguno($event)'></i>", 
-                                   ng_model='plantacionDefault2', css_class="input-sm", placeholder="nombre"),  
-                    Field('plantacion_lugar_2', ng_model='plantacionDefault2', css_class='input-sm', placeholder="lugar"),
-                    Field('plantacion_fecha_2', ng_model='plantacionDefault2', css_class='input-sm', placeholder="mes/año"),
+                    PrependedText('plantacion_nombre_2', "<i class='fa fa-times ninguno-btn' ></i>", 
+                                   css_class="input-sm", placeholder="nombre"),  
+                    Field('plantacion_lugar_2', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_2', css_class='input-sm', placeholder="mes/año"),
                     css_class = 'col-sm-11 informe-semestral-plantacion clearfix',
                 ),
                 Div(
-                    PrependedText('plantacion_nombre_3', "<i id='ninguno-btn-3' class='fa fa-times ninguno-btn' ng-click='alClickNinguno($event)'></i>", 
-                                ng_model='plantacionDefault3', css_class="input-sm", placeholder="nombre"),
-                    Field('plantacion_lugar_3', ng_model='plantacionDefault3', css_class='input-sm', placeholder="lugar"),
-                    Field('plantacion_fecha_3', ng_model='plantacionDefault3', css_class='input-sm', placeholder="mes/año"),
+                    PrependedText('plantacion_nombre_3', "<i class='fa fa-times ninguno-btn' ></i>", 
+                                css_class="input-sm", placeholder="nombre"),
+                    Field('plantacion_lugar_3', css_class='input-sm', placeholder="lugar"),
+                    Field('plantacion_fecha_3', css_class='input-sm', placeholder="mes/año"),
                     css_class = 'col-sm-11 informe-semestral-plantacion clearfix',
                 )
             ),
@@ -553,6 +556,6 @@ class InformeSemestralPublicoForm(forms.ModelForm):
             Field('testimonios', css_class="input-xlarge", rows="3"),
             Field('ministerio_ninos', css_class="input-xlarge", rows="3"),
             Field('uso_local', css_class="input-xlarge", rows="3"),
-            Field('fotos'),
+            'fotos',
         
         )

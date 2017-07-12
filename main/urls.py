@@ -44,6 +44,7 @@ urlpatterns = patterns('main.views',
     url(r'^informe-respuesta$', 'informe_respuesta', name='informe_respuesta' ),
     url(r'^informes-semestrales$', 'informes_semestrales', name='informes_semestrales'),
     url(r'^informes-semestrales/(?P<pk>\d+)$', 'informe_semestral', name='informe_semestral'),
+    url(r'^informes-semestrales/(?P<pk>\d+)/edit$', 'informe_semestral_edit', name='informe_semestral_edit'),
     url(r'^informes-semestrales/(?P<pk>\d+)/csv$', 'informe_semestral_csv', name='informe_semestral_csv'),
 )
 

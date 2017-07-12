@@ -38,6 +38,10 @@
 
 {% block content %}
 
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    <script type="text/javascript" src="/static/admin/js/actions.js"></script>
+
+
     <div class="page-header">
 	  	<h1>Informe Semestral</h1>
 	</div>
@@ -83,5 +87,14 @@
 {% endblock %}
 
 {% block js_body %} 
-	<script src="{{STATIC_URL}}main/app/informeSemestral.js?v=5"></script>
+	<script src="{{STATIC_URL}}main/app/informeSemestral.js?v=6"></script>
+
+    <script>
+        // Set fields a 'ninguno'
+        $('.ninguno-btn', '.informe-semestral-plantacion').click(function(){
+            var $parent = $(this).parents('.informe-semestral-plantacion');
+            $parent.find('input').val('NINGUNO');
+
+        });
+    </script>
 {% endblock js_body %}
