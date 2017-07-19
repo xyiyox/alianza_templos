@@ -650,7 +650,7 @@ class InformeSemestralPublico(models.Model):
 
     conversiones        = models.PositiveIntegerField('Conversiones', help_text='Total de personas que aceptaron a Cristo como su Señor y Salvador en el último semestre')
  
-    bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos')
+    bautismos_nuevos    = models.PositiveIntegerField('Total Bautismos', help_text="Total de personas bautizadas en el último semestre")
     no_bautismos        = models.TextField('Si no hubo bautismos', help_text='Explique por que no hubo bautismos', null=True, blank=True)
  
     asistencia_general  = models.PositiveIntegerField('Total Asistencia General', help_text='Servicios dominicales y grupos de vida incluyendo niños y no bautizados')
