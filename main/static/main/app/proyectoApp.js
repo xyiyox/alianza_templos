@@ -95,7 +95,8 @@ angular
 	    
 	    $scope.verFotosEtapa = false;
 	    $scope.verIcmAlianza = false;
-	    $scope.verAliTemplo = false;	   
+        $scope.verAliTemplo = false;
+        $scope.verPinForm = false;	   
 
 	    $scope.openPanelConstruccion = function (event,num){
 
@@ -116,6 +117,10 @@ angular
     		$scope.verIngenieroEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-ingeniero' ? true : false;
     		$scope.verTesoreroEditForm = event.type == 'mouseenter' && event.currentTarget.id == 'panel-tesorero' ? true : false;
     		$scope.verFotosEtapa = event.type == 'mouseenter' && event.currentTarget.id == 'panel-fotos' ? true : false;
+        }
+        
+        $scope.openPinPanel = function(event) {    		 		
+    		$scope.verPinForm = event.type == 'mouseenter';
 	    }
 	    
 	    /* ------------------  AUTORIZACIONES  -----------------------*/ 

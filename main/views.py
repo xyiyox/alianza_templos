@@ -609,6 +609,10 @@ def proyecto(request, pk):
         tesoreroEditForm = TesoreroEditForm(instance=proyecto)
         tesoreroEditForm.helper.form_action = reverse('asignaciones', args=[proyecto.pk])
         ctx['tesoreroEditForm'] = tesoreroEditForm
+
+        asignarICMPinForm = AsignarICMPinForm(instance=proyecto)
+        asignarICMPinForm.helper.form_action = reverse('asignar_pin', args=[proyecto.pk])
+        ctx['icmPinForm'] = asignarICMPinForm
         
     
     return render(request, 'main/proyecto.html', ctx)
@@ -812,6 +816,18 @@ def asignaciones(request, pk):
         return redirect(proyecto)
 
     raise Http404
+
+@login_required
+def asignar_pin(request, pk):
+    if request.method == 'POST':
+        proyecto  =  get_object_or_404(Edificacion, pk=pk)
+        form = AsignarICMPinForm(request.POST, instance=proyecto)
+        proj = form.save(commit=False)
+        proj.save(update_fields=['icm_pin'])
+        return redirect(proyecto)
+    
+    raise Http404
+
 
 
 @login_required

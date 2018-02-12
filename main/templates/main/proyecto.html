@@ -1341,8 +1341,35 @@
 			</div>
 		</div>
 	 {% endif %}
-				
-      
+    
+     {% if user.tipo == user.NACIONAL %}      
+     <div class="page-header" style="margin-top:0;">
+        <h4>ICM</h4>
+      </div>
+
+      <div  ng-mouseenter="openPinPanel($event)" ng-mouseleave="openPinPanel($event)"
+			 class="panel {% if proyecto.icm_pin %} panel-green {% else %} panel-red {% endif %}">
+		    <div class="panel-heading">
+		        <div class="row">
+		            <div class="col-md-6">
+		                <i class="fa {% if proyecto.icm_pin %}fa-check {% else %}fa-lock {% endif %}fa-lg fa-fw"></i>
+		                PIN
+		            </div>
+		            <div class="col-md-6 text-right">
+		                <i class="fa fa-qrcode fa-fw"></i>  
+		                {{proyecto.icm_pin|default_if_none:"no asignado"}}
+		            </div>
+		        </div>
+		    </div>
+			
+		    <div class="panel-body" ng-show="verPinForm">
+                {% crispy icmPinForm %}
+
+		    </div>
+		    
+      </div>
+    {% endif %}
+
 
 	</div> <!-- col-sm-4   -->
 
@@ -1361,5 +1388,5 @@
 		window.longitud = parseFloat( '{{proyecto.coordenadas.lon}}'.replace(",", ".") );
 	</script>
 	
-	<script src="{{STATIC_URL}}main/app/proyectoApp.js?v=10"></script>
+	<script src="{{STATIC_URL}}main/app/proyectoApp.js?v=11"></script>
 {% endblock js_body %}

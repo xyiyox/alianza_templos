@@ -387,6 +387,24 @@ class AprobacionNacionalForm(ModelFormBase):
         fields = ['aprobacion_nacional']
 
 
+class AsignarICMPinForm(ModelFormBase):
+    
+    def __init__(self, *args, **kwargs):
+        super(AsignarICMPinForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+        self.helper.form_action = "reemplazar_en_vista"
+
+        self.helper.layout = Layout(
+            Field('icm_pin', css_class="input-sm"),
+            StrictButton('Guardar Pin', type="Submit", css_class="btn-info btn-sm"),
+        )
+
+    class Meta:
+        model = Edificacion
+        fields = ['icm_pin']
+
+
 """ FORMULARIOS ASIGNACION Y EDICCION DE USUARIOS """
 
 class AsignarUsuariosForm(ModelFormBase):

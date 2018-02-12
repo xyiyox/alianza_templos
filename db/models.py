@@ -131,157 +131,159 @@ class Plazo(models.Model):
 
 
 class Edificacion(models.Model):
-	"""
-	Representacion de un Proyecto de construccion 
-	de un templo para una iglesia de la IACYMC
-	"""
+    """
+    Representacion de un Proyecto de construccion 
+    de un templo para una iglesia de la IACYMC
+    """
 
-	class Meta:
-		verbose_name_plural = "edificaciones"
+    class Meta:
+        verbose_name_plural = "edificaciones"
 
-	TIPO_OWNER_LOTE_CHOICES = (
-		(0, 'Alianza Cristiana'),
-		(1, 'Otro'),
-	)
+    TIPO_OWNER_LOTE_CHOICES = (
+        (0, 'Alianza Cristiana'),
+        (1, 'Otro'),
+    )
 
-	TIPO_ADQUISICION_CHOICES = (
-		(0, 'Comprado'),
-		(1, 'Donado'),
-	)
+    TIPO_ADQUISICION_CHOICES = (
+        (0, 'Comprado'),
+        (1, 'Donado'),
+    )
 
-	TIPO_CONSTRUCCION_CHOICES = (
-		(0, 'Templo',),
-		(1, 'Obra Social'),
-		(2, 'Templo/Obra Social (Arriba)'),
-		(3, 'Templo/Obra Social (Lateral Izq)'),
-		(4, 'Templo/Obra Social (Atras)'),
-		(5, 'Templo/Obra Social (Lateral Der)'),
-	)
-
-
-	TT = True
-	FF = False
-	REQUIERE_CHOICES = (		 
-		(TT, 'Si'),
-		(FF, 'No'),
-	)
+    TIPO_CONSTRUCCION_CHOICES = (
+        (0, 'Templo',),
+        (1, 'Obra Social'),
+        (2, 'Templo/Obra Social (Arriba)'),
+        (3, 'Templo/Obra Social (Lateral Izq)'),
+        (4, 'Templo/Obra Social (Atras)'),
+        (5, 'Templo/Obra Social (Lateral Der)'),
+    )
 
 
-	TIPO_TERRENO_CHOICES = (
-		(0, 'Plano'),
-		(1, 'Desnivel'),		
-	)
-
-	LOCALIDAD_TERRENO = (
-		(0, 'Rural'),
-		(1, 'Urbano'),
-		(2, 'Veredal'),
-	)
-
-	VECINOS_TERRENO = (
-		(0, 'Izquierda'),
-		(1, 'Derecha'),		
-		(2, 'Atras'),	
-		(3, 'Der/Izq'),
-	)
-
-	UBICACION = (
-		(0, 'Esquina Derecha'),
-		(1, 'Esquina Izquierda'),		
-		(2, 'En la Mitad')
-	)
-
-	TIPO_DE_PERMISO = (
-		(0, 'Curaduria'),
-		(1, 'Planeacion'),		
-		(2, 'No')
-	)
-
-	ESTADO_FORMULARIO = (
-		(0, 'EdificacionForm'),
-		(1, 'ComunidadForm'),
-		(2, 'CongregacionForm'),
-		(3, 'FuentesFinancierasForm'),
-		(4, 'CondicionesForm'),
-		(5, 'Terminado'),
-	)	
-
-	nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
-	direccion 		= models.TextField(verbose_name='Dirección')
-	coordenadas 	= map_fields.GeoLocationField(max_length=100, help_text=EDIFICACION_COORDENADAS) 	
-	owner_lote 		= models.SmallIntegerField('Dueño del Lote', choices=TIPO_OWNER_LOTE_CHOICES , default=0)
-	tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES , default=0)
-
-	tipo_terreno = models.SmallIntegerField('Estado del Terreno', choices=TIPO_TERRENO_CHOICES , default=0)
-	localidad_terreno = models.SmallIntegerField('Localidad del Terreno', choices=LOCALIDAD_TERRENO , default=0)
-	vecinos_terreno = models.SmallIntegerField('Vecinos del Terreno', choices=VECINOS_TERRENO , default=0)
-	ubucacion_construccion = models.SmallIntegerField('Ubicacion de la Construccion', choices=UBICACION , default=0)
-	informacion_adicional = models.TextField('Datos adicionales del Terreno', 
-						help_text='Ingrese informacion adicional sobre el tereno, como desniveles, tipo de lugar, datos adionales que permitan agilizar el proceso de la creacion de los planos.',null=True, blank=True)
-
-	dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30, help_text=
-		"Ingrese Ancho x Largo en Metros")
-	dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30, help_text=
-		"Ingrese las medidas en Metros. Para construcción de templos las médidas autorizadas "
-		"son 200 mt cuadrados y para obra social 150 mt cuadrados. Si las médidas superan estos "
-		"valores entonces se asume que la congregación aporta el excedente del dinero")
-
-	num_pisos 			= models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
-	tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES, default=0,help_text=
-		"Seleccione el tipo de Construccion, Tenga encuenta para el caso de Templo/Obra Social"
-		" de identificar como se va construir esta instalacion, esta informacion es importante y debe ser precisa")
-	requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?',choices=REQUIERE_CHOICES, default=True)
-	tipo_permiso 		= models.SmallIntegerField('Tipo de Permiso',choices=TIPO_DE_PERMISO, default=0)
-	tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses), Templo 6 Max Meses, Templo/Obra Max 8 Meses.')
-	
-
-	# control de estado y etapa
-	estado 			= models.SmallIntegerField(choices=ESTADO_FORMULARIO)
-	etapa_actual 	= models.PositiveSmallIntegerField(choices=Etapa.ETAPA_ACTUAL)
+    TT = True
+    FF = False
+    REQUIERE_CHOICES = (		 
+        (TT, 'Si'),
+        (FF, 'No'),
+    )
 
 
-	# usuarios involucrados, el nacional y el regional se asignan por defecto
-	usuario 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable', 
-					related_name='usuario')
-	ingeniero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Maestro de Obra Asignado', 
-					null=True, blank=True, related_name='ingeniero')
-	arquitecto 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Arquitecto Asignado', 
-					null=True, blank=True, related_name='arquitecto')
-	tesorero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Tesorero Asignado', 
-					null=True, blank=True, related_name='tesorero')
+    TIPO_TERRENO_CHOICES = (
+        (0, 'Plano'),
+        (1, 'Desnivel'),		
+    )
+
+    LOCALIDAD_TERRENO = (
+        (0, 'Rural'),
+        (1, 'Urbano'),
+        (2, 'Veredal'),
+    )
+
+    VECINOS_TERRENO = (
+        (0, 'Izquierda'),
+        (1, 'Derecha'),		
+        (2, 'Atras'),	
+        (3, 'Der/Izq'),
+    )
+
+    UBICACION = (
+        (0, 'Esquina Derecha'),
+        (1, 'Esquina Izquierda'),		
+        (2, 'En la Mitad')
+    )
+
+    TIPO_DE_PERMISO = (
+        (0, 'Curaduria'),
+        (1, 'Planeacion'),		
+        (2, 'No')
+    )
+
+    ESTADO_FORMULARIO = (
+        (0, 'EdificacionForm'),
+        (1, 'ComunidadForm'),
+        (2, 'CongregacionForm'),
+        (3, 'FuentesFinancierasForm'),
+        (4, 'CondicionesForm'),
+        (5, 'Terminado'),
+    )	
+
+    nombre_proyecto = models.CharField(max_length=40, verbose_name='Nombre del Proyecto')
+    direccion 		= models.TextField(verbose_name='Dirección')
+    coordenadas 	= map_fields.GeoLocationField(max_length=100, help_text=EDIFICACION_COORDENADAS) 	
+    owner_lote 		= models.SmallIntegerField('Dueño del Lote', choices=TIPO_OWNER_LOTE_CHOICES , default=0)
+    tipo_adquisicion = models.SmallIntegerField('Método de Adquisición', choices=TIPO_ADQUISICION_CHOICES , default=0)
+
+    tipo_terreno = models.SmallIntegerField('Estado del Terreno', choices=TIPO_TERRENO_CHOICES , default=0)
+    localidad_terreno = models.SmallIntegerField('Localidad del Terreno', choices=LOCALIDAD_TERRENO , default=0)
+    vecinos_terreno = models.SmallIntegerField('Vecinos del Terreno', choices=VECINOS_TERRENO , default=0)
+    ubucacion_construccion = models.SmallIntegerField('Ubicacion de la Construccion', choices=UBICACION , default=0)
+    informacion_adicional = models.TextField('Datos adicionales del Terreno', 
+                        help_text='Ingrese informacion adicional sobre el tereno, como desniveles, tipo de lugar, datos adionales que permitan agilizar el proceso de la creacion de los planos.',null=True, blank=True)
+
+    dimensiones_terreno = models.CharField('Dimensiones del Terreno', max_length=30, help_text=
+        "Ingrese Ancho x Largo en Metros")
+    dimensiones_edificio = models.CharField('Dimensiones del Edificio',max_length=30, help_text=
+        "Ingrese las medidas en Metros. Para construcción de templos las médidas autorizadas "
+        "son 200 mt cuadrados y para obra social 150 mt cuadrados. Si las médidas superan estos "
+        "valores entonces se asume que la congregación aporta el excedente del dinero")
+
+    num_pisos 			= models.SmallIntegerField('Cantidad de Pisos', choices=((1, 1), (2, 2)), default=1 )
+    tipo_construccion 	= models.SmallIntegerField('Tipo de Construcción', choices=TIPO_CONSTRUCCION_CHOICES, default=0,help_text=
+        "Seleccione el tipo de Construccion, Tenga encuenta para el caso de Templo/Obra Social"
+        " de identificar como se va construir esta instalacion, esta informacion es importante y debe ser precisa")
+    requiere_permiso 	= models.BooleanField('¿Requiere permiso de construcción?',choices=REQUIERE_CHOICES, default=True)
+    tipo_permiso 		= models.SmallIntegerField('Tipo de Permiso',choices=TIPO_DE_PERMISO, default=0)
+    tiempo_limite 		= models.PositiveSmallIntegerField('Tiempo Limite', help_text='Tiempo en que se terminará la construcción (Meses), Templo 6 Max Meses, Templo/Obra Max 8 Meses.')
+        
+
+    # control de estado y etapa
+    estado 			= models.SmallIntegerField(choices=ESTADO_FORMULARIO)
+    etapa_actual 	= models.PositiveSmallIntegerField(choices=Etapa.ETAPA_ACTUAL)
+
+
+    # usuarios involucrados, el nacional y el regional se asignan por defecto
+    usuario 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable', 
+                    related_name='usuario')
+    ingeniero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Maestro de Obra Asignado', 
+                    null=True, blank=True, related_name='ingeniero')
+    arquitecto 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Arquitecto Asignado', 
+                    null=True, blank=True, related_name='arquitecto')
+    tesorero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Tesorero Asignado', 
+                    null=True, blank=True, related_name='tesorero')
 
 	# aprobaciones para cambiar de etapa, estan en orden temporal
-	aprobacion_regional 	= models.BooleanField(default=False)
-	usuarios_asignados      = models.BooleanField(default=False)
+    aprobacion_regional 	= models.BooleanField(default=False)
+    usuarios_asignados      = models.BooleanField(default=False)
 
-	aprobacion_arquitecto 	= models.BooleanField(default=False)
-	aprobacion_ingeniero 	= models.BooleanField(default=False)
-	
-	planos_creados          = models.BooleanField(default=False)
-	aprobacion_tesorero 	= models.BooleanField(default=False)
-	aprobacion_nacional 	= models.BooleanField(default=False)
-	aprobacion_internacional= models.BooleanField(default=False)	
+    aprobacion_arquitecto 	= models.BooleanField(default=False)
+    aprobacion_ingeniero 	= models.BooleanField(default=False)
 
-	aprobacion_fotos = models.PositiveSmallIntegerField(default=0)# Campo Generico de aprobacion de fotos
-	envio_icm        = models.BooleanField(default=False)# Campo Generico de envio de icm a a la alianza
-	envio_alianza    = models.BooleanField(default=False)# Campo Generico de envio alianza a la iglesia
+    planos_creados          = models.BooleanField(default=False)
+    aprobacion_tesorero 	= models.BooleanField(default=False)
+    aprobacion_nacional 	= models.BooleanField(default=False)
+    aprobacion_internacional= models.BooleanField(default=False)	
 
-	fecha_aprox_dedicacion     = models.DateTimeField(null=True, blank=True) 
+    aprobacion_fotos = models.PositiveSmallIntegerField(default=0)# Campo Generico de aprobacion de fotos
+    envio_icm        = models.BooleanField(default=False)# Campo Generico de envio de icm a a la alianza
+    envio_alianza    = models.BooleanField(default=False)# Campo Generico de envio alianza a la iglesia
 
-	created     = models.DateField(auto_now_add =True)
-	updated     = models.DateField(auto_now = True)
+    fecha_aprox_dedicacion     = models.DateTimeField(null=True, blank=True)
 
-	def __unicode__(self):
-		return "%s" %u"Edificación"
+    created     = models.DateField(auto_now_add =True)
+    updated     = models.DateField(auto_now = True)
 
-	def get_absolute_url(self):
-		return reverse('main.views.proyecto', args=[str(self.id)])
+    icm_pin     = models.CharField(max_length=40, null=True, blank=True, verbose_name='Pin de ICM')
 
-	# properties
-	def _get_registro_etapa(self):
-		return self.etapa_set.latest()
-	
-	etapa = property(_get_registro_etapa)
+    def __unicode__(self):
+        return "%s" %u"Edificación"
+
+    def get_absolute_url(self):
+        return reverse('main.views.proyecto', args=[str(self.id)])
+
+    # properties
+    def _get_registro_etapa(self):
+        return self.etapa_set.latest()
+
+    etapa = property(_get_registro_etapa)
 
 
 class InformacionFinanciera(models.Model):
