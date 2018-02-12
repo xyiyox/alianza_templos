@@ -817,14 +817,15 @@ def asignaciones(request, pk):
 
     raise Http404
 
-@login_required
+@login_required   # solo usuarios logueados
 def asignar_pin(request, pk):
-    if request.method == 'POST':
-        proyecto  =  get_object_or_404(Edificacion, pk=pk)
-        form = AsignarICMPinForm(request.POST, instance=proyecto)
-        proj = form.save(commit=False)
-        proj.save(update_fields=['icm_pin'])
-        return redirect(proyecto)
+    if request.method == 'POST':  # solo llamadas post
+        if request.user.tipo == Usuario.NACIONAL:  # solo usuario nacional
+            proyecto  =  get_object_or_404(Edificacion, pk=pk)
+            form = AsignarICMPinForm(request.POST, instance=proyecto)
+            proj = form.save(commit=False)
+            proj.save(update_fields=['icm_pin'])   # solo actualizar campo especifico
+            return redirect(proyecto)
     
     raise Http404
 
