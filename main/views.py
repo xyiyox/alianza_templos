@@ -1128,3 +1128,15 @@ def informe_semestral_csv(request, pk):
         inf.ofrendas, inf.peticiones_oracion, inf.testimonios, inf.ministerio_ninos, inf.uso_local])
 
     return response
+
+
+
+
+def mapa(request):
+    
+    ctx = {}
+    proyectos = Edificacion.objects.all()
+    ctx['proyectos'] = proyectos
+        
+    return render(request, 'main/mapa.html', ctx)
+

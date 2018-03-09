@@ -1,0 +1,72 @@
+{% extends 'main/base.html' %}
+{% load main_tags %}
+
+{% block title %} Mapa {% endblock %}
+
+{% block css %} 
+	<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #mapa {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      #wrap-map {
+        height: 550px;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+	<div id="wrap-map">
+		<div id="mapa"></div>
+
+	</div>
+
+{% endblock content %}
+
+{% block js_body %} 
+	<script>
+      var map;
+      function initMap() {
+
+      	var colombia = {lat: 5.244568, lng: -74.213706};
+        map = new google.maps.Map(document.getElementById('mapa'), {
+          center: colombia,  
+          zoom: 6
+        });
+
+        // var marker = new google.maps.Marker({
+        //   position: colombia,
+        //   map: map
+        // });
+        	var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+	        var markers = locations.map(function(location, i) {
+	          return new google.maps.Marker({
+	            position: location,
+	            map: map,
+	            //label: labels[i % labels.length]
+	          });
+	        });
+      }
+
+      var locations = [
+      		{% for proyecto in proyectos %}
+      			{lat: parseFloat( '{{proyecto.coordenadas.lat}}'.replace(",", ".") ), lng: parseFloat( '{{proyecto.coordenadas.lon}}'.replace(",", ".") ) } {% if not forloop.last  %},{% endif %}
+				
+			{% endfor %}
+      ]
+
+      
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEQAeIx4HfvcHj5NXrchd57WWa5HxAhuY&callback=initMap"
+    async defer></script>
+{% endblock js_body %}
