@@ -1,0 +1,35 @@
+version: "2"
+
+services:
+  db:
+    extends:
+      file: base.yml
+      service: db
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d #con esto cargamos a db
+      
+  web:
+    extends:
+      file: base.yml
+      service: web
+    build: 
+      args:
+        - DJANGO_ENV=dev
+    command: python manage.py runserver 0.0.0:8001
+    volumes:
+      - .:/webapp
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+#volumes:
+#  db_datos:
+#    external: true
+
