@@ -198,7 +198,39 @@
 
     </div>  <!-- sidebar  -->
 
+    {% else %}
+    
+
+    <!-- SIDEBAR  -->
+    <div class="navbar-default sidebar" role="navigation">
+        
+        <div class="sidebar-nav navbar-collapse">
+
+            <ul class="nav" id="side-menu">
+   
+                <li>
+                    <a class="active" href="{% url 'mapa' %}"><i class="fa  fa-fw"></i>Todos</a>
+                </li>
+                <li>
+                    <a class="active" href="{% url 'mapa_filtro' filtro='preaprobados' %}"><i class="fa  fa-fw"></i> Preaprobados</a>
+                </li>
+                <li>
+                    <a class="active" href="{% url 'mapa_filtro' filtro='construccion' %}"><i class="fa  fa-fw"></i> En Contrucción</a>
+                </li>
+                <li>
+                    <a class="active" href="{% url 'mapa_filtro' filtro='dedicados' %}"><i class="fa  fa-fw"></i> Dedicados</a>
+                </li>
+
+            </ul>  <!-- nav  -->
+
+        </div>   <!-- sidebar-nav  -->
+
+    </div>  <!-- sidebar  -->
+
+
     {% endif %}
+
+
 
 
 </nav>

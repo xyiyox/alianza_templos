@@ -34,37 +34,88 @@
 {% block js_body %} 
 	<script>
       var map;
+
+      var styles = [
+        {
+            "featureType": "administrative.province",
+            "elementType": "geometry.fill",
+            "stylers": [
+            {
+                "color": '#DC143C'
+            },
+            {
+                "saturation": 90
+            },
+            {
+                "lightness": 90
+            },
+            {
+                "visibility": "on"
+            }
+            ]
+        },
+        {
+            "featureType": "administrative.province",
+            "elementType": "geometry.stroke",
+            "stylers": [
+            {
+                "color": '#DC143C'
+            },
+            {
+                "visibility": "on"
+            },
+            {
+                "weight": 2
+            }
+            ]
+        }
+    ];
+
+
       function initMap() {
 
       	var colombia = {lat: 5.244568, lng: -74.213706};
         map = new google.maps.Map(document.getElementById('mapa'), {
           center: colombia,  
-          zoom: 6
+          zoom: 6,
+          styles: styles
         });
 
-        // var marker = new google.maps.Marker({
-        //   position: colombia,
-        //   map: map
-        // });
-        	var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-	        var markers = locations.map(function(location, i) {
-	          return new google.maps.Marker({
-	            position: location,
-	            map: map,
-	            //label: labels[i % labels.length]
-	          });
-	        });
+        var datos = [
+            {% for proyecto in proyectos %}
+
+                {
+                    position: new google.maps.LatLng(parseFloat( '{{proyecto.coordenadas.lat}}'.replace(",", ".") ), parseFloat( '{{proyecto.coordenadas.lon}}'.replace(",", ".") ) ),
+                    icon: {% if proyecto.etapa_actual <= 10 %}'red-dot.png'{% elif proyecto.etapa_actual >= 14 %}'green-dot.png'{% else %}'yellow-dot.png'{% endif %},
+                    nombre: String("{{proyecto.nombre_proyecto}}")
+                } {% if not forloop.last  %},{% endif %}
+                
+            {% endfor %}
+        ];
+
+        var ventana = new google.maps.InfoWindow();
+        
+
+
+        datos.forEach(function(dato) {
+            console.log('Hola');
+            var marker = new google.maps.Marker({
+                position: dato.position,
+                icon: 'http://maps.google.com/mapfiles/ms/icons/'+dato.icon,
+                map: map
+            });
+
+            marker.addListener('click', function(){
+                var contenString = '<h5>'+dato.nombre+'</h5>';
+                ventana.setContent(contenString);
+                ventana.open(map, marker);
+            });
+        });
       }
 
-      var locations = [
-      		{% for proyecto in proyectos %}
-      			{lat: parseFloat( '{{proyecto.coordenadas.lat}}'.replace(",", ".") ), lng: parseFloat( '{{proyecto.coordenadas.lon}}'.replace(",", ".") ) } {% if not forloop.last  %},{% endif %}
-				
-			{% endfor %}
-      ]
+  
 
-      
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEQAeIx4HfvcHj5NXrchd57WWa5HxAhuY&callback=initMap"

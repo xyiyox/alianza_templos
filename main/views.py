@@ -1132,10 +1132,27 @@ def informe_semestral_csv(request, pk):
 
 
 
-def mapa(request):
+def mapa(request, filtro=None):
     
+    proyectos = None
     ctx = {}
-    proyectos = Edificacion.objects.all()
+
+    todos = [2,3,4,5,6,7,8,9,10,11,12,13,14,15] # todos menos los que estan en diligenciamiento
+    preaprobados = [2,3,4,5,6,7,8,9,10]
+    contruccion = [11,12,13]
+    dedicados = [14,15]
+
+
+    if filtro:
+        if filtro == 'preaprobados':
+            proyectos = Edificacion.objects.filter(etapa_actual__in=preaprobados)
+        if filtro == 'construccion':
+            proyectos = Edificacion.objects.filter(etapa_actual__in=contruccion)
+        if filtro == 'dedicados':
+            proyectos = Edificacion.objects.filter(etapa_actual__in=dedicados)
+    else:
+        proyectos = Edificacion.objects.filter(etapa_actual__in=todos)
+
     ctx['proyectos'] = proyectos
         
     return render(request, 'main/mapa.html', ctx)

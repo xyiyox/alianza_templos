@@ -50,5 +50,6 @@ urlpatterns = patterns('main.views',
 
 
     url(r'^mapa$', 'mapa', name='mapa'),
+    url(r'^mapa/(?P<filtro>\w+)/$', 'mapa', name='mapa_filtro'),
 )
 
