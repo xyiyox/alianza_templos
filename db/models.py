@@ -470,42 +470,43 @@ def calcular_ruta(self, filename):
 	return 'adjuntos/%s/%s' %(self.edificacion.pk, filename)
 
 class Adjuntos(models.Model):
-	""" Modelo para almacenar los archivos adjuntos """
+    """ Modelo para almacenar los archivos adjuntos """
 
-	class Meta:
-		verbose_name_plural = "adjuntos"
+    class Meta:
+        verbose_name_plural = "adjuntos"
 
-	edificacion   			= models.ForeignKey('Edificacion')
+    edificacion   			= models.ForeignKey('Edificacion')
 
-	foto_construccion 		= models.ImageField('Foto del Terreno', upload_to=calcular_ruta,
-								help_text='Mostrando claramente el terreno donde se va a construir la iglesia, jpg o png, minimo 600 x 480 pixeles, Tamaño maximo 2MB')
-	foto_congregacion 		= models.ImageField('Foto de la congregación', upload_to=calcular_ruta, 
-								help_text='Mostrando el lugar donde se reunen actualmente')
-	foto_pastor 			= models.FileField('Foto del Pastor', upload_to=calcular_ruta,
-								help_text='Incluya una foto del pastor en caso de no aparecer en la foto de la congregación')
+    foto_construccion 		= models.ImageField('Foto del Terreno', upload_to=calcular_ruta,
+                                help_text='Mostrando claramente el terreno donde se va a construir la iglesia, jpg o png, minimo 600 x 480 pixeles, Tamaño maximo 2MB')
+    foto_congregacion 		= models.ImageField('Foto de la congregación', upload_to=calcular_ruta, 
+                                help_text='Mostrando el lugar donde se reunen actualmente')
+    foto_pastor 			= models.FileField('Foto del Pastor', upload_to=calcular_ruta,
+                                help_text='Incluya una foto del pastor en caso de no aparecer en la foto de la congregación')
 
-	permiso_construccion 	= models.FileField('Permiso de construcción o Certificado de que no necesita Permiso', upload_to=calcular_ruta,
-								help_text='Debe agregar el permiso de construccion, si no necesida debe agregar la prueba de que no necesita permiso.',null=True, blank=True)
-	escritura_terreno 		= models.FileField('Escritura del terreno Autenticada, o Promesa de Compra', upload_to=calcular_ruta,
-								help_text='Mostrando la prueba de propiedad')
-	manzana_catastral 		= models.FileField('Manzana Catastral o Croquis dibujado a Mano', upload_to=calcular_ruta, help_text='Mostrando las dimensiones de la propiedad y la ubicación de la tierra, Si el instituto Augustin Codaci no le proporciona este documento, puede adjuntar un dibujo de la localizacion(mapa pequeño) de el lugar donde se construira el templo')
-	plan_construccion 		= models.FileField('Plan de construcción', upload_to=calcular_ruta, null=True, blank=True,
-								help_text='Obligatorio para todos los planes que no hacen parte de los aprobados por ICM')
-	historia_congregacion 	= models.FileField('Historia de la congregación', upload_to=calcular_ruta,
-								help_text='Incluya una breve historia de la congregación preferiblemente en formato WORD.')
-	testimonio_pastor 		= models.FileField('Testimonio del pastor', upload_to=calcular_ruta,
-								help_text='Incluya el testimonio del pastor de la congregación preferiblemente en formato WORD.')	
-	
-	planos_arquitecto       = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
-	planos_ingeniero        = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
+    permiso_construccion 	= models.FileField('Permiso de construcción o Certificado de que no necesita Permiso', upload_to=calcular_ruta,
+                                help_text='Debe agregar el permiso de construccion, si no necesida debe agregar la prueba de que no necesita permiso.',null=True, blank=True)
+    escritura_terreno 		= models.FileField('Escritura del terreno Autenticada, o Promesa de Compra', upload_to=calcular_ruta,
+                                help_text='Mostrando la prueba de propiedad')
+    manzana_catastral 		= models.FileField('Manzana Catastral o Croquis dibujado a Mano', upload_to=calcular_ruta, help_text='Mostrando las dimensiones de la propiedad y la ubicación de la tierra, Si el instituto Augustin Codaci no le proporciona este documento, puede adjuntar un dibujo de la localizacion(mapa pequeño) de el lugar donde se construira el templo')
+    plan_construccion 		= models.FileField('Plan de construcción', upload_to=calcular_ruta, null=True, blank=True,
+                                help_text='Obligatorio para todos los planes que no hacen parte de los aprobados por ICM')
+    historia_congregacion 	= models.FileField('Historia de la congregación', upload_to=calcular_ruta,
+                                help_text='Incluya una breve historia de la congregación preferiblemente en formato WORD.')
+    testimonio_pastor 		= models.FileField('Testimonio del pastor', upload_to=calcular_ruta,
+                                help_text='Incluya el testimonio del pastor de la congregación preferiblemente en formato WORD.')
 
-	fotos_p1       			= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
-	fotos_p2        		= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
-	fotos_p3        		= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
-	dedicacion      		= models.FileField('Dedicacion Comprimido', upload_to=calcular_ruta, null=True, blank=False)
+    certificacion           = models.FileField('Certificación', upload_to=calcular_ruta, help_text="Agregue certificación bancaria o de materiales")
+    planos_arquitecto       = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
+    planos_ingeniero        = models.FileField('Planos', upload_to=calcular_ruta, null=True, blank=False)
 
-	def __str__(self):
-		return "%s" %"Adjuntos"
+    fotos_p1       			= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
+    fotos_p2        		= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
+    fotos_p3        		= models.FileField('Comprimido de Fotos', upload_to=calcular_ruta, null=True, blank=False)
+    dedicacion      		= models.FileField('Dedicacion Comprimido', upload_to=calcular_ruta, null=True, blank=False)
+
+    def __str__(self):
+        return "%s" %"Adjuntos"
 
 
 class Comentario(models.Model):
