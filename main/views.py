@@ -340,7 +340,9 @@ def proyecto_zip(request, pk):
     if adjuntos.plan_construccion:    
         filenames += [adjuntos.plan_construccion.path]
     if adjuntos.certificacion:
-        filenames += [adjuntos.certificacion.path]    
+        if adjuntos.certificacion != 'ninguno':  #validamos que el valor sea diferente de ninguno
+            print "Certificacioin pasa"
+            filenames += [adjuntos.certificacion.path]    
     if adjuntos.historia_congregacion:    
         filenames += [adjuntos.historia_congregacion.path]    
     if adjuntos.testimonio_pastor:    
