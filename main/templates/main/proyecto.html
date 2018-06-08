@@ -678,7 +678,26 @@
 									   No Adjuntado	
 									  {% endif %}
 								     </td> 
-								 </tr>	
+                                 </tr>	
+                                 <tr> <th>Certificación: </th>
+                                    <td>
+                                    {% if adjuntos.historia_congregacion %}
+                                         <a href="/media/{{ adjuntos.certificacion}}" download>									    
+                                        {% if adjuntos.historia_congregacion.name|extencion %}
+                                            {% thumbnail adjuntos.certificacion "100x100" crop="center" as im %}
+                                              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                                            {% empty %}
+                                               Descargar						     	
+                                            {% endthumbnail %}	
+                                        {% else %}
+                                               Descargar	
+                                        {% endif %}
+                                        </a>	
+                                        {% else %}
+                                          No Adjuntado	
+                                         {% endif %}
+                                    </td>
+                                </tr>	
 								<tr> <th>Historia Congregacion: </th>
 								     <td>
 								     {% if adjuntos.historia_congregacion %}
