@@ -140,7 +140,7 @@ class Edificacion(models.Model):
         verbose_name_plural = "edificaciones"
 
     TIPO_OWNER_LOTE_CHOICES = (
-        (0, 'Alianza Cristiana'),
+        (0, 'Propio Iglesia Local'),
         (1, 'Otro'),
     )
 

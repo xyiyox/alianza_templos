@@ -2,6 +2,7 @@ version: "2"
 
 services:
   db:
+    container_name: "${PROJECT_NAME}_db"
     extends:
       file: base.yml
       service: db
@@ -9,6 +10,7 @@ services:
       - ./postgres-init:/docker-entrypoint-initdb.d #con esto cargamos a db
       
   web:
+    container_name: "${PROJECT_NAME}_web"
     extends:
       file: base.yml
       service: web
@@ -24,6 +26,7 @@ services:
       - db
 
   adminer:
+    container_name: "${PROJECT_NAME}_adminer"
     image: adminer
     restart: always
     ports:
