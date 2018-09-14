@@ -24,7 +24,7 @@ ps:
 	@docker ps --filter name='$(PROJECT_NAME)*'
 
 shell:
-	docker exec -ti -e COLUMNS=$(shell tput cols) -e LINES=$(shell tput lines) $(shell docker ps --filter name='$(PROJECT_NAME)_php' --format "{{ .ID }}") sh
+	docker exec -ti -e COLUMNS=$(shell tput cols) -e LINES=$(shell tput lines) $(shell docker ps --filter name='$(PROJECT_NAME)_web' --format "{{ .ID }}") sh
 
 
 logs:

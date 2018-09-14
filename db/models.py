@@ -332,7 +332,7 @@ class InformacionFinanciera(models.Model):
 							help_text='Ingrese el valor en Pesos Colombianos (COP)')
 	
 	tipo_cuenta         = models.SmallIntegerField('Tipo de Cuenta', choices=TIPO_CUENTA,default=0)
-	titular_cuenta      = models.CharField('Titular', max_length=100,help_text="Debe ser una cuenta de la Alianza",default="")
+	titular_cuenta      = models.CharField('Titular', max_length=100,help_text="Debe ser una cuenta de la iglesia",default="")
 	banco				= models.CharField('Nombre del Banco', max_length=100,default="")	
 	numero_cuenta 		= models.CharField(max_length=40, verbose_name='Numero de Cuenta',help_text='Ingrese el Numero de Cuenta,(Necesario si se aprueba el proyecto para hacer las consignaciones)',default='00-00000-00')
 	
@@ -379,7 +379,8 @@ class Congregacion(models.Model):
 		(4, 'Sur'),
 		(5, 'Valle'),
 		(6, 'Guanbianos'),
-		(7, 'Paez')
+		(7, 'Paez'),
+        (8, 'Bautista'),
 	)
 
 	ESTADO_CIVIL_CHOICES = (
@@ -634,7 +635,8 @@ class InformeSemestralPublico(models.Model):
 		(4, 'Sur'),
 		(5, 'Valle'),
 		(6, 'Guanbianos'),
-		(7, 'Paez')
+		(7, 'Paez'),
+        (8, 'Bautista')
 	)
     
     nombre_proyecto     = models.CharField('Nombre', max_length=40)
