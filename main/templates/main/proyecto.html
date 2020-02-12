@@ -360,7 +360,12 @@
 					<div class="col-sm-12">
 						<table class="table table-bordered table-striped">
 							<tbody>	
-								<tr> <th>Dirección: </th>       <td>{{ proyecto.direccion}}</td> </tr>													
+								{% if user.tipo == user.NACIONAL %}
+								<tr> <th>Usuario asignado: </th> <td><a href="/admin/usuarios/usuario/{{user_own.pk}}/" target="_blank">{{ user_own.email }}</a></td> </tr> 
+								{% else %}
+								<tr> <th>Usuario asignado: </th> <td>{{ user_own.email }}</td> </tr>
+								{% endif %}	
+								<tr> <th>Dirección: </th>       <td>{{ proyecto.direccion }}</td> </tr>													
 								<tr> <th>Coordenadas: </th> 	<td>{{ proyecto.coordenadas }}</td> </tr>
 								<tr> <th>Dueño del Lote: </th> 	<td>{{ proyecto.get_owner_lote_display }}</td> </tr>
 								<tr> <th>Adquisición: </th> 	<td>{{ proyecto.get_tipo_adquisicion_display }}</td> </tr>

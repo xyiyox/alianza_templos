@@ -492,16 +492,16 @@ def proyecto(request, pk):
                 informeObject.edificacion = proyecto
                 informeObject.save()                         
                 return redirect(proyecto)            
-            
+
+    user_own = Usuario.objects.get(pk=proyecto.pk) 
+
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
     comentarioForm         = ComentarioForm()
     comentarioForm.helper.form_action = proyecto.get_absolute_url()
 
     ctx = {'proyecto': proyecto, 'Etapa': Etapa, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
     ctx['aprobacionForm'] = AprobacionForm()  
-
-    #PRUEBA DE EMAIL CON ESTILO
-    #mail_prueba()
+    ctx['user_own'] = user_own
   
     try:
         comunidad =  Comunidad.objects.get(edificacion=proyecto)
