@@ -493,7 +493,7 @@ def proyecto(request, pk):
                 informeObject.save()                         
                 return redirect(proyecto)            
 
-    user_own = Usuario.objects.get(pk=proyecto.pk) 
+    user_own = Usuario.objects.get(pk=proyecto.usuario.pk) 
 
     comentarios  = Comentario.objects.filter(edificacion=pk).order_by('-created')
     comentarioForm         = ComentarioForm()
