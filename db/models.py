@@ -378,7 +378,7 @@ class Congregacion(models.Model):
 		(3, 'Pacífico'),
 		(4, 'Sur'),
 		(5, 'Valle'),
-		(6, 'Guanbianos'),
+		(6, 'Guámbianos'),
 		(7, 'Paez'),
         (8, 'Bautista'),
 	)
