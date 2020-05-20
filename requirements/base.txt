@@ -6,7 +6,7 @@ django-session-security==2.1.6
 django-suit==0.2.11
 google-api-python-client==1.4.1
 html5lib==1.0b7
-httplib2==0.9.1
+httplib2==0.18.0
 jsonfield==0.9.20
 oauth2client==1.4.12
 pisa==3.0.33
