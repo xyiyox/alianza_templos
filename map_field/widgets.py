@@ -1,7 +1,7 @@
 
 from django.conf import settings
 from django.forms import widgets
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.forms.util import flatatt
 
@@ -26,5 +26,5 @@ class MapsGeoPointhWidget(widgets.TextInput):
         final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
-            final_attrs['value'] = force_unicode(self._format_value(value))
+            final_attrs['value'] = force_text(self._format_value(value))
         return mark_safe(u'<div class="map_canvas_wrapper"><div id="map_canvas"></div><input %s/></div>' % ( flatatt(final_attrs)) )

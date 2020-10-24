@@ -1,17 +1,23 @@
-FROM python:2.7
+ARG PYTHON_TAG
 
-ARG DJANGO_ENV
+FROM wodby/python:${PYTHON_TAG}
 
-ENV PYTHONUNBUFFERED 1
-ENV WEBAPP_DIR=/webapp 
+RUN pip install --upgrade pip
+#RUN pip install pipenv
 
-RUN mkdir $WEBAPP_DIR
+COPY requirements.txt ./
 
-WORKDIR $WEBAPP_DIR
+#COPY Pipfile Pipfile.lock ./
 
-ADD requirements/base.txt $WEBAPP_DIR/
-ADD requirements/$DJANGO_ENV.txt $WEBAPP_DIR/
+# Install additional dev packages for native extensions (only for -dev python tag)
+#RUN sudo apk add --update missing-package
 
-RUN pip install -r $DJANGO_ENV.txt
+RUN pip install -r requirements.txt
+#RUN pipenv install --skip-lock --system --dev
 
-ADD . $WEBAPP_DIR/
+# We assume your project name is "myapp".
+ENV GUNICORN_APP alianza_templos.wsgi:application
+# By default we start Gunicorn server, modify to change it.
+# If your project is in a subdirectory.
+#ENV GUNICORN_PYTHONPATH alliance
+CMD ["/etc/init.d/gunicorn"]

@@ -8,7 +8,6 @@ from django.http import HttpResponseRedirect,HttpResponseServerError
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.formtools.wizard.views import SessionWizardView
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import csv
@@ -22,14 +21,15 @@ from db.forms import *
 from db.models import Edificacion, Comunidad, Comentario, Etapa, InformeSemestral, InformeSemestralPublico
 from usuarios.models import Usuario
 
-from django.contrib.formtools.wizard.forms import ManagementForm
+
 from collections import OrderedDict
 
-import StringIO
+from io import StringIO
 import zipfile
 
-import ho.pisa as pisa
-import cStringIO as StringIO
+#import ho.pisa as pisa
+from xhtml2pdf import pisa
+
 import cgi
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -341,7 +341,7 @@ def proyecto_zip(request, pk):
         filenames += [adjuntos.plan_construccion.path]
     if adjuntos.certificacion:
         if adjuntos.certificacion != 'ninguno':  #validamos que el valor sea diferente de ninguno
-            print "Certificacioin pasa"
+            print( "Certificacioin pasa" )
             filenames += [adjuntos.certificacion.path]    
     if adjuntos.historia_congregacion:    
         filenames += [adjuntos.historia_congregacion.path]    
@@ -444,10 +444,10 @@ def informe_pdf(request, pk, index):
         raise PermissionDenied  
     
     ctx = { 'pagesize':'A4' , 'proyecto': proyecto }      
-    print index
+    print( index )
     try:
         informe = InformeSemestral.objects.filter(edificacion=pk,informe=index)
-        print informe[0]
+        print( informe[0] )
         ctx['informe'] = informe[0]
     except InformeSemestral.DoesNotExist:
         pass
@@ -550,7 +550,7 @@ def proyecto(request, pk):
             #0 -> No lo  ha lleano, 1--> Amarilio - Espera que sea la fecha  2 --> Verde full
             informes = InformeSemestral.objects.filter(edificacion=pk)                        
             ctx['informes'] = informes
-            print informes
+            print( informes )
             if len(informes) <= 6 and len(informes) > 0:
                 pre_inform = informes[len(informes)-1].fecha_elaboracion
                 if pre_inform.month <= 6:
@@ -1015,7 +1015,7 @@ def auth_return(request):
             }
             construction_initial = construction_final  
             event = service.events().insert(calendarId='primary', body=event).execute()
-            print 'Event created: %s' % (event.get('htmlLink'))         
+            print( 'Event created: %s' % (event.get('htmlLink')) )
 
       ctx = {'hola':'chao'}
       return render(request, 'main/calendar.html', ctx)

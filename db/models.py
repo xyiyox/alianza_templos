@@ -63,7 +63,7 @@ class Etapa(models.Model):
 	)
 
 	edificacion = models.ForeignKey('Edificacion')
-	etapa       = models.IntegerField(max_length=2, choices=ETAPA_ACTUAL)
+	etapa       = models.IntegerField(choices=ETAPA_ACTUAL)
 	
 	created     = models.DateTimeField(auto_now_add = True) 
 
@@ -118,10 +118,10 @@ class Plazo(models.Model):
 	""" esta clase le permite abstraer los plazos de cada etapa para 
 	ser cambiados a voluntad segun evoluciona al app """
 
-	etapa = models.PositiveSmallIntegerField(unique=True, max_length=2, choices=Etapa.ETAPA_ACTUAL)
-	plazo = models.PositiveSmallIntegerField(max_length=4, help_text='plazo en días')
+	etapa = models.PositiveSmallIntegerField(unique=True, choices=Etapa.ETAPA_ACTUAL)
+	plazo = models.PositiveSmallIntegerField(help_text='plazo en días')
 
-	peso    = models.IntegerField(max_length=2, unique=True)
+	peso    = models.IntegerField(unique=True)
 	updated = models.DateField(auto_now = True)
 
 	def __unicode__(self):
@@ -697,9 +697,9 @@ class InformeSemestralPublico(models.Model):
     updated     = models.DateField(auto_now = True) 
 
     def get_absolute_url(self):
-		return reverse('main.views.informe_semestral', args=[str(self.id)])
-    
+        return reverse('main.views.informe_semestral', args=[str(self.id)])
+
 
     def __unicode__(self):
-		return "%s %s" %(self.id, u"Informe Público")
+        return "%s %s" %(self.id, u"Informe Público")
 

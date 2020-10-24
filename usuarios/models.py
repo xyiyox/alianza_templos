@@ -86,8 +86,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     # On Python 3: def __str__(self):
     def __unicode__(self):
-    	if self.nombre:
-        	return "%s %s" %(self.nombre, self.apellidos)
+        if self.nombre:
+            return "%s %s" %(self.nombre, self.apellidos)
         return self.email
 
     @property

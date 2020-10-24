@@ -1,15 +1,5 @@
-"""
-Django settings for alianza_templos project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
-
 try:
-    from local_settings import *
+    from . local_settings import *
 except ImportError:
     print('no se encuentra local_settings')
     pass 
@@ -34,7 +24,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.formtools',
+    #'django.contrib.formtools',
 
     'crispy_forms',
     'session_security',
@@ -48,6 +38,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,7 +47,10 @@ MIDDLEWARE_CLASSES = (
     'session_security.middleware.SessionSecurityMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'django.middleware.security.SecurityMiddleware',
 )
+
+
 
 ROOT_URLCONF = 'alianza_templos.urls'
 
@@ -100,26 +94,60 @@ EMAIL_PORT = EMAIL_PORT
 EMAIL_COMUNICACIONES = 'sandra.montanez@laalianzacristiana.co'
 EMAIL_DEVELOPER = 'felipe.valencia@laalianzacristiana.co'
 
-# configuracion de django suit
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
-
-TEMPLATE_CONTEXT_PROCESSORS = TCP + (
-    'django.core.context_processors.request',
-    'main.context_processors.notificaciones',
-    'main.context_processors.etapa',
-    'main.context_processors.region',
-    'main.context_processors.civil',
-    'main.context_processors.choices',
-    'main.context_processors.fotos',
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            # insert your TEMPLATE_DIRS here
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.core.context_processors.request', # para suit
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+
+                'main.context_processors.notificaciones',
+                'main.context_processors.etapa',
+                'main.context_processors.region',
+                'main.context_processors.civil',
+                'main.context_processors.choices',
+                'main.context_processors.fotos',
+            ],
+        },
+    },
+]
+
+
+
+
+################### configuraciones de paquetes instalados ####################
 
 SUIT_CONFIG = {
     'ADMIN_NAME': '<a href="/"><img width="150" height=40 src="/static/main/img/logo.png"></a>',
     'MENU_ICONS': {
         'usuarios': 'icon-user',
         'auth': 'icon-lock',
-    }
+    },
+    'CONFIRM_UNSAVED_CHANGES': True
 }
+
+
 
 # configuracion de crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -134,3 +162,6 @@ LOGIN_URL = '/login'
 
 TASK_UPLOAD_FILE_TYPES = ['rar', 'zip',]
 TASK_UPLOAD_FILE_MAX_SIZE = "5242880"
+
+
+
