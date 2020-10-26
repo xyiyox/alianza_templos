@@ -4,6 +4,7 @@ services:
   postgres:
     image: wodby/postgres:$POSTGRES_TAG
     container_name: "${PROJECT_NAME}_postgres"
+    restart: always
     stop_grace_period: 30s
     environment:
       POSTGRES_PASSWORD: $DB_PASSWORD
@@ -24,6 +25,7 @@ services:
       args:
         PYTHON_TAG: $PYTHON_TAG
     container_name: "${PROJECT_NAME}_python"
+    restart: always
     environment:
       DB_HOST: $DB_HOST
       DB_USER: $DB_USER
@@ -41,6 +43,7 @@ services:
   nginx:
     image: wodby/nginx:$NGINX_TAG
     container_name: "${PROJECT_NAME}_nginx"
+    restart: always
     depends_on:
     - python
     environment:
