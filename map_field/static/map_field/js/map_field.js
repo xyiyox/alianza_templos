@@ -32,21 +32,27 @@ function leafletMap() {
 
             var latlng = L.latLng(lat, lng);
 
-            var mqUrl      = 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
+            /* var mqUrl      = 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
                 osmAttrib  = 'Map data &copy; <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a> contributors',
                 mqAttrib   = 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">';
 
             var capaBase = L.tileLayer(mqUrl, {
                 attribution: osmAttrib+' | '+mqAttrib,
                 subdomains: ['otile1','otile2','otile3','otile4']
-            });
+            }); */
+
+            var mapUrl = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"; 
+            var osmAttribution = '©<a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'; 
+            var capaBase = L.tileLayer(mapUrl, {maxZoom: 19, attribution: osmAttribution}); 
+        
+            if (map != undefined) { map.remove(); }  //para quitar erro de mapa previamente inicializado
 
             map = L.map('map_canvas', {
                 center: latlng,
                 zoom: zoom
             });
             map.addLayer(capaBase);
-
+            
 
             if (existinglocation) {          
                 self.setMarker(latlng);

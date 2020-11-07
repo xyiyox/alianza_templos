@@ -275,6 +275,9 @@ class Edificacion(models.Model):
 
     def __unicode__(self):
         return "%s" %u"Edificación"
+    
+    def __str__(self):
+        return "%s" %"Edificación"
 
     def get_absolute_url(self):
         return reverse('main.views.proyecto', args=[str(self.id)])
@@ -287,60 +290,64 @@ class Edificacion(models.Model):
 
 
 class InformacionFinanciera(models.Model):
-	""" Informacion Financiera """
+    """ Informacion Financiera """
 
-	class Meta:
-		verbose_name_plural = "informaciones financieras"
+    class Meta:
+        verbose_name_plural = "informaciones financieras"
 
-	VALOR_SOLICITADO_CHOICES = (
-		(0, 14000),
-		(1, 25000),
-		(2, 39000),
-	)
+    VALOR_SOLICITADO_CHOICES = (
+        (0, 14000),
+        (1, 25000),
+        (2, 39000),
+    )
 
 
-	TIPO_CUENTA = (
-		(0, 'Ahorros'),
-		(1, 'Corriente'),	
-	)
+    TIPO_CUENTA = (
+        (0, 'Ahorros'),
+        (1, 'Corriente'),	
+    )
 
-	TIPO_PAGO_FONDO = (
-		(0, 'Cuota Fija Mensual'),
-		(1, 'Porcentaje Mensual de Ofrendas'),
-	)
+    TIPO_PAGO_FONDO = (
+        (0, 'Cuota Fija Mensual'),
+        (1, 'Porcentaje Mensual de Ofrendas'),
+    )
 
-	# Contribuciones estimadas de la congregacion
-	#mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
-	#valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
-	dinero_efectivo 	= models.PositiveIntegerField('Dinero Ahorrado', 
-							help_text='Ingrese el valor en Pesos Colombianos (COP), El total con el que cuenta Fisicamente')
-							#. <br>Puede usar '
-							#'<a href="http://www.colombia.com/cambio_moneda/" target="_blank">este enlace</a> '
-							#'como convertidor de moneda.')
-	valor_terreno 		= models.PositiveIntegerField('Valor del Terreno', 
-							help_text='Ingrese el valor en Pesos Colombianos (COP)')
-	#valor_solicitado 	= models.PositiveIntegerField('Dinero Solicitado', choices= VALOR_SOLICITADO_CHOICES, 
-	#						help_text='Recuerde que este dinero esta expresado en Dolares (Estados Unidos)')
-	num_voluntarios		= models.PositiveSmallIntegerField('Cantidad de Voluntarios', 
-							help_text='¿Cuantas personas tiene disponibles para ayudar fisicamente en la construcción?')
-	desc_voluntarios 	= models.TextField('Descripción', 
-							help_text='Describa que trabajos pueden hacer los Voluntarios y cuantas horas semanales pueden donar')
-	#dias_donados 		= models.PositiveSmallIntegerField('Dias Donados', 
-	#						help_text='¿Cuantos dias de trabajo donaran aquellos que no pueden ayudar fisicamente a la obra?', 
-	#						null=True, blank=True)
-	costo_total 		= models.PositiveIntegerField('Costo total del proyecto', 
-							help_text='Ingrese el valor en Pesos Colombianos (COP)')
-	
-	tipo_cuenta         = models.SmallIntegerField('Tipo de Cuenta', choices=TIPO_CUENTA,default=0)
-	titular_cuenta      = models.CharField('Titular', max_length=100,help_text="Debe ser una cuenta de la iglesia",default="")
-	banco				= models.CharField('Nombre del Banco', max_length=100,default="")	
-	numero_cuenta 		= models.CharField(max_length=40, verbose_name='Numero de Cuenta',help_text='Ingrese el Numero de Cuenta,(Necesario si se aprueba el proyecto para hacer las consignaciones)',default='00-00000-00')
-	
-	# Relacion 1 a 1 entre la edificacion y la informacion financiera
-	edificacion 		= models.OneToOneField('Edificacion')
+    # Contribuciones estimadas de la congregacion
+    #mano_obra 			= models.PositiveIntegerField('Costo de la Mano de obra', default=0, blank=True)
+    #valor_materiales 	= models.PositiveIntegerField('Costo de Materiales de construcción', default=0, blank=True)
+    dinero_efectivo 	= models.PositiveIntegerField('Dinero Ahorrado', 
+                            help_text='Ingrese el valor en Pesos Colombianos (COP), El total con el que cuenta Fisicamente')
+                            #. <br>Puede usar '
+                            #'<a href="http://www.colombia.com/cambio_moneda/" target="_blank">este enlace</a> '
+                            #'como convertidor de moneda.')
+    valor_terreno 		= models.PositiveIntegerField('Valor del Terreno', 
+                            help_text='Ingrese el valor en Pesos Colombianos (COP)')
+    #valor_solicitado 	= models.PositiveIntegerField('Dinero Solicitado', choices= VALOR_SOLICITADO_CHOICES, 
+    #						help_text='Recuerde que este dinero esta expresado en Dolares (Estados Unidos)')
+    num_voluntarios		= models.PositiveSmallIntegerField('Cantidad de Voluntarios', 
+                            help_text='¿Cuantas personas tiene disponibles para ayudar fisicamente en la construcción?')
+    desc_voluntarios 	= models.TextField('Descripción', 
+                            help_text='Describa que trabajos pueden hacer los Voluntarios y cuantas horas semanales pueden donar')
+    #dias_donados 		= models.PositiveSmallIntegerField('Dias Donados', 
+    #						help_text='¿Cuantos dias de trabajo donaran aquellos que no pueden ayudar fisicamente a la obra?', 
+    #						null=True, blank=True)
+    costo_total 		= models.PositiveIntegerField('Costo total del proyecto', 
+                            help_text='Ingrese el valor en Pesos Colombianos (COP)')
 
-	def __unicode__(self):
-		return "%s" %u"Información Financiera"
+    tipo_cuenta         = models.SmallIntegerField('Tipo de Cuenta', choices=TIPO_CUENTA,default=0)
+    titular_cuenta      = models.CharField('Titular', max_length=100,help_text="Debe ser una cuenta de la iglesia",default="")
+    banco				= models.CharField('Nombre del Banco', max_length=100,default="")	
+    numero_cuenta 		= models.CharField(max_length=40, verbose_name='Numero de Cuenta',help_text='Ingrese el Numero de Cuenta,(Necesario si se aprueba el proyecto para hacer las consignaciones)',default='00-00000-00')
+
+    # Relacion 1 a 1 entre la edificacion y la informacion financiera
+    edificacion 		= models.OneToOneField('Edificacion')
+
+    def __unicode__(self):
+        return "%s" %u"Información Financiera"
+
+    def __str__(self):
+        return "%s" %"Información Financiera"
+
 
 
 class Comunidad(models.Model):

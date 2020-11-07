@@ -18,6 +18,7 @@
 
 from django.db import models
 from django.core import exceptions
+from django.utils.encoding import force_text
 
 __all__ = ('AddressField', 'GeoLocationField', 'PathField',)
 
@@ -51,10 +52,10 @@ class GeoPt(object):
         self.lat = self._validate_geo_range(lat, 90)
         self.lon = self._validate_geo_range(lon, 180)
 
-    def __unicode__(self):
+
+    def __str__(self):
         if self.lat is not None and self.lon is not None:
             return "%s,%s" % (self.lat, self.lon)
-        return ''
 
     def __eq__(self, other):
         if isinstance(other, GeoPt):
@@ -62,7 +63,7 @@ class GeoPt(object):
         return False
 
     def __len__(self):
-        return len(self.__unicode__())
+        return len(force_text(self))
 
     def _split_geo_point(self, geo_point):
         """splits the geo point into lat and lon"""
@@ -121,7 +122,7 @@ class GeoLocationField(models.CharField):
         """prepare the value for database query"""
         if value is None:
             return None
-        return unicode(value)
+        return force_text(self.to_python(value))
 
     def get_prep_lookup(self, lookup_type, value):
         # We only handle 'exact' and 'in'. All others are errors.
@@ -140,7 +141,7 @@ class GeoLocationField(models.CharField):
 
 
 
-try:
+""" try:
     from south.modelsinspector import add_introspection_rules
     add_introspection_rules([], ["^map_field\.fields\.GeoLocationField"])
     add_introspection_rules([], ["^map_field\.fields\.AddressField"])
@@ -148,5 +149,5 @@ try:
 except ImportError:
     pass
 
-
+ """
 

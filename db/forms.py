@@ -20,7 +20,7 @@ from django.core.exceptions import ValidationError
 class ModelFormBase(forms.ModelForm):
             
     def quien_soy(self):
-        return self.instance
+        return str( self.instance )
 
 class EdificacionForm(ModelFormBase):  
 

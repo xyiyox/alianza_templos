@@ -1,7 +1,7 @@
 Django==1.8.19
 Pillow==4.0
 argparse==1.2.1
-django-crispy-forms==1.4.0
+django-crispy-forms==1.5.2
 django-debug-toolbar==1.9.1
 django-session-security==2.1.6
 django-suit==0.2.17

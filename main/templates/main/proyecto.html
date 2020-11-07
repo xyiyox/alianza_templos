@@ -5,7 +5,7 @@
 
 {% block title %} Proyecto {% endblock %}
 {% block css %} 
-<link rel="stylesheet" href="{{STATIC_URL}}main/leaflet/leaflet.css"> 
+<link rel="stylesheet" href="{{STATIC_URL}}main/leaflet/leaflet.css?v=0-7-7"> 
 <style>
     .informe-semestral-plantacion .form-group {
         width: 33%;
@@ -382,7 +382,12 @@
 								<tr> <th>Ubicacion de Terreno: </th>  <td>{{ proyecto.ubucacion_construccion|ubicacion }}</td> </tr>
 								<tr> <th>Informacion Adicional: </th>  <td>{{ proyecto.informacion_adicional }}</td> </tr>
 								<tr> <th>Planos Arquitecto: </th>  <td>
+
+									{% if adjuntos.planos_ingeniero %}
 									 <a href="/media/{{ adjuntos.planos_ingeniero}}" download>Descargar Planos.</a>
+									{% else %}
+										Aun no hay planos
+									{% endif %}
 									</td> 
 								</tr>								
 							</tbody>							
@@ -1397,19 +1402,24 @@
 
 	</div> <!-- col-sm-4   -->
 
-
 </div>	
 
 {% endblock content %}
 
 
 {% block js_body %} 
-	<script src="{{STATIC_URL}}main/leaflet/leaflet.js"></script>
-	<script src="{{STATIC_URL}}main/js/angular-leaflet-directive.min.js"></script>
+	<script src="{{STATIC_URL}}main/leaflet/leaflet.js?v=1-7"></script>
+	<script src="{{STATIC_URL}}main/js/angular-leaflet-directive.min.js?v=2015-11-06"></script>
 	
 	<script>
-		window.latitud  = parseFloat( '{{proyecto.coordenadas.lat}}'.replace(",", ".") );
-		window.longitud = parseFloat( '{{proyecto.coordenadas.lon}}'.replace(",", ".") );
+		console.log("{{proyecto.etapa_actual|etapa_to_general_progress}}");
+		console.log("{{proyecto.coordenadas.lat}}");
+		var geo = '{{proyecto.coordenadas}}';
+		var point = geo.split(",");
+		window.latitud   = parseFloat(point[0]);
+		window.longitud  = parseFloat(point[1]);
+		//window.latitud  = parseFloat( '{{proyecto.coordenadas.lat}}'.replace(",", ".") );
+		//window.longitud = parseFloat( '{{proyecto.coordenadas.lon}}'.replace(",", ".") );
 	</script>
 	
 	<script src="{{STATIC_URL}}main/app/proyectoApp.js?v=11"></script>

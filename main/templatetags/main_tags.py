@@ -37,7 +37,7 @@ def etapa_to_icon(etapa):
 @register.filter
 def etapa_to_general_progress(etapa):
 	#return (etapa * 100) / len(Etapa.ETAPA_ACTUAL)
-	return (etapa * 100) / Etapa.DEDICACION
+	return int( (etapa * 100) / Etapa.DEDICACION )
 
 
 @register.filter

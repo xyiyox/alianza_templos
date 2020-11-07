@@ -502,7 +502,8 @@ def proyecto(request, pk):
     ctx = {'proyecto': proyecto, 'Etapa': Etapa, 'comentarios': comentarios, 'comentarioForm': comentarioForm}
     ctx['aprobacionForm'] = AprobacionForm()  
     ctx['user_own'] = user_own
-  
+    print( "COORDENADAS proyecto.coordenadas")
+    print( proyecto.coordenadas )
     try:
         comunidad =  Comunidad.objects.get(edificacion=proyecto)
         ctx['comunidad'] = comunidad
