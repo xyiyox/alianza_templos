@@ -2,18 +2,30 @@
 import os
 import httplib2
 
-from django.shortcuts import render_to_response, render, redirect, get_object_or_404
-from django.http import HttpResponse, Http404
-from django.http import HttpResponseRedirect,HttpResponseServerError  
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.staticfiles import finders
+from django.template.loader import get_template
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-import csv
 
-from django.core.urlresolvers import reverse
-from threading import Timer
+import csv
+import logging
+import zipfile
+import datetime
+import time
+
+from xhtml2pdf import pisa
+from io import StringIO
+from apiclient.discovery import build
+from oauth2client import xsrfutil
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.django_orm import Storage
+from datetime import datetime, timedelta
+
 
 from main.forms import *
 from main.email import *
@@ -22,32 +34,7 @@ from db.models import Edificacion, Comunidad, Comentario, Etapa, InformeSemestra
 from usuarios.models import Usuario
 
 
-from collections import OrderedDict
 
-from io import StringIO
-import zipfile
-
-#import ho.pisa as pisa
-from xhtml2pdf import pisa
-
-import cgi
-from django.template import RequestContext
-from django.template.loader import render_to_string
-
-
-import logging
-
-from apiclient.discovery import build
-from django.http import HttpResponseBadRequest
-
-from oauth2client import xsrfutil
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.django_orm import Storage
-
-from datetime import timedelta
-from datetime import datetime
-import datetime
-import time
 
 # CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
 # application, including client_id and client_secret, which are found
@@ -381,14 +368,59 @@ def proyecto_zip(request, pk):
     return resp
 
 
-def generar_pdf(html):
-    # Función para generar el archivo PDF y devolverlo mediante HttpResponse 
-    links    = lambda uri, rel: os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ''))
-    result = StringIO.StringIO()
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result,link_callback=links)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return HttpResponse('Error al generar el PDF: %s' % cgi.escape(html))
+
+def link_callback(uri, rel):
+    """
+    Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+    resources
+    """
+    result = finders.find(uri)
+    if result:
+        if not isinstance(result, (list, tuple)):
+            result = [result]
+        result = list(os.path.realpath(path) for path in result)
+        path=result[0]
+    else:
+        sUrl = settings.STATIC_URL        # Typically /static/
+        sRoot = settings.STATIC_ROOT      # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL         # Typically /media/
+        mRoot = settings.MEDIA_ROOT       # Typically /home/userX/project_static/media/
+
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri
+
+    # make sure that file exists
+    if not os.path.isfile(path):
+        raise Exception(
+            'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+    return path
+
+
+def generar_pdf(tpl, ctx):
+    
+    template_path = tpl
+    context = ctx
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="reporte.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response, link_callback=link_callback)
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('Ups algo salió mal construyendo el pdf <pre>' + html + '</pre>')
+    return response
+
+
 
 @login_required
 def proyecto_pdf(request, pk):
@@ -430,9 +462,8 @@ def proyecto_pdf(request, pk):
         ctx['condiciones'] = condiciones
     except Condiciones.DoesNotExist:
         pass   
-       
-    html = render_to_string('main/pdf.html',ctx, context_instance=RequestContext(request))
-    return generar_pdf(html)
+
+    return generar_pdf('main/pdf.html', ctx)
 
 
 @login_required
@@ -452,8 +483,7 @@ def informe_pdf(request, pk, index):
     except InformeSemestral.DoesNotExist:
         pass
 
-    html = render_to_string('main/pdf_informe.html',ctx, context_instance=RequestContext(request))
-    return generar_pdf(html)
+    return generar_pdf('main/pdf_informe.html', ctx)
 
 @login_required
 def proyecto(request, pk):

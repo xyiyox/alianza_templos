@@ -1,252 +1,409 @@
 {% load main_tags %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html>
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<style>
-  table {
-    border-collapse: collapse;  
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pdf</title>
 
-table, th, td {
-    border: 1px solid black;
-    vertical-align: middle;
-    padding: 5px;  
-}
-th {
-    text-align: left;
-    width: 20%;
-    padding: 5px;
-} 
-.hh{
+  <style>
 
-  background-color:#b10e10;
-  color: white;
-  font-size: 15px; 
-}
+    @page {
+      size: letter portrait;
+      margin: 2cm;
 
-td, th{
-  font-size: 14px;
-}
-img{
-  text-align: center;
-}
+      @frame content_frame {
+          left: 50pt;
+          width: 512pt;
+          top: 50pt;
+          height: 692pt;
+          /*-pdf-frame-border: 1;     for debugging the layout */
+      }  
+    }
+
+    table { -pdf-keep-with-next: true; }
+    p { margin: 0; -pdf-keep-with-next: true; }
 
 
-</style>
-</head>    
-<body>    
-  <img src="header.jpg">
-    <table class="table table-bordered table-striped">
-      <tbody> 
-        <tr> <th colspan='2' class='hh'>Proyecto</th>      </tr> 
-        <tr> <th>Nombre del Proyecto: </th>       <td>{{ proyecto.nombre_proyecto}}</td> </tr> 
-        <tr> <th>Dirección: </th>       <td>{{ proyecto.direccion}}</td> </tr>                          
-        <tr> <th>Coordenadas: </th>   <td>{{ proyecto.coordenadas }}</td> </tr>
-        <tr> <th>Dueño del Lote: </th>  <td>{{ proyecto.get_owner_lote_display }}</td> </tr>
-        <tr> <th>Adquisición: </th>   <td>{{ proyecto.get_tipo_adquisicion_display }}</td> </tr>
-        <tr> <th>Terreno: </th>       <td>{{ proyecto.dimensiones_terreno }}</td> </tr>
-        <tr> <th>Edificio: </th>      <td>{{ proyecto.dimensiones_edificio }}</td> </tr>
-        <tr> <th>No. pisos: </th>       <td>{{ proyecto.num_pisos }}</td> </tr>
-        <tr> <th>Tipo: </th>          <td>{{ proyecto.get_tipo_construccion_display }}</td> </tr>
-        <tr> <th>Requiere permiso: </th>  <td>{{ proyecto.requiere_permiso|yesno:"Si,No,No sabemos" }}</td> </tr>
-        <tr> <th>Tiempo límite: </th>     <td>{{ proyecto.tiempo_limite }} meses</td> </tr>     
-        <tr> <th>Tipo de Terreno: </th>  <td>{{ proyecto.tipo_terreno|terreno }}</td> </tr>                 
-        <tr> <th>Localidad del Terreno: </th>  <td>{{ proyecto.localidad_terreno|localidad }}</td> </tr>
-        <tr> <th>Vecinos del Terreno: </th>  <td>{{ proyecto.vecinos_terreno|vecinos }}</td> </tr>
-        <tr> <th>Ubicacion de Terreno: </th>  <td>{{ proyecto.ubucacion_construccion|ubicacion }}</td> </tr>
-        <tr> <th>Informacion Adicional: </th>  <td>{{ proyecto.informacion_adicional }}</td> </tr>
-      </tbody>              
-    </table>  
-    <table class="table table-bordered table-striped">
-        <tbody> 
-           <tr> <th colspan='2' class='hh'>Finanzas</th>      </tr>   
-          <tr> <th>Dinero Efectivo: </th>       <td>{{ financiera.dinero_efectivo}}</td> </tr>    
-          <tr> <th>Valor del Terreno: </th>       <td>{{ financiera.valor_terreno}}</td> </tr>    
-          <tr> <th>Numero de Voluntarios: </th>       <td>{{ financiera.num_voluntarios}}</td> </tr>  
-          <tr> <th>Descripcion: </th>       <td>{{ financiera.desc_voluntarios}}</td> </tr>   
-          <tr> <th>Costo Total: </th>       <td>{{ financiera.costo_total}}</td> </tr>  
-          <tr> <th>Tipo de Cuenta: </th>       <td>{{ financiera.tipo_cuenta|cuenta}}</td> </tr>                
-          <tr> <th>Titular: </th>       <td>{{ financiera.titular_cuenta}}</td> </tr> 
-          <tr> <th>Banco: </th>       <td>{{ financiera.banco}}</td> </tr>  
-          <tr> <th>No. Cuenta: </th>       <td>{{ financiera.numero_cuenta}}</td> </tr> 
-        </tbody>              
-      </table>   
-      <table class="table table-bordered table-striped">
-          <tbody> 
-            <tr> <th colspan='2' class='hh'>Comunidad</th>      </tr>   
-            <tr> <th>Ciudad: </th>
-                 <td>{{ comunidad.nombre}}</td> 
-             </tr>    
-            <tr> <th>Poblacion: </th>       
-               <td>{{ comunidad.poblacion_comunidad}}</td> 
-            </tr>   
-            <tr> <th>Departamento: </th>       
-              <td>{{ comunidad.region}}</td>
-            </tr> 
-            <tr> <th>Capital Departamento: </th>       
-              <td>{{ comunidad.capital_depto}}</td> 
-            </tr>   
-            <tr> <th>Distancia a la Capital: </th>       
-              <td>{{ comunidad.distancia_capital}}</td> 
-            </tr> 
-              <tr> <th>Vereda: </th>       
-                  <td>{{ comunidad.vereda}}</td> 
-                </tr>
-                <tr> <th>Corregimiento: </th>       
-                  <td>{{ comunidad.corregimiento}}</td> 
-                </tr>
-          </tbody>              
-      </table>     
-      <table class="table table-bordered table-striped">
-        <tbody> 
-          <tr> <th colspan='2' class='hh'>Congregacion</th>      </tr>   
-          <tr> <th>Nombre: </th>
-               <td>{{ congregacion.nombre}}</td> 
-           </tr>    
-          <tr> <th>Fecha Fundacion: </th>       
-             <td>{{ congregacion.fecha_fundacion}}</td> 
-          </tr>   
-          <tr> <th>Lengua Materna: </th>       
-            <td>{{ congregacion.lengua_primaria}}</td>
-          </tr> 
-          <tr> <th>Region: </th>       
-            <td>{% for key,value in list_regions %}
-                  {% if congregacion.region == key %}
-                    {{value}}
-                  {% endif %} 
-                {% endfor %}
-              </td> 
-          </tr>   
-          <tr> <th>Asistencia General: </th>       
-            <td>{{ congregacion.asistencia_general}}</td> 
-          </tr>
-          <tr> <th>Asistencia Niños: </th>       
-            <td>{{ congregacion.asistencia_ninos}}</td> 
-          </tr>
+    /* table,
+    th,
+    td {
+      border: 1px solid black;
+      vertical-align: middle;
+      padding: 5px;
+    } */
 
-          <tr> <th>Miembros Adultos: </th>       
-            <td>{{ congregacion.miembros_adultos}}</td> 
-          </tr>
-          <tr> <th>Miembros Niños: </th>       
-            <td>{{ congregacion.miembros_ninos}}</td> 
-          </tr> 
+    th {
+      text-align: left;
+      width: 30%;
+    }
 
-          
-          <tr> <th>Ingresos Mensuales: </th>       
-            <td>{{ congregacion.ingreso_mensual}}</td> 
-          </tr>
+    .hh {
 
-          
-          <tr> <th>Nombre Pastor: </th>       
-            <td>{{ congregacion.nombre_pastor}}</td> 
-          </tr>
+      background-color: #b10e10;
+      color: white;
+      font-size: 15px;
+    }
 
-          <tr> <th>Telefono Pastor: </th>       
-                  <td>{{ congregacion.telefono_pastor}}</td> 
-                </tr>
-                <tr> <th>Celular Pastor: </th>       
-                  <td>{{ congregacion.celular_pastor}}</td> 
-                </tr>
-                <tr> <th>Email Pastor: </th>       
-                  <td>{{ congregacion.email_pastor}}</td> 
-                </tr> 
-          
-          <tr> <th>Estado Civil: </th>       
-            <td>{% for key,value in list_civil %}
-                  {% if congregacion.estado_civil == key %}
-                    {{value}}
-                  {% endif %} 
-                {% endfor %}</td> 
-          </tr>
-          
-          <tr> <th>Cantidad de Hijos: </th>       
-            <td>{{ congregacion.cant_hijos}}</td> 
-          </tr>
-          
-          <tr> <th>Entrenamiento Biblico: </th>       
-            <td>{{ congregacion.entrenamiento_biblico}}</td> 
-          </tr>
-          
-          <tr> <th>Titulos Obtenidos: </th>       
-            <td>{{ congregacion.titulos_obtenidos}}</td> 
-          </tr>
-          
-          <tr> <th>Años al servicio de la Iglesia: </th>       
-            <td>{{ congregacion.anios_iglesia}}</td> 
-          </tr>
+    td,
+    th {
+      font-size: 14px;
+    }
 
-          <tr> <th>Años al servicio en el Ministerio: </th>       
-            <td>{{ congregacion.anios_ministerio}}</td> 
-          </tr>
-          
-        </tbody>        
-      </table>
-      <table class="table table-bordered table-striped">
-              <tbody>                 
-                <tr> <th colspan='2' class='hh'>Condiciones</th>      </tr>   
-                <tr> <th>Condiciones de Construccion</th>       <td>
-                  {% for key,value in list_status %}
-                        {% if condiciones.construccion == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>Mantenimiento del Templo/Obra Social: </th>       <td>{% for key,value in list_status %}
-                        {% if condiciones.mantenimiento == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>Actividades Estipuladas: </th>       <td>{% for key,value in list_status %}
-                        {% if condiciones.actividades == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>Discipulado: </th>       <td>{% for key,value in list_status %}
-                        {% if condiciones.discipulado == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>Cumplimiento con el Alcance: </th>       <td>{% for key,value in list_status %}
-                        {% if condiciones.alcance == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>¿Aldia con el 13%?: </th>       <td>{% for key,value in list_status %}
-                        {% if condiciones.found_commitment == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>Cumplimiento con el Presupuesto: </th>       <td>{% for key,value in list_status %}
-                        {% if condiciones.presupuesto == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>Completar la Obra: </th>       <td>{% for key,value in list_status %}
-                        {% if condiciones.terminacion == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>Comentarios: </th>       <td>
-                        {{ condiciones.comentarios }} </td> </tr> 
-                
-                <tr> <th>¿Acepta los Terminos?: </th>       <td>{% for key,value in list_status %}
-                        {% if condiciones.aceptacion == key %}
-                          {{value}}
-                        {% endif %} 
-                      {% endfor %}</td> </tr> 
-                
-                <tr> <th>Nombre del Aplicante: </th>       <td>{{condiciones.nombre_completo}}</td> </tr>   
-                
-              </tbody>              
-            </table>          
-         
-  </body>
+    img {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <img src="header.jpg"> -->
+  <table class="table table-bordered table-striped">
+    
+      <tr>
+        <th colspan='2' class='hh'>Proyecto</th>
+      </tr>
+      <tr>
+        <th>Nombre del Proyecto: </th>
+        <td>{{ proyecto.nombre_proyecto}}</td>
+      </tr>
+      <tr>
+        <th>Dirección: </th>
+        <td>{{ proyecto.direccion}}</td>
+      </tr>
+      <tr>
+        <th>Coordenadas: </th>
+        <td>{{ proyecto.coordenadas }}</td>
+      </tr>
+      <tr>
+        <th>Dueño del Lote: </th>
+        <td>{{ proyecto.get_owner_lote_display }}</td>
+      </tr>
+      <tr>
+        <th>Adquisición: </th>
+        <td>{{ proyecto.get_tipo_adquisicion_display }}</td>
+      </tr>
+      <tr>
+        <th>Terreno: </th>
+        <td>{{ proyecto.dimensiones_terreno }}</td>
+      </tr>
+      <tr>
+        <th>Edificio: </th>
+        <td>{{ proyecto.dimensiones_edificio }}</td>
+      </tr>
+      <tr>
+        <th>No. pisos: </th>
+        <td>{{ proyecto.num_pisos }}</td>
+      </tr>
+      <tr>
+        <th>Tipo: </th>
+        <td>{{ proyecto.get_tipo_construccion_display }}</td>
+      </tr>
+      <tr>
+        <th>Requiere permiso: </th>
+        <td>{{ proyecto.requiere_permiso|yesno:"Si,No,No sabemos" }}</td>
+      </tr>
+      <tr>
+        <th>Tiempo límite: </th>
+        <td>{{ proyecto.tiempo_limite }} meses</td>
+      </tr>
+      <tr>
+        <th>Tipo de Terreno: </th>
+        <td>{{ proyecto.tipo_terreno|terreno }}</td>
+      </tr>
+      <tr>
+        <th>Localidad del Terreno: </th>
+        <td>{{ proyecto.localidad_terreno|localidad }}</td>
+      </tr>
+      <tr>
+        <th>Vecinos del Terreno: </th>
+        <td>{{ proyecto.vecinos_terreno|vecinos }}</td>
+      </tr>
+      <tr>
+        <th>Ubicacion de Terreno: </th>
+        <td>{{ proyecto.ubucacion_construccion|ubicacion }}</td>
+      </tr>
+      <tr>
+        <th>Informacion Adicional: </th>
+        <td>{{ proyecto.informacion_adicional }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-bordered table-striped">
+    <tbody>
+      <tr>
+        <th colspan='2' class='hh'>Finanzas</th>
+      </tr>
+      <tr>
+        <th>Dinero Efectivo: </th>
+        <td>{{ financiera.dinero_efectivo}}</td>
+      </tr>
+      <tr>
+        <th>Valor del Terreno: </th>
+        <td>{{ financiera.valor_terreno}}</td>
+      </tr>
+      <tr>
+        <th>Numero de Voluntarios: </th>
+        <td>{{ financiera.num_voluntarios}}</td>
+      </tr>
+      <tr>
+        <th>Descripcion: </th>
+        <td>{{ financiera.desc_voluntarios}}</td>
+      </tr>
+      <tr>
+        <th>Costo Total: </th>
+        <td>{{ financiera.costo_total}}</td>
+      </tr>
+      <tr>
+        <th>Tipo de Cuenta: </th>
+        <td>{{ financiera.tipo_cuenta|cuenta}}</td>
+      </tr>
+      <tr>
+        <th>Titular: </th>
+        <td>{{ financiera.titular_cuenta}}</td>
+      </tr>
+      <tr>
+        <th>Banco: </th>
+        <td>{{ financiera.banco}}</td>
+      </tr>
+      <tr>
+        <th>No. Cuenta: </th>
+        <td>{{ financiera.numero_cuenta}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-bordered table-striped">
+    <tbody>
+      <tr>
+        <th colspan='2' class='hh'>Comunidad</th>
+      </tr>
+      <tr>
+        <th>Ciudad: </th>
+        <td>{{ comunidad.nombre}}</td>
+      </tr>
+      <tr>
+        <th>Poblacion: </th>
+        <td>{{ comunidad.poblacion_comunidad}}</td>
+      </tr>
+      <tr>
+        <th>Departamento: </th>
+        <td>{{ comunidad.region}}</td>
+      </tr>
+      <tr>
+        <th>Capital Departamento: </th>
+        <td>{{ comunidad.capital_depto}}</td>
+      </tr>
+      <tr>
+        <th>Distancia a la Capital: </th>
+        <td>{{ comunidad.distancia_capital}}</td>
+      </tr>
+      <tr>
+        <th>Vereda: </th>
+        <td>{{ comunidad.vereda}}</td>
+      </tr>
+      <tr>
+        <th>Corregimiento: </th>
+        <td>{{ comunidad.corregimiento}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-bordered table-striped">
+    <tbody>
+      <tr>
+        <th colspan='2' class='hh'>Congregacion</th>
+      </tr>
+      <tr>
+        <th>Nombre: </th>
+        <td>{{ congregacion.nombre}}</td>
+      </tr>
+      <tr>
+        <th>Fecha Fundacion: </th>
+        <td>{{ congregacion.fecha_fundacion}}</td>
+      </tr>
+      <tr>
+        <th>Lengua Materna: </th>
+        <td>{{ congregacion.lengua_primaria}}</td>
+      </tr>
+      <tr>
+        <th>Region: </th>
+        <td>{% for key,value in list_regions %}
+          {% if congregacion.region == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <th>Asistencia General: </th>
+        <td>{{ congregacion.asistencia_general}}</td>
+      </tr>
+      <tr>
+        <th>Asistencia Niños: </th>
+        <td>{{ congregacion.asistencia_ninos}}</td>
+      </tr>
+      <tr>
+        <th>Miembros Adultos: </th>
+        <td>{{ congregacion.miembros_adultos}}</td>
+      </tr>
+      <tr>
+        <th>Miembros Niños: </th>
+        <td>{{ congregacion.miembros_ninos}}</td>
+      </tr>
+      <tr>
+        <th>Ingresos Mensuales: </th>
+        <td>{{ congregacion.ingreso_mensual}}</td>
+      </tr>
+      <tr>
+        <th>Nombre Pastor: </th>
+        <td>{{ congregacion.nombre_pastor}}</td>
+      </tr>
+      <tr>
+        <th>Telefono Pastor: </th>
+        <td>{{ congregacion.telefono_pastor}}</td>
+      </tr>
+      <tr>
+        <th>Celular Pastor: </th>
+        <td>{{ congregacion.celular_pastor}}</td>
+      </tr>
+      <tr>
+        <th>Email Pastor: </th>
+        <td>{{ congregacion.email_pastor}}</td>
+      </tr>
+      <tr>
+        <th>Estado Civil: </th>
+        <td>{% for key,value in list_civil %}
+          {% if congregacion.estado_civil == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+      <tr>
+        <th>Cantidad de Hijos: </th>
+        <td>{{ congregacion.cant_hijos}}</td>
+      </tr>
+      <tr>
+        <th>Entrenamiento Biblico: </th>
+        <td>{{ congregacion.entrenamiento_biblico}}</td>
+      </tr>
+      <tr>
+        <th>Titulos Obtenidos: </th>
+        <td>{{ congregacion.titulos_obtenidos}}</td>
+      </tr>
+      <tr>
+        <th>Años al servicio de la Iglesia: </th>
+        <td>{{ congregacion.anios_iglesia}}</td>
+      </tr>
+      <tr>
+        <th>Años al servicio en el Ministerio: </th>
+        <td>{{ congregacion.anios_ministerio}}</td>
+      </tr>
+
+    </tbody>
+  </table>
+  <table class="table table-bordered table-striped">
+    <tbody>
+      <tr>
+        <th colspan='2' class='hh'>Condiciones</th>
+      </tr>
+      <tr>
+        <th>Condiciones de Construccion</th>
+        <td>
+          {% for key,value in list_status %}
+          {% if condiciones.construccion == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>Mantenimiento del Templo/Obra Social: </th>
+        <td>{% for key,value in list_status %}
+          {% if condiciones.mantenimiento == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>Actividades Estipuladas: </th>
+        <td>{% for key,value in list_status %}
+          {% if condiciones.actividades == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>Discipulado: </th>
+        <td>{% for key,value in list_status %}
+          {% if condiciones.discipulado == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>Cumplimiento con el Alcance: </th>
+        <td>{% for key,value in list_status %}
+          {% if condiciones.alcance == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>¿Aldia con el 13%?: </th>
+        <td>{% for key,value in list_status %}
+          {% if condiciones.found_commitment == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>Cumplimiento con el Presupuesto: </th>
+        <td>{% for key,value in list_status %}
+          {% if condiciones.presupuesto == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>Completar la Obra: </th>
+        <td>{% for key,value in list_status %}
+          {% if condiciones.terminacion == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>Comentarios: </th>
+        <td>
+          {{ condiciones.comentarios }} </td>
+      </tr>
+
+      <tr>
+        <th>¿Acepta los Terminos?: </th>
+        <td>{% for key,value in list_status %}
+          {% if condiciones.aceptacion == key %}
+          {{value}}
+          {% endif %}
+          {% endfor %}</td>
+      </tr>
+
+      <tr>
+        <th>Nombre del Aplicante: </th>
+        <td>{{condiciones.nombre_completo}}</td>
+      </tr>
+
+   
+  </table>
+
+</body>
+
 </html>
