@@ -3,13 +3,13 @@ Pillow==4.0
 argparse==1.2.1
 django-crispy-forms==1.8.1
 django-debug-toolbar==1.9.1
-django-session-security==2.1.6
+django-session-security==2.6.7
 django-suit==0.2.17
 google-api-python-client==1.4.1
 html5lib==1.1
 httplib2==0.9.1
 jsonfield==0.9.20
-oauth2client==1.4.12
+oauth2client==1.5.2
 psycopg2==2.7
 pyPdf==1.13
 pyasn1==0.1.8
@@ -18,7 +18,7 @@ reportlab==3.5
 rsa==3.2
 simplejson==3.8.0
 six==1.9.0
-sorl-thumbnail==12.2
+sorl-thumbnail==12.7.0
 sqlparse==0.2.0
 uritemplate==0.6
 gunicorn==20.0.4

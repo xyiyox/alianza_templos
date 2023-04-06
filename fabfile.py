@@ -25,10 +25,11 @@ SERVER_NAME     = os.getenv('SERVER_NAME')
 SERVER_APP_PATH = os.getenv('SERVER_APP_PATH')
 DB_USER         = os.getenv('DB_USER')
 DB_NAME         = os.getenv('DB_NAME')
-DB_BACKUP_FOLDER = os.getenv('DB_BACKUP_FOLDER')
-SERVER_DB_FILE_PAHT    = os.path.join(SERVER_APP_PATH, DB_BACKUP_FOLDER, 'db.sql')
-LOCAL_DB_FILE_PAHT     = os.path.join(BASE_DIR, DB_BACKUP_FOLDER, 'db.sql')
-DB_DATA_FOLDER =       os.getenv('DB_DATA_FOLDER')
+DB_BACKUP_FOLDER     = os.getenv('DB_BACKUP_FOLDER')
+SERVER_DB_FILE_PAHT  = os.path.join(SERVER_APP_PATH, DB_BACKUP_FOLDER, 'db.sql')
+LOCAL_DB_FILE_PAHT   = os.path.join(BASE_DIR, DB_BACKUP_FOLDER, 'db.sql')
+DB_DATA_FOLDER       = os.getenv('DB_DATA_FOLDER')
+LOCAL_MEDIA_ROOT           = os.path.join(BASE_DIR, 'public/media')
 
 ##################### CONECTIONS ######################
 #fabic conexion
@@ -70,5 +71,10 @@ def syncdb(c):
     # recreate postgres container
     con.local(f'docker-compose up --force-recreate -d postgres')
               
-
+@task
+def syncmedia(c):
+    # download media files
+    # https://linux.die.net/man/1/rsync
+    con.local(f'rsync -auvzP -e ssh --delete --exclude="/tmp/" --exclude=".gitignore" \
+               {SERVER_NAME}:{SERVER_APP_PATH}/public/media/ {LOCAL_MEDIA_ROOT}', pty=True)
 
