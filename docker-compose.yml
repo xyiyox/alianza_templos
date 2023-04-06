@@ -175,15 +175,15 @@ services:
     labels:
     - "traefik.http.routers.${PROJECT_NAME}_portainer.rule=Host(`portainer.${PROJECT_BASE_URL}`)"
 
-#  traefik:
-#    image: traefik:v2.0
-#    container_name: "${PROJECT_NAME}_traefik"
-#    command: --api.insecure=true --providers.docker
-#    ports:
-#    - '8000:80'
-#    - '8080:8080' # Dashboard
-#    volumes:
-#    - /var/run/docker.sock:/var/run/docker.sock
+  traefik:
+    image: traefik:v2.0
+    container_name: "${PROJECT_NAME}_traefik"
+    command: --api.insecure=true --providers.docker
+    ports:
+    - '8000:80'
+    - '8080:8080' # Dashboard
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
 
 #volumes:
 ## Docker-sync for macOS users
