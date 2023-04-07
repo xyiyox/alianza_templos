@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.contrib.admin.widgets import AdminFileWidget
-from django.forms.extras.widgets import SelectDateWidget
+from django.forms.widgets import SelectDateWidget
 from datetime import date
 
 from crispy_forms.helper import FormHelper

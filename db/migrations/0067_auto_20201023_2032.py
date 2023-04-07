@@ -292,7 +292,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='edificacion',
             name='arquitecto',
-            field=models.ForeignKey(related_name='arquitecto', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Arquitecto Asignado'),
+            field=models.ForeignKey(related_name='arquitecto', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Arquitecto Asignado', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='edificacion',
@@ -332,7 +332,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='edificacion',
             name='ingeniero',
-            field=models.ForeignKey(related_name='ingeniero', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Maestro de Obra Asignado'),
+            field=models.ForeignKey(related_name='ingeniero', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Maestro de Obra Asignado', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='edificacion',
@@ -362,7 +362,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='edificacion',
             name='tesorero',
-            field=models.ForeignKey(related_name='tesorero', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Tesorero Asignado'),
+            field=models.ForeignKey(related_name='tesorero', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Tesorero Asignado', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='edificacion',
@@ -397,7 +397,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='edificacion',
             name='usuario',
-            field=models.ForeignKey(related_name='usuario', to=settings.AUTH_USER_MODEL, verbose_name='Responsable'),
+            field=models.ForeignKey(related_name='usuario', to=settings.AUTH_USER_MODEL, verbose_name='Responsable', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='edificacion',

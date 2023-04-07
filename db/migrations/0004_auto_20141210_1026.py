@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('etapa', models.IntegerField(max_length=2, choices=[(0, b'Diligenciamiento'), (1, b'Aprobaci\xc3\xb3n Regional'), (2, b'Asignaci\xc3\xb3n de Ingeniero/Arquitecto'), (3, b'Creaci\xc3\xb3n de Planos'), (4, b'Aprobaci\xc3\xb3n Ingeniero'), (5, b'Aprobaci\xc3\xb3n Tesorero'), (6, b'Aprobaci\xc3\xb3n Nacional'), (7, b'Aprobaci\xc3\xb3n Internacional'), (8, b'En Espera de Cupo'), (9, b'En Espera de Recursos'), (10, b'En Construcci\xc3\xb3n'), (11, b'Esperando Correcciones'), (12, b'Finalizaci\xc3\xb3n')])),
                 ('created', models.DateField(auto_now_add=True)),
-                ('edificacion', models.ForeignKey(to='db.Edificacion')),
+                ('edificacion', models.ForeignKey(to='db.Edificacion', on_delete=models.CASCADE)),
             ],
             options={
             },

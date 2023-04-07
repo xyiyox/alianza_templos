@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='edificacion',
             name='ingeniero',
-            field=models.ForeignKey(related_name='ingeniero', verbose_name=b'Maestro de Obra Asignado', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='ingeniero', verbose_name=b'Maestro de Obra Asignado', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterField(

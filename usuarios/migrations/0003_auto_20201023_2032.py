@@ -30,11 +30,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='usuario',
             name='user_creador',
-            field=models.ForeignKey(related_name='creador', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Creado por'),
+            field=models.ForeignKey(related_name='creador', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Creado por', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='usuario',
             name='user_padre',
-            field=models.ForeignKey(related_name='padre', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Asignado a', help_text='Asigne este usuario a un usuario regional'),
+            field=models.ForeignKey(related_name='padre', to=settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Asignado a', help_text='Asigne este usuario a un usuario regional', on_delete=models.CASCADE),
         ),
     ]

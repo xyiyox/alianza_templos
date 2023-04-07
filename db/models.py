@@ -62,7 +62,7 @@ class Etapa(models.Model):
 		(INFORMES, u'Informes Semestrales'),
 	)
 
-	edificacion = models.ForeignKey('Edificacion')
+	edificacion = models.ForeignKey('Edificacion', on_delete=models.CASCADE)
 	etapa       = models.IntegerField(choices=ETAPA_ACTUAL)
 	
 	created     = models.DateTimeField(auto_now_add = True) 
@@ -242,13 +242,13 @@ class Edificacion(models.Model):
 
     # usuarios involucrados, el nacional y el regional se asignan por defecto
     usuario 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Responsable', 
-                    related_name='usuario')
+                    related_name='usuario', on_delete=models.CASCADE)
     ingeniero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Maestro de Obra Asignado', 
-                    null=True, blank=True, related_name='ingeniero')
+                    null=True, blank=True, related_name='ingeniero', on_delete=models.CASCADE)
     arquitecto 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Arquitecto Asignado', 
-                    null=True, blank=True, related_name='arquitecto')
+                    null=True, blank=True, related_name='arquitecto', on_delete=models.CASCADE)
     tesorero 	= models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Tesorero Asignado', 
-                    null=True, blank=True, related_name='tesorero')
+                    null=True, blank=True, related_name='tesorero', on_delete=models.CASCADE)
 
 	# aprobaciones para cambiar de etapa, estan en orden temporal
     aprobacion_regional 	= models.BooleanField(default=False)
@@ -340,7 +340,7 @@ class InformacionFinanciera(models.Model):
     numero_cuenta 		= models.CharField(max_length=40, verbose_name='Numero de Cuenta',help_text='Ingrese el Numero de Cuenta,(Necesario si se aprueba el proyecto para hacer las consignaciones)',default='00-00000-00')
 
     # Relacion 1 a 1 entre la edificacion y la informacion financiera
-    edificacion 		= models.OneToOneField('Edificacion')
+    edificacion 		= models.OneToOneField('Edificacion', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return "%s" %u"Información Financiera"
@@ -367,7 +367,7 @@ class Comunidad(models.Model):
 	vereda 				= models.CharField('Vereda', max_length=50,help_text='Ingrese el la Vereda donde se va realizar la construccion, si aplica.',null=True, blank=True) 
 	corregimiento 		= models.CharField('Corregimiento', max_length=50,help_text='Ingrese el Corregimiento donde se va realizar la construccion, si aplica.',null=True, blank=True) 
 	# Relacion 1 a 1 entre la edificacion y la comunidad
-	edificacion 		= models.OneToOneField('Edificacion')
+	edificacion 		= models.OneToOneField('Edificacion', on_delete=models.CASCADE)
 
 	def __str__(self):
 		return "%s" %"Ciudad"
@@ -425,25 +425,11 @@ class Congregacion(models.Model):
 	anios_iglesia 			= models.PositiveSmallIntegerField('Años de servicio en la congregación actual')
 	anios_ministerio 		= models.PositiveSmallIntegerField('Años de servicio en el ministerio')
 
-	#hay_material 			= models.BooleanField('¿El pastor conoce el material del Instituto Biblico del Aire?', default=False)
-	#q1_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
-	#usa_material			= models.BooleanField('¿El pastor ha acordado usar este material para crecimiento de la iglesia?', default=False) 
-	#q2_why_not 				= models.TextField('¿Por que no?', blank=True, null=True)
-	#q2_how_do 				= models.TextField('¿Como lo hace?', blank=True, null=True)
-	# Relacion 1 a 1 entre la edificacion y la congregacion
-	edificacion 			= models.OneToOneField('Edificacion')
+	edificacion 			= models.OneToOneField('Edificacion', on_delete=models.CASCADE)
 
 	def __str__(self):
 		return "%s" %"Congregación"
 	
-#class FuentesFinanciacion(models.Model):
-#	""" 
-#	Tabla que almacenara posibles entradas economicas dinstintas a ICM que tenga el proyecto
-#	"""
-#	nombre 			= models.CharField(max_length=30)
-#	valor 			= models.DecimalField('Valor', max_digits=15, decimal_places=3)
-#	
-#	info_financiera = models.ForeignKey('InformacionFinanciera')
 
 def validate_terminos(value):
 	if value != True:
@@ -455,7 +441,7 @@ class Condiciones(models.Model):
 	class Meta:
 		verbose_name_plural = "condiciones"
 
-	edificacion       = models.ForeignKey('Edificacion')
+	edificacion       = models.ForeignKey('Edificacion', on_delete=models.CASCADE)
 	construccion      = models.BooleanField(CONDICIONES_CONSTRUCCION, choices=BOOL_CHOICES, default=False)
 	mantenimiento     = models.BooleanField(CONDICIONES_MANTENIMIENTO, choices=BOOL_CHOICES, default=False)
 	actividades       = models.BooleanField(CONDICIONES_ACTIVIDADES, choices=BOOL_CHOICES, default=False)
@@ -483,7 +469,7 @@ class Adjuntos(models.Model):
     class Meta:
         verbose_name_plural = "adjuntos"
 
-    edificacion   			= models.ForeignKey('Edificacion')
+    edificacion   			= models.ForeignKey('Edificacion', on_delete=models.CASCADE)
 
     foto_construccion 		= models.ImageField('Foto del Terreno', upload_to=calcular_ruta,
                                 help_text='Mostrando claramente el terreno donde se va a construir la iglesia, jpg o png, minimo 600 x 480 pixeles, Tamaño maximo 2MB')
@@ -520,11 +506,11 @@ class Adjuntos(models.Model):
 class Comentario(models.Model):
 	""" Modelo para almacenar los comentarios de una edificacion """
 	
-	edificacion 		= models.ForeignKey('Edificacion')
+	edificacion 		= models.ForeignKey('Edificacion', on_delete=models.CASCADE)
 
-	commenter 			= models.ForeignKey(settings.AUTH_USER_MODEL)
+	commenter 			= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	descripcion 		= models.TextField('Comentario')
-	comentario_padre 	= models.ForeignKey('Comentario', null=True, blank=True)
+	comentario_padre 	= models.ForeignKey('Comentario', null=True, blank=True, on_delete=models.CASCADE)
 	created     		= models.DateTimeField(auto_now_add = True) 
 
 
@@ -561,7 +547,7 @@ class InformeSemestral(models.Model):
     class Meta:
         verbose_name_plural = "informes"
 
-    edificacion 		= models.ForeignKey('Edificacion')
+    edificacion 		= models.ForeignKey('Edificacion', on_delete=models.CASCADE)
 
     #Representa el numero del informe 1 - 6.
     informe 		    = models.PositiveIntegerField(null=True, blank=True) 

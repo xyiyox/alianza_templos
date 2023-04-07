@@ -65,8 +65,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_admin        = models.BooleanField(default=False)
 
     user_creador    = models.ForeignKey('self', null=True, blank=True, verbose_name="Creado por", 
-                        related_name='creador')
-    user_padre      = models.ForeignKey('self', null=True, blank=True, related_name='padre', 
+                        related_name='creador', on_delete=models.CASCADE)
+    user_padre      = models.ForeignKey('self', null=True, blank=True, related_name='padre', on_delete=models.CASCADE,
                         verbose_name='Asignado a', help_text='Asigne este usuario a un usuario regional')
 
     objects         = UsuarioManager()

@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('testimonios', models.TextField(help_text=b'liberaciones, conversiones, milagros, etc', verbose_name=b'Testimonios')),
                 ('ministerio_ninos', models.TextField(help_text=b'Campamentos. alcances evangelisticos, escuela biblica, deportes,grupos de vida, etc.', verbose_name=b'Ministerio de los Ni\xc3\xb1os')),
                 ('uso_local', models.TextField(help_text=b'Escuela de dia, entrenamiento vocacional, estudios biblicos, ministerio de mujeres, proyeccion de peliculas, etc.', verbose_name=b'Uso del local de la iglesia')),
-                ('edificacion', models.ForeignKey(to='db.Edificacion')),
+                ('edificacion', models.ForeignKey(to='db.Edificacion', on_delete=models.CASCADE)),
             ],
             options={
             },

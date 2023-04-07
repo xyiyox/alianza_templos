@@ -6,7 +6,6 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext, ugettext_lazy as _
 # para que select retorne una lista
-from django.utils.datastructures import MultiValueDict, MergeDict
 from django.db.models import Q
 
 from usuarios.models import Usuario
@@ -37,14 +36,6 @@ class UserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-
-
-# class SelectSingleAsList(forms.Select):
-#     def value_from_datadict(self, data, files, name):
-#         if isinstance(data, (MultiValueDict, MergeDict)):
-#             return data.getlist(name)  # NOTE this returns a list rather than a single value.
-#         return data.get(name, None)
-
 
 class UserChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on

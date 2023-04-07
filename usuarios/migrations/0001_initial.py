@@ -27,8 +27,8 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True)),
                 ('is_admin', models.BooleanField(default=False)),
                 ('groups', models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Group', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of his/her group.', verbose_name='groups')),
-                ('user_creador', models.ForeignKey(related_name='creador', verbose_name=b'Creado por', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
-                ('user_padre', models.ForeignKey(related_name='padre', blank=True, to=settings.AUTH_USER_MODEL, help_text=b'Asigne este usuario a un usuario regional', null=True, verbose_name=b'Asignado a')),
+                ('user_creador', models.ForeignKey(related_name='creador', verbose_name=b'Creado por', blank=True, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
+                ('user_padre', models.ForeignKey(related_name='padre', blank=True, to=settings.AUTH_USER_MODEL, help_text=b'Asigne este usuario a un usuario regional', null=True, verbose_name=b'Asignado a', on_delete=models.CASCADE)),
                 ('user_permissions', models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Permission', blank=True, help_text='Specific permissions for this user.', verbose_name='user permissions')),
             ],
             options={
