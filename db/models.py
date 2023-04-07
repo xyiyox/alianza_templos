@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils import timezone
 from datetime import datetime, timedelta
 
-from sorl.thumbnail import ImageField
+
 
 from .datos import *
 from .choices import DEPTOS, CAPITALES
@@ -280,7 +280,7 @@ class Edificacion(models.Model):
         return "%s" %"Edificación"
 
     def get_absolute_url(self):
-        return reverse('main.views.proyecto', args=[str(self.id)])
+        return reverse('proyecto', args=[str(self.id)])
 
     # properties
     def _get_registro_etapa(self):
@@ -690,7 +690,7 @@ class InformeSemestralPublico(models.Model):
     updated     = models.DateField(auto_now = True) 
 
     def get_absolute_url(self):
-        return reverse('main.views.informe_semestral', args=[str(self.id)])
+        return reverse('informe_semestral', args=[str(self.id)])
 
 
     def __unicode__(self):

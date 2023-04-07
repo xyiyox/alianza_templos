@@ -5,7 +5,7 @@ import httplib2
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles import finders
@@ -23,7 +23,6 @@ from io import StringIO
 from apiclient.discovery import build
 from oauth2client import xsrfutil
 from oauth2client.client import flow_from_clientsecrets
-from oauth2client.django_orm import Storage
 from datetime import datetime, timedelta
 
 
@@ -50,7 +49,7 @@ FLOW = flow_from_clientsecrets(
 
 def home(request):
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         
         if request.user.tipo == Usuario.NACIONAL:
             return redirect('home_nacional')

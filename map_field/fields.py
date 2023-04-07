@@ -107,7 +107,7 @@ class GeoLocationField(models.CharField):
     ranges [-90, 90] and [-180, 180], respectively.
     """
     description = "A geographical point, specified by floating-point latitude and longitude coordinates."
-    __metaclass__ = models.SubfieldBase
+    #__metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
         kwargs['max_length'] = 100

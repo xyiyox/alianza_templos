@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'db',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -116,7 +116,7 @@ TEMPLATES = [
                 # list if you haven't customized them:
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.debug',
-                'django.core.context_processors.request', # para suit
+                'django.template.context_processors.request', # para suit
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
