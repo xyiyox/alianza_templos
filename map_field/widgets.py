@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.forms import widgets
 from django.utils.encoding import force_text
@@ -23,8 +22,9 @@ class MapsGeoPointhWidget(widgets.TextInput):
     def render(self, name, value, attrs=None):
         if value is None:
             value = ''
-        final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+        attrs_join = self.build_attrs(attrs, self.attrs) #recoge los atributos del widget
+        final_attrs = self.build_attrs(attrs_join, {'type':self.input_type, 'name':name} )
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
-            final_attrs['value'] = force_text(self._format_value(value))
-        return mark_safe(u'<div class="map_canvas_wrapper"><div id="map_canvas"></div><input %s/></div>' % ( flatatt(final_attrs)) )
+            final_attrs['value'] = force_text(value)
+        return mark_safe(f'<div class="map_canvas_wrapper"><div id="map_canvas"></div><input { flatatt(final_attrs) } /></div>')

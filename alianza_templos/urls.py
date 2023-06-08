@@ -1,14 +1,16 @@
-from django.conf.urls import include, url
-from django.views import static
-
-from django.contrib import admin
+#from django.views import static
 from django.conf import settings
-admin.autodiscover()
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-    url(r'^', include('main.urls')),
-    url(r'^admin/', admin.site.urls),
-    url(r'session_security/', include('session_security.urls')),
-    url(r'^media/(?P<path>.*)$', static.serve, {'document_root':settings.MEDIA_ROOT,}),
+    path('', include('main.urls')),
+    path('admin/', admin.site.urls),
+    path('session_security/', include('session_security.urls')),
+    #re_path(r'^media/(?P<path>.*)$', static.serve, {'document_root':settings.MEDIA_ROOT,}),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

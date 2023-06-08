@@ -13,10 +13,9 @@ from django.template.loader import get_template
 from django.conf import settings
 
 import csv
-import logging
 import zipfile
 import datetime
-import time
+
 
 from xhtml2pdf import pisa
 from io import StringIO

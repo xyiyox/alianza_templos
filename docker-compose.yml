@@ -42,7 +42,7 @@ services:
     - ./:/usr/src/app:cached
 #    # Alternative for macOS users: docker-sync https://wodby.com/docs/stacks/drupal/local#docker-for-mac
 #    - docker-sync:/usr/src/app
-    command: python manage.py runserver 0.0.0:8002
+    command: ./manage.py runserver 0.0.0.0:8002
     ports:
     - "8002:8002"
 
@@ -62,8 +62,8 @@ services:
       #NGINX_VHOST_PRESET: http-proxy
     volumes:
     - ./:/usr/src/app:cached
-#    # Alternative for macOS users: docker-sync https://wodby.com/docs/stacks/drupal/local#docker-for-mac
-#    - docker-sync:/usr/src/app
+## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/python/local#docker-for-mac
+#    - backend:/usr/src/app
     labels:
     - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
 
@@ -88,9 +88,9 @@ services:
 #    - "traefik.http.services.${PROJECT_NAME}_varnish.loadbalancer.server.port=6081"
 #    - "traefik.http.routers.${PROJECT_NAME}_varnish.rule=Host(`varnish.${PROJECT_BASE_URL}`)"
 
-#  redis:
-#    container_name: "${PROJECT_NAME}_redis"
-#    image: wodby/redis:$REDIS_TAG
+  redis:
+    container_name: "${PROJECT_NAME}_redis"
+    image: wodby/redis:$REDIS_TAG
 
 #  adminer:
 #    container_name: "${PROJECT_NAME}_adminer"
@@ -166,28 +166,38 @@ services:
 #    container_name: "${PROJECT_NAME}_opensmtpd"
 #    image: wodby/opensmtpd:$OPENSMTPD_TAG
 
-  portainer:
-    image: portainer/portainer
-    container_name: "${PROJECT_NAME}_portainer"
-    command: --no-auth -H unix:///var/run/docker.sock
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-    - "traefik.http.routers.${PROJECT_NAME}_portainer.rule=Host(`portainer.${PROJECT_BASE_URL}`)"
-
   traefik:
     image: traefik:v2.0
     container_name: "${PROJECT_NAME}_traefik"
     command: --api.insecure=true --providers.docker
     ports:
-    - '8000:80'
-    - '8080:8080' # Dashboard
+    - '8001:80'
+#    - '8080:8080' # Dashboard
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
 
+#x-mutagen:
+#  sync:
+#    defaults:
+#      ignore:
+#        vcs: true
+#        paths:
+#        - .DS_Store
+#        - .history
+#        - .idea
+#    backend:
+#      alpha: "."
+#      beta: "volume://backend"
+#      configurationBeta:
+#        permissions:
+#          defaultFileMode: 0644
+#          defaultDirectoryMode: 0755
+#          defaultOwner: "id:501"
+#          defaultGroup: "id:20"
+
 #volumes:
-## Docker-sync for macOS users
-#  docker-sync:
-#    external: true
+## Mutagen for macOS users
+#  backend:
 ## For Xdebug profiler
 #  files:
+

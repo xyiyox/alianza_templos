@@ -78,3 +78,7 @@ def syncmedia(c):
     con.local(f'rsync -auvzP -e ssh --delete --exclude="/tmp/" --exclude=".gitignore" \
                {SERVER_NAME}:{SERVER_APP_PATH}/public/media/ {LOCAL_MEDIA_ROOT}', pty=True)
 
+
+@task
+def local_db_delete(c):
+    con.local(f'sudo rm -rf {DB_DATA_FOLDER}' )
